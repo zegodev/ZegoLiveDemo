@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -773,7 +773,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="moP-Aj-Ocv" customClass="UIControl">
-                                                <rect key="frame" x="18" y="438" width="284" height="112"/>
+                                                <rect key="frame" x="18" y="431" width="284" height="129"/>
                                                 <subviews>
                                                     <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="h7v-nH-xsg">
                                                         <rect key="frame" x="0.0" y="0.0" width="183" height="30"/>
@@ -786,7 +786,17 @@
                                                         <textInputTraits key="textInputTraits"/>
                                                     </textField>
                                                     <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uKy-MS-NJu">
-                                                        <rect key="frame" x="0.0" y="41" width="276" height="30"/>
+                                                        <rect key="frame" x="0.0" y="38" width="276" height="30"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1Ow-xx-Vqc">
+                                                        <rect key="frame" x="0.0" y="76" width="124" height="30"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                    <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fE9-kB-ZAV">
+                                                        <rect key="frame" x="146" y="76" width="130" height="30"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits"/>
                                                     </textField>
@@ -834,8 +844,10 @@
                         <outlet property="sliderFPS" destination="rxd-4g-Mxo" id="xR7-39-Guu"/>
                         <outlet property="sliderResolution" destination="dJA-P8-fC6" id="8pf-2x-ud3"/>
                         <outlet property="switchAdvanced" destination="PQg-xu-INe" id="FAL-n0-rg8"/>
+                        <outlet property="tfAppID" destination="1Ow-xx-Vqc" id="PKt-eE-ZEm"/>
                         <outlet property="tfIP" destination="h7v-nH-xsg" id="uqw-fY-5KW"/>
                         <outlet property="tfPort" destination="cz9-De-sMB" id="oaD-5n-tSe"/>
+                        <outlet property="tfSign" destination="fE9-kB-ZAV" id="lfX-8x-ZWy"/>
                         <outlet property="tfUrl" destination="uKy-MS-NJu" id="CKh-hj-p0s"/>
                     </connections>
                 </viewController>
@@ -994,7 +1006,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="说点什么吧" textAlignment="natural" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="pqI-Ym-uc6">
                                 <rect key="frame" x="31" y="540" width="255" height="24"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="send"/>
                                 <connections>
@@ -1074,7 +1086,7 @@
                                             <action selector="replayCtrlClicked:" destination="GVJ-cd-SxC" eventType="touchUpInside" id="WUu-r0-wec"/>
                                         </connections>
                                     </button>
-                                    <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="hcf-qf-R7v">
+                                    <slider opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="hcf-qf-R7v">
                                         <rect key="frame" x="32" y="-2" width="220" height="31"/>
                                         <connections>
                                             <action selector="replayProgressChanged:" destination="GVJ-cd-SxC" eventType="valueChanged" id="70W-ao-S9j"/>
@@ -1103,6 +1115,36 @@
                                     <constraint firstItem="jTQ-90-9yd" firstAttribute="centerY" secondItem="8TW-YT-Be2" secondAttribute="centerY" id="yxj-n5-N5G"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xfa-dT-lqE">
+                                <rect key="frame" x="16" y="58" width="102" height="128"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7JV-id-2XW">
+                                        <rect key="frame" x="0.0" y="34" width="102" height="94"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="GVJ-cd-SxC" id="iCl-du-Vd6"/>
+                                            <outlet property="delegate" destination="GVJ-cd-SxC" id="d1k-oN-JZf"/>
+                                        </connections>
+                                    </pickerView>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zrd-rN-pFO">
+                                        <rect key="frame" x="45" y="5" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="enableBeautify:" destination="GVJ-cd-SxC" eventType="valueChanged" id="mHg-7v-bdB"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="美颜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSG-Hh-0V7">
+                                        <rect key="frame" x="8" y="10" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.8674081321647048" green="1" blue="0.66907846852897324" alpha="0.5" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="LHw-ig-XvT"/>
+                                    <constraint firstAttribute="width" constant="102" id="Rl0-Fr-Icy"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -1117,6 +1159,7 @@
                             <constraint firstItem="oAG-Wq-Asm" firstAttribute="top" secondItem="hY7-zS-z3K" secondAttribute="topMargin" constant="8" id="CcJ-Jp-pjE"/>
                             <constraint firstItem="tIW-mt-Ehj" firstAttribute="top" secondItem="5Td-yH-nEI" secondAttribute="top" id="FoK-q8-xS5"/>
                             <constraint firstItem="IxS-5Q-n38" firstAttribute="trailing" secondItem="hY7-zS-z3K" secondAttribute="trailingMargin" id="G85-tE-85r"/>
+                            <constraint firstItem="xfa-dT-lqE" firstAttribute="top" secondItem="oAG-Wq-Asm" secondAttribute="bottom" constant="8" id="GdQ-xP-6pZ"/>
                             <constraint firstItem="EI5-Cl-Dfd" firstAttribute="trailing" secondItem="gIc-fR-j3a" secondAttribute="trailing" id="GjE-hc-lwH"/>
                             <constraint firstItem="uqd-s3-KuP" firstAttribute="width" secondItem="hY7-zS-z3K" secondAttribute="width" multiplier="0.25" id="J2Y-or-zfh"/>
                             <constraint firstItem="4xr-Rf-5vI" firstAttribute="width" secondItem="pqI-Ym-uc6" secondAttribute="width" id="LB9-VO-cYn"/>
@@ -1149,6 +1192,7 @@
                             <constraint firstItem="3Ud-KJ-tfC" firstAttribute="height" secondItem="JpH-dR-cFU" secondAttribute="height" constant="1" id="u0p-0c-F41"/>
                             <constraint firstItem="wpG-S4-RMz" firstAttribute="trailing" secondItem="8mj-Ux-lrY" secondAttribute="leading" constant="-8" id="u51-mZ-gjy"/>
                             <constraint firstItem="8mj-Ux-lrY" firstAttribute="centerY" secondItem="wpG-S4-RMz" secondAttribute="centerY" id="uht-wC-dIu"/>
+                            <constraint firstItem="xfa-dT-lqE" firstAttribute="leading" secondItem="hY7-zS-z3K" secondAttribute="leadingMargin" id="wHq-ff-2W7"/>
                             <constraint firstItem="JpH-dR-cFU" firstAttribute="leading" secondItem="hY7-zS-z3K" secondAttribute="leading" constant="4" id="xPQ-xk-iZa"/>
                             <constraint firstItem="8TW-YT-Be2" firstAttribute="leading" secondItem="JpH-dR-cFU" secondAttribute="leading" id="xdB-Ou-kph"/>
                             <constraint firstItem="gIc-fR-j3a" firstAttribute="leading" secondItem="EI5-Cl-Dfd" secondAttribute="leading" id="xov-ap-alU"/>
@@ -1162,6 +1206,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="6rI-dW-Skk"/>
                     <connections>
+                        <outlet property="beautyBox" destination="xfa-dT-lqE" id="HUD-il-waQ"/>
                         <outlet property="candidateTableView" destination="IxS-5Q-n38" id="D5u-Aq-FRR"/>
                         <outlet property="chatDisplayCtrlBtn" destination="JpH-dR-cFU" id="i2W-Oh-caP"/>
                         <outlet property="firstStreamView" destination="Ws9-Ky-Lfr" id="j2m-e4-uzH"/>

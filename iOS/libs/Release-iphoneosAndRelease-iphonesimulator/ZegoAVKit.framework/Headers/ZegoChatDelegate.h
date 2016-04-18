@@ -7,16 +7,17 @@
 
 #import <Foundation/Foundation.h>
 #import "CustomMsg.h"
+#import "TextMsg.h"
 
 @protocol ZegoChatDelegate <NSObject>
 
 typedef unsigned int	uint32;
 
 typedef enum {
-    PlayListUpdateFlag_Error = 0,  //获取直播流信息失败
-    PlayListUpdateFlag_Add = 1,  //Add和Remove的时候,playList里只有一个流信息
-    PlayListUpdateFlag_Remove = 2,
-    PlayListUpdateFlag_UpdateAll = 3,  //全部更新，可能会有多条直播流
+    PlayListUpdateFlag_Error = 0,  ///< 获取直播流信息失败
+    PlayListUpdateFlag_Add = 1,    ///< 新增流信息
+    PlayListUpdateFlag_Remove = 2, ///< 流删除
+    PlayListUpdateFlag_UpdateAll = 3,  ///< 全部更新，可能会有多条直播流 ***被废弃***
 } PlayListUpdateFlag;
 
 #define STREAM_ID @"stream_id"  //long long
@@ -39,7 +40,7 @@ typedef enum {
 - (void) onKickOut:(uint32) reason msg:(NSString*)msg;
 
 @optional
-/// \brief 聊天室信息更新，现在主要是成员更新
+/// \brief 聊天室成员更新
 /// \note 在聊天室里，有其他成员进出的时候会收到该通知
 /// \param arrNewUsers 新增成员列表
 /// \param arrLeftUsers 离开成员列表

@@ -20,7 +20,7 @@ typedef enum {
     ZegoAVConfigVideoResolution_320x240 = 0,
     ZegoAVConfigVideoResolution_352x288 = 1,
     ZegoAVConfigVideoResolution_640x480 = 2,
-    ZegoAVConfigVideoResolution_960x540 = 3,
+    //ZegoAVConfigVideoResolution_960x540 = 3,
     ZegoAVConfigVideoResolution_1280x720 = 4,
     ZegoAVConfigVideoResolution_1920x1080 = 5
 }ZegoAVConfigVideoResolution;
@@ -35,12 +35,12 @@ typedef enum {
 }ZegoAVConfigVideoFps;
 
 typedef enum {
-    ZegoAVConfigVideoBitrate_Verylow = 200*1024,
-    ZegoAVConfigVideoBitrate_Low = 400*1024,
-    ZegoAVConfigVideoBitrate_Generic = 600*1024,
-    ZegoAVConfigVideoBitrate_High = 800*1024,
-    ZegoAVConfigVideoBitrate_Veryhigh = 1000*1024,
-    ZegoAVConfigVideoBitrate_Superhigh = 1200*1024
+    ZegoAVConfigVideoBitrate_Verylow = 250*1000,
+    ZegoAVConfigVideoBitrate_Low = 300*1000,
+    ZegoAVConfigVideoBitrate_Generic = 480*1000,
+    ZegoAVConfigVideoBitrate_High = 600*1000,
+    ZegoAVConfigVideoBitrate_Veryhigh = 800*1000,
+    ZegoAVConfigVideoBitrate_Superhigh = 1000*1000
 }ZegoAVConfigVideoBitrate;
 
 @interface ZegoAVConfig : NSObject
@@ -67,7 +67,7 @@ typedef enum {
 /// \brief 设置每秒帧数
 /// \param fps 每秒帧数
 /// \return true:调用成功；false:调用失败
-- (bool) setVideoFPS:(ZegoAVConfigVideoFps)fps;
+- (bool) setVideoFPS:(int)fps;
 
 /// \brief 获取每秒帧数
 /// \return 每秒帧数
@@ -76,7 +76,7 @@ typedef enum {
 /// \brief 设置码率
 /// \param bitrate 码率
 /// \return true:调用成功；false:调用失败
-- (bool) setVideoBitrate:(ZegoAVConfigVideoBitrate)bitrate;
+- (bool) setVideoBitrate:(int)bitrate;
 
 /// \brief 获取码率
 /// \return 码率

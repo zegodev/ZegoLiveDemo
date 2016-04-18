@@ -11,41 +11,15 @@
 #import "ZegoChatDelegate.h"
 #import "ZegoVideoDelegate.h"
 #import "ZegoAVConfig.h"
+#if TARGET_OS_IPHONE
+#import <ZegoAVKit/ZegoAVDefines.h>
+#elif TARGET_OS_MAC
+#import <ZegoAVKitosx/ZegoAVDefines.h>
+#endif
 
 @interface ZegoAVApi : NSObject
 
-typedef unsigned int	uint32;
-
-typedef enum{
-    FLAG_RESOLUTION = 0x1,
-    FLAG_FPS = 0x2,
-    FLAG_BITRATE = 0x4
-}SetConfigReturnType;
-
-typedef enum{
-    ZegoVideoViewModeScaleAspectFit     = 0,    //等比缩放，可能有黑边
-    ZegoVideoViewModeScaleAspectFill    = 1,    //等比缩放填充整View，可能有部分被裁减
-    ZegoVideoViewModeScaleToFill        = 2,    //填充整个View
-}ZegoVideoViewMode;
-
-typedef enum{
-    CustomDataType_data = 1,    //NSData存的byte数组
-    CustomDataType_file = 2
-}CustomDataType;
-
-typedef enum
-{
-    CAPTURE_ROTATE_0 = 0,
-    CAPTURE_ROTATE_90 = 90,
-    CAPTURE_ROTATE_180 = 180,
-    CAPTURE_ROTATE_270 = 270
-}CAPTURE_ROTATE;
-
-typedef enum
-{
-    RemoteViewIndex_First = 0,
-    RemoteViewIndex_Second = 1
-}RemoteViewIndex;
++ (void)setLogLevel:(int)logLevel;
 
 /// \brief 初始化SDK
 /// \param appID Zego派发的数字ID，各个开发者的唯一标识
@@ -141,6 +115,8 @@ typedef enum
 /// \note 通过回调 onTakeRemoteViewSnapshot: 返回结果
 - (bool)takeRemoteViewSnapshot;
 
+- (bool)takeRemoteViewSnapshot:(RemoteViewIndex)idx;
+
 /// \brief 截取本地预览视频 view 图像
 /// \note 通过回调 onTakeLocalViewSnapshot: 返回结果
 - (bool)takeLocalViewSnapshot;
@@ -202,7 +178,7 @@ typedef enum
 /// \brief 发布直播
 /// \param user 发布者信息
 /// \param title 直播的名称
-/// \return true:调用成功，等待ZegoVideoDelegate中的onPublishSucc或onPublishFail通知；false:调用失败
+/// \return true:调用成功，等待ZegoVideoDelegate中的onPublishSucc或onPublishStop通知；false:调用失败
 //- (bool) startPublish:(ZegoUser*)user title:(NSString*)title;
 
 /// \brief 停止直播
@@ -213,7 +189,7 @@ typedef enum
 /// \param user 观看者信息
 /// \param zegoToken 观看直播的令牌
 /// \param zegoId 直播的Id，直播的唯一标识
-/// \return true:调用成功，等待ZegoVideoDelegate中的onPlaySucc或onPlayFail通知；false:调用失败
+/// \return true:调用成功，等待ZegoVideoDelegate中的onPlaySucc或onPlayStop通知；false:调用失败
 //- (bool) startPlay:(ZegoUser*)user zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId;
 
 /// \brief 停止观看
@@ -238,26 +214,29 @@ typedef enum
 /// \param dataKey 设置数据都是以{key,value}的形式来设置，datakey开发者可以自己定义
 /// \param data 当dataKey==CustomDataType_data，用data来设置数据，NSData中是一个Byte数组
 /// \param file 当dataKey==CustomDataType_file，用file来设置数据，本地文件路径，文件会上传
-/// \return true:调用成功，等待ZegoVideoDelegate中的onPublishSucc或onPublishFail通知；false:调用失败
+/// \return true:调用成功，等待ZegoVideoDelegate中onSetPublishExtraDataResult通知；false:调用失败
 - (bool) setPublishExtraData:(CustomDataType)type dataKey:(NSString*)key data:(NSData*)data file:(NSString*)file;
 
 /// \brief 开始直播
 /// \note 在进入聊天室成功后，调用该接口来直播
 /// \param title 直播的名称
-/// \param avTitle 直播的名称
-/// \return true:调用成功，等待ZegoVideoDelegate中的onPublishSucc或onPublishFail通知；false:调用失败
-- (bool) startPublishInChatRoom:(NSString*)title coverPic:(NSString*)coverPic;
+/// \return true:调用成功，等待ZegoVideoDelegate中的onPublishSucc或onPublishStop通知；false:调用失败
+- (bool) startPublishInChatRoom:(NSString*)title;
 
 /// \brief 停止直播
 /// \note 在聊天室内，停止直播调用该接口
 /// \return true:停止成功；false:停止失败
 - (bool) stopPublishInChatRoom;
 
+/// \brief 获取主播流信息
+/// \return 直播流信息，key 包含 kZegoPublishStreamIDKey/kZegoPublishStreamURLKey/kZegoPublishStreamAliasKey
+- (NSDictionary *)currentPublishInfo;
+
 /// \brief 观看直播
 /// \note 在进入聊天室成功后，调用该接口来观看直播
 /// \param index setRemoteView传进来的index
 /// \param streamID onPlayListUpdate带回来的STREAM_ID字段
-/// \return true:调用成功，等待ZegoVideoDelegate中的onPlaySucc或onPlayFail通知；false:调用失败
+/// \return true:调用成功，等待ZegoVideoDelegate中的onPlaySucc或onPlayStop通知；false:调用失败
 - (bool) startPlayInChatRoom:(RemoteViewIndex)index streamID:(long long)streamID;
 
 /// \brief 停止观看
@@ -287,12 +266,29 @@ typedef enum
 /// \return true：成功；false:失败
 - (bool) enableTorch:(bool) bEnable;
 
-/// \brief 开关扬声器
+/// \brief 主播方开启美颜功能
+/// \param bEnable true 打开，false 关闭
+/// \return true: 成功；false: 失败
+- (bool)enableBeautifying:(bool)bEnable;
+
+- (bool)setFilter:(ZegoFilter)filter;
+
+/// \brief （声音输出）静音开关
 /// \param bEnable true打开，false关闭
 /// \return true：成功；false:失败
 - (bool) enableSpeaker:(bool) bEnable;
+
+/// \brief 手机内置扬声器开关
+/// \param bEnable true打开，false关闭
+/// \return true：成功；false:失败
+- (bool)setBuiltInSpeakerOn:(bool)bOn;
 
 /// 设置连接到测试服务器，开发者无需关心
 - (bool) setTestServer:(NSString*)ip port:(int)port url:(NSString*)url;
 
 @end
+
+
+extern const NSString *kZegoPublishStreamIDKey;     ///< 主播流ID，uint64
+extern const NSString *kZegoPublishStreamURLKey;    ///< 主播流观看 url，NSString
+extern const NSString *kZegoPublishStreamAliasKey;  ///< 主播流别名，NSString

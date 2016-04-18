@@ -16,7 +16,9 @@ extern "C"{
 
 
 ZegoAVApi * getZegoAV_ShareInstance();
-
+void releaseZegoAV_ShareInstance();
+void setCustomAppIDAndSign(uint32 appid, NSData* data);
+    void setTestServer(NSString *ip, int port, NSString *url);
     
     
 #ifdef __cplusplus

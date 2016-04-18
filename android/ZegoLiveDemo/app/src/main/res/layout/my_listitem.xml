@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_selector"
+                android:orientation="horizontal"
+                android:padding="5dip" >
+
+<LinearLayout android:id="@+id/CoverImage"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:padding="3dip"
+              android:layout_alignParentLeft="true"
+              android:background="@drawable/image_bg"
+              android:layout_marginRight="5dip">
+
+    <ImageView
+        android:id="@+id/ImageViewCover"
+        android:layout_width="50dip"
+        android:layout_height="50dip"
+        android:src="@drawable/main_tab_item_bg"/>
+
+</LinearLayout>
+
+<TextView
+    android:id="@+id/ItemTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignTop="@+id/CoverImage"
+    android:layout_toRightOf="@+id/CoverImage"
+    android:text="Rihanna Love the way lie"
+    android:textColor="#040404"
+    android:typeface="sans"
+    android:textSize="15dip"
+    android:textStyle="bold"/>
+
+<TextView
+    android:id="@+id/ItemText"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/ItemTitle"
+    android:textColor="#343434"
+    android:textSize="10dip"
+    android:layout_marginTop="1dip"
+    android:layout_toRightOf="@+id/CoverImage"
+    android:text="Just gona stand there and ..." />
+
+<TextView
+    android:id="@+id/duration"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_alignTop="@id/ItemTitle"
+    android:gravity="right"
+    android:text="5:45"
+    android:layout_marginRight="5dip"
+    android:textSize="10dip"
+    android:textColor="#10bcc9"
+    android:textStyle="bold"/>
+
+<ImageView android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@drawable/main_tab_item_home"
+           android:layout_alignParentRight="true"
+           android:layout_centerVertical="true"/>
+
+</RelativeLayout>
+

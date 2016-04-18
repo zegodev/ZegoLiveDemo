@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlytParent"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/layoutLocalView1"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="48dp"
+        android:visibility="invisible"
+        />
+
+    <!-- Remote View -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layoutRemoteView"
+        android:background="@android:color/white">
+        <SurfaceView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/svVideoView"
+            android:layout_margin="1dp"/>
+
+        <LinearLayout
+            android:id="@+id/layoutRemoteViewTool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#50FFFFFF">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnRemoteViewShot"
+                android:src="@android:drawable/ic_menu_camera"
+                android:background="@android:color/transparent"/>
+
+            <RadioGroup
+                android:id="@+id/rgVideoMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fill"
+                    android:id="@+id/rbFill"
+                    android:checked="false"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AspectFit"
+                    android:id="@+id/rbAspectFit"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AspectFill"
+                    android:id="@+id/rbAspectFill"
+                    android:checked="false"/>
+            </RadioGroup>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutLocalView2"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="48dp"
+        android:visibility="invisible"
+       />
+
+    <LinearLayout
+        android:id="@+id/layoutToolbar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0dp"
+        android:layout_marginEnd="0dp"
+        android:background="#50129afb"
+        android:weightSum="1">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Flash"
+            android:id="@+id/chkFlash"
+            android:checked="false"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Front Camera"
+            android:id="@+id/chkFrontCam"
+            android:checked="false"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mic"
+            android:id="@+id/chkEnableMic"
+            android:checked="false"/>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Join"
+            android:id="@+id/btnJoinPublish"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="0"
+            android:id="@+id/TxtUserCount"
+            android:background="#a2fb12"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnClose"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:background="@android:color/transparent"
+            android:layout_weight="0.27"/>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivSnapshot"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"/>
+
+</RelativeLayout>

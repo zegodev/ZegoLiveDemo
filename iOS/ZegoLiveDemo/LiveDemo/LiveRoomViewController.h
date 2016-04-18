@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #include "ZegoAVKitManager.h"
 #import "ZegoAVKit/ZegoMoviePlayer.h"
+#import <ZegoAVKit/ZegoShareApi.h>
 
 
 #define  LIVEROOM_TYPE_PUBLISH @"1"
@@ -16,7 +17,7 @@
 #define  COVER_FILE_KEY @"Cover_Pic"
 
 
-@interface LiveRoomViewController : UIViewController<ZegoChatDelegate, ZegoVideoDelegate, UIApplicationDelegate, ZegoMoviePlayerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface LiveRoomViewController : UIViewController<ZegoChatDelegate, ZegoVideoDelegate, UIApplicationDelegate, ZegoMoviePlayerDelegate, UITableViewDataSource, UITableViewDelegate, ZegoShareApiDelegate>
 
     @property(nonatomic,strong) NSString * roomType;
     @property(nonatomic,strong) NSString * roomTitle;

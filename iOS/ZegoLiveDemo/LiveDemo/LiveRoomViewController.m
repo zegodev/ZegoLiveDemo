@@ -58,6 +58,7 @@ enum{
 @interface LiveRoomViewController ()
 
 @property (strong) UIAlertView *alert;
+@property (weak, nonatomic) IBOutlet UIView *beautyBox;
 
 @end
 
@@ -76,6 +77,10 @@ enum{
     NSMutableArray *_candidateList;
     
     NSMutableArray *_viewInfoList;
+    
+    ZegoShareApi *shareApi;
+    
+    NSArray *_filterList;
 }
 
 - (void)viewDidLoad {
@@ -83,6 +88,23 @@ enum{
     
     // * disable idle timer
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    
+    _filterList = @[
+                    @"无滤镜",
+                    @"简洁",
+                    @"黑白",
+                    @"老化",
+                    @"哥特",
+                    @"锐色",
+                    @"淡雅",
+                    @"酒红",
+                    @"青柠",
+                    @"浪漫",
+                    @"光晕",
+                    @"蓝调",
+                    @"梦幻",
+                    @"夜色"
+                    ];
 }
 
 
@@ -91,6 +113,7 @@ enum{
     [self registerNotifications];
     
     _displayChat = YES;
+    [self.beautyBox setHidden:YES];
     
     if ([_roomType isEqualToString:LIVEROOM_TYPE_PLAYBACK]) {
         
@@ -130,10 +153,8 @@ enum{
 
         self.liveDuration.text = formatTimeInterval(timeDuration, NO);
 
-
         return;
     }
-    
     
     self.replayCtrlView.hidden = YES;
     self.inputMsgEdit.hidden = NO;
@@ -165,9 +186,9 @@ enum{
     [getZegoAV_ShareInstance() setRemoteView:RemoteViewIndex_First view:firstRemoteView];
     [getZegoAV_ShareInstance() setRemoteView:RemoteViewIndex_Second view:secondRemoteView];
     
-    [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];
-    [getZegoAV_ShareInstance() setRemoteViewMode:RemoteViewIndex_First mode:ZegoVideoViewModeScaleAspectFill];
-    [getZegoAV_ShareInstance() setRemoteViewMode:RemoteViewIndex_Second mode:ZegoVideoViewModeScaleAspectFill];
+    [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFit];
+    [getZegoAV_ShareInstance() setRemoteViewMode:RemoteViewIndex_First mode:ZegoVideoViewModeScaleAspectFit];
+    [getZegoAV_ShareInstance() setRemoteViewMode:RemoteViewIndex_Second mode:ZegoVideoViewModeScaleAspectFit];
     
     //设置回调代理
     [getZegoAV_ShareInstance() setVideoDelegate:self callbackQueue:dispatch_get_main_queue()];
@@ -215,12 +236,13 @@ enum{
         _publisherPic = _userPic;
                 
         self.goPublishBtn.hidden = YES;
+        self.beautyBox.hidden = NO;
     }
     [self displayPublisherUI];
     
 }
 
--(void)viewDidDisappear:(BOOL)animated{
+-(void)viewWillDisappear:(BOOL)animated{
 
     [_viewInfoList removeAllObjects];
     _viewInfoList = nil;
@@ -235,6 +257,7 @@ enum{
     else{
         
         [getZegoAV_ShareInstance() leaveChatRoom];
+        releaseZegoAV_ShareInstance();
         _playing = NO;
     }
     
@@ -299,6 +322,21 @@ enum{
     _useFrontCamera = !_useFrontCamera;
 
     [getZegoAV_ShareInstance() setFrontCam:_useFrontCamera];
+    
+    [UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionTransitionNone animations:^{
+        CGAffineTransform newTransform = CGAffineTransformMakeScale(-1, 1);
+        
+        [self.firstStreamView setTransform:newTransform];
+        
+        CGAffineTransform newTransform2 = CGAffineTransformMakeScale(1, 1);
+        
+        [self.firstStreamView setTransform:newTransform2];
+
+        
+    }
+                     completion:nil
+                         
+     ];
 }
 
 - (IBAction)publishControlBtnClicked:(UIButton *)sender {
@@ -345,7 +383,7 @@ enum{
         
         [getZegoAV_ShareInstance() setLocalView:previewView];
         [getZegoAV_ShareInstance() startPreview];
-        [getZegoAV_ShareInstance() startPublishInChatRoom:self.roomTitle coverPic:nil];
+        [getZegoAV_ShareInstance() startPublishInChatRoom:self.roomTitle];
         
         self.roomStatus.text = @"直播中";
         
@@ -749,11 +787,9 @@ enum{
     
     
     //[_publishControlBtn setEnabled:YES];
-
-
 }
 
-- (void) onPublishFail:(ShowErrCode)err zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId title:(NSString*)title {
+- (void) onPublishStop:(ShowErrCode)err zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId title:(NSString*)title {
 
     if(err == ShowErrCode_Temp_Broken){
         self.roomStatus.text = @"网络优化中";
@@ -761,7 +797,7 @@ enum{
 
         //临时中断，尝试重新启动发布直播
         [getZegoAV_ShareInstance() startPreview];
-        [getZegoAV_ShareInstance() startPublishInChatRoom:self.roomTitle coverPic:nil];
+        [getZegoAV_ShareInstance() startPublishInChatRoom:self.roomTitle];
     }
     else if(err == ShowErrCode_End){
         //发布流正常结束
@@ -782,7 +818,7 @@ enum{
     [self updateLiveDurationLabel];
 }
 
-- (void) onPlayFail:(uint32)err streamID:(long long)streamID zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId title:(NSString*)title{
+- (void) onPlayStop:(uint32)err streamID:(long long)streamID zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId title:(NSString*)title{
     NSLog(@"%s", __FUNCTION__);
     
     if(err == ShowErrCode_Temp_Broken){
@@ -1082,7 +1118,7 @@ enum{
         
         [getZegoAV_ShareInstance() setLocalView:previewView];
         [getZegoAV_ShareInstance() startPreview];
-        [getZegoAV_ShareInstance() startPublishInChatRoom:self.roomTitle coverPic:nil];
+        [getZegoAV_ShareInstance() startPublishInChatRoom:self.roomTitle];
         
         self.roomStatus.text = @"直播中";
         _publishing = YES;
@@ -1236,7 +1272,7 @@ enum{
             }
         }
         else{
-            int imageIndex = (customMsg.user.userID.longLongValue)%9;
+            int imageIndex = ((unsigned long long)(customMsg.user.userID.longLongValue))%9;
             imagePath = [[NSString alloc] initWithFormat:@"balloon_%d.png", imageIndex];
             
             [self startFlyImage:nCount imagePath:imagePath];
@@ -1306,7 +1342,7 @@ enum{
 
                 [getZegoAV_ShareInstance() setLocalView:previewView];
                 [getZegoAV_ShareInstance() startPreview];
-                [getZegoAV_ShareInstance() startPublishInChatRoom:self.roomTitle coverPic:nil];
+                [getZegoAV_ShareInstance() startPublishInChatRoom:self.roomTitle];
                 
                 _publishing = YES;
                 
@@ -1412,6 +1448,33 @@ enum{
     
 
     [_publisherPicView setImage:[UIImage imageNamed:_publisherPic]];
+    //点击头像复制分享链接到剪贴板
+    _publisherPicView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+    [_publisherPicView addGestureRecognizer:singleTap];
+}
+
+- (void)handleSingleTap:(UIGestureRecognizer *)gestureRecognizer {
+    shareApi = [ZegoShareApi new];
+    [shareApi setDelegate:self callbackQueue:dispatch_get_main_queue()];
+    NSDictionary *dict =[getZegoAV_ShareInstance() currentPublishInfo];
+    [shareApi initApi];
+    [shareApi getShareUrlByBase:@"http://api.zego.im" stream:dict[kZegoPublishStreamAliasKey] title:@"ZegoTest"];
+}
+
+- (void)onGetStreamShareUrl:(int)errorCode info:(NSDictionary *)info
+{
+    NSString* strShareUrl = info[kZegoShareUrlKey];
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setString:strShareUrl];
+    [shareApi setDelegate:nil callbackQueue:nil];
+    [shareApi uninitApi];
+    shareApi = nil;
+}
+
+- (void)onGetStreamPlayUrl:(int)errorCode info:(NSDictionary *)info
+{
+    
 }
 
 - (void) displayPlayerList:(NSInteger)totalCount{
@@ -1529,9 +1592,9 @@ enum{
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    [self stopAllPlayStreams];
-    [getZegoAV_ShareInstance() stopPublishInChatRoom];
-    [self LeaveRoom:nil];
+    //[self stopAllPlayStreams];
+    //[getZegoAV_ShareInstance() stopPublishInChatRoom];
+    //[self LeaveRoom:nil];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -1659,4 +1722,40 @@ static NSString * formatTimeInterval(CGFloat seconds, BOOL isLeft)
         }
     }
 }
+
+
+#pragma mark -- UIPickerViewDelegate, UIPickerViewDataSource
+// pickerView 列数
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+// pickerView 每列个数
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return _filterList.count;
+}
+
+
+// 返回选中的行
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    [getZegoAV_ShareInstance() setFilter:row];
+}
+
+//返回当前行的内容,此处是将数组中数值添加到滚动的那个显示栏上
+-(NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if (row >= _filterList.count) {
+        return @"Error";
+    }
+    
+    return [_filterList objectAtIndex:row];
+}
+
+
+- (IBAction)enableBeautify:(id)sender {
+    UISwitch *s = (UISwitch *)sender;
+    [getZegoAV_ShareInstance() enableBeautifying:s.on];
+}
+
 @end

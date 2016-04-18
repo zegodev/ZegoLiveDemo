@@ -8,6 +8,24 @@
 #include "ZegoAVKitManager.h"
 
 ZegoAVApi *g_zegoAV = NULL;
+NSData *g_signKey;
+uint32 g_appID;
+NSString *g_testIP = nil;
+int g_testPort = 0;
+NSString *g_testUrl = nil;
+
+void setCustomAppIDAndSign(uint32 appid, NSData* data)
+{
+    g_appID = appid;
+    g_signKey = data;
+}
+
+void setTestServer(NSString *ip, int port, NSString *url)
+{
+    g_testIP = ip;
+    g_testPort = port;
+    g_testUrl = url;
+}
 
 NSData * zegoAppSignFromServer()
 {
@@ -27,12 +45,26 @@ NSData * zegoAppSignFromServer()
 
 ZegoAVApi * getZegoAV_ShareInstance()
 {
-    if (g_zegoAV == NULL) {
-        NSData * appSign =  zegoAppSignFromServer();
-        g_zegoAV = [ZegoAVApi new];
-        [g_zegoAV initSDK:1 appSignature:appSign];
+    if (g_zegoAV == nil) {
+        if (g_appID != 0 && g_signKey != nil) {
+            g_zegoAV = [ZegoAVApi new];
+            [g_zegoAV initSDK:g_appID appSignature:g_signKey];
+        }
+        else{
+            NSData * appSign =  zegoAppSignFromServer();
+            g_zegoAV = [ZegoAVApi new];
+            [g_zegoAV initSDK:1 appSignature:appSign];
+        }
+        [g_zegoAV setTestServer:g_testIP port:g_testPort url:g_testUrl];
     }
     return g_zegoAV;
 }
 
 
+void releaseZegoAV_ShareInstance()
+{
+    if (g_zegoAV) {
+        [g_zegoAV uninitSDK];
+        g_zegoAV = nil;
+    }
+}

@@ -28,10 +28,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [getZegoAV_ShareInstance() setShowListDelegate:self callbackQueue:dispatch_get_main_queue()];
-    
     // 集成刷新控件
     [self setupRefresh];
+}
+
+- (void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [getZegoAV_ShareInstance() setShowListDelegate:self callbackQueue:dispatch_get_main_queue()];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [refreshControl endRefreshing];
+    
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

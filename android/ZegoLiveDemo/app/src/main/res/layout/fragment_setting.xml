@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/bg_white"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:padding="@dimen/dimen_20">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.zego.zegolivedemo.ui.widget.CirImageView
+            android:layout_width="@dimen/avatar_width"
+            android:layout_height="@dimen/avatar_height"
+            android:src="@mipmap/ic_avatar_default"/>
+
+        <TextView
+            android:id="@+id/tv_change_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/sl_btn_pressed"
+            android:padding="@dimen/dimen_10"
+            android:text="@string/change_user_account"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_5"/>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_40"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_account"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_5"/>
+
+        <EditText
+            android:id="@+id/et_user_account"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/text_size_3"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_40"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_name"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_5"/>
+
+        <EditText
+            android:id="@+id/et_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/text_size_3"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_40"
+        android:layout_marginTop="@dimen/dimen_15"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resolution_type"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_4"/>
+
+        <Spinner
+            android:id="@+id/sp_resolutions"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:entries="@array/resolution_types"
+            android:textColor="@color/text_gray">
+
+        </Spinner>
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60"
+        android:layout_marginTop="@dimen/dimen_15"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_resolution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_4"
+            tools:text="分辨率   1920 X 1080"/>
+
+        <com.zego.zegolivedemo.ui.widget.CustomSeekBar
+            android:id="@+id/sb_resolution"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_30"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_fps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_4"
+            tools:text="帧率   30"/>
+
+        <com.zego.zegolivedemo.ui.widget.CustomSeekBar
+            android:id="@+id/sb_fps"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_30"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_bitrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_4"
+            tools:text="码率   30"/>
+
+        <com.zego.zegolivedemo.ui.widget.CustomSeekBar
+            android:id="@+id/sb_bitrate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_30"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_complete_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_30"
+        android:text="@string/complete_setting"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_5"/>
+
+</LinearLayout>

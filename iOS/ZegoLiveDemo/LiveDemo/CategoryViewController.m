@@ -59,6 +59,18 @@
     [self setupRefresh];
 }
 
+- (void) viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [getZegoAV_ShareInstance() setShowListDelegate:self callbackQueue:dispatch_get_main_queue()];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [refreshControl endRefreshing];
+    
+    [super viewWillDisappear:animated];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

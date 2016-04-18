@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *tfIP;
 @property (weak, nonatomic) IBOutlet UITextField *tfPort;
 @property (weak, nonatomic) IBOutlet UITextField *tfUrl;
+@property (weak, nonatomic) IBOutlet UITextField *tfAppID;
+@property (weak, nonatomic) IBOutlet UITextField *tfSign;
 
 @property (weak, nonatomic) IBOutlet UISlider *sliderResolution;
 @property (weak, nonatomic) IBOutlet UISlider *sliderFPS;

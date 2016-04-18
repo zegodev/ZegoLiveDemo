@@ -1,0 +1,6 @@
+framework module ZegoAVKit {
+  umbrella header "ZegoAVKit.h"
+
+  export *
+  module * { export * }
+}

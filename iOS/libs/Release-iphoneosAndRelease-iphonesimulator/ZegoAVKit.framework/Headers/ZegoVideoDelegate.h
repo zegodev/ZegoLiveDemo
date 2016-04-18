@@ -27,7 +27,7 @@ typedef enum {
 /// \param zegoToken 聊天室token，进入一个聊天室，需要同时有zegoToken和zegoId
 /// \param zegoId 聊天室唯一标识
 /// \param title 直播名称
-- (void) onPublishFail:(ShowErrCode)err zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId title:(NSString*)title;
+- (void) onPublishStop:(ShowErrCode)err zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId title:(NSString*)title;
 
 /// \brief 观看直播成功
 /// \param zegoToken 聊天室token，进入一个聊天室，需要同时有zegoToken和zegoId
@@ -42,7 +42,7 @@ typedef enum {
 /// \param zegoId 聊天室唯一标识
 /// \param streamID 直播流的唯一标识
 /// \param title 直播名称
-- (void) onPlayFail:(uint32)err streamID:(long long)streamID zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId title:(NSString*)title;
+- (void) onPlayStop:(uint32)err streamID:(long long)streamID zegoToken:(uint32)zegoToken zegoId:(uint32)zegoId title:(NSString*)title;
 
 /// \brief 观看直播人数更新
 /// \param userCount 观看直播的人数
