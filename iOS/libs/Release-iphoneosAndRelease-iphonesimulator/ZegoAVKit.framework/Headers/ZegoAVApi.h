@@ -269,7 +269,7 @@
 /// \brief 主播方开启美颜功能
 /// \param bEnable true 打开，false 关闭
 /// \return true: 成功；false: 失败
-- (bool)enableBeautifying:(bool)bEnable;
+- (bool)enableBeautifying:(ZegoBeautifyFeature)feature;
 
 - (bool)setFilter:(ZegoFilter)filter;
 

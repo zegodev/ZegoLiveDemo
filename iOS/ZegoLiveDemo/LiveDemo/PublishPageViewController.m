@@ -13,6 +13,22 @@
 
 
 @interface PublishPageViewController ()
+
+@property (weak, nonatomic) IBOutlet UIView *beautyBox;
+@property (weak, nonatomic) IBOutlet UIView *filterBox;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beautifyBoxHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beautifyBoxWidth;
+@property (weak, nonatomic) IBOutlet UIButton *btnBeautify;
+@property (weak, nonatomic) IBOutlet UIPickerView *beautifyPicker;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *filterBoxHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *filterBoxWidth;
+@property (weak, nonatomic) IBOutlet UIPickerView *filterPicker;
+@property (weak, nonatomic) IBOutlet UIButton *btnFilter;
+
+@property (readonly) NSArray* beautifyFeatureList;
+
 @end
 
 @implementation PublishPageViewController
@@ -21,6 +37,7 @@
     BOOL enableTorch;
     
     NSString *coverImagePath;
+    NSArray *_filterList;
 }
 
 - (void)viewDidLoad {
@@ -55,6 +72,28 @@
     [self registerForKeyboardNotifications];
     
     [self swichPreviewChanged:_previewSwitch];
+    
+    _filterList = @[
+                    @"无滤镜",
+                    @"简洁",
+                    @"黑白",
+                    @"老化",
+                    @"哥特",
+                    @"锐色",
+                    @"淡雅",
+                    @"酒红",
+                    @"青柠",
+                    @"浪漫",
+                    @"光晕",
+                    @"蓝调",
+                    @"梦幻",
+                    @"夜色"
+                    ];
+    
+    _beautifyFeatureList = @[@"无美颜", @"磨皮", @"全屏美白", @"磨皮＋全屏美白", @"磨皮+皮肤美白"];
+    
+    self.filterBox.hidden = YES;
+    self.beautyBox.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -123,9 +162,15 @@
 - (IBAction)swichPreviewChanged:(UISwitch *)sender {
     if (sender.on) {
         [self startPreview];
+        self.filterBox.hidden = NO;
+        self.beautyBox.hidden = NO;
+        self.coverImageView.hidden = YES;
     }
     else{
         [self stopPreview];
+        self.filterBox.hidden = YES;
+        self.beautyBox.hidden = YES;
+        self.coverImageView.hidden = NO;
     }
 }
 
@@ -319,5 +364,106 @@
 
     return [UIImage imageWithCGImage:imageRef];
 }
+
+
+#pragma mark -- UIPickerViewDelegate, UIPickerViewDataSource
+// pickerView 列数
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+// pickerView 每列个数
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    if (pickerView == self.beautifyPicker) {
+        return self.beautifyFeatureList.count;
+    } else {
+        return _filterList.count;
+    }
+}
+
+
+// 返回选中的行
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if (pickerView == self.beautifyPicker) {
+        int feature = ZEGO_BEAUTIFY_NONE;
+        switch (row) {
+            case 1:
+                feature = ZEGO_BEAUTIFY_POLISH;
+                break;
+            case 2:
+                feature = ZEGO_BEAUTIFY_WHITEN;
+                break;
+            case 3:
+                feature = ZEGO_BEAUTIFY_POLISH | ZEGO_BEAUTIFY_WHITEN;
+                break;
+            case 4:
+                feature = ZEGO_BEAUTIFY_POLISH | ZEGO_BEAUTIFY_SKINWHITEN;
+                break;
+            default:
+                break;
+        }
+        
+        [getZegoAV_ShareInstance() enableBeautifying:feature];
+        
+        [self.btnBeautify setTitle:self.beautifyFeatureList[row] forState:UIControlStateNormal];
+        
+    } else {
+        [getZegoAV_ShareInstance() setFilter:row];
+        [self.btnFilter setTitle:_filterList[row] forState:UIControlStateNormal];
+    }
+}
+
+//返回当前行的内容,此处是将数组中数值添加到滚动的那个显示栏上
+-(NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    NSArray *dataList = nil;
+    if (pickerView == self.beautifyPicker) {
+        dataList = self.beautifyFeatureList;
+    } else {
+        dataList = _filterList;
+    }
+    
+    if (row >= dataList.count) {
+        return @"Error";
+    }
+    
+    return [dataList objectAtIndex:row];
+}
+
+
+- (IBAction)enableBeautify:(id)sender {
+    
+    if (self.beautifyBoxWidth.constant == 150) {
+        self.beautifyBoxHeight.constant = 46;
+        self.beautifyBoxWidth.constant = 120;
+        self.beautifyPicker.hidden = YES;
+    } else {
+        self.beautifyBoxHeight.constant = 128;
+        self.beautifyBoxWidth.constant = 150;
+        self.beautifyPicker.hidden = NO;
+    }
+    
+    [UIView animateWithDuration:0.1 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+- (IBAction)filterClicked:(id)sender {
+    if (self.filterBoxWidth.constant == 130) {
+        self.filterBoxHeight.constant = 46;
+        self.filterBoxWidth.constant = 60;
+        self.filterPicker.hidden = YES;
+    } else {
+        self.filterBoxHeight.constant = 128;
+        self.filterBoxWidth.constant = 130;
+        self.filterPicker.hidden = NO;
+    }
+    
+    [UIView animateWithDuration:0.1 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
 
 @end

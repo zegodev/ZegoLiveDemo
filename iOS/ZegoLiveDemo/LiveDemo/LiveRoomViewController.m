@@ -59,6 +59,20 @@ enum{
 
 @property (strong) UIAlertView *alert;
 @property (weak, nonatomic) IBOutlet UIView *beautyBox;
+@property (weak, nonatomic) IBOutlet UIView *filterBox;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beautifyBoxHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *beautifyBoxWidth;
+@property (weak, nonatomic) IBOutlet UIButton *btnBeautify;
+@property (weak, nonatomic) IBOutlet UIPickerView *beautifyPicker;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *filterBoxHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *filterBoxWidth;
+@property (weak, nonatomic) IBOutlet UIPickerView *filterPicker;
+@property (weak, nonatomic) IBOutlet UIButton *btnFilter;
+
+
+@property (readonly) NSArray* beautifyFeatureList;
 
 @end
 
@@ -105,6 +119,8 @@ enum{
                     @"梦幻",
                     @"夜色"
                     ];
+    
+    _beautifyFeatureList = @[@"无美颜", @"磨皮", @"全屏美白", @"磨皮＋全屏美白", @"磨皮+皮肤美白"];
 }
 
 
@@ -113,7 +129,9 @@ enum{
     [self registerNotifications];
     
     _displayChat = YES;
-    [self.beautyBox setHidden:YES];
+
+    self.beautyBox.hidden = YES;
+    self.filterBox.hidden = YES;
     
     if ([_roomType isEqualToString:LIVEROOM_TYPE_PLAYBACK]) {
         
@@ -237,6 +255,10 @@ enum{
                 
         self.goPublishBtn.hidden = YES;
         self.beautyBox.hidden = NO;
+        self.filterBox.hidden = NO;
+        
+        [self.btnFilter setTitle:_filterList[0] forState:UIControlStateNormal];
+        [self.btnBeautify setTitle:self.beautifyFeatureList[0] forState:UIControlStateNormal];
     }
     [self displayPublisherUI];
     
@@ -1732,30 +1754,96 @@ static NSString * formatTimeInterval(CGFloat seconds, BOOL isLeft)
 
 // pickerView 每列个数
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return _filterList.count;
+    if (pickerView == self.beautifyPicker) {
+        return self.beautifyFeatureList.count;
+    } else {
+        return _filterList.count;
+    }
 }
 
 
 // 返回选中的行
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    [getZegoAV_ShareInstance() setFilter:row];
+    if (pickerView == self.beautifyPicker) {
+        int feature = ZEGO_BEAUTIFY_NONE;
+        switch (row) {
+            case 1:
+                feature = ZEGO_BEAUTIFY_POLISH;
+                break;
+            case 2:
+                feature = ZEGO_BEAUTIFY_WHITEN;
+                break;
+            case 3:
+                feature = ZEGO_BEAUTIFY_POLISH | ZEGO_BEAUTIFY_WHITEN;
+                break;
+            case 4:
+                feature = ZEGO_BEAUTIFY_POLISH | ZEGO_BEAUTIFY_SKINWHITEN;
+                break;
+            default:
+                break;
+        }
+        
+        [getZegoAV_ShareInstance() enableBeautifying:feature];
+
+        [self.btnBeautify setTitle:self.beautifyFeatureList[row] forState:UIControlStateNormal];
+        
+    } else {
+        [getZegoAV_ShareInstance() setFilter:row];
+        [self.btnFilter setTitle:_filterList[row] forState:UIControlStateNormal];
+    }
 }
 
 //返回当前行的内容,此处是将数组中数值添加到滚动的那个显示栏上
 -(NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if (row >= _filterList.count) {
+    NSArray *dataList = nil;
+    if (pickerView == self.beautifyPicker) {
+        dataList = self.beautifyFeatureList;
+    } else {
+        dataList = _filterList;
+    }
+    
+    if (row >= dataList.count) {
         return @"Error";
     }
     
-    return [_filterList objectAtIndex:row];
+    return [dataList objectAtIndex:row];
 }
 
 
 - (IBAction)enableBeautify:(id)sender {
-    UISwitch *s = (UISwitch *)sender;
-    [getZegoAV_ShareInstance() enableBeautifying:s.on];
+    
+    if (self.beautifyBoxWidth.constant == 150) {
+        self.beautifyBoxHeight.constant = 46;
+        self.beautifyBoxWidth.constant = 120;
+        self.beautifyPicker.hidden = YES;
+    } else {
+        self.beautifyBoxHeight.constant = 128;
+        self.beautifyBoxWidth.constant = 150;
+        self.beautifyPicker.hidden = NO;
+    }
+    
+    [UIView animateWithDuration:0.1 animations:^{
+        [self.view layoutIfNeeded];
+    }];
 }
+
+- (IBAction)filterClicked:(id)sender {
+    if (self.filterBoxWidth.constant == 130) {
+        self.filterBoxHeight.constant = 46;
+        self.filterBoxWidth.constant = 60;
+        self.filterPicker.hidden = YES;
+    } else {
+        self.filterBoxHeight.constant = 128;
+        self.filterBoxWidth.constant = 130;
+        self.filterPicker.hidden = NO;
+    }
+    
+    [UIView animateWithDuration:0.1 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
 
 @end

@@ -11,7 +11,7 @@
 typedef enum {
     ZegoAVConfigPreset_Verylow = 0,
     ZegoAVConfigPreset_Low = 1,
-    ZegoAVConfigPreset_Generic = 2,
+    ZegoAVConfigPreset_Generic = 2,  //手机端直播建议使用Generic配置，效果最优
     ZegoAVConfigPreset_High = 3,
     ZegoAVConfigPreset_Veryhigh = 4
 }ZegoAVConfigPreset;
@@ -46,7 +46,7 @@ typedef enum {
 @interface ZegoAVConfig : NSObject
 
 /// \brief 获取预设配置
-/// \param config 分为4个等级，根据机器性能和网络条件选择预设
+/// \param config 分为5个等级，根据机器性能和网络条件选择预设，手机端直播建议使用Generic配置，效果最优
 /// \return true:调用成功；false:调用失败
 +(ZegoAVConfig*) defaultZegoAVConfig:(ZegoAVConfigPreset)preset;
 

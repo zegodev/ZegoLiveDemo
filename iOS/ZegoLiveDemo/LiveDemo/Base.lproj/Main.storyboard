@@ -257,7 +257,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="119" y="-387"/>
+            <point key="canvasLocation" x="370" y="772"/>
         </scene>
         <!--CategoryPage-->
         <scene sceneID="wg7-f3-ORb">
@@ -473,7 +473,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="152" y="371"/>
+            <point key="canvasLocation" x="18" y="772"/>
         </scene>
         <!--Popular-->
         <scene sceneID="Rh7-Nz-V94">
@@ -517,7 +517,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TPh-TV-z9V" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="113" y="1068"/>
+            <point key="canvasLocation" x="-686" y="772"/>
         </scene>
         <!--PublishPage-->
         <scene sceneID="KX1-Yb-1sI">
@@ -547,7 +547,7 @@
                                 </connections>
                             </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hgU-ZN-Vxg">
-                                <rect key="frame" x="85.5" y="43" width="51" height="31"/>
+                                <rect key="frame" x="85" y="43" width="51" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="GRM-ec-QHX"/>
                                     <constraint firstAttribute="width" constant="49" id="tSv-bI-EnW"/>
@@ -602,6 +602,62 @@
                                     <segue destination="GVJ-cd-SxC" kind="modal" identifier="PublishInLiveRoom" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="dqk-mB-vKn"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RAr-VX-vQW">
+                                <rect key="frame" x="16" y="82" width="150" height="128"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Siw-AL-eHu">
+                                        <rect key="frame" x="0.0" y="37" width="150" height="91"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="zGU-6C-fO4" id="CRX-bu-LY2"/>
+                                            <outlet property="delegate" destination="zGU-6C-fO4" id="rIy-vv-za0"/>
+                                        </connections>
+                                    </pickerView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hyb-wQ-IGs">
+                                        <rect key="frame" x="60" y="8" width="30" height="30"/>
+                                        <state key="normal" title="美颜"/>
+                                        <connections>
+                                            <action selector="enableBeautify:" destination="zGU-6C-fO4" eventType="touchUpInside" id="T5O-4m-eVJ"/>
+                                            <action selector="enableBeautify:" destination="GVJ-cd-SxC" eventType="touchUpInside" id="lPs-wY-QHJ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.86740813220000001" green="1" blue="0.66907846849999997" alpha="0.5" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="hyb-wQ-IGs" firstAttribute="top" secondItem="RAr-VX-vQW" secondAttribute="top" constant="8" id="2kP-Cf-btM"/>
+                                    <constraint firstAttribute="width" constant="150" id="9ch-2g-Dfe"/>
+                                    <constraint firstAttribute="height" constant="128" id="ruv-ra-Naa"/>
+                                    <constraint firstItem="hyb-wQ-IGs" firstAttribute="centerX" secondItem="RAr-VX-vQW" secondAttribute="centerX" id="yDo-4D-qbs"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rdL-9t-bc4" userLabel="Filter Box">
+                                <rect key="frame" x="173" y="82" width="130" height="128"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aiY-6W-bvF">
+                                        <rect key="frame" x="14" y="37" width="102" height="91"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="zGU-6C-fO4" id="xqX-E5-Sdj"/>
+                                            <outlet property="delegate" destination="zGU-6C-fO4" id="IKF-rF-few"/>
+                                        </connections>
+                                    </pickerView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IvM-Lv-Gh0">
+                                        <rect key="frame" x="50" y="8" width="30" height="30"/>
+                                        <state key="normal" title="滤镜"/>
+                                        <connections>
+                                            <action selector="filterClicked:" destination="zGU-6C-fO4" eventType="touchUpInside" id="3Pt-Np-KB2"/>
+                                            <action selector="filterClicked:" destination="GVJ-cd-SxC" eventType="touchUpInside" id="91J-Ve-rsB"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.86740813220000001" green="1" blue="0.66907846849999997" alpha="0.5" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="130" id="2ur-tm-8LE"/>
+                                    <constraint firstAttribute="height" constant="128" id="Bbg-fI-4HO"/>
+                                    <constraint firstItem="IvM-Lv-Gh0" firstAttribute="centerX" secondItem="rdL-9t-bc4" secondAttribute="centerX" id="KyC-9T-BTf"/>
+                                    <constraint firstItem="IvM-Lv-Gh0" firstAttribute="top" secondItem="rdL-9t-bc4" secondAttribute="top" constant="8" id="awY-SQ-RFR"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -609,6 +665,7 @@
                             <constraint firstItem="H5q-Mx-mkl" firstAttribute="centerY" secondItem="hgU-ZN-Vxg" secondAttribute="centerY" id="3Ts-DZ-tGo"/>
                             <constraint firstItem="V5f-Hw-fj2" firstAttribute="top" secondItem="C49-5n-Hiq" secondAttribute="bottom" constant="30" id="4Pb-oe-YWg"/>
                             <constraint firstItem="xEk-VN-7QK" firstAttribute="width" secondItem="GtY-Ni-oIb" secondAttribute="width" constant="-18" id="5KO-od-2AW"/>
+                            <constraint firstItem="rdL-9t-bc4" firstAttribute="leading" secondItem="RAr-VX-vQW" secondAttribute="trailing" constant="7" id="7Co-MS-dfW"/>
                             <constraint firstItem="xEk-VN-7QK" firstAttribute="centerX" secondItem="GtY-Ni-oIb" secondAttribute="centerX" id="89E-xN-2bA"/>
                             <constraint firstItem="hgU-ZN-Vxg" firstAttribute="centerY" secondItem="Cfy-rH-vDI" secondAttribute="centerY" id="9X9-vb-Lao"/>
                             <constraint firstItem="a5G-5e-Ygh" firstAttribute="top" secondItem="Cfy-rH-vDI" secondAttribute="top" id="DVm-9g-UjS"/>
@@ -617,11 +674,14 @@
                             <constraint firstItem="z3O-G1-c7u" firstAttribute="width" secondItem="GtY-Ni-oIb" secondAttribute="width" multiplier="0.45" id="Pmo-Tn-d9Y"/>
                             <constraint firstItem="hgU-ZN-Vxg" firstAttribute="centerX" secondItem="z3O-G1-c7u" secondAttribute="centerX" constant="-48.5" id="Y9r-kl-V7j"/>
                             <constraint firstItem="xEk-VN-7QK" firstAttribute="bottom" secondItem="C49-5n-Hiq" secondAttribute="top" constant="-10" id="bOY-A2-nYn"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="RAr-VX-vQW" secondAttribute="leading" id="bWa-a1-cfQ"/>
                             <constraint firstItem="z3O-G1-c7u" firstAttribute="centerX" secondItem="GtY-Ni-oIb" secondAttribute="centerX" constant="-1.5" id="cn2-xJ-iWV"/>
+                            <constraint firstItem="rdL-9t-bc4" firstAttribute="top" secondItem="RAr-VX-vQW" secondAttribute="top" id="cuS-1b-cfJ"/>
                             <constraint firstItem="C49-5n-Hiq" firstAttribute="centerX" secondItem="GtY-Ni-oIb" secondAttribute="centerX" id="e7Y-PG-VJ7"/>
                             <constraint firstItem="H5q-Mx-mkl" firstAttribute="centerX" secondItem="z3O-G1-c7u" secondAttribute="centerX" constant="1.5" id="pvZ-GJ-rmg"/>
                             <constraint firstItem="a5G-5e-Ygh" firstAttribute="centerX" secondItem="z3O-G1-c7u" secondAttribute="centerX" constant="71.5" id="rFg-63-dK2"/>
                             <constraint firstItem="Cfy-rH-vDI" firstAttribute="centerX" secondItem="z3O-G1-c7u" secondAttribute="centerX" constant="42.5" id="rHs-ao-QLM"/>
+                            <constraint firstItem="RAr-VX-vQW" firstAttribute="top" secondItem="hgU-ZN-Vxg" secondAttribute="bottom" constant="8" id="tuG-f4-WHd"/>
                         </constraints>
                         <connections>
                             <action selector="View_TouchDown:" destination="zGU-6C-fO4" eventType="touchDown" id="uXR-gV-z63"/>
@@ -631,15 +691,25 @@
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="beautifyBoxHeight" destination="ruv-ra-Naa" id="cUT-XQ-Chy"/>
+                        <outlet property="beautifyBoxWidth" destination="9ch-2g-Dfe" id="acY-6f-N5C"/>
+                        <outlet property="beautifyPicker" destination="Siw-AL-eHu" id="GPA-wi-070"/>
+                        <outlet property="beautyBox" destination="RAr-VX-vQW" id="cJW-EM-kBs"/>
+                        <outlet property="btnBeautify" destination="hyb-wQ-IGs" id="pVc-4Z-g8E"/>
                         <outlet property="btnBeginPublish" destination="C49-5n-Hiq" id="FGH-zc-UZ8"/>
+                        <outlet property="btnFilter" destination="IvM-Lv-Gh0" id="Lcf-F4-yse"/>
                         <outlet property="coverImageView" destination="z3O-G1-c7u" id="EIj-PI-2Uq"/>
+                        <outlet property="filterBox" destination="rdL-9t-bc4" id="19I-Db-3YG"/>
+                        <outlet property="filterBoxHeight" destination="Bbg-fI-4HO" id="hbC-YR-DPa"/>
+                        <outlet property="filterBoxWidth" destination="2ur-tm-8LE" id="BTJ-Z4-Bjc"/>
+                        <outlet property="filterPicker" destination="aiY-6W-bvF" id="ytt-gz-g1u"/>
                         <outlet property="previewSwitch" destination="hgU-ZN-Vxg" id="qg0-B4-uPT"/>
                         <outlet property="publishDescription" destination="xEk-VN-7QK" id="2Ef-Wg-TUw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x9B-ul-9Ub" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="95" y="1570"/>
+            <point key="canvasLocation" x="-332" y="772"/>
         </scene>
         <!--MyProfile-->
         <scene sceneID="dau-LD-KXQ">
@@ -853,7 +923,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="irh-gk-VGp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-485" y="1353"/>
+            <point key="canvasLocation" x="-1048" y="772"/>
         </scene>
         <!--LiveRoom-->
         <scene sceneID="gQg-KY-gzE">
@@ -1116,33 +1186,57 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xfa-dT-lqE">
-                                <rect key="frame" x="16" y="58" width="102" height="128"/>
+                                <rect key="frame" x="16" y="58" width="150" height="128"/>
                                 <subviews>
                                     <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7JV-id-2XW">
-                                        <rect key="frame" x="0.0" y="34" width="102" height="94"/>
+                                        <rect key="frame" x="0.0" y="37" width="150" height="91"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="dataSource" destination="GVJ-cd-SxC" id="iCl-du-Vd6"/>
                                             <outlet property="delegate" destination="GVJ-cd-SxC" id="d1k-oN-JZf"/>
                                         </connections>
                                     </pickerView>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="zrd-rN-pFO">
-                                        <rect key="frame" x="45" y="5" width="51" height="31"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eqI-bf-nba">
+                                        <rect key="frame" x="60" y="8" width="30" height="30"/>
+                                        <state key="normal" title="美颜"/>
                                         <connections>
-                                            <action selector="enableBeautify:" destination="GVJ-cd-SxC" eventType="valueChanged" id="mHg-7v-bdB"/>
+                                            <action selector="enableBeautify:" destination="GVJ-cd-SxC" eventType="touchUpInside" id="WwE-zn-iSv"/>
                                         </connections>
-                                    </switch>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="美颜" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pSG-Hh-0V7">
-                                        <rect key="frame" x="8" y="10" width="42" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.8674081321647048" green="1" blue="0.66907846852897324" alpha="0.5" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="LHw-ig-XvT"/>
-                                    <constraint firstAttribute="width" constant="102" id="Rl0-Fr-Icy"/>
+                                    <constraint firstAttribute="width" constant="150" id="Rl0-Fr-Icy"/>
+                                    <constraint firstItem="eqI-bf-nba" firstAttribute="top" secondItem="xfa-dT-lqE" secondAttribute="top" constant="8" id="bmk-Ry-heO"/>
+                                    <constraint firstItem="eqI-bf-nba" firstAttribute="centerX" secondItem="xfa-dT-lqE" secondAttribute="centerX" id="eMH-F9-Z44"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tec-Ps-XqX" userLabel="Filter Box">
+                                <rect key="frame" x="173" y="58" width="130" height="128"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="38P-lu-ZvQ">
+                                        <rect key="frame" x="14" y="37" width="102" height="91"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="GVJ-cd-SxC" id="gkJ-zK-RRS"/>
+                                            <outlet property="delegate" destination="GVJ-cd-SxC" id="dzo-4d-7Jg"/>
+                                        </connections>
+                                    </pickerView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zm3-zV-qY9">
+                                        <rect key="frame" x="50" y="8" width="30" height="30"/>
+                                        <state key="normal" title="滤镜"/>
+                                        <connections>
+                                            <action selector="filterClicked:" destination="GVJ-cd-SxC" eventType="touchUpInside" id="PiI-lN-Lz5"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.86740813220000001" green="1" blue="0.66907846849999997" alpha="0.5" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="zm3-zV-qY9" firstAttribute="centerX" secondItem="tec-Ps-XqX" secondAttribute="centerX" id="1oq-QF-t3a"/>
+                                    <constraint firstAttribute="width" constant="130" id="33k-g1-VMI"/>
+                                    <constraint firstItem="zm3-zV-qY9" firstAttribute="top" secondItem="tec-Ps-XqX" secondAttribute="top" constant="8" id="FRo-B2-ICN"/>
+                                    <constraint firstAttribute="height" constant="128" id="HDK-31-gJG"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -1153,6 +1247,7 @@
                             <constraint firstItem="oAG-Wq-Asm" firstAttribute="leading" secondItem="hY7-zS-z3K" secondAttribute="leadingMargin" constant="-4" id="9QY-5k-Od0"/>
                             <constraint firstItem="uqd-s3-KuP" firstAttribute="bottom" secondItem="4xr-Rf-5vI" secondAttribute="top" constant="-6" id="A19-EG-OHg"/>
                             <constraint firstAttribute="trailing" secondItem="8mj-Ux-lrY" secondAttribute="trailing" constant="4" id="ATI-we-n7s"/>
+                            <constraint firstItem="tec-Ps-XqX" firstAttribute="top" secondItem="xfa-dT-lqE" secondAttribute="top" id="B3E-yD-5to"/>
                             <constraint firstItem="gLO-Qt-HIl" firstAttribute="centerX" secondItem="JpH-dR-cFU" secondAttribute="centerX" id="BBb-FD-Lsg"/>
                             <constraint firstItem="s5T-ly-Ilo" firstAttribute="centerY" secondItem="wpG-S4-RMz" secondAttribute="centerY" id="Bnm-Rb-oKz"/>
                             <constraint firstItem="pqI-Ym-uc6" firstAttribute="centerY" secondItem="JpH-dR-cFU" secondAttribute="centerY" id="C48-Xj-8B2"/>
@@ -1165,6 +1260,7 @@
                             <constraint firstItem="4xr-Rf-5vI" firstAttribute="width" secondItem="pqI-Ym-uc6" secondAttribute="width" id="LB9-VO-cYn"/>
                             <constraint firstItem="pqI-Ym-uc6" firstAttribute="height" secondItem="JpH-dR-cFU" secondAttribute="height" id="LIi-ql-nZ8"/>
                             <constraint firstItem="gLO-Qt-HIl" firstAttribute="bottom" secondItem="JpH-dR-cFU" secondAttribute="top" constant="-3" id="Oaf-0d-4ru"/>
+                            <constraint firstItem="tec-Ps-XqX" firstAttribute="leading" secondItem="xfa-dT-lqE" secondAttribute="trailing" constant="7" id="Pkb-4O-SsT"/>
                             <constraint firstItem="gIc-fR-j3a" firstAttribute="top" secondItem="EI5-Cl-Dfd" secondAttribute="bottom" id="Qy2-23-DHE"/>
                             <constraint firstAttribute="trailing" secondItem="3Ud-KJ-tfC" secondAttribute="trailing" constant="4" id="TFs-pg-3ow"/>
                             <constraint firstItem="EI5-Cl-Dfd" firstAttribute="leading" secondItem="oAG-Wq-Asm" secondAttribute="trailing" id="Tts-PP-JkK"/>
@@ -1206,9 +1302,18 @@
                     </view>
                     <navigationItem key="navigationItem" id="6rI-dW-Skk"/>
                     <connections>
+                        <outlet property="beautifyBoxHeight" destination="LHw-ig-XvT" id="chl-2b-pCx"/>
+                        <outlet property="beautifyBoxWidth" destination="Rl0-Fr-Icy" id="sRm-rd-Sys"/>
+                        <outlet property="beautifyPicker" destination="7JV-id-2XW" id="BEy-ej-76v"/>
                         <outlet property="beautyBox" destination="xfa-dT-lqE" id="HUD-il-waQ"/>
+                        <outlet property="btnBeautify" destination="eqI-bf-nba" id="qbC-Nz-CAa"/>
+                        <outlet property="btnFilter" destination="zm3-zV-qY9" id="ZCu-Hi-lMo"/>
                         <outlet property="candidateTableView" destination="IxS-5Q-n38" id="D5u-Aq-FRR"/>
                         <outlet property="chatDisplayCtrlBtn" destination="JpH-dR-cFU" id="i2W-Oh-caP"/>
+                        <outlet property="filterBox" destination="tec-Ps-XqX" id="wlF-QT-1aN"/>
+                        <outlet property="filterBoxHeight" destination="HDK-31-gJG" id="hG5-n0-XSe"/>
+                        <outlet property="filterBoxWidth" destination="33k-g1-VMI" id="rZ3-CJ-cNB"/>
+                        <outlet property="filterPicker" destination="38P-lu-ZvQ" id="5Cp-Zy-pyC"/>
                         <outlet property="firstStreamView" destination="Ws9-Ky-Lfr" id="j2m-e4-uzH"/>
                         <outlet property="goPublishBtn" destination="wpG-S4-RMz" id="IFL-6m-yp4"/>
                         <outlet property="inputMsgEdit" destination="pqI-Ym-uc6" id="ZU0-6Z-asa"/>
@@ -1232,7 +1337,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PwH-4a-2fZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="538" y="-362"/>
+            <point key="canvasLocation" x="18" y="1566"/>
         </scene>
         <!--Main Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -1267,7 +1372,7 @@
         <image name="btn_home_normal.png" width="27" height="27"/>
         <image name="btn_lightening.png" width="56" height="56"/>
         <image name="btn_live_selected.png" width="27" height="27"/>
-        <image name="btn_search_clicked.png" width="19" height="19"/>
+        <image name="btn_search_clicked.png" width="24" height="24"/>
         <image name="btn_user_normal.png" width="27" height="27"/>
         <image name="fanpaizi_closed_nor.png" width="56" height="56"/>
         <image name="fanpaizi_like_nor.png" width="56" height="56"/>

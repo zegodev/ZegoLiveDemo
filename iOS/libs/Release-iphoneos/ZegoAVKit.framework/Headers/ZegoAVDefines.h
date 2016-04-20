@@ -60,4 +60,14 @@ typedef enum : NSUInteger {
     ZEGO_FILTER_DARK        = 13    ///< 夜色
 } ZegoFilter;
 
+
+
+/// \brief 美白特性，
+typedef enum : NSUInteger {
+    ZEGO_BEAUTIFY_NONE          = 0,        ///< 无美颜
+    ZEGO_BEAUTIFY_POLISH        = 1,        ///< 磨皮
+    ZEGO_BEAUTIFY_WHITEN        = 1 << 1,   ///< 全屏美白
+    ZEGO_BEAUTIFY_SKINWHITEN    = 1 << 2    ///< 皮肤美白，一般与磨皮结合使用 ZEGO_BEAUTIFY_POLISH | ZEGO_BEAUTIFY_SKINWHITEN
+} ZegoBeautifyFeature;
+
 #endif /* ZegoAVApiDefines_h */
