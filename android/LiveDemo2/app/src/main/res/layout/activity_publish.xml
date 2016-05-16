@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rlyt_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@color/bg_gray">
+
+        <TextView
+            android:id="@+id/tv_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Ch:"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_5"/>
+
+        <Button
+            android:id="@+id/btn_play"
+            android:layout_width="@dimen/dimen_60"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_alignParentRight="true"
+            android:text="播放"
+            android:textSize="@dimen/text_size_3"
+            android:textColor="@color/sl_btn"/>
+
+        <ImageButton
+            android:id="@+id/ibtn_mic"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_marginRight="@dimen/dimen_5"
+            android:layout_toLeftOf="@id/btn_play"
+            android:background="@drawable/sl_option_selected"
+            android:src="@mipmap/ic_microphone_72"/>
+
+        <ImageButton
+            android:id="@+id/ibtn_speaker"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_marginRight="@dimen/dimen_5"
+            android:layout_toLeftOf="@id/ibtn_mic"
+            android:background="@drawable/sl_option_selected"
+            android:src="@mipmap/ic_sound_72"/>
+
+        <ImageButton
+            android:id="@+id/ibtn_front_cam"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_marginRight="@dimen/dimen_5"
+            android:layout_toLeftOf="@id/ibtn_speaker"
+            android:background="@drawable/sl_option_selected"
+            android:src="@mipmap/ic_camera_72"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_divider"
+        style="@style/HorizontalDivider"
+        android:layout_below="@id/rlyt_header"/>
+
+    <LinearLayout
+        android:id="@+id/rlyt_info"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_70"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bg_gray"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llyt_publish_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="PublState:null"
+                android:textSize="@dimen/text_size_2"/>
+
+            <TextView
+                android:text="PublStream:null"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_2"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llyt_play_sate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_2"
+                android:text="PlayState:null"/>
+
+            <TextView
+                android:text="PlayStream:null"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_2"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlytVideoGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rlyt_info"
+        android:layout_below="@id/view_divider"
+        android:layout_marginBottom="@dimen/dimen_1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rlyt_small_video_parent1"
+            android:layout_width="@dimen/local_view_width"
+            android:visibility="invisible"
+            android:layout_height="@dimen/local_view_height"/>
+
+        <RelativeLayout
+            android:id="@+id/rlyt_big_video_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+        <RelativeLayout
+            android:id="@+id/rlyt_small_video_parent2"
+            android:layout_width="@dimen/local_view_width"
+            android:layout_height="@dimen/local_view_height"
+            android:visibility="invisible"
+           />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

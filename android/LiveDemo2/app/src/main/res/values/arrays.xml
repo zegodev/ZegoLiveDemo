@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="resolution_types">
+        <item>超低质量</item>
+        <item>低质量</item>
+        <item>标准质量</item>
+        <item>高质量</item>
+        <item>超高质量</item>
+        <item>自定义</item>
+    </string-array>
+
+    <string-array name="resolutions">
+        <item >320 x 240</item>
+        <item >352 x 288</item>
+        <item >640 x 480</item>
+        <item >640 x 480</item>
+        <item >1280 x 720</item>
+        <item >1920 x 1080</item>
+    </string-array>
+</resources>

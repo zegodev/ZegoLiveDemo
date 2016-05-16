@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#ffffffff"
+              android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:navigationIcon="@mipmap/ic_setting_72"
+        app:title="@string/app_name"/>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <EditText
+                android:id="@+id/et_liveChannel"
+                android:layout_width="@dimen/dimen_300"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:background="@null"
+                android:layout_height="@dimen/dimen_30"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:textSize="@dimen/text_size_4"
+                android:inputType="text"
+                android:hint="请输入LiveChannel"/>
+            <View style="@style/HorizontalDivider"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/dimen_20">
+               <TextView
+                   android:id="@+id/tv_anchor"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="主播"
+                   android:textColor="@color/text_black"
+                   android:textSize="@dimen/text_size_5"/>
+                <TextView
+
+                    android:layout_below="@id/tv_anchor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_publish_title"
+                    android:layout_marginTop="@dimen/dimen_10"
+                    android:textSize="@dimen/text_size_4"
+                    android:text="Tile-"/>
+
+                <Button
+                    android:id="@+id/btn_publish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Publish"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_gray"
+                android:padding="@dimen/dimen_20"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/tv_audience"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="观众"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_5"/>
+
+
+                <Button
+                    android:id="@+id/btn_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Play"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <fragment
+            android:id="@+id/setting_fragment"
+            android:name="com.zego.livedemo2.SettingFragment"
+            android:layout_width="@dimen/dimen_300"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:tag="LEFT"
+            />
+
+
+    </android.support.v4.widget.DrawerLayout>
+
+
+</LinearLayout>
