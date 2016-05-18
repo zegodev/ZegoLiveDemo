@@ -1,0 +1,664 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A7091B1C1CAE6A7600918610 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7091B1B1CAE6A7600918610 /* main.m */; };
+		A7091B1F1CAE6A7600918610 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7091B1E1CAE6A7600918610 /* AppDelegate.m */; };
+		A7091B221CAE6A7600918610 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7091B211CAE6A7600918610 /* ViewController.m */; };
+		A7091B251CAE6A7600918610 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7091B231CAE6A7600918610 /* Main.storyboard */; };
+		A7091B271CAE6A7600918610 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7091B261CAE6A7600918610 /* Assets.xcassets */; };
+		A7091B2A1CAE6A7600918610 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7091B281CAE6A7600918610 /* LaunchScreen.storyboard */; };
+		A7091B541CAE740B00918610 /* ZegoAVKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A7091B531CAE740B00918610 /* ZegoAVKitManager.m */; };
+		A72B71F91CD0E7FE006EC9AD /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72B71F71CD0A040006EC9AD /* VideoToolbox.framework */; };
+		A72B720C1CD1F249006EC9AD /* ZegoAVKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A7091B531CAE740B00918610 /* ZegoAVKitManager.m */; };
+		A72B720D1CD1F249006EC9AD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7091B211CAE6A7600918610 /* ViewController.m */; };
+		A72B720E1CD1F249006EC9AD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7091B1E1CAE6A7600918610 /* AppDelegate.m */; };
+		A72B720F1CD1F249006EC9AD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7091B1B1CAE6A7600918610 /* main.m */; };
+		A72B72101CD1F249006EC9AD /* ZegoAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4E0C1CBB3E2A005A0558 /* ZegoAboutViewController.m */; };
+		A72B72111CD1F249006EC9AD /* ZegoSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4DF91CB7FF13005A0558 /* ZegoSettingViewController.m */; };
+		A72B72121CD1F249006EC9AD /* ZegoNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0DF331CBE780B0041E104 /* ZegoNavigationController.m */; };
+		A72B72131CD1F249006EC9AD /* ZegoLiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4E091CBA1F19005A0558 /* ZegoLiveViewController.m */; };
+		A72B72151CD1F249006EC9AD /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72B71F71CD0A040006EC9AD /* VideoToolbox.framework */; };
+		A72B72161CD1F249006EC9AD /* ZegoAVKit2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72B72001CD1CAF9006EC9AD /* ZegoAVKit2.framework */; };
+		A72B72171CD1F249006EC9AD /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E7453B1CC913650034F329 /* libiconv.tbd */; };
+		A72B72191CD1F249006EC9AD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7091B281CAE6A7600918610 /* LaunchScreen.storyboard */; };
+		A72B721A1CD1F249006EC9AD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7091B261CAE6A7600918610 /* Assets.xcassets */; };
+		A72B721B1CD1F249006EC9AD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7091B231CAE6A7600918610 /* Main.storyboard */; };
+		A72B72231CD1F442006EC9AD /* ZegoAVKit2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A72B72051CD1CAF9006EC9AD /* ZegoAVKit2.framework */; };
+		A72B72241CD1F445006EC9AD /* ZegoAVKit2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A72B72051CD1CAF9006EC9AD /* ZegoAVKit2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7AC4DFA1CB7FF13005A0558 /* ZegoSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4DF91CB7FF13005A0558 /* ZegoSettingViewController.m */; };
+		A7AC4E0A1CBA1F19005A0558 /* ZegoLiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4E091CBA1F19005A0558 /* ZegoLiveViewController.m */; };
+		A7AC4E0D1CBB3E2A005A0558 /* ZegoAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4E0C1CBB3E2A005A0558 /* ZegoAboutViewController.m */; };
+		A7B0DF341CBE780B0041E104 /* ZegoNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0DF331CBE780B0041E104 /* ZegoNavigationController.m */; };
+		A7E7453C1CC913650034F329 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E7453B1CC913650034F329 /* libiconv.tbd */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A7091B591CAE781F00918610 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A72B72241CD1F445006EC9AD /* ZegoAVKit2.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A72B721C1CD1F249006EC9AD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A7091B171CAE6A7600918610 /* LiveDemo2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveDemo2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7091B1B1CAE6A7600918610 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A7091B1D1CAE6A7600918610 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A7091B1E1CAE6A7600918610 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A7091B201CAE6A7600918610 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		A7091B211CAE6A7600918610 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A7091B241CAE6A7600918610 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A7091B261CAE6A7600918610 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A7091B291CAE6A7600918610 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A7091B2B1CAE6A7600918610 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7091B521CAE740B00918610 /* ZegoAVKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoAVKitManager.h; sourceTree = "<group>"; };
+		A7091B531CAE740B00918610 /* ZegoAVKitManager.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ZegoAVKitManager.m; sourceTree = "<group>"; };
+		A72B71F71CD0A040006EC9AD /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		A72B71FE1CD1CAF9006EC9AD /* ZegoAVKit2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZegoAVKit2.framework; sourceTree = "<group>"; };
+		A72B72001CD1CAF9006EC9AD /* ZegoAVKit2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZegoAVKit2.framework; sourceTree = "<group>"; };
+		A72B72031CD1CAF9006EC9AD /* ZegoAVKit2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZegoAVKit2.framework; sourceTree = "<group>"; };
+		A72B72051CD1CAF9006EC9AD /* ZegoAVKit2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZegoAVKit2.framework; sourceTree = "<group>"; };
+		A72B72211CD1F249006EC9AD /* LiveDemo2iOS7.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveDemo2iOS7.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A72B72221CD1F249006EC9AD /* LiveDemo2 copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "LiveDemo2 copy-Info.plist"; path = "/Users/randyqiu/dev/Dev0.9.0-zegoavkit/projects/apple/demo/LiveDemo2/LiveDemo2 copy-Info.plist"; sourceTree = "<absolute>"; };
+		A7AC4DF81CB7FF13005A0558 /* ZegoSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoSettingViewController.h; sourceTree = "<group>"; };
+		A7AC4DF91CB7FF13005A0558 /* ZegoSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoSettingViewController.m; sourceTree = "<group>"; };
+		A7AC4E081CBA1F19005A0558 /* ZegoLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoLiveViewController.h; sourceTree = "<group>"; };
+		A7AC4E091CBA1F19005A0558 /* ZegoLiveViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoLiveViewController.m; sourceTree = "<group>"; };
+		A7AC4E0B1CBB3E2A005A0558 /* ZegoAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoAboutViewController.h; sourceTree = "<group>"; };
+		A7AC4E0C1CBB3E2A005A0558 /* ZegoAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoAboutViewController.m; sourceTree = "<group>"; };
+		A7B0DF321CBE780B0041E104 /* ZegoNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoNavigationController.h; sourceTree = "<group>"; };
+		A7B0DF331CBE780B0041E104 /* ZegoNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoNavigationController.m; sourceTree = "<group>"; };
+		A7E7453B1CC913650034F329 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A7091B141CAE6A7600918610 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A72B71F91CD0E7FE006EC9AD /* VideoToolbox.framework in Frameworks */,
+				A72B72231CD1F442006EC9AD /* ZegoAVKit2.framework in Frameworks */,
+				A7E7453C1CC913650034F329 /* libiconv.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A72B72141CD1F249006EC9AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A72B72151CD1F249006EC9AD /* VideoToolbox.framework in Frameworks */,
+				A72B72161CD1F249006EC9AD /* ZegoAVKit2.framework in Frameworks */,
+				A72B72171CD1F249006EC9AD /* libiconv.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A7091B0E1CAE6A7600918610 = {
+			isa = PBXGroup;
+			children = (
+				A7E7453B1CC913650034F329 /* libiconv.tbd */,
+				A7091B491CAE6B9400918610 /* frameworks */,
+				A7091B191CAE6A7600918610 /* LiveDemo2 */,
+				A7091B181CAE6A7600918610 /* Products */,
+				A72B72221CD1F249006EC9AD /* LiveDemo2 copy-Info.plist */,
+			);
+			sourceTree = "<group>";
+		};
+		A7091B181CAE6A7600918610 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A7091B171CAE6A7600918610 /* LiveDemo2.app */,
+				A72B72211CD1F249006EC9AD /* LiveDemo2iOS7.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A7091B191CAE6A7600918610 /* LiveDemo2 */ = {
+			isa = PBXGroup;
+			children = (
+				A7091B521CAE740B00918610 /* ZegoAVKitManager.h */,
+				A7091B531CAE740B00918610 /* ZegoAVKitManager.m */,
+				A7091B1D1CAE6A7600918610 /* AppDelegate.h */,
+				A7091B1E1CAE6A7600918610 /* AppDelegate.m */,
+				A7091B201CAE6A7600918610 /* ViewController.h */,
+				A7091B211CAE6A7600918610 /* ViewController.m */,
+				A7B0DF321CBE780B0041E104 /* ZegoNavigationController.h */,
+				A7B0DF331CBE780B0041E104 /* ZegoNavigationController.m */,
+				A7AC4DF81CB7FF13005A0558 /* ZegoSettingViewController.h */,
+				A7AC4DF91CB7FF13005A0558 /* ZegoSettingViewController.m */,
+				A7AC4E0B1CBB3E2A005A0558 /* ZegoAboutViewController.h */,
+				A7AC4E0C1CBB3E2A005A0558 /* ZegoAboutViewController.m */,
+				A7AC4E081CBA1F19005A0558 /* ZegoLiveViewController.h */,
+				A7AC4E091CBA1F19005A0558 /* ZegoLiveViewController.m */,
+				A7091B231CAE6A7600918610 /* Main.storyboard */,
+				A7091B261CAE6A7600918610 /* Assets.xcassets */,
+				A7091B281CAE6A7600918610 /* LaunchScreen.storyboard */,
+				A7091B2B1CAE6A7600918610 /* Info.plist */,
+				A7091B1A1CAE6A7600918610 /* Supporting Files */,
+			);
+			path = LiveDemo2;
+			sourceTree = "<group>";
+		};
+		A7091B1A1CAE6A7600918610 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A7091B1B1CAE6A7600918610 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A7091B491CAE6B9400918610 /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A72B71F71CD0A040006EC9AD /* VideoToolbox.framework */,
+				A72B71FC1CD1CAF9006EC9AD /* libsZegoAVKit2iOS7Static */,
+				A72B72011CD1CAF9006EC9AD /* libsZegoAVKit2Release */,
+			);
+			name = frameworks;
+			sourceTree = "<group>";
+		};
+		A72B71FC1CD1CAF9006EC9AD /* libsZegoAVKit2iOS7Static */ = {
+			isa = PBXGroup;
+			children = (
+				A72B71FD1CD1CAF9006EC9AD /* iOS7Static-iphoneos */,
+				A72B71FF1CD1CAF9006EC9AD /* iOS7Static-iphoneosAndRelease-iphonesimulator */,
+			);
+			name = libsZegoAVKit2iOS7Static;
+			path = ../libsZegoAVKit2iOS7Static;
+			sourceTree = "<group>";
+		};
+		A72B71FD1CD1CAF9006EC9AD /* iOS7Static-iphoneos */ = {
+			isa = PBXGroup;
+			children = (
+				A72B71FE1CD1CAF9006EC9AD /* ZegoAVKit2.framework */,
+			);
+			path = "iOS7Static-iphoneos";
+			sourceTree = "<group>";
+		};
+		A72B71FF1CD1CAF9006EC9AD /* iOS7Static-iphoneosAndRelease-iphonesimulator */ = {
+			isa = PBXGroup;
+			children = (
+				A72B72001CD1CAF9006EC9AD /* ZegoAVKit2.framework */,
+			);
+			path = "iOS7Static-iphoneosAndRelease-iphonesimulator";
+			sourceTree = "<group>";
+		};
+		A72B72011CD1CAF9006EC9AD /* libsZegoAVKit2Release */ = {
+			isa = PBXGroup;
+			children = (
+				A72B72021CD1CAF9006EC9AD /* Release-iphoneos */,
+				A72B72041CD1CAF9006EC9AD /* Release-iphoneosAndRelease-iphonesimulator */,
+			);
+			name = libsZegoAVKit2Release;
+			path = ../libsZegoAVKit2Release;
+			sourceTree = "<group>";
+		};
+		A72B72021CD1CAF9006EC9AD /* Release-iphoneos */ = {
+			isa = PBXGroup;
+			children = (
+				A72B72031CD1CAF9006EC9AD /* ZegoAVKit2.framework */,
+			);
+			path = "Release-iphoneos";
+			sourceTree = "<group>";
+		};
+		A72B72041CD1CAF9006EC9AD /* Release-iphoneosAndRelease-iphonesimulator */ = {
+			isa = PBXGroup;
+			children = (
+				A72B72051CD1CAF9006EC9AD /* ZegoAVKit2.framework */,
+			);
+			path = "Release-iphoneosAndRelease-iphonesimulator";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A7091B161CAE6A7600918610 /* LiveDemo2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7091B2E1CAE6A7600918610 /* Build configuration list for PBXNativeTarget "LiveDemo2" */;
+			buildPhases = (
+				A7091B131CAE6A7600918610 /* Sources */,
+				A7091B141CAE6A7600918610 /* Frameworks */,
+				A7091B151CAE6A7600918610 /* Resources */,
+				A7091B591CAE781F00918610 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LiveDemo2;
+			productName = LiveDemo2;
+			productReference = A7091B171CAE6A7600918610 /* LiveDemo2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A72B720A1CD1F249006EC9AD /* LiveDemo2iOS7 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A72B721D1CD1F249006EC9AD /* Build configuration list for PBXNativeTarget "LiveDemo2iOS7" */;
+			buildPhases = (
+				A72B720B1CD1F249006EC9AD /* Sources */,
+				A72B72141CD1F249006EC9AD /* Frameworks */,
+				A72B72181CD1F249006EC9AD /* Resources */,
+				A72B721C1CD1F249006EC9AD /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LiveDemo2iOS7;
+			productName = LiveDemo2;
+			productReference = A72B72211CD1F249006EC9AD /* LiveDemo2iOS7.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A7091B0F1CAE6A7600918610 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = Zego;
+				TargetAttributes = {
+					A7091B161CAE6A7600918610 = {
+						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 3WR2G89LR2;
+					};
+				};
+			};
+			buildConfigurationList = A7091B121CAE6A7600918610 /* Build configuration list for PBXProject "LiveDemo2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A7091B0E1CAE6A7600918610;
+			productRefGroup = A7091B181CAE6A7600918610 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A7091B161CAE6A7600918610 /* LiveDemo2 */,
+				A72B720A1CD1F249006EC9AD /* LiveDemo2iOS7 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A7091B151CAE6A7600918610 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7091B2A1CAE6A7600918610 /* LaunchScreen.storyboard in Resources */,
+				A7091B271CAE6A7600918610 /* Assets.xcassets in Resources */,
+				A7091B251CAE6A7600918610 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A72B72181CD1F249006EC9AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A72B72191CD1F249006EC9AD /* LaunchScreen.storyboard in Resources */,
+				A72B721A1CD1F249006EC9AD /* Assets.xcassets in Resources */,
+				A72B721B1CD1F249006EC9AD /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A7091B131CAE6A7600918610 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7091B541CAE740B00918610 /* ZegoAVKitManager.m in Sources */,
+				A7091B221CAE6A7600918610 /* ViewController.m in Sources */,
+				A7091B1F1CAE6A7600918610 /* AppDelegate.m in Sources */,
+				A7091B1C1CAE6A7600918610 /* main.m in Sources */,
+				A7AC4E0D1CBB3E2A005A0558 /* ZegoAboutViewController.m in Sources */,
+				A7AC4DFA1CB7FF13005A0558 /* ZegoSettingViewController.m in Sources */,
+				A7B0DF341CBE780B0041E104 /* ZegoNavigationController.m in Sources */,
+				A7AC4E0A1CBA1F19005A0558 /* ZegoLiveViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A72B720B1CD1F249006EC9AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A72B720C1CD1F249006EC9AD /* ZegoAVKitManager.m in Sources */,
+				A72B720D1CD1F249006EC9AD /* ViewController.m in Sources */,
+				A72B720E1CD1F249006EC9AD /* AppDelegate.m in Sources */,
+				A72B720F1CD1F249006EC9AD /* main.m in Sources */,
+				A72B72101CD1F249006EC9AD /* ZegoAboutViewController.m in Sources */,
+				A72B72111CD1F249006EC9AD /* ZegoSettingViewController.m in Sources */,
+				A72B72121CD1F249006EC9AD /* ZegoNavigationController.m in Sources */,
+				A72B72131CD1F249006EC9AD /* ZegoLiveViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		A7091B231CAE6A7600918610 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7091B241CAE6A7600918610 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A7091B281CAE6A7600918610 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7091B291CAE6A7600918610 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A7091B2C1CAE6A7600918610 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A7091B2D1CAE6A7600918610 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A7091B2F1CAE6A7600918610 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2Release/Release-iphoneosAndRelease-iphonesimulator";
+				INFOPLIST_FILE = LiveDemo2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.newlivedemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8bff31cd-6c2c-4bb2-8594-60d9a9f4a940";
+			};
+			name = Debug;
+		};
+		A7091B301CAE6A7600918610 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2Release/Release-iphoneosAndRelease-iphonesimulator";
+				INFOPLIST_FILE = LiveDemo2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.newlivedemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "68af750b-ab94-456b-9adc-f35d36c0550e";
+			};
+			name = Release;
+		};
+		A72B71A71CCCBC16006EC9AD /* iOS7Static */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = iOS7Static;
+		};
+		A72B71A81CCCBC16006EC9AD /* iOS7Static */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
+				ENABLE_BITCODE = NO;
+				ENABLE_TESTABILITY = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
+				INFOPLIST_FILE = LiveDemo2/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.newlivedemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8bff31cd-6c2c-4bb2-8594-60d9a9f4a940";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = iOS7Static;
+		};
+		A72B721E1CD1F249006EC9AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
+				INFOPLIST_FILE = "LiveDemo2 copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.newlivedemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8bff31cd-6c2c-4bb2-8594-60d9a9f4a940";
+			};
+			name = Debug;
+		};
+		A72B721F1CD1F249006EC9AD /* iOS7Static */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
+				ENABLE_BITCODE = NO;
+				ENABLE_TESTABILITY = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
+				INFOPLIST_FILE = "LiveDemo2 copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.newlivedemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8bff31cd-6c2c-4bb2-8594-60d9a9f4a940";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = iOS7Static;
+		};
+		A72B72201CD1F249006EC9AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
+				INFOPLIST_FILE = "LiveDemo2 copy-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.newlivedemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "68af750b-ab94-456b-9adc-f35d36c0550e";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A7091B121CAE6A7600918610 /* Build configuration list for PBXProject "LiveDemo2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7091B2C1CAE6A7600918610 /* Debug */,
+				A72B71A71CCCBC16006EC9AD /* iOS7Static */,
+				A7091B2D1CAE6A7600918610 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7091B2E1CAE6A7600918610 /* Build configuration list for PBXNativeTarget "LiveDemo2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7091B2F1CAE6A7600918610 /* Debug */,
+				A72B71A81CCCBC16006EC9AD /* iOS7Static */,
+				A7091B301CAE6A7600918610 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A72B721D1CD1F249006EC9AD /* Build configuration list for PBXNativeTarget "LiveDemo2iOS7" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A72B721E1CD1F249006EC9AD /* Debug */,
+				A72B721F1CD1F249006EC9AD /* iOS7Static */,
+				A72B72201CD1F249006EC9AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A7091B0F1CAE6A7600918610 /* Project object */;
+}
