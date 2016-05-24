@@ -296,6 +296,11 @@ public class PlayActivity extends AbsShowActivity {
             @Override
             public void onTakeLocalViewSnapshot(final Bitmap bitmap) {
             }
+
+            @Override
+            public void onCaptureVideoSize(int width, int height) {
+                Log.i("TestData", "Data:" + width + "--" + height);
+            }
         });
 
     }

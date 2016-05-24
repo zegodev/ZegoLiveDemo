@@ -274,6 +274,11 @@ public class PublishActivity extends AbsShowActivity {
             public void onTakeLocalViewSnapshot(final Bitmap bitmap) {
                 Log.i("TestData", "");
             }
+
+            @Override
+            public void onCaptureVideoSize(int width, int height) {
+                Log.i("TestData", "Data:" + width + "--" + height);
+            }
         });
     }
 
