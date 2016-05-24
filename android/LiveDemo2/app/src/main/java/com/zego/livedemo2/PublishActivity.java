@@ -17,12 +17,14 @@ import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -104,6 +106,12 @@ public class PublishActivity extends AbsShowActivity {
 
     @Bind(R.id.btn_play)
     public Button btnPlay;
+
+    @Bind(R.id.sp_filters)
+    public Spinner spFilters;
+
+    @Bind(R.id.sp_beauties)
+    public Spinner spBeauties;
 
 
     public EditText etStreamID;
@@ -214,11 +222,11 @@ public class PublishActivity extends AbsShowActivity {
             @Override
             public void onLoginChannel(boolean isLoginSuccess) {
                 if (isLoginSuccess) {
-                    tvChannel.setText("Ch: " + mLiveChannel);
+                    tvChannel.setText("Channel:" + mLiveChannel);
                     // 登陆成功, 开始发布
                     startPublish();
                 } else {
-                    tvChannel.setText("Ch: Error");
+                    tvChannel.setText("Channel: Error");
                 }
             }
 
@@ -331,7 +339,9 @@ public class PublishActivity extends AbsShowActivity {
         ibtnSpeaker.setSelected(mIsSpeakerSelected);
         ibtnMic.setSelected(mIsMicSelected);
 
-        tvChannel.setText("Ch:" + mLiveChannel);
+        if(savedInstanceState != null){
+            tvChannel.setText("Channel:" + mLiveChannel);
+        }
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -374,6 +384,94 @@ public class PublishActivity extends AbsShowActivity {
             }
         });
 
+
+        spBeauties.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int beauty = 0;
+                switch (position){
+                    case 0:
+                        beauty = ZegoAVKitCommon.ZegoBeauty.NONE;
+                        break;
+                    case 1:
+                        beauty = ZegoAVKitCommon.ZegoBeauty.POLISH;
+                        break;
+                    case 2:
+                        beauty = ZegoAVKitCommon.ZegoBeauty.WHITEN;
+                        break;
+                    case 3:
+                        beauty = ZegoAVKitCommon.ZegoBeauty.POLISH | ZegoAVKitCommon.ZegoBeauty.WHITEN;
+                        break;
+                    case 4:
+                        beauty = ZegoAVKitCommon.ZegoBeauty.POLISH | ZegoAVKitCommon.ZegoBeauty.SKIN_WHITEN;
+                        break;
+                }
+                mZegoAVKit.enableBeautifying(beauty);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spFilters.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ZegoAVKitCommon.ZegoFilter filter = null;
+                switch (position){
+                    case 0:
+                        filter = ZegoAVKitCommon.ZegoFilter.None;
+                        break;
+                    case 1:
+                        filter = ZegoAVKitCommon.ZegoFilter.Lomo;
+                        break;
+                    case 2:
+                        filter = ZegoAVKitCommon.ZegoFilter.BlackWhite;
+                        break;
+                    case 3:
+                        filter = ZegoAVKitCommon.ZegoFilter.OldStyle;
+                        break;
+                    case 4:
+                        filter = ZegoAVKitCommon.ZegoFilter.Gothic;
+                        break;
+                    case 5:
+                        filter = ZegoAVKitCommon.ZegoFilter.SharpColor;
+                        break;
+                    case 6:
+                        filter = ZegoAVKitCommon.ZegoFilter.Fade;
+                        break;
+                    case 7:
+                        filter = ZegoAVKitCommon.ZegoFilter.Wine;
+                        break;
+                    case 8:
+                        filter = ZegoAVKitCommon.ZegoFilter.Lime;
+                        break;
+                    case 9:
+                        filter = ZegoAVKitCommon.ZegoFilter.Romantic;
+                        break;
+                    case 10:
+                        filter = ZegoAVKitCommon.ZegoFilter.Halo;
+                        break;
+                    case 11:
+                        filter = ZegoAVKitCommon.ZegoFilter.Blue;
+                        break;
+                    case 12:
+                        filter = ZegoAVKitCommon.ZegoFilter.Illusion;
+                        break;
+                    case 13:
+                        filter = ZegoAVKitCommon.ZegoFilter.Dark;
+                        break;
+                }
+
+                mZegoAVKit.setFilter(filter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override

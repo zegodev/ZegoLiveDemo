@@ -363,7 +363,10 @@ public class PlayActivity extends AbsShowActivity {
         ibtnSpeaker.setSelected(mIsSpeakerSelected);
         mZegoAVKit.enableSpeaker(mIsSpeakerSelected);
 
-        tvChannel.setText("Ch:" + mLiveChannel);
+        if(savedInstanceState != null){
+            tvChannel.setText("Ch:" + mLiveChannel);
+        }
+
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
