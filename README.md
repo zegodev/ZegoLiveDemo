@@ -2,7 +2,7 @@
 
 ZegoLiveDemo 是深圳市即构科技有限公司提供直播 SDKDemo ，包括 android 和 iOS 版本，欢迎体验。
 
-* iOS 版本：[https://github.com/zegodev/ZegoLiveDemo/tree/master/ios](https://github.com/zegodev/ZegoLiveDemo/tree/master/ios)
+* iOS 版本：[https://github.com/zegodev/ZegoLiveDemo/tree/master/ios](https://github.com/zegodev/ZegoLiveDemo/tree/master/iOS)
 * android 版本：[https://github.com/zegodev/ZegoLiveDemo/tree/master/android](https://github.com/zegodev/ZegoLiveDemo/tree/master/android)
 
 详细接口文档：
