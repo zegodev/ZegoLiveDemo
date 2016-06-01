@@ -7,11 +7,11 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zego.livedemo2.base.AbsBaseActivity;
+import com.zego.livedemo2.utils.PreferenceUtils;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -31,8 +31,7 @@ public class MainActivity extends AbsBaseActivity {
     @Bind(R.id.tv_publish_title)
     public TextView tvPublishTitle;
 
-    @Bind(R.id.et_liveChannel)
-    public EditText etLiveChannel;
+    private OnSetConfigsCallback mSetConfigsCallback;
 
     @Override
     protected int getContentViewLayout() {
@@ -41,13 +40,6 @@ public class MainActivity extends AbsBaseActivity {
 
     @Override
     protected void initExtraData(Bundle savedInstanceState) {
-//        String info = "BOARD:" + Build.BOARD + ", MODEL:" + Build.MODEL + ", BOOTLOADER:" + Build.BOOTLOADER + ", BRAND:" + Build.BRAND
-//                + ", DEVICE:" + Build.DEVICE + ", DISPLAY:" + Build.DISPLAY + ", FINGERPRINT:" + Build.FINGERPRINT + ", TIME:" + Build.TIME + ", HARDWARE:"
-//                + Build.HARDWARE  + ", HOST:" + Build.HOST + ", ID:" + Build.ID + ", PRODUCT:" + Build.PRODUCT + ", SERIAL:" + Build.SERIAL + ", TAGS:"
-//                + Build.TAGS + ", TYPE:" + Build.TYPE + ", MANUFACTURER:" + Build.MANUFACTURER + ", USER:" + Build.USER + ", SUPPORTED_32_BIT_ABIS:"
-//                + Build.SUPPORTED_32_BIT_ABIS + ", SUPPORTED_64_BIT_ABIS:" + Build.SUPPORTED_64_BIT_ABIS + ", SUPPORTED_ABIS:" + Build.SUPPORTED_ABIS ;
-//
-//       Log.i("TestBuild", info);
     }
 
     @Override
@@ -58,7 +50,9 @@ public class MainActivity extends AbsBaseActivity {
     @Override
     protected void initViews(Bundle savedInstanceState) {
 
-        tvPublishTitle.setText("Title" + ZegoApiManager.getInstance().getZegoUser().getUserName());
+        mSetConfigsCallback = (SettingFragment) getFragmentManager().findFragmentById(R.id.setting_fragment);
+
+        tvPublishTitle.setText("Title-" + PreferenceUtils.getInstance().getUserName());
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -73,6 +67,10 @@ public class MainActivity extends AbsBaseActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 toolBar.setTitle(getString(R.string.app_name));
+                // 当侧边栏关闭时, set配置
+                if(mSetConfigsCallback != null){
+                    mSetConfigsCallback.onSetConfig();
+                }
             }
 
             @Override
@@ -102,18 +100,18 @@ public class MainActivity extends AbsBaseActivity {
 
     @OnClick(R.id.btn_publish)
     public void startPublish(){
-        String liveChannel = etLiveChannel.getText().toString();
+        String liveChannel = PreferenceUtils.getInstance().getChannel();
         if(TextUtils.isEmpty(liveChannel)){
-            liveChannel = "5190";
+            liveChannel = getString(R.string.defult_channel);
         }
         PublishActivity.actionStart(MainActivity.this, tvPublishTitle.getText().toString(), liveChannel);
     }
 
     @OnClick(R.id.btn_play)
     public void startPlay(){
-        String liveChannel = etLiveChannel.getText().toString();
+        String liveChannel = PreferenceUtils.getInstance().getChannel();
         if(TextUtils.isEmpty(liveChannel)){
-            liveChannel = "5190";
+            liveChannel = getString(R.string.defult_channel);
         }
 
         PlayActivity.actionStart(MainActivity.this, liveChannel);
@@ -149,5 +147,9 @@ public class MainActivity extends AbsBaseActivity {
             ZegoApiManager.getInstance().releaseSDK();
             System.exit(0);
         }
+    }
+
+    public interface OnSetConfigsCallback{
+        void onSetConfig();
     }
 }

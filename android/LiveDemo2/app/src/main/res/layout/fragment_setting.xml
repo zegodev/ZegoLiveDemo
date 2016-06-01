@@ -1,177 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/bg_white"
-              android:gravity="center_horizontal"
-              android:orientation="vertical"
-              android:padding="@dimen/dimen_20">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.zego.livedemo2.widgets.CirImageView
-            android:layout_width="@dimen/avatar_width"
-            android:layout_height="@dimen/avatar_height"
-            android:src="@mipmap/ic_avatar_default"/>
-
-        <TextView
-            android:id="@+id/tv_change_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/sl_btn_pressed"
-            android:padding="@dimen/dimen_10"
-            android:text="@string/change_user_account"
-            android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_5"/>
-    </RelativeLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_account"
-            android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_5"/>
-
-        <EditText
-            android:id="@+id/et_user_account"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dimen_10"
-            android:textColor="@color/text_gray"
-            android:textSize="@dimen/text_size_3"/>
-    </LinearLayout>
-
+            android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@color/bg_white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/dimen_20">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_name"
-            android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_5"/>
 
-        <EditText
-            android:id="@+id/et_user_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dimen_10"
-            android:textColor="@color/text_gray"
-            android:textSize="@dimen/text_size_3"
-            />
-    </LinearLayout>
+            android:layout_height="@dimen/dimen_45"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50"
-        android:layout_marginTop="@dimen/dimen_15"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_account"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_5"/>
+
+            <EditText
+                android:id="@+id/et_user_account"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/text_size_3"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_45"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_name"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_5"/>
+
+            <EditText
+                android:id="@+id/et_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/text_size_3"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_45"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/channel"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_5"/>
+
+            <EditText
+                android:id="@+id/et_channel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/text_size_3"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_45"
+            android:layout_marginTop="@dimen/dimen_15"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resolution_type"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_5"/>
+
+            <Spinner
+                android:id="@+id/sp_resolutions"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_50"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:entries="@array/resolution_types"
+                android:textColor="@color/text_gray">
+
+            </Spinner>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_45"
+            android:layout_marginTop="@dimen/dimen_15"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_resolution"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_5"
+                tools:text="分辨率   1920 X 1080"/>
+
+            <com.zego.livedemo2.widgets.CustomSeekBar
+                android:id="@+id/sb_resolution"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_30"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_45"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_fps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_5"
+                tools:text="帧率   30"/>
+
+            <com.zego.livedemo2.widgets.CustomSeekBar
+                android:id="@+id/sb_fps"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_30"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_45"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_bitrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_5"
+                tools:text="码率   30"/>
+
+            <com.zego.livedemo2.widgets.CustomSeekBar
+                android:id="@+id/sb_bitrate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_30"/>
+        </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/resolution_type"
-            android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_5"/>
-
-        <Spinner
-            android:id="@+id/sp_resolutions"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_version"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_50"
-            android:layout_marginLeft="@dimen/dimen_10"
-            android:entries="@array/resolution_types"
-            android:textColor="@color/text_gray">
-
-        </Spinner>
-    </LinearLayout>
-
-    <LinearLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50"
-        android:layout_marginTop="@dimen/dimen_15"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_resolution"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_5"
-            tools:text="分辨率   1920 X 1080"/>
+            android:gravity="center_vertical"
+            android:text="Version: 1.1"/>
 
-        <com.zego.livedemo2.widgets.CustomSeekBar
-            android:id="@+id/sb_resolution"
+        <LinearLayout
+            android:visibility="invisible"
+            android:id="@+id/llyt_hide_operation"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_30"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50"
-        android:layout_marginTop="@dimen/dimen_10"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_fps"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_5"
-            tools:text="帧率   30"/>
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_45"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+                <ToggleButton
+                    android:id="@+id/tb_modify_test_env"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOn="关闭测试环境"
+                    android:textOff="打开测试环境"
+                    android:checked="false"
+                    />
+            </LinearLayout>
 
-        <com.zego.livedemo2.widgets.CustomSeekBar
-            android:id="@+id/sb_fps"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_30"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_45"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="appID:"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_5"/>
+
+                <EditText
+                    android:id="@+id/et_appid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_10"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/text_size_3"
+                    android:inputType="number"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_45"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="appKEY:"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_5"/>
+
+                <EditText
+                    android:id="@+id/et_appkey"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_10"
+                    android:textColor="@color/text_gray"
+                    android:textSize="@dimen/text_size_3"
+                    android:inputType="text"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50"
-        android:layout_marginTop="@dimen/dimen_10"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_bitrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_5"
-            tools:text="码率   30"/>
-
-        <com.zego.livedemo2.widgets.CustomSeekBar
-            android:id="@+id/sb_bitrate"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_30"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_complete_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_30"
-        android:text="@string/completion"
-        android:textColor="@color/text_black"
-        android:textSize="@dimen/text_size_5"/>
-
-</LinearLayout>
+</ScrollView>

@@ -23,6 +23,8 @@ public class PreferenceUtils {
 
     public static final String KEY_USER_NAME = "user_name";
 
+    public static final String KEY_CHANNEL = "channel";
+
 
     private SharedPreferences mSharedPreferences;
 
@@ -41,34 +43,14 @@ public class PreferenceUtils {
         return sInstance;
     }
 
-    public void setUserID(String userID){
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(KEY_USER_ID, userID);
-        editor.commit();
-    }
-
-    public void setUserName(String userName){
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(KEY_USER_NAME, userName);
-        editor.commit();
-    }
-
-    public String getUserID(){
-        return mSharedPreferences.getString(KEY_USER_ID, null);
-    }
-
-    public String getUserName(){
-        return mSharedPreferences.getString(KEY_USER_NAME, null);
-    }
-
     public void setStringValue(String key, String value){
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(key, value);
         editor.commit();
     }
 
-    public String getStringValue(String key){
-        return mSharedPreferences.getString(key, null);
+    public String getStringValue(String key, String defaultValue){
+        return mSharedPreferences.getString(key, defaultValue);
     }
 
     public void setBooleanValue(String key, boolean value){
@@ -78,7 +60,32 @@ public class PreferenceUtils {
     }
 
 
-    public boolean getBooleanValue(String key){
-        return mSharedPreferences.getBoolean(key, false);
+    public boolean getBooleanValue(String key, boolean defaultValue){
+        return mSharedPreferences.getBoolean(key, defaultValue);
+    }
+
+
+    public void setUserID(String userID){
+        setStringValue(KEY_USER_ID, userID);
+    }
+
+    public void setUserName(String userName){
+        setStringValue(KEY_USER_NAME, userName);
+    }
+
+    public String getUserID(){
+        return getStringValue(KEY_USER_ID, null);
+    }
+
+    public String getUserName(){
+        return mSharedPreferences.getString(KEY_USER_NAME, null);
+    }
+
+    public void setChannel(String channel){
+        setStringValue(KEY_CHANNEL, channel);
+    }
+
+    public String getChannel(){
+        return getStringValue(KEY_CHANNEL, null);
     }
 }

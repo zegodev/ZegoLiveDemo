@@ -20,14 +20,14 @@
             android:layout_height="wrap_content"
             android:text="FT"
             android:id="@+id/rb_asfit_big"
-            android:checked="false"/>
+            android:checked="true"/>
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="AFL"
             android:id="@+id/rb_asfill_big"
-            android:checked="true"/>
+            android:checked="false"/>
 
         <RadioButton
             android:layout_width="wrap_content"

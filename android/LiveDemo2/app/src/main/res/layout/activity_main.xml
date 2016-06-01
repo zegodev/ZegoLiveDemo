@@ -24,56 +24,47 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <EditText
-                android:id="@+id/et_liveChannel"
-                android:layout_width="@dimen/dimen_300"
-                android:layout_marginLeft="@dimen/dimen_10"
-                android:background="@null"
-                android:layout_height="@dimen/dimen_30"
-                android:layout_marginTop="@dimen/dimen_10"
-                android:textSize="@dimen/text_size_4"
-                android:inputType="text"
-                android:hint="请输入LiveChannel"/>
-            <View style="@style/HorizontalDivider"/>
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="@dimen/dimen_20">
-               <TextView
-                   android:id="@+id/tv_anchor"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="主播"
-                   android:textColor="@color/text_black"
-                   android:textSize="@dimen/text_size_5"/>
-                <TextView
 
-                    android:layout_below="@id/tv_anchor"
+                <TextView
+                    android:id="@+id/tv_anchor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="主播"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_5"/>
+
+                <TextView
+
                     android:id="@+id/tv_publish_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_anchor"
                     android:layout_marginTop="@dimen/dimen_10"
-                    android:textSize="@dimen/text_size_4"
-                    android:text="Tile-"/>
+                    android:text="Tile-"
+                    android:textSize="@dimen/text_size_4"/>
 
                 <Button
                     android:id="@+id/btn_publish"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Publish"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    android:text="Publish"/>
 
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@color/bg_gray"
-                android:padding="@dimen/dimen_20"
-                android:layout_weight="1">
+                android:padding="@dimen/dimen_20">
+
                 <TextView
                     android:id="@+id/tv_audience"
                     android:layout_width="wrap_content"
@@ -87,8 +78,8 @@
                     android:id="@+id/btn_play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Play"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    android:text="Play"/>
             </RelativeLayout>
         </LinearLayout>
 

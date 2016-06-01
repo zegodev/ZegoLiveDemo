@@ -2,12 +2,9 @@ package com.zego.livedemo2;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -30,15 +27,11 @@ import android.widget.Toast;
 
 import com.zego.livedemo2.base.AbsShowActivity;
 import com.zego.livedemo2.constants.IntentExtra;
-import com.zego.livedemo2.listener.OnWiredHeadsetChangeListener;
-import com.zego.livedemo2.receiver.WiredHeadsetChangeReceiver;
 import com.zego.livedemo2.utils.PreferenceUtils;
 import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
-import com.zego.zegoavkit2.ZegoConstants;
 import com.zego.zegoavkit2.callback.ZegoLiveCallback;
-
-import java.util.Map;
+import com.zego.zegoavkit2.entity.ZegoUser;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -142,11 +135,6 @@ public class PublishActivity extends AbsShowActivity {
     private boolean mIsMicSelected = true;
 
     /**
-     * 耳机插拔事件的广播接收器.
-     */
-    private WiredHeadsetChangeReceiver mWiredHeadsetChangeReceiver;
-
-    /**
      * 启动入口.
      *
      * @param activity     源activity
@@ -173,18 +161,18 @@ public class PublishActivity extends AbsShowActivity {
             mLiveChannel = getIntent().getStringExtra(IntentExtra.LIVE_CHANNEL);
 
             // 用userID的后四位做publish流ID
-            String userID = ZegoApiManager.getInstance().getZegoUser().getUserId();
+            String userID = PreferenceUtils.getInstance().getUserID();
             mPublishStreamID = userID.substring(userID.length() - 4);
         } else {
 
             // Activity 后台被回收后重新启动, 恢复数据
-            mLiveChannel = PreferenceUtils.getInstance().getStringValue(KEY_LIVE_CHANNEL);
-            mPublishTitle = PreferenceUtils.getInstance().getStringValue(KEY_PUBLISH_TITLE);
-            mPublishStreamID = PreferenceUtils.getInstance().getStringValue(KEY_PUBLISH_STREAM_ID);
-            mPlayStreamID = PreferenceUtils.getInstance().getStringValue(KEY_PLAY_STREAM_ID);
-            mIsFrontCamSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_FRONT_CAM_SELECTED);
-            mIsSpeakerSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_SPEAKER_SELECTED);
-            mIsMicSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_MIC_SELECTED);
+            mLiveChannel = PreferenceUtils.getInstance().getStringValue(KEY_LIVE_CHANNEL, null);
+            mPublishTitle = PreferenceUtils.getInstance().getStringValue(KEY_PUBLISH_TITLE, null);
+            mPublishStreamID = PreferenceUtils.getInstance().getStringValue(KEY_PUBLISH_STREAM_ID, null);
+            mPlayStreamID = PreferenceUtils.getInstance().getStringValue(KEY_PLAY_STREAM_ID, null);
+            mIsFrontCamSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_FRONT_CAM_SELECTED, false);
+            mIsSpeakerSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_SPEAKER_SELECTED, false);
+            mIsMicSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_MIC_SELECTED, false);
         }
 
     }
@@ -192,37 +180,12 @@ public class PublishActivity extends AbsShowActivity {
     @Override
     protected void initVariables(final Bundle savedInstanceState) {
 
-        mWiredHeadsetChangeReceiver = new WiredHeadsetChangeReceiver(new OnWiredHeadsetChangeListener() {
-            @Override
-            public void onWiredHeadsetOn() {
-                mZegoAVKit.setBuiltInSpeakerOn(false);
-            }
-
-            @Override
-            public void onWiredHeadsetOff() {
-                mZegoAVKit.setBuiltInSpeakerOn(true);
-            }
-        });
-
         mZegoAVKit = ZegoApiManager.getInstance().getZegoAVKit();
         mZegoAVKit.setZegoLiveCallback(new ZegoLiveCallback() {
             @Override
-            public void onPublishSucc(String streamID) {
-                ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:onPublishSucc");
-                ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:" + streamID);
-
-            }
-
-            @Override
-            public void onPublishStop(ZegoAVKitCommon.ZegoStreamStopFlag stopFlag, String streamID) {
-                ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:onPublishStop-" + stopFlag);
-                ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:null");
-            }
-
-            @Override
-            public void onLoginChannel(boolean isLoginSuccess) {
+            public void onLoginChannel(String liveChannel, boolean isLoginSuccess) {
                 if (isLoginSuccess) {
-                    tvChannel.setText("Channel:" + mLiveChannel);
+                    tvChannel.setText("Channel: " + liveChannel);
                     // 登陆成功, 开始发布
                     startPublish();
                 } else {
@@ -231,34 +194,30 @@ public class PublishActivity extends AbsShowActivity {
             }
 
             @Override
-            public void onDisconnected(int i, String s) {
-                // 停止发布前, 必须调用stopPreview
-                mZegoAVKit.stopPreview();
-                mZegoAVKit.stopPublish();
+            public void onPublishSucc(String streamID, String liveChannel, String playUrl){
+                ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:onPublishSucc");
+                ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:" + streamID);
             }
 
             @Override
-            public void onReconnected(String s) {
-                startPublish();
+            public void onPublishStop(ZegoAVKitCommon.ZegoStreamStopFlag zegoStreamStopFlag,  String streamID, String liveChannel) {
+                ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:onPublishStop-" + zegoStreamStopFlag);
+                ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:null");
             }
 
-
             @Override
-            public void onPlaySucc(String streamID) {
-
+            public void onPlaySucc(String streamID, String liveChannel) {
                 // 播放成功以后,禁止播放按钮
                 btnPlay.setEnabled(false);
                 ((TextView) llytPlayState.getChildAt(0)).setText("PlayState:onPlaySucc");
                 ((TextView) llytPlayState.getChildAt(1)).setText("PlayStream:" + streamID);
-
             }
 
             @Override
-            public void onPlayStop(ZegoAVKitCommon.ZegoStreamStopFlag stopFlag, String streamID) {
-                ((TextView) llytPlayState.getChildAt(0)).setText("PlayState:onPlayStop-" + stopFlag);
+            public void onPlayStop(ZegoAVKitCommon.ZegoStreamStopFlag zegoStreamStopFlag, String streamID, String liveChannel) {
+                ((TextView) llytPlayState.getChildAt(0)).setText("PlayState:onPlayStop-" + zegoStreamStopFlag);
                 ((TextView) llytPlayState.getChildAt(1)).setText("PlayStream:null");
             }
-
 
             @Override
             public void onVideoSizeChanged(String streamID, int width, int height) {
@@ -483,43 +442,18 @@ public class PublishActivity extends AbsShowActivity {
     protected void loadData(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             // 登陆频道
-            mZegoAVKit.loginChannel(ZegoApiManager.getInstance().getZegoUser(), mLiveChannel);
+            ZegoUser zegoUser = new ZegoUser(PreferenceUtils.getInstance().getUserID(), PreferenceUtils.getInstance().getUserName());
+            mZegoAVKit.loginChannel(zegoUser, mLiveChannel);
         } else {
 
-            Map<String, String> publishInfo = mZegoAVKit.getCurrentPublishInfo();
-            // 当引擎依旧处于发布状态时, 只需要重新设置view即可
-            if (publishInfo != null && !TextUtils.isEmpty(publishInfo.get(ZegoConstants.KEY_STREAM_ID))) {
-                mZegoAVKit.setFrontCam(mIsFrontCamSelected);
-                mZegoAVKit.enableSpeaker(mIsSpeakerSelected);
-                mZegoAVKit.enableMic(mIsMicSelected);
-                mZegoAVKit.setLocalView(svBig);
-                mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
-                mZegoAVKit.startPreview();
-            } else {
-                /// 当引擎依停止发布了, 重新发布
-                startPublish();
-            }
+            // 重新发布视频
+            startPublish();
 
-            // 恢复播放
-            if (!TextUtils.isEmpty(mPlayStreamID)) {
-                rlytSmallVideoParent.setVisibility(View.VISIBLE);
-                rlytSmallVideoParent.bringToFront();
-                btnPlay.setEnabled(false);
-                mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
-                mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, svSmall);
-            }
+            // 开始播放
+            startPlay();
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // 注册广播
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.intent.action.HEADSET_PLUG");
-        registerReceiver(mWiredHeadsetChangeReceiver, intentFilter);
-    }
 
     @Override
     protected void onPause() {
@@ -535,10 +469,17 @@ public class PublishActivity extends AbsShowActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        // 注销广播
-        unregisterReceiver(mWiredHeadsetChangeReceiver);
-        super.onDestroy();
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // 当前Activity在后台被回收，停止发布视频
+//        mZegoAVKit.stopPreview();
+//        mZegoAVKit.stopPublish();
+//
+//        // 当前Activity在后台被回收, 停止播放
+//        if(!TextUtils.isEmpty(mPlayStreamID)){
+//            mZegoAVKit.stopPlayStream(mPlayStreamID);
+//        }
     }
 
     private void newDialog() {
@@ -567,35 +508,25 @@ public class PublishActivity extends AbsShowActivity {
      * 开始发布.
      */
     private void startPublish() {
-
         mZegoAVKit.setFrontCam(mIsFrontCamSelected);
         mZegoAVKit.enableSpeaker(mIsSpeakerSelected);
         mZegoAVKit.enableMic(mIsMicSelected);
         mZegoAVKit.setLocalView(svBig);
-        mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+        mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
         mZegoAVKit.startPreview();
         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
-
-
     }
 
     /**
      * 开始播放流.
      */
     private void startPlay() {
-
         rlytSmallVideoParent.setVisibility(View.VISIBLE);
         rlytSmallVideoParent.bringToFront();
         mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, svSmall);
         mZegoAVKit.startPlayStream(mPlayStreamID, ZegoAVKitCommon.ZegoRemoteViewIndex.First);
 
-
-        // 检测是否插入耳机
-        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if(audioManager.isWiredHeadsetOn()){
-            mZegoAVKit.setBuiltInSpeakerOn(false);
-        }
     }
 
 
@@ -603,7 +534,6 @@ public class PublishActivity extends AbsShowActivity {
      * 退出.
      */
     private void logout() {
-        // 停止发布前, 必须调用stopPreview
         mZegoAVKit.stopPreview();
         mZegoAVKit.stopPublish();
 
@@ -670,5 +600,4 @@ public class PublishActivity extends AbsShowActivity {
                 break;
         }
     }
-
 }

@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import com.zego.livedemo2.utils.PreferenceUtils;
 import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAvConfig;
-import com.zego.zegoavkit2.entity.ZegoUser;
 
 /**
  * des: zego api管理器.
@@ -19,15 +18,10 @@ public class ZegoApiManager {
 
     private ZegoAVKit mZegoAVKit = null;
 
-    private ZegoUser mZegoUser;
-
-    private ZegoAvConfig mZegoAVConfig;
-
     private ZegoApiManager() {
 
         mZegoAVKit = new ZegoAVKit();
 
-        // 获取本地保存的用户信息
         String userID = PreferenceUtils.getInstance().getUserID();
         String userName = PreferenceUtils.getInstance().getUserName();
 
@@ -37,12 +31,14 @@ public class ZegoApiManager {
             userID = ms + "";
             userName = "Android-"+ms;
 
-            // 保存用户信息
             PreferenceUtils.getInstance().setUserID(userID);
             PreferenceUtils.getInstance().setUserName(userName);
         }
 
-        mZegoUser = new ZegoUser(userID, userName);
+        // 初始化频道
+        if(TextUtils.isEmpty(PreferenceUtils.getInstance().getChannel())){
+            PreferenceUtils.getInstance().setChannel(ZegoApplication.sApplicationContext.getString(R.string.defult_channel));
+        }
     }
 
     public static ZegoApiManager getInstance() {
@@ -60,7 +56,6 @@ public class ZegoApiManager {
      * 初始化sdk.
      */
     public void initSDK(Context context) {
-
         // 设置日志level
         mZegoAVKit.setLogLevel(context, ZegoAVKit.LOG_LEVEL_DEBUG, null);
 
@@ -74,12 +69,10 @@ public class ZegoApiManager {
         int appID = 1;
 
         // 初始化sdk
-       mZegoAVKit.init(appID, signKey, context);
+        mZegoAVKit.init(appID, signKey, context);
 
-        // 初始化配置
-        mZegoAVConfig = new ZegoAvConfig();
-        mZegoAVConfig.setResolution(640, 480);
-        mZegoAVKit.setAVConfig(mZegoAVConfig);
+        // 初始化设置级别为"High"
+        mZegoAVKit.setAVConfig(new ZegoAvConfig(ZegoAvConfig.Level.High));
     }
 
 
@@ -94,14 +87,6 @@ public class ZegoApiManager {
 
     public ZegoAVKit getZegoAVKit() {
         return mZegoAVKit;
-    }
-
-    public ZegoUser getZegoUser() {
-        return mZegoUser;
-    }
-
-    public ZegoAvConfig getZegoAVConfig() {
-        return mZegoAVConfig;
     }
 
     public void setZegoConfig(ZegoAvConfig config){
