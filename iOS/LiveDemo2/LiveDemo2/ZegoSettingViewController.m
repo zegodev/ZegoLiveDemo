@@ -208,7 +208,7 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
         }
     } else {
         _presetIndex = ZegoAVConfigPreset_High;
-        _currentConfig = [ZegoAVConfig defaultZegoAVConfig:ZegoAVConfigPreset_Generic];
+        _currentConfig = [ZegoAVConfig defaultZegoAVConfig:ZegoAVConfigPreset_High];
         return ;
     }
     
