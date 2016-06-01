@@ -1,0 +1,96 @@
+--- xcodebuild: WARNING: -exportArchive without -exportOptionsPlist is deprecated
+Packaging application: '/var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.app'
+Arguments: output=/var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.ipa  verbose=1  
+Environment variables:
+TERM = xterm-256color
+REL_TAG = heads/master-0-gcc27a1d
+SRC_ROOT = /Users/zego-builder/zegoavkit-1.0.0/src
+VERSIONER_PERL_VERSION = 5.18
+TERM_SESSION_ID = F1C9B33F-BC51-4B6D-B5E7-5456AE5982E4
+XPC_FLAGS = 0x0
+VERSIONER_PERL_PREFER_32_BIT = no
+TMPDIR = /var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/
+LOGNAME = zego-builder
+TOP_DIR = /Users/zego-builder/zegoavkit-1.0.0
+PATH = /Applications/Xcode.app/Contents/Developer/usr/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/zego-builder/Documents/work/android-ndk-r10d:/Users/zego-builder/Documents/work/adt-bundle-mac-x86-64/sdk/platform-tools:/Users/zego-builder/Documents/work/adt-bundle-mac-x86-64/sdk/tools:/usr/local:/usr/local/apache-ant-1.9.6/bin
+PWD = /Users/zego-builder/zegoavkit-1.0.0/src/projects/apple/demo/LiveDemo2
+USER = zego-builder
+HOME = /Users/zego-builder
+SHLVL = 5
+OLDPWD = /Users/zego-builder/zegoavkit-1.0.0/src/projects/apple
+ANDROID_HOME = /Users/zego-builder/Library/Android/sdk
+TERM_PROGRAM = Apple_Terminal
+SHELL = /bin/bash
+SECURITYSESSIONID = 186a8
+_ = /usr/bin/xcodebuild
+LANG = zh_CN.UTF-8
+__CF_USER_TEXT_ENCODING = 0x1F5:0x19:0x34
+TERM_PROGRAM_VERSION = 361.1
+XPC_SERVICE_NAME = 0
+REL_DATE = 160601_192451
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.jct9bzOqzZ/Listeners
+RELEASE_ROOT = /Users/zego-builder/zegoavkit-1.0.0/release
+Apple_PubSub_Socket_Render = /private/tmp/com.apple.launchd.SVQV3bUJUT/Render
+
+Output directory: '/var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.ipa'
+Temporary Directory: '/var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/Xpxszyq4d6'  (will NOT be deleted on exit when verbose set)
++ /bin/cp -Rp /var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.app /var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/Xpxszyq4d6/Payload
+Program /bin/cp returned 0 : []
+### Checking original app
++ /usr/bin/codesign --verify -vvvv /var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.app
+Program /usr/bin/codesign returned 0 : [/var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.app: valid on disk
+/var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.app: satisfies its Designated Requirement
+]
+Done checking the original app
++ /usr/bin/zip --symlinks --verbose --recurse-paths /var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.ipa .
+Program /usr/bin/zip returned 0 : [  adding: Payload/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/_CodeSignature/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/_CodeSignature/CodeResources	(in=13833) (out=2949) (deflated 79%)
+  adding: Payload/LiveDemo2.app/AppIcon60x60@2x.png	(in=3425) (out=3337) (deflated 3%)
+  adding: Payload/LiveDemo2.app/AppIcon60x60@3x.png	(in=3713) (out=3475) (deflated 6%)
+  adding: Payload/LiveDemo2.app/Assets.car 	(in=100793) (out=49456) (deflated 51%)
+  adding: Payload/LiveDemo2.app/Base.lproj/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/Base.lproj/LaunchScreen.storyboardc/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/Base.lproj/LaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib	(in=1796) (out=1046) (deflated 42%)
+  adding: Payload/LiveDemo2.app/Base.lproj/LaunchScreen.storyboardc/Info.plist	(in=258) (out=149) (deflated 42%)
+  adding: Payload/LiveDemo2.app/Base.lproj/LaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib	(in=832) (out=554) (deflated 33%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/BYZ-38-t0r-view-8bC-Xf-vdC.nib	(in=7008) (out=3435) (deflated 51%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/iIk-lm-Ddg-view-L0y-9Z-O9n.nib	(in=13549) (out=5993) (deflated 56%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/Info.plist	(in=569) (out=260) (deflated 54%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/KuM-ty-hV9-view-EZM-DH-f7z.nib	(in=2691) (out=1344) (deflated 50%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/mgV-Su-I0b-view-izZ-Cx-8My.nib	(in=2342) (out=1323) (deflated 44%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/UINavigationController-X1e-oM-0cx.nib	(in=2572) (out=1474) (deflated 43%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/UITableViewController-KuM-ty-hV9.nib	(in=1185) (out=763) (deflated 36%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/UITableViewController-UNS-bw-kjp.nib	(in=1625) (out=972) (deflated 40%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/UIViewController-iIk-lm-Ddg.nib	(in=972) (out=633) (deflated 35%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/UIViewController-mgV-Su-I0b.nib	(in=973) (out=640) (deflated 34%)
+  adding: Payload/LiveDemo2.app/Base.lproj/Main.storyboardc/UNS-bw-kjp-view-nhd-Hw-MM7.nib	(in=17511) (out=6978) (deflated 60%)
+  adding: Payload/LiveDemo2.app/embedded.mobileprovision	(in=7448) (out=5073) (deflated 32%)
+  adding: Payload/LiveDemo2.app/Frameworks/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/Frameworks/ZegoAVKit2.framework/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/Frameworks/ZegoAVKit2.framework/_CodeSignature/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/Frameworks/ZegoAVKit2.framework/_CodeSignature/CodeResources	(in=2026) (out=518) (deflated 74%)
+  adding: Payload/LiveDemo2.app/Frameworks/ZegoAVKit2.framework/Info.plist	(in=747) (out=536) (deflated 28%)
+  adding: Payload/LiveDemo2.app/Frameworks/ZegoAVKit2.framework/ZegoAVKit2 ..	(in=22689296) (out=9152550) (deflated 60%)
+  adding: Payload/LiveDemo2.app/Info.plist	(in=1377) (out=918) (deflated 33%)
+  adding: Payload/LiveDemo2.app/LiveDemo2 	(in=318096) (out=90667) (deflated 71%)
+  adding: Payload/LiveDemo2.app/PkgInfo	(in=8) (out=8) (stored 0%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/_CodeSignature/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/_CodeSignature/CodeResources	(in=3544) (out=949) (deflated 73%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/Headers/	(in=0) (out=0) (stored 0%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/Headers/ZegoAVConfig.h	(in=2562) (out=837) (deflated 67%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/Headers/ZegoAVDefines.h	(in=2096) (out=915) (deflated 56%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/Headers/ZegoLiveApi.h	(in=7784) (out=2539) (deflated 67%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/Headers/ZegoUser.h	(in=171) (out=116) (deflated 32%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/Headers/ZegoVideoCapture.h	(in=4898) (out=1541) (deflated 69%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/Info.plist	(in=747) (out=536) (deflated 28%)
+  adding: Payload/LiveDemo2.app/ZegoAVKit2.framework/ZegoAVKit2 ..	(in=22689296) (out=9152558) (deflated 60%)
+total bytes=45905743, compressed=18495042 -> 60% savings
+]
+Results at '/var/folders/n5/4_6b5y_j2kvgwxz5fsn4cgnc0000gn/T/73A8EFCB-FF70-4792-8889-770F7AA4D123-37837-00000771D5C1E346/LiveDemo2.ipa' 
+Moving exported product to '/Users/zego-builder/zegoavkit-1.0.0/src/projects/apple/demo/LiveDemo2/LiveDemo2.ipa'
+** EXPORT SUCCEEDED **
+
