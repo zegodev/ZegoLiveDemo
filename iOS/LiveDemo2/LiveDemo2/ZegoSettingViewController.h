@@ -23,6 +23,7 @@
 
 @property (nonatomic, strong) NSString *userID;
 @property (nonatomic, strong) NSString *userName;
+@property (nonatomic, strong) NSString *channelID;
 
 @property (readonly) NSArray *presetVideoQualityList;
 @property (nonatomic, strong) ZegoAVConfig *currentConfig;

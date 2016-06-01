@@ -8,11 +8,11 @@
 #include "ZegoAVKitManager.h"
 
 ZegoLiveApi *g_zegoAV = NULL;
-NSData *g_signKey;
-uint32 g_appID;
-NSString *g_testIP = nil;
-int g_testPort = 0;
-NSString *g_testUrl = nil;
+NSData *g_signKey = nil;
+uint32 g_appID = 0;
+
+BOOL g_useTestEnv = NO;
+BOOL g_requireHardwareAccelerated = NO;
 
 void setCustomAppIDAndSign(uint32 appid, NSData* data)
 {
@@ -20,12 +20,6 @@ void setCustomAppIDAndSign(uint32 appid, NSData* data)
     g_signKey = data;
 }
 
-void setTestServer(NSString *ip, int port, NSString *url)
-{
-    g_testIP = ip;
-    g_testPort = port;
-    g_testUrl = url;
-}
 
 NSData * zegoAppSignFromServer()
 {
@@ -43,16 +37,38 @@ NSData * zegoAppSignFromServer()
     return appSign;
 }
 
+
+#import <ZegoAVKit2/ZegoVideoCapture.h>
+#import "./advanced/video_capture_external_demo.h"
+
+static demo::VideoCaptureFactoryDemo * g_factory = nullptr;
+
+void ZegoSetVideoCaptureDevice()
+{
+//    if (g_factory == nullptr)
+//    {
+//        g_factory = new demo::VideoCaptureFactoryDemo;
+//        [ZegoLiveApi setVideoCaptureFactory:(void *)((ZEGO::AV::VideoCaptureDevice *)g_factory)];
+//    }
+}
+
+
 ZegoLiveApi * getZegoAV_ShareInstance()
 {
     if (g_zegoAV == nil) {
+        [ZegoLiveApi setLogLevel:4];
+        [ZegoLiveApi setUseTestEnv:g_useTestEnv];
+        
+        ZegoSetVideoCaptureDevice();
+        
         if (g_appID != 0 && g_signKey != nil) {
             g_zegoAV = [[ZegoLiveApi alloc] initWithAppID:g_appID appSignature:g_signKey];
-        } else{
+        } else {
             NSData * appSign =  zegoAppSignFromServer();
             g_zegoAV = [[ZegoLiveApi alloc] initWithAppID:1 appSignature:appSign];
         }
-        [ZegoLiveApi setLogLevel:4];
+        
+        [g_zegoAV requireHardwareAccelerated:g_requireHardwareAccelerated];
     }
     return g_zegoAV;
 }
@@ -99,6 +115,40 @@ NSData* ConvertStringToSign(NSString* strSign)
 void ZegoDemoSetCustomAppIDAndSign(uint32 appid, NSString* strSign)
 {
     NSData *d = ConvertStringToSign(strSign);
-    g_appID = appid;
-    g_signKey = d;
+    
+    if (d.length == 32 && appid != 0) {
+        g_appID = appid;
+        g_signKey = d;
+    }
+    
+    g_zegoAV = nil;
+}
+
+void setUseTestEnv(BOOL testEnv)
+{
+    g_useTestEnv = testEnv;
+    [ZegoLiveApi setUseTestEnv:testEnv];
+}
+
+
+
+BOOL isUseingTestEnv()
+{
+    return g_useTestEnv;
+}
+
+uint32 ZegoGetAppID()
+{
+    return g_appID;
+}
+
+void ZegoRequireHardwareAccelerated(bool hardwareAccelerated)
+{
+    g_requireHardwareAccelerated = hardwareAccelerated;
+    [g_zegoAV requireHardwareAccelerated:hardwareAccelerated];
+}
+
+BOOL ZegoIsRequireHardwareAccelerated()
+{
+    return g_requireHardwareAccelerated;
 }

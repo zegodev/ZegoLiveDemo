@@ -8,8 +8,11 @@
 
 #import "ZegoSettingViewController.h"
 
+#include <string>
+
 NSString *kZegoDemoUserIDKey            = @"userid";
 NSString *kZegoDemoUserNameKey          = @"username";
+NSString *kZegoDemoChannelIDKey         = @"channelid";
 NSString *kZegoDemoVideoPresetKey       = @"preset";
 NSString *kZegoDemoVideoResolutionKey   = @"resolution";
 NSString *kZegoDemoVideoFrameRateKey    = @"framerate";
@@ -23,6 +26,7 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
 {
     NSString *_userID;
     NSString *_userName;
+    NSString *_channelID;
 }
 
 + (instancetype)sharedInstance {
@@ -74,6 +78,36 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
         NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
         [ud setObject:_userID forKey:kZegoDemoUserIDKey];
     }
+}
+
+
+- (NSString *)channelID {
+    if (_channelID.length == 0) {
+        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSString *channelID = [ud stringForKey:kZegoDemoChannelIDKey];
+        if (channelID.length > 0) {
+            _channelID = channelID;
+        } else {
+            _channelID = @"5190";
+        }
+    }
+    
+    return _channelID;
+}
+
+
+- (void)setChannelID:(NSString *)channelID {
+    if ([_channelID isEqualToString:channelID]) {
+        return;
+    }
+    
+    if (channelID.length == 0) {
+        channelID = @"5190";
+    }
+    
+    _channelID = channelID;
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:_channelID forKey:kZegoDemoChannelIDKey];
 }
 
 
@@ -136,26 +170,26 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
     ZegoAVConfigVideoResolution r = ZegoAVConfigVideoResolution_640x480;
     switch ((int)size.width) {
         case 320:
-            r = 0;
+            r = (ZegoAVConfigVideoResolution)0;
             break;
         case 352:
-            r = 1;
+            r = (ZegoAVConfigVideoResolution)1;
             break;
         case 640:
-            r = 2;
+            r = (ZegoAVConfigVideoResolution)2;
             break;
         case 960:
-            r = 3;
+            r = (ZegoAVConfigVideoResolution)3;
             break;
         case 1280:
-            r = 4;
+            r = (ZegoAVConfigVideoResolution)4;
             break;
         case 1920:
-            r = 5;
+            r = (ZegoAVConfigVideoResolution)5;
             break;
             
         default:
-            r = -1;
+            r = (ZegoAVConfigVideoResolution)-1;
             break;
     }
     
@@ -173,7 +207,7 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
             return ;
         }
     } else {
-        _presetIndex = ZegoAVConfigPreset_Generic;
+        _presetIndex = ZegoAVConfigPreset_High;
         _currentConfig = [ZegoAVConfig defaultZegoAVConfig:ZegoAVConfigPreset_Generic];
         return ;
     }
@@ -254,6 +288,7 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
 @interface ZegoSettingViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *userID;
 @property (weak, nonatomic) IBOutlet UITextField *userName;
+@property (weak, nonatomic) IBOutlet UITextField *channelID;
 
 @property (weak, nonatomic) IBOutlet UIPickerView *presetPicker;
 @property (weak, nonatomic) IBOutlet UILabel *videoResolution;
@@ -263,7 +298,11 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
 @property (weak, nonatomic) IBOutlet UISlider *videoFrameRateSlider;
 @property (weak, nonatomic) IBOutlet UISlider *videoBitRateSlider;
 @property (weak, nonatomic) IBOutlet UITextField *appID;
-@property (weak, nonatomic) IBOutlet UITextField *appSign;
+@property (weak, nonatomic) IBOutlet UITextView *appSign;
+
+@property (weak, nonatomic) IBOutlet UISwitch *testEnvSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *hardwareAcceleratedSwitch;
+
 @end
 
 
@@ -273,13 +312,30 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
     [super viewWillAppear:animated];
     [self loadVideoSettings];
     [self loadAccountSettings];
+    self.testEnvSwitch.on = isUseingTestEnv();
+    self.hardwareAcceleratedSwitch.on = ZegoIsRequireHardwareAccelerated();
+    
+    if (ZegoGetAppID() != 0) {
+        [self.appID setText:[NSString stringWithFormat:@"%u", ZegoGetAppID()]];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [ZegoSettings sharedInstance].userID = self.userID.text;
     [ZegoSettings sharedInstance].userName = self.userName.text;
+    [ZegoSettings sharedInstance].channelID = self.channelID.text;
     
-    ZegoDemoSetCustomAppIDAndSign((uint32)self.appID.text.integerValue, self.appSign.text);
+    if (self.appID.text.length > 0) {
+    
+        std::string strAppID = self.appID.text.UTF8String;
+        unsigned long appID = std::stoul(strAppID);
+        
+        ZegoDemoSetCustomAppIDAndSign((uint32)appID, self.appSign.text);
+    }
+    
+    setUseTestEnv(self.testEnvSwitch.on);
+    
+
     
     [super viewWillDisappear:animated];
 }
@@ -320,6 +376,7 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
 - (void)loadAccountSettings {
     self.userID.text = [ZegoSettings sharedInstance].userID;
     self.userName.text = [ZegoSettings sharedInstance].userName;
+    self.channelID.text = [ZegoSettings sharedInstance].channelID;
 }
 
 - (void)loadVideoSettings {
@@ -365,10 +422,21 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
 
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath indexAtPosition:0] == 2) {
+    if ([indexPath indexAtPosition:0] == 2 || [indexPath indexAtPosition:0] == 3) {
         return YES;
     }
     return NO;
 }
+
+- (IBAction)toggleTestEnv:(id)sender {
+    UISwitch *s = (UISwitch *)sender;
+    setUseTestEnv(s.on);
+}
+
+- (IBAction)toggleHardwareAccelerated:(id)sender {
+    UISwitch *s = (UISwitch *)sender;
+    ZegoRequireHardwareAccelerated(s.on);
+}
+
 
 @end

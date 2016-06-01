@@ -13,7 +13,6 @@
 
 @interface ViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *liveID;
 @property (weak, nonatomic) IBOutlet UITextField *publishTitle;
 
 @property (weak, nonatomic) IBOutlet UIButton *btnPublish;
@@ -30,17 +29,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    // init
+    getZegoAV_ShareInstance();
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (self.liveID.text.length == 0) {
-        [self.liveID setText:@"5180"];
-    }
     [self.publishTitle setText:[NSString stringWithFormat:@"Hello-%@", [ZegoSettings sharedInstance].userName]];
-    
-    self.liveID.delegate = self;
     self.publishTitle.delegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
@@ -123,10 +120,10 @@
         if (sender == self.btnPublish) {
             c.liveType = 1;
             c.liveTitle = self.publishTitle.text;
-            c.liveChannel = self.liveID.text;
+            c.liveChannel = [ZegoSettings sharedInstance].channelID;
         } else if (sender == self.btnPlay) {
             c.liveType = 2;
-            c.liveChannel = self.liveID.text;
+            c.liveChannel = [ZegoSettings sharedInstance].channelID;
         } else if (sender == self) {
             c.liveType = 1;
             c.liveChannel = [ZegoSettings sharedInstance].publishingLiveChannel;
@@ -141,8 +138,6 @@
     [self.view endEditing:YES];
     return YES;
 }
-
-
 
 - (void)handleTouchEvent:(id)sender {
     [self.view endEditing:YES];
