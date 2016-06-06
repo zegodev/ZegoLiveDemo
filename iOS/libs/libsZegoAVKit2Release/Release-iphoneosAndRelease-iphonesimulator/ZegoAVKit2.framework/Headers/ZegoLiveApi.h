@@ -30,6 +30,8 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamIDKey;    ///< 主播流ID，值�
 ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观看 url，值为 NSString
 
 
+@protocol ZegoVideoCaptureFactory;
+
 /// \brief 回调协议
 /// \note 所有回调调用都会发生在主线程
 @protocol ZegoLiveApiDelegate <NSObject>
@@ -227,12 +229,8 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 + (void)setUseTestEnv:(bool)useTestEnv;
 
 /// \brief 设置外部采集模块
-/// \param factory 工厂对象，继承自 ZEGO::AV::VideoCaptureFactory，
+/// \param factory 工厂对象
 /// \note 必须在 InitSDK 前调用，并且不能置空
-///    Example:
-//+ (void)setVideoCaptureFactory:(void *)factory;
++ (void)setVideoCaptureFactory:(id<ZegoVideoCaptureFactory>)factory;
 
 @end
-
-
-

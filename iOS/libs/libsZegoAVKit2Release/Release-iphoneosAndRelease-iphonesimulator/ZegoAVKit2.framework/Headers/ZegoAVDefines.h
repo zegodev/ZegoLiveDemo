@@ -39,7 +39,8 @@ typedef enum
 typedef enum
 {
     RemoteViewIndex_First = 0,
-    RemoteViewIndex_Second = 1
+    RemoteViewIndex_Second = 1,
+    RemoteViewIndex_Third = 2
 }RemoteViewIndex;
 
 

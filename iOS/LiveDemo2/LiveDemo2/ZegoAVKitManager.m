@@ -41,14 +41,14 @@ NSData * zegoAppSignFromServer()
 #import <ZegoAVKit2/ZegoVideoCapture.h>
 #import "./advanced/video_capture_external_demo.h"
 
-static demo::VideoCaptureFactoryDemo * g_factory = nullptr;
+static VideoCaptureFactoryDemo * g_factory = nullptr;
 
 void ZegoSetVideoCaptureDevice()
 {
 //    if (g_factory == nullptr)
 //    {
-//        g_factory = new demo::VideoCaptureFactoryDemo;
-//        [ZegoLiveApi setVideoCaptureFactory:(void *)((ZEGO::AV::VideoCaptureDevice *)g_factory)];
+//        g_factory = [[VideoCaptureFactoryDemo alloc] init];
+//        [ZegoLiveApi setVideoCaptureFactory:g_factory];
 //    }
 }
 

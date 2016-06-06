@@ -31,8 +31,8 @@
 		A73816DC1CF5D4B900EE2D28 /* ZegoAVKit2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A73816CC1CF5D48B00EE2D28 /* ZegoAVKit2.framework */; };
 		A79E08BF1CFE9071002CDADC /* ZegoAVKit2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A73816D11CF5D48B00EE2D28 /* ZegoAVKit2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A79E08C01CFE9075002CDADC /* ZegoAVKit2.framework in Resources */ = {isa = PBXBuildFile; fileRef = A73816D11CF5D48B00EE2D28 /* ZegoAVKit2.framework */; };
-		A79E08C41CFE90B3002CDADC /* video_capture_external_demo.mm in Sources */ = {isa = PBXBuildFile; fileRef = A79E08C31CFE90B3002CDADC /* video_capture_external_demo.mm */; };
-		A79E08C51CFE90B3002CDADC /* video_capture_external_demo.mm in Sources */ = {isa = PBXBuildFile; fileRef = A79E08C31CFE90B3002CDADC /* video_capture_external_demo.mm */; };
+		A79E08C41CFE90B3002CDADC /* video_capture_external_demo.m in Sources */ = {isa = PBXBuildFile; fileRef = A79E08C31CFE90B3002CDADC /* video_capture_external_demo.m */; };
+		A79E08C51CFE90B3002CDADC /* video_capture_external_demo.m in Sources */ = {isa = PBXBuildFile; fileRef = A79E08C31CFE90B3002CDADC /* video_capture_external_demo.m */; };
 		A79E08C71CFEAC63002CDADC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79E08C61CFEAC63002CDADC /* AVFoundation.framework */; };
 		A79E08C91CFEAC69002CDADC /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79E08C81CFEAC69002CDADC /* CoreMedia.framework */; };
 		A79E08CA1CFEACBF002CDADC /* ZegoAVKit2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A73816D11CF5D48B00EE2D28 /* ZegoAVKit2.framework */; };
@@ -89,7 +89,7 @@
 		A73816CF1CF5D48B00EE2D28 /* ZegoAVKit2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZegoAVKit2.framework; sourceTree = "<group>"; };
 		A73816D11CF5D48B00EE2D28 /* ZegoAVKit2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ZegoAVKit2.framework; sourceTree = "<group>"; };
 		A79E08C21CFE90B3002CDADC /* video_capture_external_demo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = video_capture_external_demo.h; sourceTree = "<group>"; };
-		A79E08C31CFE90B3002CDADC /* video_capture_external_demo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = video_capture_external_demo.mm; sourceTree = "<group>"; };
+		A79E08C31CFE90B3002CDADC /* video_capture_external_demo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = video_capture_external_demo.m; sourceTree = "<group>"; };
 		A79E08C61CFEAC63002CDADC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A79E08C81CFEAC69002CDADC /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A79E08CB1CFFE99D002CDADC /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
@@ -262,7 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				A79E08C21CFE90B3002CDADC /* video_capture_external_demo.h */,
-				A79E08C31CFE90B3002CDADC /* video_capture_external_demo.mm */,
+				A79E08C31CFE90B3002CDADC /* video_capture_external_demo.m */,
 			);
 			path = advanced;
 			sourceTree = "<group>";
@@ -370,7 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7091B541CAE740B00918610 /* ZegoAVKitManager.m in Sources */,
-				A79E08C41CFE90B3002CDADC /* video_capture_external_demo.mm in Sources */,
+				A79E08C41CFE90B3002CDADC /* video_capture_external_demo.m in Sources */,
 				A7091B221CAE6A7600918610 /* ViewController.m in Sources */,
 				A7091B1F1CAE6A7600918610 /* AppDelegate.m in Sources */,
 				A7091B1C1CAE6A7600918610 /* main.m in Sources */,
@@ -386,7 +386,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A72B720C1CD1F249006EC9AD /* ZegoAVKitManager.m in Sources */,
-				A79E08C51CFE90B3002CDADC /* video_capture_external_demo.mm in Sources */,
+				A79E08C51CFE90B3002CDADC /* video_capture_external_demo.m in Sources */,
 				A72B720D1CD1F249006EC9AD /* ViewController.m in Sources */,
 				A72B720E1CD1F249006EC9AD /* AppDelegate.m in Sources */,
 				A72B720F1CD1F249006EC9AD /* main.m in Sources */,

@@ -157,11 +157,19 @@
                                             <constraint firstAttribute="width" constant="120" id="WXT-rg-nzk"/>
                                         </constraints>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lCd-H2-byZ" userLabel="Small Video View 2">
+                                        <rect key="frame" x="332" y="262" width="120" height="180"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="lCd-H2-byZ" firstAttribute="width" secondItem="NgO-du-eG5" secondAttribute="width" id="EVE-e8-nwf"/>
+                                    <constraint firstItem="NgO-du-eG5" firstAttribute="leading" secondItem="lCd-H2-byZ" secondAttribute="trailing" constant="8" id="HZH-m9-u3O"/>
                                     <constraint firstAttribute="bottom" secondItem="NgO-du-eG5" secondAttribute="bottom" constant="52" id="ech-fW-6Zz"/>
+                                    <constraint firstItem="lCd-H2-byZ" firstAttribute="height" secondItem="NgO-du-eG5" secondAttribute="height" id="iSy-1f-cn4"/>
                                     <constraint firstAttribute="trailing" secondItem="NgO-du-eG5" secondAttribute="trailing" constant="20" id="lxp-P2-MJl"/>
+                                    <constraint firstItem="lCd-H2-byZ" firstAttribute="centerY" secondItem="NgO-du-eG5" secondAttribute="centerY" id="rHX-ev-HVI"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -426,7 +434,8 @@
                         <outlet property="liveInfo" destination="d46-Ku-dHj" id="PCz-rO-HHW"/>
                         <outlet property="liveStatus" destination="r5Q-h7-rrK" id="bDr-qy-ZUX"/>
                         <outlet property="playStreamID" destination="yk5-FM-qr9" id="2Vs-Kp-nd2"/>
-                        <outlet property="smallView" destination="NgO-du-eG5" id="Twl-7Z-otr"/>
+                        <outlet property="smallView1" destination="NgO-du-eG5" id="BPG-Rr-ehu"/>
+                        <outlet property="smallView2" destination="lCd-H2-byZ" id="6ce-lR-VTm"/>
                         <outlet property="statusBoxBottemSpaceConstraint" destination="4SX-Az-ayA" id="ZRJ-s5-6LP"/>
                         <outlet property="statusBoxHeightConstraint" destination="Pov-KG-yGJ" id="KCU-uv-jLq"/>
                     </connections>
