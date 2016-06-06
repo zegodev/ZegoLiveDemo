@@ -309,6 +309,9 @@ public class PlayActivity extends AbsShowActivity {
                     rlytSmallVideoParent.addView(viewBig);
                     rlytBigVideoParent.addView(viewSmall);
                     mSmallVideoIsSmall = false;
+
+                    rgSmallViewMode.setVisibility(View.VISIBLE);
+                    rgBigViewMode.setVisibility(View.INVISIBLE);
                 } else {
                     //  复原
                     rlytSmallVideoParent.removeView(viewBig);
@@ -321,6 +324,9 @@ public class PlayActivity extends AbsShowActivity {
                     rlytSmallVideoParent.addView(viewSmall);
                     rlytBigVideoParent.addView(viewBig);
                     mSmallVideoIsSmall = true;
+
+                    rgSmallViewMode.setVisibility(View.INVISIBLE);
+                    rgBigViewMode.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -353,6 +359,7 @@ public class PlayActivity extends AbsShowActivity {
             }
         });
 
+        rgSmallViewMode.setVisibility(View.INVISIBLE);
         rgSmallViewMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -526,7 +533,7 @@ public class PlayActivity extends AbsShowActivity {
         rlytSmallVideoParent.setVisibility(View.VISIBLE);
         rlytSmallVideoParent.bringToFront();
         mZegoAVKit.setLocalView(svSmall);
-        mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+        mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
         mZegoAVKit.startPreview();
         boolean ret = mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
         Log.i("TestData", ret + "");
@@ -538,13 +545,13 @@ public class PlayActivity extends AbsShowActivity {
      */
     private void startPlay(int playStreamIndex) {
         if (playStreamIndex == 1) {
-            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
             mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, svBig);
             mZegoAVKit.startPlayStream(mPlayStreamID1, ZegoAVKitCommon.ZegoRemoteViewIndex.First);
         } else if (playStreamIndex == 2) {
             rlytSmallVideoParent.setVisibility(View.VISIBLE);
             rlytSmallVideoParent.bringToFront();
-            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
             mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, svSmall);
             mZegoAVKit.startPlayStream(mPlayStreamID2, ZegoAVKitCommon.ZegoRemoteViewIndex.Second);
         }

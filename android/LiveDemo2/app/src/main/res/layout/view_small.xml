@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-    android:background="@color/bg_black">
+                android:layout_height="match_parent">
     <SurfaceView
         android:id="@+id/sv_small_video"
         android:layout_width="match_parent"
@@ -13,23 +12,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/bg_gray"
-        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dimen_80"
         >
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="FT"
             android:id="@+id/rb_asfit_small"
-            android:checked="false"/>
+            android:checked="true"/>
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="AFL"
             android:id="@+id/rb_asfill_small"
-            android:checked="true"/>
+            android:checked="false"/>
 
         <RadioButton
             android:layout_width="wrap_content"

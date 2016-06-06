@@ -152,3 +152,8 @@ BOOL ZegoIsRequireHardwareAccelerated()
 {
     return g_requireHardwareAccelerated;
 }
+
+NSString *ZegoGetSDKVersion()
+{
+    return [getZegoAV_ShareInstance() version];
+}

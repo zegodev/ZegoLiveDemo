@@ -92,6 +92,13 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \param appSignature Zego派发的签名,用来校验对应appID的合法性
 - (instancetype)initWithAppID:(uint32)appID appSignature:(NSData*)appSignature;
 
+/// \brief 启动 SDK，准备音视频服务
+/// \note 在可能用到直播功能时才调用
+- (bool)startSDK;
+
+/// \brief 停止 SDK，停止音视频服务
+- (bool)stopSDK;
+
 /// \brief 设置用来观看直播的View
 /// \param index View的序号，目前支持一个聊天室两个主播
 /// \param view 展示视频的View

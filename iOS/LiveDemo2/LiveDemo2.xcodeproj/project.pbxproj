@@ -36,6 +36,7 @@
 		A79E08C71CFEAC63002CDADC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79E08C61CFEAC63002CDADC /* AVFoundation.framework */; };
 		A79E08C91CFEAC69002CDADC /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79E08C81CFEAC69002CDADC /* CoreMedia.framework */; };
 		A79E08CA1CFEACBF002CDADC /* ZegoAVKit2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A73816D11CF5D48B00EE2D28 /* ZegoAVKit2.framework */; };
+		A79E08CC1CFFE99D002CDADC /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A79E08CB1CFFE99D002CDADC /* libresolv.tbd */; };
 		A7AC4DFA1CB7FF13005A0558 /* ZegoSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4DF91CB7FF13005A0558 /* ZegoSettingViewController.m */; };
 		A7AC4E0A1CBA1F19005A0558 /* ZegoLiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4E091CBA1F19005A0558 /* ZegoLiveViewController.m */; };
 		A7AC4E0D1CBB3E2A005A0558 /* ZegoAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4E0C1CBB3E2A005A0558 /* ZegoAboutViewController.m */; };
@@ -91,6 +92,7 @@
 		A79E08C31CFE90B3002CDADC /* video_capture_external_demo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = video_capture_external_demo.mm; sourceTree = "<group>"; };
 		A79E08C61CFEAC63002CDADC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A79E08C81CFEAC69002CDADC /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		A79E08CB1CFFE99D002CDADC /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		A7AC4DF81CB7FF13005A0558 /* ZegoSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoSettingViewController.h; sourceTree = "<group>"; };
 		A7AC4DF91CB7FF13005A0558 /* ZegoSettingViewController.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp.preprocessed; fileEncoding = 4; path = ZegoSettingViewController.m; sourceTree = "<group>"; };
 		A7AC4E081CBA1F19005A0558 /* ZegoLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoLiveViewController.h; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A79E08CC1CFFE99D002CDADC /* libresolv.tbd in Frameworks */,
 				A72B72151CD1F249006EC9AD /* VideoToolbox.framework in Frameworks */,
 				A72B72171CD1F249006EC9AD /* libiconv.tbd in Frameworks */,
 				A73816DC1CF5D4B900EE2D28 /* ZegoAVKit2.framework in Frameworks */,
@@ -131,6 +134,7 @@
 		A7091B0E1CAE6A7600918610 = {
 			isa = PBXGroup;
 			children = (
+				A79E08CB1CFFE99D002CDADC /* libresolv.tbd */,
 				A7E7453B1CC913650034F329 /* libiconv.tbd */,
 				A7091B491CAE6B9400918610 /* frameworks */,
 				A7091B191CAE6A7600918610 /* LiveDemo2 */,

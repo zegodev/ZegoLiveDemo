@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -283,6 +284,9 @@ public class PublishActivity extends AbsShowActivity {
                     rlytSmallVideoParent.addView(viewBig);
                     rlytBigVideoParent.addView(viewSmall);
                     mSmallVideoIsSmall = false;
+
+                    rgSmallViewMode.setVisibility(View.VISIBLE);
+                    rgBigViewMode.setVisibility(View.INVISIBLE);
                 } else {
                     //  复原
                     rlytSmallVideoParent.removeView(viewBig);
@@ -295,6 +299,9 @@ public class PublishActivity extends AbsShowActivity {
                     rlytSmallVideoParent.addView(viewSmall);
                     rlytBigVideoParent.addView(viewBig);
                     mSmallVideoIsSmall = true;
+
+                    rgSmallViewMode.setVisibility(View.INVISIBLE);
+                    rgBigViewMode.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -311,9 +318,11 @@ public class PublishActivity extends AbsShowActivity {
             @Override
             public void onClick(View v) {
                 newDialog();
+                //TestActivity.actionStart(PublishActivity.this);
             }
         });
 
+        rgSmallViewMode.setVisibility(View.INVISIBLE);
         rgSmallViewMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -348,7 +357,8 @@ public class PublishActivity extends AbsShowActivity {
             }
         });
 
-
+        ArrayAdapter<String> beautyAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, mResources.getStringArray(R.array.beauties));
+        spBeauties.setAdapter(beautyAdapter);
         spBeauties.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -379,6 +389,8 @@ public class PublishActivity extends AbsShowActivity {
             }
         });
 
+        ArrayAdapter<String> filterAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, mResources.getStringArray(R.array.filters));
+        spFilters.setAdapter(filterAdapter);
         spFilters.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -523,7 +535,7 @@ public class PublishActivity extends AbsShowActivity {
     private void startPlay() {
         rlytSmallVideoParent.setVisibility(View.VISIBLE);
         rlytSmallVideoParent.bringToFront();
-        mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+        mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
         mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, svSmall);
         mZegoAVKit.startPlayStream(mPlayStreamID, ZegoAVKitCommon.ZegoRemoteViewIndex.First);
 

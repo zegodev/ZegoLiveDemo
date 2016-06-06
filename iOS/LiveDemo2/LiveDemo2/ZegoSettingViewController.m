@@ -286,6 +286,8 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
 
 
 @interface ZegoSettingViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *version;
+
 @property (weak, nonatomic) IBOutlet UITextField *userID;
 @property (weak, nonatomic) IBOutlet UITextField *userName;
 @property (weak, nonatomic) IBOutlet UITextField *channelID;
@@ -380,6 +382,7 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
 }
 
 - (void)loadVideoSettings {
+    self.version.text = ZegoGetSDKVersion();
     [self.presetPicker selectRow:[ZegoSettings sharedInstance].presetIndex inComponent:0 animated:YES];
     [self updateViedoSettingUI];
 }

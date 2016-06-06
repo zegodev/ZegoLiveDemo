@@ -24,7 +24,8 @@ extern "C"{
     
     void ZegoRequireHardwareAccelerated(bool hardwareAccelerated);
     BOOL ZegoIsRequireHardwareAccelerated();
-        
+    
+    NSString *ZegoGetSDKVersion();
 #ifdef __cplusplus
 }
 #endif
