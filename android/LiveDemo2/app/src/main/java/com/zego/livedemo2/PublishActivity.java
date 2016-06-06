@@ -184,60 +184,56 @@ public class PublishActivity extends AbsShowActivity {
         mZegoAVKit = ZegoApiManager.getInstance().getZegoAVKit();
         mZegoAVKit.setZegoLiveCallback(new ZegoLiveCallback() {
             @Override
-            public void onLoginChannel(String liveChannel, boolean isLoginSuccess) {
-                if (isLoginSuccess) {
-                    tvChannel.setText("Channel: " + liveChannel);
+            public void onLoginChannel(String liveChannel, int retCode) {
+                if (retCode == 0) {
+                    tvChannel.setText("Channel:" + liveChannel);
                     // 登陆成功, 开始发布
                     startPublish();
                 } else {
-                    tvChannel.setText("Channel: Error");
+                    tvChannel.setText("Channel:error-" + retCode);
                 }
             }
 
             @Override
             public void onPublishSucc(String streamID, String liveChannel, String playUrl){
-                ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:onPublishSucc");
+                ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:success");
                 ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:" + streamID);
             }
 
             @Override
-            public void onPublishStop(ZegoAVKitCommon.ZegoStreamStopFlag zegoStreamStopFlag,  String streamID, String liveChannel) {
-                ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:onPublishStop-" + zegoStreamStopFlag);
-                ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:null");
+            public void onPublishStop(int retCode,  String streamID, String liveChannel) {
+                ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:stop-" + retCode);
+                ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:" + streamID);
             }
 
             @Override
             public void onPlaySucc(String streamID, String liveChannel) {
                 // 播放成功以后,禁止播放按钮
                 btnPlay.setEnabled(false);
-                ((TextView) llytPlayState.getChildAt(0)).setText("PlayState:onPlaySucc");
+                ((TextView) llytPlayState.getChildAt(0)).setText("PlayState:success");
                 ((TextView) llytPlayState.getChildAt(1)).setText("PlayStream:" + streamID);
             }
 
             @Override
-            public void onPlayStop(ZegoAVKitCommon.ZegoStreamStopFlag zegoStreamStopFlag, String streamID, String liveChannel) {
-                ((TextView) llytPlayState.getChildAt(0)).setText("PlayState:onPlayStop-" + zegoStreamStopFlag);
-                ((TextView) llytPlayState.getChildAt(1)).setText("PlayStream:null");
+            public void onPlayStop(int retCode, String streamID, String liveChannel) {
+                ((TextView) llytPlayState.getChildAt(0)).setText("PlayState:stop-" + retCode);
+                ((TextView) llytPlayState.getChildAt(1)).setText("PlayStream:" + streamID);
             }
 
             @Override
             public void onVideoSizeChanged(String streamID, int width, int height) {
-                Log.i("TestData", "");
             }
 
             @Override
             public void onTakeRemoteViewSnapshot(final Bitmap bitmap, ZegoAVKitCommon.ZegoRemoteViewIndex zegoRemoteViewIndex) {
-                Log.i("TestData", "");
             }
 
             @Override
             public void onTakeLocalViewSnapshot(final Bitmap bitmap) {
-                Log.i("TestData", "");
             }
 
             @Override
             public void onCaptureVideoSize(int width, int height) {
-                Log.i("TestData", "Data:" + width + "--" + height);
             }
         });
     }
@@ -458,11 +454,17 @@ public class PublishActivity extends AbsShowActivity {
             mZegoAVKit.loginChannel(zegoUser, mLiveChannel);
         } else {
 
+            Log.i("onSaveInstanceState", "onRestoreInstance");
+
             // 重新发布视频
             startPublish();
 
-            // 开始播放
-            startPlay();
+            if (!TextUtils.isEmpty(mPlayStreamID)) {
+                // 重新播放
+                startPlay();
+            }
+
+
         }
     }
 
@@ -484,14 +486,7 @@ public class PublishActivity extends AbsShowActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // 当前Activity在后台被回收，停止发布视频
-//        mZegoAVKit.stopPreview();
-//        mZegoAVKit.stopPublish();
-//
-//        // 当前Activity在后台被回收, 停止播放
-//        if(!TextUtils.isEmpty(mPlayStreamID)){
-//            mZegoAVKit.stopPlayStream(mPlayStreamID);
-//        }
+        Log.i("onSaveInstanceState", "onSaveInstanceState");
     }
 
     private void newDialog() {
@@ -546,12 +541,15 @@ public class PublishActivity extends AbsShowActivity {
      * 退出.
      */
     private void logout() {
+
         mZegoAVKit.stopPreview();
         mZegoAVKit.stopPublish();
+        mZegoAVKit.setLocalView(null);
 
         // 停止播放
         if (!TextUtils.isEmpty(mPlayStreamID)) {
             mZegoAVKit.stopPlayStream(mPlayStreamID);
+            mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, null);
         }
 
         mZegoAVKit.logoutChannel();
