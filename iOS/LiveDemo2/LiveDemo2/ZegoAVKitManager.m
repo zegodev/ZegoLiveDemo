@@ -26,11 +26,7 @@ NSData * zegoAppSignFromServer()
     //!! Demo 把signKey先写到代码中
     //!! 规范用法：这个signKey需要从server下发到App，避免在App中存储，防止盗用
     
-    Byte signkey[] = {0x91,0x93,0xcc,0x66,0x2a,0x1c,0xe,0xc1,
-        0x35,0xec,0x71,0xfb,0x7,0x19,0x4b,0x38,
-        0x15,0xf1,0x43,0xf5,0x7c,0xd2,0xb5,0x9a,
-        0xe3,0xdd,0xdb,0xe0,0xf1,0x74,0x36,0xd};
-    
+    Byte signkey[] = {0x91,0x93,0xcc,0x66,0x2a,0x1c,0xe,0xc1,0x35,0xec,0x71,0xfb,0x7,0x19,0x4b,0x38,0x15,0xf1,0x43,0xf5,0x7c,0xd2,0xb5,0x9a,0xe3,0xdd,0xdb,0xe0,0xf1,0x74,0x36,0xd};
     
     NSData * appSign = [[NSData alloc] initWithBytes:signkey length:32];
     
@@ -40,16 +36,27 @@ NSData * zegoAppSignFromServer()
 
 #import <ZegoAVKit2/ZegoVideoCapture.h>
 #import "./advanced/video_capture_external_demo.h"
+#import "./advanced/ZegoVideoCaptureFromImage.h"
 
-static VideoCaptureFactoryDemo * g_factory = nullptr;
+static __strong id<ZegoVideoCaptureFactory> g_factory = nullptr;
 
 void ZegoSetVideoCaptureDevice()
 {
-//    if (g_factory == nullptr)
-//    {
-//        g_factory = [[VideoCaptureFactoryDemo alloc] init];
-//        [ZegoLiveApi setVideoCaptureFactory:g_factory];
-//    }
+#if TARGET_OS_SIMULATOR
+    if (g_factory == nullptr) {
+        g_factory = [[ZegoVideoCaptureFactory alloc] init];
+        [ZegoLiveApi setVideoCaptureFactory:g_factory];
+    }
+#else
+/*
+    // try VideoCaptureFactoryDemo for camera
+    if (g_factory == nullptr)
+    {
+        g_factory = [[VideoCaptureFactoryDemo alloc] init];
+        [ZegoLiveApi setVideoCaptureFactory:g_factory];
+    }
+ */
+#endif
 }
 
 

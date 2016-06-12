@@ -10,6 +10,9 @@
 #import "ZegoAVKitManager.h"
 #import "ZegoSettingViewController.h"
 
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTCall.h>
+
 @interface ZegoDemoAnchorCongif : NSObject
 
 @property BOOL enableMic;
@@ -25,7 +28,7 @@
     self = [super init];
     if (self) {
         _enableMic = YES;
-        _useFrontCamera = NO;
+        _useFrontCamera = YES;
         _beautifyFeature = 0;
     }
     
@@ -76,7 +79,6 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 @property (strong) UITapGestureRecognizer *smallView2TapGestureRecognizer;
 
 @property (nonatomic) BOOL isPublishing;
-@property BOOL isPlaying;
 @property BOOL isPreviewOn;
 @property (nonatomic) BOOL isLogin;
 
@@ -87,6 +89,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 @implementation ZegoLiveViewController
 {
     ZegoDemoAnchorCongif *_anchorConfig;
+    CTCallCenter *_callCenter;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -120,6 +123,17 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
                     @"夜色"
                     ];
     
+    if (!_callCenter) {
+        _callCenter = [[CTCallCenter alloc] init];
+    }
+    
+    // 监听电话事件，电话来时关闭直播
+    __weak ZegoLiveViewController *weakSelf = self;
+    _callCenter.callEventHandler = ^(CTCall* call) {
+        ZegoLiveViewController *strongSelf = weakSelf;
+        [strongSelf handlePhoneCallEvent:call];
+    };
+    
     [self setupLiveKit];
     
     if (self.isLogin) {
@@ -147,6 +161,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleKeyboardWillDismiss:) name:UIKeyboardWillHideNotification object:nil];
     
+    
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     
     if (!self.smallView1TapGestureRecognizer) {
@@ -163,6 +178,8 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 - (void)viewWillDisappear:(BOOL)animated {
     
+    _callCenter = nil;
+    
     [self.smallView1 removeGestureRecognizer:self.smallView1TapGestureRecognizer];
     [self.smallView2 removeGestureRecognizer:self.smallView2TapGestureRecognizer];
     
@@ -173,26 +190,40 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
+    CGFloat angle = 0;
+    
     switch (self.interfaceOrientation) {
         case UIInterfaceOrientationPortrait:
-            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_0];
+//            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_0];
             break;
             
         case UIInterfaceOrientationPortraitUpsideDown:
-            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_180];
+            angle = M_PI;
+//            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_180];
             break;
             
         case UIInterfaceOrientationLandscapeLeft:
-            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_90];
+            angle = M_PI_2;
+//            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_90];
             break;
             
         case UIInterfaceOrientationLandscapeRight:
-            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_270];
+            angle = -M_PI_2;
+//            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_270];
             break;
             
         default:
             break;
     }
+    
+    CGAffineTransform newTransform = CGAffineTransformMakeRotation(angle);
+    [self.bigView setTransform:newTransform];
+}
+
+- (void)handlePhoneCallEvent:(CTCall *)call {
+    NSLog(@"%s, state: %@", __func__, call.callState);
+    // 电话来时，关闭直播
+    [self leave:self];
 }
 
 -(void)handleSmallViewTap:(UIGestureRecognizer*)gestureRecognizer {
@@ -391,6 +422,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
         [getZegoAV_ShareInstance() stopPublishing];
     } else if (self.videoViewInfo.count < 2) {
         [self enablePreview:YES];
+        [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];
         bool ret = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:[self publishStreamID]];
         NSLog(@"%s, ret: %d", __func__, ret);
         
@@ -512,6 +544,14 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     }
     
     self.btnJoin.enabled = YES;
+    
+#if TARGET_OS_SIMULATOR
+    // testing
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        self.playStreamID.text = streamID;
+//        [self playExtractStream:self];
+//    });
+#endif
 }
 
 /// \brief 发布直播失败
@@ -553,6 +593,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
                 assert(b);
                 
                 [self enablePreview:YES];
+                [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];
                 b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:[self publishStreamID]];
                 
                 assert(b);
@@ -743,7 +784,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     bool foundThird = false;
     
     for (NSDictionary *info in self.videoViewInfo) {
-        RemoteViewIndex index = [info[kZegoDemoViewIndexKey] integerValue];
+        RemoteViewIndex index = (RemoteViewIndex)[info[kZegoDemoViewIndexKey] integerValue];
         if (index == RemoteViewIndex_First) {
             foundFirst = true;
         } else if (index == RemoteViewIndex_Second) {

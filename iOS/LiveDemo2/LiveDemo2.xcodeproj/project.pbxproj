@@ -41,6 +41,9 @@
 		A7AC4E0A1CBA1F19005A0558 /* ZegoLiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4E091CBA1F19005A0558 /* ZegoLiveViewController.m */; };
 		A7AC4E0D1CBB3E2A005A0558 /* ZegoAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7AC4E0C1CBB3E2A005A0558 /* ZegoAboutViewController.m */; };
 		A7B0DF341CBE780B0041E104 /* ZegoNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0DF331CBE780B0041E104 /* ZegoNavigationController.m */; };
+		A7E0E57A1D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E0E5791D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.m */; };
+		A7E0E57B1D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.m in Sources */ = {isa = PBXBuildFile; fileRef = A7E0E5791D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.m */; };
+		A7E0E57D1D0D0D9200AF2AC8 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E0E57C1D0D0D9200AF2AC8 /* CoreTelephony.framework */; };
 		A7E7453C1CC913650034F329 /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A7E7453B1CC913650034F329 /* libiconv.tbd */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +104,9 @@
 		A7AC4E0C1CBB3E2A005A0558 /* ZegoAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoAboutViewController.m; sourceTree = "<group>"; };
 		A7B0DF321CBE780B0041E104 /* ZegoNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoNavigationController.h; sourceTree = "<group>"; };
 		A7B0DF331CBE780B0041E104 /* ZegoNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoNavigationController.m; sourceTree = "<group>"; };
+		A7E0E5781D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoVideoCaptureFromImage.h; sourceTree = "<group>"; };
+		A7E0E5791D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoVideoCaptureFromImage.m; sourceTree = "<group>"; };
+		A7E0E57C1D0D0D9200AF2AC8 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		A7E7453B1CC913650034F329 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -109,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7E0E57D1D0D0D9200AF2AC8 /* CoreTelephony.framework in Frameworks */,
 				A79E08C91CFEAC69002CDADC /* CoreMedia.framework in Frameworks */,
 				A79E08C71CFEAC63002CDADC /* AVFoundation.framework in Frameworks */,
 				A72B71F91CD0E7FE006EC9AD /* VideoToolbox.framework in Frameworks */,
@@ -134,6 +141,7 @@
 		A7091B0E1CAE6A7600918610 = {
 			isa = PBXGroup;
 			children = (
+				A7E0E57C1D0D0D9200AF2AC8 /* CoreTelephony.framework */,
 				A79E08CB1CFFE99D002CDADC /* libresolv.tbd */,
 				A7E7453B1CC913650034F329 /* libiconv.tbd */,
 				A7091B491CAE6B9400918610 /* frameworks */,
@@ -263,6 +271,8 @@
 			children = (
 				A79E08C21CFE90B3002CDADC /* video_capture_external_demo.h */,
 				A79E08C31CFE90B3002CDADC /* video_capture_external_demo.m */,
+				A7E0E5781D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.h */,
+				A7E0E5791D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.m */,
 			);
 			path = advanced;
 			sourceTree = "<group>";
@@ -376,6 +386,7 @@
 				A7091B1C1CAE6A7600918610 /* main.m in Sources */,
 				A7AC4E0D1CBB3E2A005A0558 /* ZegoAboutViewController.m in Sources */,
 				A7AC4DFA1CB7FF13005A0558 /* ZegoSettingViewController.m in Sources */,
+				A7E0E57A1D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.m in Sources */,
 				A7B0DF341CBE780B0041E104 /* ZegoNavigationController.m in Sources */,
 				A7AC4E0A1CBA1F19005A0558 /* ZegoLiveViewController.m in Sources */,
 			);
@@ -392,6 +403,7 @@
 				A72B720F1CD1F249006EC9AD /* main.m in Sources */,
 				A72B72101CD1F249006EC9AD /* ZegoAboutViewController.m in Sources */,
 				A72B72111CD1F249006EC9AD /* ZegoSettingViewController.m in Sources */,
+				A7E0E57B1D09D2FA00AF2AC8 /* ZegoVideoCaptureFromImage.m in Sources */,
 				A72B72121CD1F249006EC9AD /* ZegoNavigationController.m in Sources */,
 				A72B72131CD1F249006EC9AD /* ZegoLiveViewController.m in Sources */,
 			);
