@@ -190,34 +190,26 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    CGFloat angle = 0;
-    
     switch (self.interfaceOrientation) {
         case UIInterfaceOrientationPortrait:
-//            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_0];
+            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_0];
             break;
             
         case UIInterfaceOrientationPortraitUpsideDown:
-            angle = M_PI;
-//            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_180];
+            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_180];
             break;
             
         case UIInterfaceOrientationLandscapeLeft:
-            angle = M_PI_2;
-//            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_90];
+            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_90];
             break;
             
         case UIInterfaceOrientationLandscapeRight:
-            angle = -M_PI_2;
-//            [getZegoAV_ShareInstance() setCaptureRotation:CAPTURE_ROTATE_270];
+            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_270];
             break;
             
         default:
             break;
     }
-    
-    CGAffineTransform newTransform = CGAffineTransformMakeRotation(angle);
-    [self.bigView setTransform:newTransform];
 }
 
 - (void)handlePhoneCallEvent:(CTCall *)call {

@@ -109,6 +109,7 @@ static CVPixelBufferRef pb = NULL;
 - (int)setFrontCam:(int)bFront { return 0; }
 - (int)setView:(UIView*)view { return 0; }
 - (int)setViewMode:(int)mode { return 0; }
+- (int)setViewRotation:(int)rotation { return 0; }
 - (int)setCaptureRotation:(int)rotaion { return 0; }
 
 - (int)startPreview {

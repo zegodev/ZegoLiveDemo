@@ -116,6 +116,8 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \return true:调用成功；false:调用失败
 - (bool)setLocalViewMode:(ZegoVideoViewMode)mode;
 
+- (bool)setDisplayRotation:(CAPTURE_ROTATE)rotate;
+
 /// \brief 设置视频配置
 /// \param config 配置参数
 /// \return 0表示成功，非0 分别用一位来表示对应的值设置失败，可以与上SetConfigReturnType的各个值来获取设置失败的原因
@@ -139,10 +141,20 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \return true:调用成功；false:调用失败
 - (bool)setCaptureRotation:(CAPTURE_ROTATE)rotate;
 
+/// \brief 开启关闭音频采集噪声抑制
+/// \param bEnable true打开，false关闭
+/// \return true:调用成功；false:调用失败
+- (bool)enableNoiseSuppress:(bool)bEnable;
+
 /// \brief 开启关闭麦克风
 /// \param bEnable true打开，false关闭
 /// \return true:调用成功；false:调用失败
 - (bool)enableMic:(bool)bEnable;
+
+/// \brief 开启关闭视频采集
+/// \param bEnable true打开，false关闭
+/// \return true:调用成功；false:调用失败
+- (bool)enableCamera:(bool)bEnable;
 
 /// \brief 截取观看直播 view 图像
 /// \param idx 视频通道

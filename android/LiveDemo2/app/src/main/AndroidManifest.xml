@@ -36,12 +36,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".PublishActivity"
-            android:screenOrientation="portrait">
+                  >
 
         </activity>
 
         <activity android:name=".PlayActivity"
-                  android:screenOrientation="portrait">
+                 >
 
         </activity>
 

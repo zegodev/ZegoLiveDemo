@@ -28,6 +28,7 @@
 - (int)setFrontCam:(int)bFront;
 - (int)setView:(UIView*)view;
 - (int)setViewMode:(int)mode;
+- (int)setViewRotation:(int)rotation;
 - (int)setCaptureRotation:(int)rotaion;
 - (int)startPreview;
 - (int)stopPreview;

@@ -179,6 +179,10 @@
     return 0;
 }
 
+- (int)setViewRotation:(int)rotation {
+    return 0;
+}
+
 - (int)setCaptureRotation:(int)rotaion {
     if(m_oSettings.rotation == rotaion) {
         return 0;

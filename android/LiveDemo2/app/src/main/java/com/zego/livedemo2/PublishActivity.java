@@ -135,6 +135,8 @@ public class PublishActivity extends AbsShowActivity {
      */
     private boolean mIsMicSelected = true;
 
+    private int rotation = 0;
+
     /**
      * 启动入口.
      *
@@ -315,6 +317,25 @@ public class PublishActivity extends AbsShowActivity {
             public void onClick(View v) {
                 newDialog();
                 //TestActivity.actionStart(PublishActivity.this);
+//                rotation += 90;
+//                if(rotation == 360){
+//                    rotation = 0;
+//                }
+//
+//                switch (rotation){
+//                    case 0:
+//                        mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0);
+//                        break;
+//                    case 90:
+//                        mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90);
+//                        break;
+//                    case 180:
+//                        mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_180);
+//                        break;
+//                    case 270:
+//                        mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270);
+//                        break;
+//                }
             }
         });
 
