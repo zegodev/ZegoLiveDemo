@@ -116,6 +116,9 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \return true:调用成功；false:调用失败
 - (bool)setLocalViewMode:(ZegoVideoViewMode)mode;
 
+/// \brief 设置手机姿势
+/// \param rotate 逆时针旋转角度
+/// \return true:调用成功；false:调用失败
 - (bool)setDisplayRotation:(CAPTURE_ROTATE)rotate;
 
 /// \brief 设置视频配置
