@@ -41,6 +41,8 @@ CZegoLiveDemoDlg::CZegoLiveDemoDlg(CWnd* pParent /*=NULL*/)
 	m_pSetting = NULL;
 	m_nResolutionWidth = 640;
 	m_nResolutionHeight = 480;
+	m_nBitrate = 480 * 1000;
+	m_nFPS = 15;
 	m_bMic = TRUE;
 	m_bAux = TRUE;
 	m_dwAppId = 1;
@@ -63,6 +65,8 @@ void CZegoLiveDemoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_CHECK_AUX, m_bAux);
 	DDX_Text(pDX, IDC_EDIT_RESOLUTION_WIDTH, m_nResolutionWidth);
 	DDX_Text(pDX, IDC_EDIT_RESOLUTION_HEIGHT, m_nResolutionHeight);
+	DDX_Text(pDX, IDC_EDIT_FPS, m_nFPS);
+	DDX_Text(pDX, IDC_EDIT_BITRATE, m_nBitrate);
 	DDX_Text(pDX, IDC_COMBO_AUDIODEVICE, m_strAudio);
 	DDX_Text(pDX, IDC_COMBO_VIDEODEVICE, m_strVideo);
 }
@@ -93,6 +97,8 @@ BOOL CZegoLiveDemoDlg::OnInitDialog()
 	{
 		m_nResolutionWidth = m_pSetting->m_nResolutionWidth;
 		m_nResolutionHeight = m_pSetting->m_nResolutionHeight;
+		m_nBitrate = m_pSetting->m_nBitrate;
+		m_nFPS = m_pSetting->m_nFPS;
 		m_bMic = m_pSetting->m_bMic;
 		m_bAux = m_pSetting->m_bAux;
 		m_dwAppId = m_pSetting->m_dwAppId;
@@ -220,6 +226,8 @@ void CZegoLiveDemoDlg::OnBnClickedOk()
 		m_pSetting->m_dwAppId = m_dwAppId;
 		m_pSetting->m_nResolutionHeight = m_nResolutionHeight;
 		m_pSetting->m_nResolutionWidth = m_nResolutionWidth;
+		m_pSetting->m_nBitrate = m_nBitrate;
+		m_pSetting->m_nFPS = m_nFPS;
 
 		m_pSetting->m_strCam.Empty();
 		m_pSetting->m_strMic.Empty();

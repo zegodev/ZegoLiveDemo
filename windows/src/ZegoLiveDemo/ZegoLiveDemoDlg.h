@@ -57,6 +57,8 @@ private:
 
 	int m_nResolutionWidth;
 	int m_nResolutionHeight;
+	int m_nBitrate;
+	int m_nFPS;
 
 	CString m_strAudio;
 	CString m_strVideo;

@@ -219,6 +219,9 @@ void CMainDialog::InitSdk()
 	ZEGO::AV::EnableMic(m_setting.m_bMic);
 
 	ZEGO::AV::SetVideoResolution(m_setting.m_nResolutionWidth, m_setting.m_nResolutionHeight);
+	ZEGO::AV::SetVideoBitrate(m_setting.m_nBitrate);
+	ZEGO::AV::SetVideoFPS(m_setting.m_nFPS);
+
 	if (!m_setting.m_strCam.IsEmpty())
 	{
 		ZEGO::AV::SetVideoDevice(AvRoomApp::Utility::WStringToUTF8(m_setting.m_strCam.GetBuffer()).c_str());
@@ -469,9 +472,6 @@ void CMainDialog::OnBnClickedPublish()
 
 	ZEGO::AV::SetPreviewView(hView);
 	ZEGO::AV::StartPreview();
-
-	//ZEGO::AV::EnableMic(true);
-	//ZEGO::AV::SetVideoResolution(m_setting.m_nResolutionWidth, m_setting.m_nResolutionHeight);
 
 	UpdateData(TRUE);
 

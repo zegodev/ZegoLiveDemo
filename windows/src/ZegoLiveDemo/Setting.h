@@ -8,6 +8,8 @@ public:
 	
 	int m_nResolutionWidth;
 	int m_nResolutionHeight;
+	int m_nBitrate;
+	int m_nFPS;
 	BOOL m_bMic;
 	BOOL m_bAux;
 

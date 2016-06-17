@@ -10,6 +10,8 @@ CSetting::CSetting()
 {
 	m_nResolutionWidth = 640;
 	m_nResolutionHeight = 480;
+	m_nBitrate = 480 * 1000;
+	m_nFPS = 15;
 	m_bMic = TRUE;
 	m_bAux = TRUE;
 
