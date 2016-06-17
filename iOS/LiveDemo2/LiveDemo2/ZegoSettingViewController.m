@@ -387,6 +387,10 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
     [self updateViedoSettingUI];
 }
 
+- (IBAction)uploadLog:(id)sender {
+    [getZegoAV_ShareInstance() uploadLog];
+}
+
 - (IBAction)sliderDidChange:(id)sender {
     [self.presetPicker selectRow:[ZegoSettings sharedInstance].presetVideoQualityList.count - 1 inComponent:0 animated:YES];
     

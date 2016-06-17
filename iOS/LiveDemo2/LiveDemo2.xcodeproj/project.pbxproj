@@ -626,7 +626,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
 				INFOPLIST_FILE = "LiveDemo2 copy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -645,7 +645,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
 				ENABLE_BITCODE = NO;
 				ENABLE_TESTABILITY = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
 				INFOPLIST_FILE = "LiveDemo2 copy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -665,7 +665,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator";
 				INFOPLIST_FILE = "LiveDemo2 copy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

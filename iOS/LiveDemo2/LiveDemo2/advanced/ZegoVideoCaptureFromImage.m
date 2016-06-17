@@ -7,6 +7,7 @@
 //
 
 #import "ZegoVideoCaptureFromImage.h"
+#import <sys/time.h>
 
 @implementation ZegoVideoCaptureFromImage {
     struct {
@@ -52,6 +53,9 @@ static CVPixelBufferRef pb = NULL;
     dispatch_async(dispatch_get_main_queue(), ^{
         [g_fps_timer invalidate];
         int fps = m_oSettings.fps > 0 ?: 15;
+        fps = 15;
+        NSLog(@"%s, fps: %d", __func__, fps);
+        
         g_fps_timer = [NSTimer scheduledTimerWithTimeInterval:1.0/fps target:self selector:@selector(handleTick) userInfo:nil repeats:YES];
         
         if (pb) {
@@ -206,13 +210,16 @@ static CVPixelBufferRef pb = NULL;
         return NULL;
     }
     
+    time_t currentTime = time(0);
+    
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     void *data = CVPixelBufferGetBaseAddress(pixelBuffer);
     char color[4] = {0};
-    color[0] = rand() % 0xFF;
-    color[1] = rand() % 0xFF;
-    color[2] = rand() % 0xFF;
-    color[3] = rand() % 0xFF;
+    
+    color[0] = (currentTime * 1) % 0xFF;
+    color[1] = (currentTime * 2) % 0xFF;
+    color[2] = (currentTime * 3) % 0xFF;
+    color[3] = (currentTime * 4) % 0xFF;
     memset_pattern4(data, color, CVPixelBufferGetDataSize(pixelBuffer));
     
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
@@ -226,14 +233,19 @@ static CVPixelBufferRef pb = NULL;
                                                  kCGImageAlphaNoneSkipLast);
     
     CGImageRef bgraImage = [self CreateBGRAImageFromRGBAImage:image];
-    
-    CGPoint origin = {0, 0};
+
     CGFloat imageWith = CGImageGetWidth(image);
     CGFloat imageHeight = CGImageGetHeight(image);
     
+    static CGPoint origin = {0, 0};
+    static time_t lastTime = 0;
     
-    origin.x = rand() % (int)(m_oSettings.width - imageWith);
-    origin.y = rand() % (int)(m_oSettings.height - imageHeight);
+    if (lastTime != currentTime) {
+        origin.x = rand() % (int)(m_oSettings.width - imageWith);
+        origin.y = rand() % (int)(m_oSettings.height - imageHeight);
+        
+        lastTime = currentTime;
+    }
     
     CGContextDrawImage(context,
                        CGRectMake(origin.x, origin.y, CGImageGetWidth(image), CGImageGetHeight(image)),
@@ -249,13 +261,9 @@ static CVPixelBufferRef pb = NULL;
 }
 
 - (void)handleTick {
-    static time_t lastTime = 0;
-    time_t currentTime = time(0);
-    if (lastTime != currentTime) {
-        if (pb) {
-            CVPixelBufferRelease(pb);
-            pb = NULL;
-        }
+    if (pb) {
+        CVPixelBufferRelease(pb);
+        pb = NULL;
     }
     
     if (!pb) {
@@ -263,7 +271,11 @@ static CVPixelBufferRef pb = NULL;
         pb = [self pixelBufferFromCGImage:img.CGImage];
     }
     
-    CMTime pts = CMTimeMakeWithSeconds(time(0), 1);
+    struct timeval tv_now;
+    gettimeofday(&tv_now, NULL);
+    unsigned long long t = (unsigned long long)(tv_now.tv_sec) * 1000 + tv_now.tv_usec / 1000;
+    
+    CMTime pts = CMTimeMakeWithSeconds(t, 1000);
     [client_ onIncomingCapturedData:pb withPresentationTimeStamp:pts];
 }
 

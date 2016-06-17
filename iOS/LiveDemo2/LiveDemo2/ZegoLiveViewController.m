@@ -174,6 +174,9 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
     [self.smallView1 addGestureRecognizer:self.smallView1TapGestureRecognizer];
     [self.smallView2 addGestureRecognizer:self.smallView2TapGestureRecognizer];
+    
+    // 设置当前的手机姿势
+    [self didRotateFromInterfaceOrientation:self.interfaceOrientation];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -200,11 +203,11 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
             break;
             
         case UIInterfaceOrientationLandscapeLeft:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_90];
+            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_270];
             break;
             
         case UIInterfaceOrientationLandscapeRight:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_270];
+            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_90];
             break;
             
         default:
