@@ -25,6 +25,8 @@ public class PreferenceUtils {
 
     public static final String KEY_CHANNEL = "channel";
 
+    public static final String KEY_PUBLISH_LEVEL = "KEY_PUBLISH_LEVEL";
+
 
     private SharedPreferences mSharedPreferences;
 
@@ -64,28 +66,49 @@ public class PreferenceUtils {
         return mSharedPreferences.getBoolean(key, defaultValue);
     }
 
+    public void setIntValue(String key, int value){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+    }
+
+    public int getIntValue(String key, int defaultValue){
+        return mSharedPreferences.getInt(key, defaultValue);
+    }
+
 
     public void setUserID(String userID){
         setStringValue(KEY_USER_ID, userID);
-    }
-
-    public void setUserName(String userName){
-        setStringValue(KEY_USER_NAME, userName);
     }
 
     public String getUserID(){
         return getStringValue(KEY_USER_ID, null);
     }
 
+    public void setUserName(String userName){
+        setStringValue(KEY_USER_NAME, userName);
+    }
+
     public String getUserName(){
-        return mSharedPreferences.getString(KEY_USER_NAME, null);
+        return getStringValue(KEY_USER_NAME, null);
     }
 
     public void setChannel(String channel){
         setStringValue(KEY_CHANNEL, channel);
     }
 
+
     public String getChannel(){
         return getStringValue(KEY_CHANNEL, null);
     }
+
+    public void setPublishLevel(int level){
+        setIntValue(KEY_PUBLISH_LEVEL, level);
+    }
+
+
+    public int getPublishLevel(){
+        return getIntValue(KEY_PUBLISH_LEVEL, -1);
+    }
+
 }

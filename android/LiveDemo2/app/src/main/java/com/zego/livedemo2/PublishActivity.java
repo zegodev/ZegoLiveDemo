@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,8 +136,6 @@ public class PublishActivity extends AbsShowActivity {
      */
     private boolean mIsMicSelected = true;
 
-    private int rotation = 0;
-
     /**
      * 启动入口.
      *
@@ -204,6 +203,7 @@ public class PublishActivity extends AbsShowActivity {
 
             @Override
             public void onPublishStop(int retCode,  String streamID, String liveChannel) {
+                mZegoAVKit.stopPreview();
                 ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:stop-" + retCode);
                 ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:" + streamID);
             }
@@ -316,26 +316,7 @@ public class PublishActivity extends AbsShowActivity {
             @Override
             public void onClick(View v) {
                 newDialog();
-                //TestActivity.actionStart(PublishActivity.this);
-//                rotation += 90;
-//                if(rotation == 360){
-//                    rotation = 0;
-//                }
-//
-//                switch (rotation){
-//                    case 0:
-//                        mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0);
-//                        break;
-//                    case 90:
-//                        mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90);
-//                        break;
-//                    case 180:
-//                        mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_180);
-//                        break;
-//                    case 270:
-//                        mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270);
-//                        break;
-//                }
+                TestActivity.actionStart(PublishActivity.this);
             }
         });
 
@@ -543,6 +524,8 @@ public class PublishActivity extends AbsShowActivity {
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
         mZegoAVKit.startPreview();
         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
+
+        changeRotation();
     }
 
     /**
@@ -555,8 +538,26 @@ public class PublishActivity extends AbsShowActivity {
         mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, svSmall);
         mZegoAVKit.startPlayStream(mPlayStreamID, ZegoAVKitCommon.ZegoRemoteViewIndex.First);
 
+        changeRotation();
+
     }
 
+    private void changeRotation() {
+        switch (getWindowManager().getDefaultDisplay().getRotation()) {
+            case Surface.ROTATION_0:
+                mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0);
+                break;
+            case Surface.ROTATION_90:
+                mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90);
+                break;
+            case Surface.ROTATION_180:
+                mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_180);
+                break;
+            case Surface.ROTATION_270:
+                mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270);
+                break;
+        }
+    }
 
     /**
      * 退出.

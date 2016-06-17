@@ -9,15 +9,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
+import android.util.Base64;
 import android.view.KeyEvent;
+import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +29,16 @@ import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
 import com.zego.zegoavkit2.callback.ZegoLiveCallback;
 import com.zego.zegoavkit2.entity.ZegoUser;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -45,63 +54,52 @@ public class PlayActivity extends AbsShowActivity {
 
     public static final String KEY_PUBLISH_STREAM_ID = "KEY_PUBLISH_STREAM_ID";
 
-    public static final String KEY_PLAY_STREAM_ID1 = "KEY_PLAY_STREAM_ID1";
-
-    public static final String KEY_PLAY_STREAM_ID2 = "KEY_PLAY_STREAM_ID2";
-
-    public static final String KEY_IS_PUBLISHING = "KEY_IS_PUBLISHING";
-
     public static final String KEY_IS_FRONT_CAM_SELECTED = "KEY_IS_FRONT_CAM_SELECTED";
 
     public static final String KEY_IS_SPEAKER_SELECTED = "KEY_IS_SPEAKER_SELECTED";
 
     public static final String KEY_IS_MIC_SELECTED = "KEY_IS_MIC_SELECTED";
 
-    public static final String KEY_IS_LOCAL_VIEW_TAKEN = "KEY_IS_LOCAL_VIEW_TAKEN";
+    public static final String KEY_VIDEO_VIEW_TAKEN_FLAGS = "KEY_VIDEO_VIEW_TAKEN_FLAGS";
 
-    public static final String KEY_IS_REMOTE_VIEW_TAKEN = "KEY_IS_REMOTE_VIEW_TAKEN";
+    public static final String KEY_PLAY_STREAM_ORDINAL = "KEY_PLAY_STREAM_ORDINAL";
 
+    public static final String KEY_PLAY_STREAM_MAP = "KEY_PLAY_STREAM_MAP";
+
+    public static final int VIDEO_NUM = 3;
+
+    public static final int BIG_VIDEO_TAG = 100;
 
     private ZegoAVKit mZegoAVKit;
 
     private RelativeLayout.LayoutParams mParamsSmall;
     private RelativeLayout.LayoutParams mParamsBig;
 
-    public RelativeLayout rlytSmallVideoParent;
+    private int mVideoViewTakenFlags[][] = {{-1, -1}, {-1, -1}, {-1, -1}};
 
-    public ViewGroup viewSmall;
+    private List<RelativeLayout> mVideoViewList = new ArrayList<>();
 
-    private SurfaceView svSmall;
+    private Map<Integer, String> mPlayStreamMap = new HashMap<>();
 
-    public RadioGroup rgSmallViewMode;
+    private int mPlayStreamOrdinal = 0;
 
-    @Bind(R.id.rlyt_big_video_parent)
-    public RelativeLayout rlytBigVideoParent;
+    private RelativeLayout mRlytBigVideoParent;
 
-    public ViewGroup viewBig;
+    private RadioGroup.OnCheckedChangeListener mCheckedChangeListener;
 
-    public SurfaceView svBig;
-
-    public RadioGroup rgBigViewMode;
+    private Map<String, String> mPlayInfoMap = new HashMap<>();
 
     @Bind(R.id.tv_channel)
     public TextView tvChannel;
+
+    @Bind(R.id.tv_play_info)
+    public TextView tvPlayInfo;
 
     @Bind(R.id.btn_publish)
     public Button btnPublish;
 
     @Bind(R.id.btn_play)
     public Button btnPlay;
-
-    @Bind(R.id.llyt_publish_state)
-    public LinearLayout llytPublishState;
-
-    @Bind(R.id.llyt_play_sate1)
-    public LinearLayout llytPlayState1;
-
-    @Bind(R.id.llyt_play_sate2)
-    public LinearLayout llytPlayState2;
-
 
     @Bind(R.id.ibtn_front_cam)
     public ImageButton ibtnFrontCam;
@@ -112,19 +110,10 @@ public class PlayActivity extends AbsShowActivity {
     @Bind(R.id.ibtn_mic)
     public ImageButton ibtnMic;
 
-    public EditText etStreamID;
-
-    private boolean mSmallVideoIsSmall = true;
-
-    private boolean mIsPublishing = false;
 
     private String mPublishTitle;
 
     private String mPublishStreamID;
-
-    private String mPlayStreamID1;
-
-    private String mPlayStreamID2;
 
     private String mLiveChannel;
 
@@ -142,10 +131,6 @@ public class PlayActivity extends AbsShowActivity {
      * 默认开启麦克.
      */
     private boolean mIsMicSelected = true;
-
-    private boolean mIsSmallViewTaken = false;
-
-    private boolean mIsBigViewTaken = false;
 
     /**
      * 启动入口.
@@ -180,14 +165,30 @@ public class PlayActivity extends AbsShowActivity {
             mLiveChannel = PreferenceUtils.getInstance().getStringValue(KEY_LIVE_CHANNEL, null);
             mPublishTitle = PreferenceUtils.getInstance().getStringValue(KEY_PUBLISH_TITLE, null);
             mPublishStreamID = PreferenceUtils.getInstance().getStringValue(KEY_PUBLISH_STREAM_ID, null);
-            mPlayStreamID1 = PreferenceUtils.getInstance().getStringValue(KEY_PLAY_STREAM_ID1, null);
-            mPlayStreamID2 = PreferenceUtils.getInstance().getStringValue(KEY_PLAY_STREAM_ID2, null);
-            mIsPublishing = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_PUBLISHING, false);
             mIsFrontCamSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_FRONT_CAM_SELECTED, false);
             mIsSpeakerSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_SPEAKER_SELECTED, false);
             mIsMicSelected = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_MIC_SELECTED, false);
-            mIsSmallViewTaken = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_LOCAL_VIEW_TAKEN, false);
-            mIsBigViewTaken = PreferenceUtils.getInstance().getBooleanValue(KEY_IS_REMOTE_VIEW_TAKEN, false);
+
+            mPlayStreamOrdinal = PreferenceUtils.getInstance().getIntValue(KEY_PLAY_STREAM_ORDINAL, 0);
+
+            try {
+                byte[] bytesMap = Base64.decode(PreferenceUtils.getInstance().getStringValue(KEY_PLAY_STREAM_MAP, ""), Base64.DEFAULT);
+                ByteArrayInputStream baisMap = new ByteArrayInputStream(bytesMap);
+                ObjectInputStream oisMap = new ObjectInputStream(baisMap);
+                mPlayStreamMap = (HashMap) oisMap.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                byte[] bytesArray = Base64.decode(PreferenceUtils.getInstance().getStringValue(KEY_VIDEO_VIEW_TAKEN_FLAGS, ""), Base64.DEFAULT);
+                ByteArrayInputStream baisArray = new ByteArrayInputStream(bytesArray);
+                ObjectInputStream oisArray = new ObjectInputStream(baisArray);
+                mVideoViewTakenFlags = (int[][]) oisArray.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
 
         }
 
@@ -195,7 +196,26 @@ public class PlayActivity extends AbsShowActivity {
 
     @Override
     protected void initVariables(final Bundle savedInstanceState) {
+        mCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Integer playStreamOrdinal = (Integer) group.getTag();
 
+                switch (checkedId) {
+                    case R.id.rb_asfit_small:
+                        changeViewMode(playStreamOrdinal, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
+                        break;
+                    case R.id.rb_asfill_small:
+                        changeViewMode(playStreamOrdinal, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+                        break;
+                    case R.id.rb_fill_small:
+                        changeViewMode(playStreamOrdinal, ZegoAVKitCommon.ZegoVideoViewMode.ScaleToFill);
+                        break;
+                }
+
+
+            }
+        };
 
         mZegoAVKit = ZegoApiManager.getInstance().getZegoAVKit();
         mZegoAVKit.setZegoLiveCallback(new ZegoLiveCallback() {
@@ -204,7 +224,12 @@ public class PlayActivity extends AbsShowActivity {
                 if (retCode == 0) {
                     tvChannel.setText("Ch:" + liveChannel);
                     // 开始播放
-                    newDialog();
+                    for (int i = 0; i < VIDEO_NUM; i++) {
+                        if (mVideoViewTakenFlags[i][0] == -1) {
+                            newDialog(mVideoViewList.get(i), i);
+                            break;
+                        }
+                    }
                 } else {
                     tvChannel.setText("Ch:error-" + retCode);
                 }
@@ -212,37 +237,27 @@ public class PlayActivity extends AbsShowActivity {
 
             @Override
             public void onPublishSucc(String streamID, String liveChannel, String playUrl) {
-                mIsPublishing = true;
-                ((TextView) llytPublishState.getChildAt(0)).setText("PublishState:success");
-                ((TextView) llytPublishState.getChildAt(1)).setText("PublishStream:" + streamID);
+                mPlayInfoMap.put(mPublishStreamID, "Publish success: " + mPublishStreamID);
+                showMessage();
             }
 
             @Override
             public void onPublishStop(int retCode, String streamID, String liveChannel) {
-                ((TextView) llytPublishState.getChildAt(0)).setText("PublishState:stop-" + retCode);
-                ((TextView) llytPublishState.getChildAt(1)).setText("PublishStream:" + retCode);
+                mZegoAVKit.stopPreview();
+                mPlayInfoMap.put(mPublishStreamID, "Publish stop: " + mPublishStreamID + "  --errCode:" + retCode);
+                showMessage();
             }
 
             @Override
             public void onPlaySucc(String streamID, String liveChannel) {
-                if (TextUtils.equals(mPlayStreamID1, streamID)) {
-                    ((TextView) llytPlayState1.getChildAt(0)).setText("PlayState1:success");
-                    ((TextView) llytPlayState1.getChildAt(1)).setText("PlayStream1:" + streamID);
-                } else if (TextUtils.equals(mPlayStreamID2, streamID)) {
-                    ((TextView) llytPlayState2.getChildAt(0)).setText("PlayState2:success");
-                    ((TextView) llytPlayState2.getChildAt(1)).setText("PlayStream2:" + streamID);
-                }
+                mPlayInfoMap.put(streamID, "Play success: " + streamID);
+                showMessage();
             }
 
             @Override
             public void onPlayStop(int retCode, String streamID, String liveChannel) {
-                if (TextUtils.equals(mPlayStreamID1, streamID)) {
-                    ((TextView) llytPlayState1.getChildAt(0)).setText("PlayState1:stop-" + retCode);
-                    ((TextView) llytPlayState1.getChildAt(1)).setText("PlayStream1:" + streamID);
-                } else if (TextUtils.equals(mPlayStreamID2, streamID)) {
-                    ((TextView) llytPlayState2.getChildAt(0)).setText("PlayState2:stop-" + retCode);
-                    ((TextView) llytPlayState2.getChildAt(1)).setText("PlayStream2:" + streamID);
-                }
+                mPlayInfoMap.put(streamID, "Play stop: " + streamID + "  --errCode:" + retCode);
+                showMessage();
             }
 
             @Override
@@ -265,84 +280,86 @@ public class PlayActivity extends AbsShowActivity {
 
     }
 
+
     @Override
     protected void initViews(Bundle savedInstanceState) {
 
+        mRlytBigVideoParent = (RelativeLayout) findViewById(R.id.rlyt_big_video_parent);
+        RelativeLayout rlytBigVideo = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_small, null);
+        mRlytBigVideoParent.addView(rlytBigVideo);
+        mVideoViewList.add(rlytBigVideo);
+        mParamsBig = (RelativeLayout.LayoutParams) rlytBigVideo.getLayoutParams();
+        getRadioGroup(rlytBigVideo).setOnCheckedChangeListener(mCheckedChangeListener);
+
 
         //两个SurfaceView重叠时, 其中一个无法显示视频
+        final RelativeLayout rlytSmallVideoParent1;
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            rlytSmallVideoParent = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent1);
+            rlytSmallVideoParent1 = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent1);
             findViewById(R.id.rlyt_small_video_parent2).setVisibility(View.GONE);
         } else {
-            rlytSmallVideoParent = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent2);
+            rlytSmallVideoParent1 = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent2);
             findViewById(R.id.rlyt_small_video_parent1).setVisibility(View.GONE);
         }
-
-
-        viewSmall = (ViewGroup) getLayoutInflater().inflate(R.layout.view_small, null);
-        svSmall = (SurfaceView) viewSmall.findViewById(R.id.sv_small_video);
-        rgSmallViewMode = (RadioGroup) viewSmall.findViewById(R.id.rg_small_video_mode);
-        rlytSmallVideoParent.addView(viewSmall);
-        mParamsSmall = (RelativeLayout.LayoutParams) viewSmall.getLayoutParams();
-
-
-        viewBig = (ViewGroup) getLayoutInflater().inflate(R.layout.view_big, null);
-        rlytBigVideoParent.addView(viewBig);
-        svBig = (SurfaceView) viewBig.findViewById(R.id.sv_big_video);
-        rgBigViewMode = (RadioGroup) viewBig.findViewById(R.id.rg_big_video_mode);
-        mParamsBig = (RelativeLayout.LayoutParams) viewBig.getLayoutParams();
-
-
-        rlytSmallVideoParent.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout rlytSmallVideo1 = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_small, null);
+        mVideoViewList.add(rlytSmallVideo1);
+        rlytSmallVideoParent1.addView(rlytSmallVideo1);
+        mParamsSmall = (RelativeLayout.LayoutParams) rlytSmallVideo1.getLayoutParams();
+        getRadioGroup(rlytSmallVideo1).setVisibility(View.INVISIBLE);
+        getRadioGroup(rlytSmallVideo1).setOnCheckedChangeListener(mCheckedChangeListener);
+        rlytSmallVideoParent1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSmallVideoIsSmall) {
-                    // 小的变大
-                    rlytSmallVideoParent.removeView(viewSmall);
-                    viewSmall.setLayoutParams(mParamsBig);
-
-                    rlytBigVideoParent.removeView(viewBig);
-                    viewBig.setLayoutParams(mParamsSmall);
-
-
-                    rlytSmallVideoParent.addView(viewBig);
-                    rlytBigVideoParent.addView(viewSmall);
-                    mSmallVideoIsSmall = false;
-
-                    rgSmallViewMode.setVisibility(View.VISIBLE);
-                    rgBigViewMode.setVisibility(View.INVISIBLE);
-                } else {
-                    //  复原
-                    rlytSmallVideoParent.removeView(viewBig);
-                    viewBig.setLayoutParams(mParamsBig);
-
-                    rlytBigVideoParent.removeView(viewSmall);
-                    viewSmall.setLayoutParams(mParamsSmall);
-
-
-                    rlytSmallVideoParent.addView(viewSmall);
-                    rlytBigVideoParent.addView(viewBig);
-                    mSmallVideoIsSmall = true;
-
-                    rgSmallViewMode.setVisibility(View.INVISIBLE);
-                    rgBigViewMode.setVisibility(View.VISIBLE);
-                }
+                exchangeViewSize((RelativeLayout) v);
             }
         });
+
+
+        //两个SurfaceView重叠时, 其中一个无法显示视频
+        final RelativeLayout rlytSmallVideoParent2;
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            rlytSmallVideoParent2 = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent3);
+            findViewById(R.id.rlyt_small_video_parent4).setVisibility(View.GONE);
+        } else {
+            rlytSmallVideoParent2 = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent4);
+            findViewById(R.id.rlyt_small_video_parent3).setVisibility(View.GONE);
+        }
+        RelativeLayout rlytSmallVideo2 = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_small, null);
+        mVideoViewList.add(rlytSmallVideo2);
+        rlytSmallVideoParent2.addView(rlytSmallVideo2);
+        getRadioGroup(rlytSmallVideo2).setVisibility(View.INVISIBLE);
+        getRadioGroup(rlytSmallVideo2).setOnCheckedChangeListener(mCheckedChangeListener);
+        rlytSmallVideoParent2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exchangeViewSize((RelativeLayout) v);
+            }
+        });
+
 
         // 设置听筒状态
         ibtnSpeaker.setSelected(mIsSpeakerSelected);
         mZegoAVKit.enableSpeaker(mIsSpeakerSelected);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             tvChannel.setText("Ch:" + mLiveChannel);
         }
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mIsBigViewTaken || !mIsSmallViewTaken) {
-                    newDialog();
+                boolean remainFreeVideo = false;
+                for (int i = 0; i < VIDEO_NUM; i++) {
+                    if (mVideoViewTakenFlags[i][0] == -1) {
+                        remainFreeVideo = true;
+                        newDialog(mVideoViewList.get(i), i);
+                        break;
+                    }
+                }
+
+                if (!remainFreeVideo) {
+                    btnPlay.setEnabled(false);
+                    btnPublish.setEnabled(false);
                 }
             }
         });
@@ -351,64 +368,18 @@ public class PlayActivity extends AbsShowActivity {
             @Override
             public void onClick(View v) {
                 btnPublish.setEnabled(false);
-                if (!mIsSmallViewTaken) {
-                    mIsSmallViewTaken = true;
-                    startPublish();
-                }
-            }
-        });
-
-        rgSmallViewMode.setVisibility(View.INVISIBLE);
-        rgSmallViewMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(mIsPublishing){
-                    switch (checkedId){
-                        case R.id.rb_asfit_small:
-                            mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
-                            break;
-                        case R.id.rb_asfill_small:
-                            mZegoAVKit.setLocalViewMode( ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
-                            break;
-                        case R.id.rb_fill_small:
-                            mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleToFill);
-                            break;
-                    }
-                }else {
-                    switch (checkedId){
-                        case R.id.rb_asfit_small:
-                            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
-                            break;
-                        case R.id.rb_asfill_small:
-                            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
-                            break;
-                        case R.id.rb_fill_small:
-                            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, ZegoAVKitCommon.ZegoVideoViewMode.ScaleToFill);
-                            break;
+                for (int i = 0; i < VIDEO_NUM; i++) {
+                    if (mVideoViewTakenFlags[i][0] == -1) {
+                        // 记录流标识以及用于播放的View
+                        mVideoViewTakenFlags[i][0] = BIG_VIDEO_TAG;
+                        mVideoViewTakenFlags[i][1] = i;
+                        startPublish(mVideoViewList.get(i));
+                        getRadioGroup(mVideoViewList.get(i)).setTag(BIG_VIDEO_TAG);
+                        break;
                     }
                 }
-
             }
         });
-
-        rgBigViewMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.rb_asfit_big:
-                        mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
-                        break;
-                    case R.id.rb_asfill_big:
-                        mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
-                        break;
-                    case R.id.rb_fill_big:
-                        mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleToFill);
-                        break;
-                }
-            }
-        });
-
-
     }
 
     @Override
@@ -419,25 +390,24 @@ public class PlayActivity extends AbsShowActivity {
             mZegoAVKit.loginChannel(zegoUser, mLiveChannel);
         } else {
 
-            // 恢复发布
-            if (mIsPublishing) {
-                btnPublish.setEnabled(false);
-                // 重新发布
-                startPublish();
-            }
+            for (int i = 0; i < VIDEO_NUM; i++) {
+                getRadioGroup(mVideoViewList.get(i)).setTag(mVideoViewTakenFlags[i][0]);
+                switch (mVideoViewTakenFlags[i][0]) {
+                    case 0:
+                        startPlay(mVideoViewList.get(mVideoViewTakenFlags[i][1]), ZegoAVKitCommon.ZegoRemoteViewIndex.First, mPlayStreamMap.get(mVideoViewTakenFlags[i][0]));
+                        break;
+                    case 1:
+                        startPlay(mVideoViewList.get(mVideoViewTakenFlags[i][1]), ZegoAVKitCommon.ZegoRemoteViewIndex.Second, mPlayStreamMap.get(mVideoViewTakenFlags[i][0]));
+                        break;
+                    case 2:
+                        startPlay(mVideoViewList.get(mVideoViewTakenFlags[i][1]), ZegoAVKitCommon.ZegoRemoteViewIndex.Third, mPlayStreamMap.get(mVideoViewTakenFlags[i][0]));
+                        break;
+                    case BIG_VIDEO_TAG:
+                        startPublish(mVideoViewList.get(mVideoViewTakenFlags[i][1]));
+                        break;
+                }
 
-            // 恢复播放流1
-            if (!TextUtils.isEmpty(mPlayStreamID1)) {
-                startPlay(1);
-            }
 
-            // 恢复播放流2
-            if (!mIsPublishing && !TextUtils.isEmpty(mPlayStreamID2)) {
-               startPlay(2);
-            }
-
-            if (mIsSmallViewTaken && mIsBigViewTaken) {
-                btnPlay.setEnabled(false);
             }
         }
     }
@@ -450,14 +420,36 @@ public class PlayActivity extends AbsShowActivity {
         PreferenceUtils.getInstance().setStringValue(KEY_LIVE_CHANNEL, mLiveChannel);
         PreferenceUtils.getInstance().setStringValue(KEY_PUBLISH_TITLE, mPublishTitle);
         PreferenceUtils.getInstance().setStringValue(KEY_PUBLISH_STREAM_ID, mPublishStreamID);
-        PreferenceUtils.getInstance().setStringValue(KEY_PLAY_STREAM_ID1, mPlayStreamID1);
-        PreferenceUtils.getInstance().setStringValue(KEY_PLAY_STREAM_ID2, mPlayStreamID2);
-        PreferenceUtils.getInstance().setBooleanValue(KEY_IS_PUBLISHING, mIsPublishing);
         PreferenceUtils.getInstance().setBooleanValue(KEY_IS_FRONT_CAM_SELECTED, mIsFrontCamSelected);
         PreferenceUtils.getInstance().setBooleanValue(KEY_IS_SPEAKER_SELECTED, mIsSpeakerSelected);
         PreferenceUtils.getInstance().setBooleanValue(KEY_IS_MIC_SELECTED, mIsMicSelected);
-        PreferenceUtils.getInstance().setBooleanValue(KEY_IS_LOCAL_VIEW_TAKEN, mIsSmallViewTaken);
-        PreferenceUtils.getInstance().setBooleanValue(KEY_IS_REMOTE_VIEW_TAKEN, mIsBigViewTaken);
+
+        PreferenceUtils.getInstance().setIntValue(KEY_PLAY_STREAM_ORDINAL, mPlayStreamOrdinal);
+
+        //将map转换为byte[]
+        ByteArrayOutputStream toByteMap = new ByteArrayOutputStream();
+        ObjectOutputStream oosMap;
+        try {
+            oosMap = new ObjectOutputStream(toByteMap);
+            oosMap.writeObject(mPlayStreamMap);
+            String playStreamMap = new String(Base64.encodeToString(toByteMap.toByteArray(), Base64.DEFAULT));
+            PreferenceUtils.getInstance().setStringValue(KEY_PLAY_STREAM_MAP, playStreamMap);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //将array转换为byte[]
+        ByteArrayOutputStream toByteArray = new ByteArrayOutputStream();
+        ObjectOutputStream oosArray;
+        try {
+            oosArray = new ObjectOutputStream(toByteArray);
+            oosArray.writeObject(mVideoViewTakenFlags);
+            String videoViewTakenFlags = new String(Base64.encodeToString(toByteArray.toByteArray(), Base64.DEFAULT));
+            PreferenceUtils.getInstance().setStringValue(KEY_VIDEO_VIEW_TAKEN_FLAGS, videoViewTakenFlags);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -465,37 +457,127 @@ public class PlayActivity extends AbsShowActivity {
         super.onSaveInstanceState(outState);
     }
 
-    private void newDialog() {
+    /**
+     * 获取SurfaceView.
+     *
+     * @param viewGroup
+     * @return
+     */
+    private SurfaceView getSurfaceView(RelativeLayout viewGroup) {
+        SurfaceView surfaceView = null;
+        if (viewGroup != null) {
+            for (int i = 0, childCount = viewGroup.getChildCount(); i < childCount; i++) {
+                if (viewGroup.getChildAt(i) instanceof SurfaceView) {
+                    surfaceView = (SurfaceView) viewGroup.getChildAt(i);
+                    break;
+                }
+            }
+        }
+        return surfaceView;
+    }
+
+    /**
+     * 获取viewGroup.
+     *
+     * @param viewGroup
+     * @return
+     */
+    private RadioGroup getRadioGroup(RelativeLayout viewGroup) {
+        RadioGroup radioGroup = null;
+        if (viewGroup != null) {
+            for (int i = 0, childCount = viewGroup.getChildCount(); i < childCount; i++) {
+                if (viewGroup.getChildAt(i) instanceof RadioGroup) {
+                    radioGroup = (RadioGroup) viewGroup.getChildAt(i);
+                    break;
+                }
+            }
+        }
+        return radioGroup;
+    }
+
+    /**
+     * 切换全屏.
+     *
+     * @param rlytSmallVideoParent
+     */
+    private void exchangeViewSize(RelativeLayout rlytSmallVideoParent) {
+
+        RelativeLayout rlytSmallVideo = (RelativeLayout) rlytSmallVideoParent.getChildAt(0);
+        RelativeLayout rlytBigVideo = (RelativeLayout) mRlytBigVideoParent.getChildAt(0);
+
+        rlytSmallVideoParent.removeViewAt(0);
+        mRlytBigVideoParent.removeViewAt(0);
+
+        rlytSmallVideo.setLayoutParams(mParamsBig);
+        rlytBigVideo.setLayoutParams(mParamsSmall);
+
+        rlytSmallVideoParent.addView(rlytBigVideo);
+        mRlytBigVideoParent.addView(rlytSmallVideo);
+
+        getRadioGroup(rlytBigVideo).setVisibility(View.INVISIBLE);
+        getRadioGroup(rlytSmallVideo).setVisibility(View.VISIBLE);
+    }
+
+
+    /**
+     * 改变view的模式.
+     *
+     * @param playStreamOrdinal
+     * @param mode
+     */
+    private void changeViewMode(int playStreamOrdinal, ZegoAVKitCommon.ZegoVideoViewMode mode) {
+        switch (playStreamOrdinal) {
+            case 0:
+                mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, mode);
+                break;
+            case 1:
+                mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, mode);
+                break;
+            case 2:
+                mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.Third, mode);
+                break;
+            case BIG_VIDEO_TAG:
+                mZegoAVKit.setLocalViewMode(mode);
+                break;
+        }
+    }
+
+    private void newDialog(final RelativeLayout rlytVideoView, final int viewTakenFlagIndex) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("请输入streamID:");
-        etStreamID = new EditText(this);
+        final EditText etStreamID = new EditText(this);
         builder.setView(etStreamID);
         builder.setPositiveButton("播放", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!mIsBigViewTaken) {
-                    mPlayStreamID1 = etStreamID.getText().toString().trim();
-                    if (TextUtils.isEmpty(mPlayStreamID1)) {
-                        Toast.makeText(PlayActivity.this, "streamID不能为空!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // 开始播放
-                        mIsBigViewTaken = true;
-                        startPlay(1);
-                    }
-                } else if (!mIsSmallViewTaken) {
-                    mPlayStreamID2 = etStreamID.getText().toString().trim();
-                    if (TextUtils.isEmpty(mPlayStreamID2)) {
-                        Toast.makeText(PlayActivity.this, "streamID不能为空!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // 开始播放
-                        mIsSmallViewTaken = true;
-                        startPlay(2);
+
+                String streamID = etStreamID.getText().toString().trim();
+                if (TextUtils.isEmpty(streamID)) {
+                    Toast.makeText(PlayActivity.this, "streamID不能为空!", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    if (mPlayStreamOrdinal < VIDEO_NUM) {
+
+                        mVideoViewTakenFlags[viewTakenFlagIndex][0] = mPlayStreamOrdinal;
+                        mVideoViewTakenFlags[viewTakenFlagIndex][1] = viewTakenFlagIndex;
+                        getRadioGroup(rlytVideoView).setTag(mPlayStreamOrdinal);
+                        mPlayStreamMap.put(mPlayStreamOrdinal, streamID);
+
+                        switch (mPlayStreamOrdinal) {
+                            case 0:
+                                startPlay(rlytVideoView, ZegoAVKitCommon.ZegoRemoteViewIndex.First, streamID);
+                                break;
+                            case 1:
+                                startPlay(rlytVideoView, ZegoAVKitCommon.ZegoRemoteViewIndex.Second, streamID);
+                                break;
+                            case 2:
+                                startPlay(rlytVideoView, ZegoAVKitCommon.ZegoRemoteViewIndex.Third, streamID);
+                                break;
+                        }
+                        mPlayStreamOrdinal++;
                     }
                 }
 
-                if (mIsSmallViewTaken && mIsBigViewTaken) {
-                    btnPlay.setEnabled(false);
-                }
 
             }
         });
@@ -503,11 +585,24 @@ public class PlayActivity extends AbsShowActivity {
         builder.show();
     }
 
+    private void showMessage(){
+        StringBuilder sb = new StringBuilder();
+        for(String info : mPlayInfoMap.values()){
+            sb.append(info);
+            sb.append("\n");
+        }
+
+        tvPlayInfo.setText(sb.toString());
+    }
+
 
     /**
      * 开始发布.
      */
-    private void startPublish() {
+    private void startPublish(final RelativeLayout rlytVideo) {
+
+        mPlayInfoMap.put(mPublishStreamID, "Publish starting: " + mPublishStreamID);
+        showMessage();
 
         ibtnFrontCam.setSelected(mIsFrontCamSelected);
         mZegoAVKit.setFrontCam(mIsFrontCamSelected);
@@ -515,30 +610,57 @@ public class PlayActivity extends AbsShowActivity {
         ibtnMic.setSelected(mIsMicSelected);
         mZegoAVKit.enableMic(mIsMicSelected);
 
-        rlytSmallVideoParent.setVisibility(View.VISIBLE);
-        rlytSmallVideoParent.bringToFront();
-        mZegoAVKit.setLocalView(svSmall);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ((RelativeLayout) rlytVideo.getParent()).setVisibility(View.VISIBLE);
+                ((RelativeLayout) rlytVideo.getParent()).bringToFront();
+            }
+        }, 500);
+        mZegoAVKit.setLocalView(getSurfaceView(rlytVideo));
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
         mZegoAVKit.startPreview();
-        boolean ret = mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
-        Log.i("TestData", ret + "");
+        mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
 
+        changeRotation();
     }
 
     /**
      * 开始播放流.
      */
-    private void startPlay(int playStreamIndex) {
-        if (playStreamIndex == 1) {
-            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
-            mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, svBig);
-            mZegoAVKit.startPlayStream(mPlayStreamID1, ZegoAVKitCommon.ZegoRemoteViewIndex.First);
-        } else if (playStreamIndex == 2) {
-            rlytSmallVideoParent.setVisibility(View.VISIBLE);
-            rlytSmallVideoParent.bringToFront();
-            mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
-            mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, svSmall);
-            mZegoAVKit.startPlayStream(mPlayStreamID2, ZegoAVKitCommon.ZegoRemoteViewIndex.Second);
+    private void startPlay(final RelativeLayout rlytVideo, ZegoAVKitCommon.ZegoRemoteViewIndex zegoRemoteViewIndex, String streamID) {
+
+        mPlayInfoMap.put(streamID, "Play starting: " + streamID);
+        showMessage();
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ((RelativeLayout) rlytVideo.getParent()).setVisibility(View.VISIBLE);
+                ((RelativeLayout) rlytVideo.getParent()).bringToFront();
+            }
+        }, 1000);
+        mZegoAVKit.setRemoteViewMode(zegoRemoteViewIndex, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
+        mZegoAVKit.setRemoteView(zegoRemoteViewIndex, getSurfaceView(rlytVideo));
+        mZegoAVKit.startPlayStream(streamID, zegoRemoteViewIndex);
+
+        changeRotation();
+    }
+
+    private void changeRotation() {
+        switch (getWindowManager().getDefaultDisplay().getRotation()) {
+            case Surface.ROTATION_0:
+                mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0);
+                break;
+            case Surface.ROTATION_90:
+                mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90);
+                break;
+            case Surface.ROTATION_180:
+                mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_180);
+                break;
+            case Surface.ROTATION_270:
+                mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270);
+                break;
         }
     }
 
@@ -546,20 +668,27 @@ public class PlayActivity extends AbsShowActivity {
      * 退出.
      */
     private void logout() {
-        if (mIsPublishing) {
-            mZegoAVKit.stopPreview();
-            mZegoAVKit.stopPublish();
-            mZegoAVKit.setLocalView(null);
-        }
 
-        if (!TextUtils.isEmpty(mPlayStreamID1)) {
-            mZegoAVKit.stopPlayStream(mPlayStreamID1);
-            mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, null);
-        }
-
-        if (!TextUtils.isEmpty(mPlayStreamID2)) {
-            mZegoAVKit.stopPlayStream(mPlayStreamID2);
-            mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, null);
+        for (int i = 0; i < VIDEO_NUM; i++) {
+            switch (mVideoViewTakenFlags[i][0]) {
+                case 0:
+                    mZegoAVKit.stopPlayStream(mPlayStreamMap.get(i));
+                    mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, null);
+                    break;
+                case 1:
+                    mZegoAVKit.stopPlayStream(mPlayStreamMap.get(i));
+                    mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, null);
+                    break;
+                case 2:
+                    mZegoAVKit.stopPlayStream(mPlayStreamMap.get(i));
+                    mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.Third, null);
+                    break;
+                case BIG_VIDEO_TAG:
+                    mZegoAVKit.stopPreview();
+                    mZegoAVKit.stopPublish();
+                    mZegoAVKit.setLocalView(null);
+                    break;
+            }
         }
 
         mZegoAVKit.logoutChannel();

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="X1e-oM-0cx">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -149,25 +150,49 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GU6-mk-DjW" userLabel="Big Video View">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NgO-du-eG5" userLabel="Small Video View">
-                                        <rect key="frame" x="460" y="262" width="120" height="180"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NgO-du-eG5" userLabel="Small Video View">
+                                        <rect key="frame" x="440" y="232" width="140" height="210"/>
                                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="180" id="Fzw-gs-cqi"/>
-                                            <constraint firstAttribute="width" constant="120" id="WXT-rg-nzk"/>
+                                            <constraint firstAttribute="width" secondItem="NgO-du-eG5" secondAttribute="height" multiplier="2:3" id="GGk-4I-5AE"/>
+                                            <constraint firstAttribute="width" constant="140" id="WXT-rg-nzk"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lCd-H2-byZ" userLabel="Small Video View 2">
-                                        <rect key="frame" x="332" y="262" width="120" height="180"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lCd-H2-byZ" userLabel="Small Video View 2">
+                                        <rect key="frame" x="292" y="232" width="140" height="210"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bdh-dJ-skH" userLabel="Small Video View 3">
+                                        <rect key="frame" x="440" y="14" width="140" height="210"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rCL-U5-pPu" userLabel="Small Video View 4">
+                                        <rect key="frame" x="292" y="14" width="140" height="210"/>
+                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vYX-Vj-uBo" userLabel="Small Video View 5">
+                                        <rect key="frame" x="144" y="232" width="140" height="210"/>
+                                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="vYX-Vj-uBo" firstAttribute="width" secondItem="lCd-H2-byZ" secondAttribute="width" id="6Tn-HS-ZR6"/>
+                                    <constraint firstItem="vYX-Vj-uBo" firstAttribute="bottom" secondItem="lCd-H2-byZ" secondAttribute="bottom" id="ASu-bu-EcW"/>
+                                    <constraint firstItem="Bdh-dJ-skH" firstAttribute="height" secondItem="NgO-du-eG5" secondAttribute="height" id="AeX-5p-5mx"/>
                                     <constraint firstItem="lCd-H2-byZ" firstAttribute="width" secondItem="NgO-du-eG5" secondAttribute="width" id="EVE-e8-nwf"/>
                                     <constraint firstItem="NgO-du-eG5" firstAttribute="leading" secondItem="lCd-H2-byZ" secondAttribute="trailing" constant="8" id="HZH-m9-u3O"/>
+                                    <constraint firstItem="rCL-U5-pPu" firstAttribute="height" secondItem="lCd-H2-byZ" secondAttribute="height" id="MdP-h5-HbD"/>
+                                    <constraint firstItem="lCd-H2-byZ" firstAttribute="top" secondItem="rCL-U5-pPu" secondAttribute="bottom" constant="8" id="NnD-AE-0P1"/>
+                                    <constraint firstItem="Bdh-dJ-skH" firstAttribute="width" secondItem="NgO-du-eG5" secondAttribute="width" id="PQL-Yd-JYW"/>
+                                    <constraint firstItem="rCL-U5-pPu" firstAttribute="width" secondItem="lCd-H2-byZ" secondAttribute="width" id="baJ-g6-v6p"/>
+                                    <constraint firstItem="Bdh-dJ-skH" firstAttribute="trailing" secondItem="NgO-du-eG5" secondAttribute="trailing" id="dc2-8U-RmI"/>
+                                    <constraint firstItem="lCd-H2-byZ" firstAttribute="leading" secondItem="vYX-Vj-uBo" secondAttribute="trailing" constant="8" id="dqk-3B-uGq"/>
                                     <constraint firstAttribute="bottom" secondItem="NgO-du-eG5" secondAttribute="bottom" constant="52" id="ech-fW-6Zz"/>
+                                    <constraint firstItem="NgO-du-eG5" firstAttribute="top" secondItem="Bdh-dJ-skH" secondAttribute="bottom" constant="8" id="f9i-vU-taL"/>
                                     <constraint firstItem="lCd-H2-byZ" firstAttribute="height" secondItem="NgO-du-eG5" secondAttribute="height" id="iSy-1f-cn4"/>
+                                    <constraint firstItem="rCL-U5-pPu" firstAttribute="trailing" secondItem="lCd-H2-byZ" secondAttribute="trailing" id="kfe-mW-Oxl"/>
+                                    <constraint firstItem="vYX-Vj-uBo" firstAttribute="height" secondItem="lCd-H2-byZ" secondAttribute="height" id="kfy-kq-sJU"/>
                                     <constraint firstAttribute="trailing" secondItem="NgO-du-eG5" secondAttribute="trailing" constant="20" id="lxp-P2-MJl"/>
                                     <constraint firstItem="lCd-H2-byZ" firstAttribute="centerY" secondItem="NgO-du-eG5" secondAttribute="centerY" id="rHX-ev-HVI"/>
                                 </constraints>
@@ -436,6 +461,9 @@
                         <outlet property="playStreamID" destination="yk5-FM-qr9" id="2Vs-Kp-nd2"/>
                         <outlet property="smallView1" destination="NgO-du-eG5" id="BPG-Rr-ehu"/>
                         <outlet property="smallView2" destination="lCd-H2-byZ" id="6ce-lR-VTm"/>
+                        <outlet property="smallView3" destination="Bdh-dJ-skH" id="213-Gk-7aL"/>
+                        <outlet property="smallView4" destination="rCL-U5-pPu" id="gRP-RF-UCy"/>
+                        <outlet property="smallView5" destination="vYX-Vj-uBo" id="ZpM-CT-Gw6"/>
                         <outlet property="statusBoxBottemSpaceConstraint" destination="4SX-Az-ayA" id="ZRJ-s5-6LP"/>
                         <outlet property="statusBoxHeightConstraint" destination="Pov-KG-yGJ" id="KCU-uv-jLq"/>
                     </connections>
