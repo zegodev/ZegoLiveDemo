@@ -3,6 +3,7 @@
 
 #include "./ZegoAVDefines.h"
 #include "./ZegoAVCallback.h"
+#include "./video_capture.h"
 
 #ifdef WIN32
     #ifdef ZEGOAVKIT_EXPORTS
@@ -27,7 +28,7 @@ namespace ZEGO
         /// \brief 设置外部采集模块
         /// \param
         /// \note 必须在 InitSDK 前调用，并且不能置空
-        ZEGOAVKIT_API void SetVideoCaptureFactory(void* factory);
+        ZEGOAVKIT_API void SetVideoCaptureFactory(AVE::VideoCaptureFactory* factory);
         
         
         /// \brief 启动log，设置log级别和log输出目录

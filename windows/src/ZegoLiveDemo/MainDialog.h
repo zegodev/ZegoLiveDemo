@@ -4,6 +4,7 @@
 #include "ZegoAVDefines.h"
 #include "Setting.h"
 #include "ZegoLiveDemoDlg.h"
+#include "CaptureFactoryImpl.h"
 
 using namespace ZEGO::AV;
 // CMainDialog dialog
@@ -30,6 +31,7 @@ public:
 
 protected:
 	LRESULT OnZegoLiveMessage(WPARAM wParam, LPARAM lParam);
+	LRESULT OnCaptureMessage(WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnInitDialog();
 
 public:
@@ -90,6 +92,7 @@ private:
 	CSetting m_setting;
 
 	HICON m_hIcon;
+	CaptureFactoryImpl m_CaptureFactoryImpl;
 public:
 	afx_msg void OnBnClickedButtonGetinroom();
 	afx_msg void OnBnClickedButtonLeaveChannel();
@@ -101,4 +104,5 @@ public:
 	afx_msg void OnClose();
     afx_msg void OnBnClickedButtonInitsdk();
     afx_msg void OnBnClickedButtonUninitsdk();
+	afx_msg void OnBnClickedButtonCapture();
 };

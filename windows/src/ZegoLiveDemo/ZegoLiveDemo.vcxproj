@@ -222,6 +222,7 @@ c:\windows\system32\xcopy.exe "$(ProjectDir)\Release\ZegoLiveDemo.exe" "$(Projec
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AvRoomAppUtility.h" />
+    <ClInclude Include="CaptureFactoryImpl.h" />
     <ClInclude Include="MainDialog.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Setting.h" />
@@ -231,6 +232,7 @@ c:\windows\system32\xcopy.exe "$(ProjectDir)\Release\ZegoLiveDemo.exe" "$(Projec
     <ClInclude Include="ZegoLiveDemoDlg.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CaptureFactoryImpl.cpp" />
     <ClCompile Include="MainDialog.cpp" />
     <ClCompile Include="Setting.cpp" />
     <ClCompile Include="stdafx.cpp">

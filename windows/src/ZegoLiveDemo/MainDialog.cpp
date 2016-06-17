@@ -72,6 +72,7 @@ BEGIN_MESSAGE_MAP(CMainDialog, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_LEAVE_CHANNEL, &CMainDialog::OnBnClickedButtonLeaveChannel)
 	ON_BN_CLICKED(IDC_Publish, &CMainDialog::OnBnClickedPublish)
 	ON_MESSAGE(WM_ZEGOLIVE_MESSAGE, &CMainDialog::OnZegoLiveMessage)
+	ON_MESSAGE(WM_CAPTURE_MESSAGE, &CMainDialog::OnCaptureMessage)
 	ON_BN_CLICKED(IDC_BUTTON_PLAY, &CMainDialog::OnBnClickedButtonPlay)
 	ON_BN_CLICKED(IDC_BUTTON_LOG, &CMainDialog::OnBnClickedButtonLog)
 	ON_BN_CLICKED(IIDC_BUTTON_PLAY2, &CMainDialog::OnBnClickedButtonPlay2)
@@ -79,6 +80,7 @@ BEGIN_MESSAGE_MAP(CMainDialog, CDialogEx)
 	ON_WM_CLOSE()
     ON_BN_CLICKED(IDC_BUTTON_INITSDK, &CMainDialog::OnBnClickedButtonInitsdk)
     ON_BN_CLICKED(IDC_BUTTON_UNINITSDK, &CMainDialog::OnBnClickedButtonUninitsdk)
+	ON_BN_CLICKED(IDC_BUTTON_CAPTURE, &CMainDialog::OnBnClickedButtonCapture)
 END_MESSAGE_MAP()
 
 
@@ -257,6 +259,11 @@ void CMainDialog::OnBnClickedButtonSetting()
 	m_pDlg = NULL;
 }
 
+LRESULT CMainDialog::OnCaptureMessage(WPARAM wParam, LPARAM lParam)
+{
+	m_CaptureFactoryImpl.OnRecvWndMsg(wParam, lParam);
+	return 0;
+}
 
 
 LRESULT CMainDialog::OnZegoLiveMessage(WPARAM wParam, LPARAM lParam)
@@ -289,10 +296,10 @@ LRESULT CMainDialog::OnZegoLiveMessage(WPARAM wParam, LPARAM lParam)
 
 	case ZEGOLIVE_MESSAGE_TYPE_OnPlayListUpdate:
 	{
-		std::tuple<PlayListUpdateFlag, ZegoLiveInfo*, unsigned int>* pParam = (std::tuple<PlayListUpdateFlag, ZegoLiveInfo*, unsigned int>*)lParam;
-		PlayListUpdateFlag flag = std::get<0>(*pParam);
-		ZegoLiveInfo* parrLiveInfo = std::get<1>(*pParam);
-		unsigned int uiLiveInfoCount = std::get<2>(*pParam);
+		//std::tuple<PlayListUpdateFlag, ZegoLiveInfo*, unsigned int>* pParam = (std::tuple<PlayListUpdateFlag, ZegoLiveInfo*, unsigned int>*)lParam;
+		//PlayListUpdateFlag flag = std::get<0>(*pParam);
+		//ZegoLiveInfo* parrLiveInfo = std::get<1>(*pParam);
+		//unsigned int uiLiveInfoCount = std::get<2>(*pParam);
 	}
 	break;
 	case ZEGOLIVE_MESSAGE_TYPE_OnPublishStateUpdate:
@@ -528,4 +535,10 @@ void CMainDialog::OnBnClickedButtonInitsdk()
 void CMainDialog::OnBnClickedButtonUninitsdk()
 {
 	UninitSdk();
+}
+
+
+void CMainDialog::OnBnClickedButtonCapture()
+{
+	ZEGO::AV::SetVideoCaptureFactory(&m_CaptureFactoryImpl);
 }
