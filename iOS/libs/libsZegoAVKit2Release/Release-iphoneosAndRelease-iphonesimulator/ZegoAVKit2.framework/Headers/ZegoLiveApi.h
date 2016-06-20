@@ -46,7 +46,7 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \param streamID 发布流ID
 /// \param channel 所在 channel
 /// \param playUrl 主播流的播放 url
-- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel playUrl:(NSString *)playUrl mixStream:(NSString *)mixStreamID;
+- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel playUrl:(NSString *)playUrl;
 
 /// \brief 发布直播失败
 /// \param err 1 正常结束, 非 1 异常结束

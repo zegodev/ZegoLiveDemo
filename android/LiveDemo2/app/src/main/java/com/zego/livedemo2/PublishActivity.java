@@ -196,7 +196,7 @@ public class PublishActivity extends AbsShowActivity {
             }
 
             @Override
-            public void onPublishSucc(String streamID, String mixStreamID, String liveChannel, String playUrl){
+            public void onPublishSucc(String streamID, String liveChannel, String playUrl){
                 ((TextView) llytPublSate.getChildAt(0)).setText("PublishState:success");
                 ((TextView) llytPublSate.getChildAt(1)).setText("PublishStream:" + streamID);
             }
