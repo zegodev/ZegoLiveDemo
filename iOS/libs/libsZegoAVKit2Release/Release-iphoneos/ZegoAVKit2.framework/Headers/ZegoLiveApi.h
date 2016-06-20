@@ -30,6 +30,8 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamIDKey;    ///< 主播流ID，值�
 ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观看 url，值为 NSString
 
 
+
+
 @protocol ZegoVideoCaptureFactory;
 
 /// \brief 回调协议
@@ -44,7 +46,7 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \param streamID 发布流ID
 /// \param channel 所在 channel
 /// \param playUrl 主播流的播放 url
-- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel playUrl:(NSString *)playUrl;
+- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel playUrl:(NSString *)playUrl mixStream:(NSString *)mixStreamID;
 
 /// \brief 发布直播失败
 /// \param err 1 正常结束, 非 1 异常结束
@@ -88,6 +90,10 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// 设置日志记录等级
 /// \param logLevel 4 - debug, 3 - generic
 + (void)setLogLevel:(int)logLevel;
+
+/// \brief 设置业务类型
+/// \param type 0 - 支持多主播连麦, 1 - 仅支持单主播直播(此时要求 liveID 与 streamID 相同)，默认为 0
++ (void)setBusinessType:(int)type;
 
 /// \brief 初始化SDK
 /// \param appID Zego派发的数字ID，各个开发者的唯一标识
@@ -199,29 +205,29 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \brief 登录频道
 /// \param channel 频道 ID
 /// \param user 用户
-/// \return YES 成功，等待异步回调，否则失败
+/// \return true 成功，等待异步回调，否则失败
 - (bool)loginChannel:(NSString *)channel user:(ZegoUser *)user;
 
 /// \brief 作为主播开始直播
 /// \param user 发布用户
 /// \param streamID 流 ID
 /// \param liveChannel 频道 ID
-/// \return YES 成功，等待异步结果回调，否则失败
+/// \return true 成功，等待异步结果回调，否则失败
 - (bool)startPublishingWithTitle:(NSString *)title streamID:(NSString *)streamID;
 
 /// \brief 停止主播
-/// \return YES 成功，否则失败
+/// \return true 成功，否则失败
 - (bool)stopPublishing;
 
 /// \brief 观看直播流
 /// \param streamID 要观看的流 ID
 /// \param index 视频播放的 view 编号
-/// \return YES 成功，等待异步回调，否则失败
+/// \return true 成功，等待异步回调，否则失败
 - (bool)startPlayStream:(NSString *)streamID viewIndex:(RemoteViewIndex)index;
 
 /// \brief 停止观看直播
 /// \param streamID 要停止的流 ID
-/// \return YES 成功，等待异步回调，否则失败
+/// \return true 成功，等待异步回调，否则失败
 - (bool)stopPlayStream:(NSString *)streamID;
 
 /// \brief 退出当前频道

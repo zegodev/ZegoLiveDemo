@@ -236,7 +236,7 @@ public class PlayActivity extends AbsShowActivity {
             }
 
             @Override
-            public void onPublishSucc(String streamID, String liveChannel, String playUrl) {
+            public void onPublishSucc(String streamID, String mixStreamID, String liveChannel, String playUrl) {
                 mPlayInfoMap.put(mPublishStreamID, "Publish success: " + mPublishStreamID);
                 showMessage();
             }

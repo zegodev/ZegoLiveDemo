@@ -25,18 +25,18 @@ public class ZegoApiManager {
         String userID = PreferenceUtils.getInstance().getUserID();
         String userName = PreferenceUtils.getInstance().getUserName();
 
-        if(TextUtils.isEmpty(userID) || TextUtils.isEmpty(userName)){
+        if (TextUtils.isEmpty(userID) || TextUtils.isEmpty(userName)) {
             // 初始化用户信息
             long ms = System.currentTimeMillis();
             userID = ms + "";
-            userName = "Android-"+ms;
+            userName = "Android-" + ms;
 
             PreferenceUtils.getInstance().setUserID(userID);
             PreferenceUtils.getInstance().setUserName(userName);
         }
 
         // 初始化频道
-        if(TextUtils.isEmpty(PreferenceUtils.getInstance().getChannel())){
+        if (TextUtils.isEmpty(PreferenceUtils.getInstance().getChannel())) {
             PreferenceUtils.getInstance().setChannel(ZegoApplication.sApplicationContext.getString(R.string.defult_channel));
         }
     }
@@ -60,16 +60,26 @@ public class ZegoApiManager {
         mZegoAVKit.setLogLevel(context, ZegoAVKit.LOG_LEVEL_DEBUG, null);
 
         // 即构分配的key与id
+//        byte[] signKey = {
+//                (byte) 0x91, (byte) 0x93, (byte) 0xcc, (byte) 0x66, (byte) 0x2a, (byte) 0x1c, (byte) 0xe, (byte) 0xc1,
+//                (byte) 0x35, (byte) 0xec, (byte) 0x71, (byte) 0xfb, (byte) 0x7, (byte) 0x19, (byte) 0x4b, (byte) 0x38,
+//                (byte) 0x15, (byte) 0xf1, (byte) 0x43, (byte) 0xf5, (byte) 0x7c, (byte) 0xd2, (byte) 0xb5, (byte) 0x9a,
+//                (byte) 0xe3, (byte) 0xdd, (byte) 0xdb, (byte) 0xe0, (byte) 0xf1, (byte) 0x74, (byte) 0x36, (byte) 0xd
+//        };
+//        int appID = 1;
+
+        long appID = 3566630470L;
+
         byte[] signKey = {
-                (byte) 0x91, (byte) 0x93, (byte) 0xcc, (byte) 0x66, (byte) 0x2a, (byte) 0x1c, (byte) 0xe, (byte) 0xc1,
-                (byte) 0x35, (byte) 0xec, (byte) 0x71, (byte) 0xfb, (byte) 0x7, (byte) 0x19, (byte) 0x4b, (byte) 0x38,
-                (byte) 0x15, (byte) 0xf1, (byte) 0x43, (byte) 0xf5, (byte) 0x7c, (byte) 0xd2, (byte) 0xb5, (byte) 0x9a,
-                (byte) 0xe3, (byte) 0xdd, (byte) 0xdb, (byte) 0xe0, (byte) 0xf1, (byte) 0x74, (byte) 0x36, (byte) 0xd
+                (byte) 0x4e, (byte) 0xc6, (byte) 0x62, (byte) 0x17, (byte) 0x34, (byte) 0xaf, (byte) 0xf1, (byte) 0x75, (byte) 0x7a, (byte) 0x7b,
+                (byte) 0x2f, (byte) 0x81, (byte) 0xc8, (byte) 0x64, (byte) 0x15, (byte) 0x3e, (byte) 0x53, (byte) 0x8f, (byte) 0x32, (byte) 0xf3,
+                (byte) 0x9e, (byte) 0x99, (byte) 0xb8, (byte) 0x63, (byte) 0x4f, (byte) 0x43, (byte) 0x6a, (byte) 0x78, (byte) 0x5e, (byte) 0x68,
+                (byte) 0xae, (byte) 0x9b
         };
-        int appID = 1;
 
         // 初始化sdk
-        mZegoAVKit.init(appID, signKey, context);
+        mZegoAVKit.init((int) appID, signKey, context);
+        mZegoAVKit.setTestEnv(true);
 
         // 初始化设置级别为"High"
         mZegoAVKit.setAVConfig(new ZegoAvConfig(ZegoAvConfig.Level.High));
@@ -89,7 +99,7 @@ public class ZegoApiManager {
         return mZegoAVKit;
     }
 
-    public void setZegoConfig(ZegoAvConfig config){
+    public void setZegoConfig(ZegoAvConfig config) {
         mZegoAVKit.setAVConfig(config);
     }
 }
