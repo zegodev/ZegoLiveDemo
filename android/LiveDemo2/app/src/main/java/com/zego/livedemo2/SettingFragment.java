@@ -72,12 +72,6 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
     // 分辨率text
     private String mResolutionTexts[];
 
-    // 分辨率
-    private int mVideoSolutions[][];
-
-    // 码率
-    private int mVideoBitrates[];
-
     private int mCount = 0;
 
     @Override
@@ -93,10 +87,6 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
     @Override
     protected void initVariables() {
         mResolutionTexts = mResources.getStringArray(R.array.resolutions);
-        // 开发者可以在sdk提供的分辨率列表上任意扩展
-        mVideoSolutions = ZegoAvConfig.VIDEO_RESOLUTIONS;
-        // 开发者可以在sdk提供的码率列表上任意扩展
-        mVideoBitrates = ZegoAvConfig.VIDEO_BITRATES;
     }
 
     @Override
@@ -136,11 +126,13 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
             }
         };
 
+        // 默认设置级别为"高"
+        final ZegoAvConfig.Level defaultLevel = ZegoAvConfig.Level.High;
         // 初始化分辨率, 默认为640x480
-        seekbarResolution.setMax(5);
-        seekbarResolution.setProgress(3);
+        seekbarResolution.setMax(ZegoAvConfig.MAX_LEVEL);
+        seekbarResolution.setProgress(defaultLevel.code);
         seekbarResolution.setOnSeekBarChangeListener(seekBarChangeListener);
-        tvResolution.setText(getString(R.string.resolution_prefix, mResolutionTexts[3]));
+        tvResolution.setText(getString(R.string.resolution_prefix, mResolutionTexts[defaultLevel.code]));
 
         // 初始化帧率, 默认为15
         seekBarFps.setMax(ZegoAvConfig.MAX_VIDEO_FPS);
@@ -150,21 +142,20 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
 
         // 初始化码率, 默认为600 * 1000
         seekBarBitrate.setMax(ZegoAvConfig.MAX_VIDEO_BITRATE);
-        seekBarBitrate.setProgress(600 * 1000);
+        seekBarBitrate.setProgress(ZegoAvConfig.VIDEO_BITRATES[defaultLevel.code]);
         seekBarBitrate.setOnSeekBarChangeListener(seekBarChangeListener);
-        tvBitrate.setText(getString(R.string.bitrate_prefix, 600 * 1000));
+        tvBitrate.setText(getString(R.string.bitrate_prefix, ZegoAvConfig.VIDEO_BITRATES[defaultLevel.code]));
 
-        // 默认选中"High"级别
-        spinnerResolutions.setSelection(3);
+        spinnerResolutions.setSelection(defaultLevel.code);
         spinnerResolutions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position < 5) {
-                    // 使用官方提供的level, 码率默认为15
+                if (position <= ZegoAvConfig.MAX_LEVEL) {
                     int level = position;
                     seekbarResolution.setProgress(level);
+                    // 预设级别中,帧率固定为"15"
                     seekBarFps.setProgress(15);
-                    seekBarBitrate.setProgress(mVideoBitrates[level]);
+                    seekBarBitrate.setProgress(ZegoAvConfig.VIDEO_BITRATES[level]);
                 }
             }
 
@@ -200,14 +191,14 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
     }
 
     @OnClick(R.id.tv_version)
-    public void showHideOperation(){
+    public void showHideOperation() {
         mCount++;
-        if(mCount % 3 == 0){
-           if(llytHideOperation.getVisibility() == View.INVISIBLE){
-               llytHideOperation.setVisibility(View.VISIBLE);
-           }else {
-               llytHideOperation.setVisibility(View.INVISIBLE);
-           }
+        if (mCount % 3 == 0) {
+            if (llytHideOperation.getVisibility() == View.INVISIBLE) {
+                llytHideOperation.setVisibility(View.VISIBLE);
+            } else {
+                llytHideOperation.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -238,13 +229,13 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
             case 5:
                 // 自定义设置
                 zegoAvConfig = new ZegoAvConfig();
-                zegoAvConfig.setResolution(mVideoSolutions[seekbarResolution.getProgress()][0], mVideoSolutions[seekbarResolution.getProgress()][1]);
+                zegoAvConfig.setResolution(ZegoAvConfig.VIDEO_RESOLUTIONS[seekbarResolution.getProgress()][0], ZegoAvConfig.VIDEO_RESOLUTIONS[seekbarResolution.getProgress()][1]);
                 zegoAvConfig.setVideoFPS(seekBarFps.getProgress());
                 zegoAvConfig.setVideoBitrate(seekBarBitrate.getProgress());
                 break;
         }
 
-        if(zegoAvConfig != null){
+        if (zegoAvConfig != null) {
             ZegoApiManager.getInstance().setZegoConfig(zegoAvConfig);
         }
 
@@ -270,7 +261,7 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
                     byte[] signKey = new byte[32];
                     for (int i = 0; i < 32; i++) {
                         int data = Integer.valueOf(keys[i].trim().replace("0x", ""), 16);
-                        signKey[i]  = (byte) data;
+                        signKey[i] = (byte) data;
                     }
 
                     ZegoApiManager.getInstance().getZegoAVKit().unInit();

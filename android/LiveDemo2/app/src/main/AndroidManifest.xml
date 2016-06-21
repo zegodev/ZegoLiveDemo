@@ -36,11 +36,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".PublishActivity"
+                  android:configChanges="orientation|screenSize"
                   >
 
         </activity>
 
         <activity android:name=".PlayActivity"
+                  android:configChanges="orientation|screenSize"
                  >
 
         </activity>

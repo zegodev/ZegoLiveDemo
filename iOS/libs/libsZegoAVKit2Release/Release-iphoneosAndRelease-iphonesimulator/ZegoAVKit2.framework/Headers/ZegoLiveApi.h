@@ -19,17 +19,10 @@
 #endif
 
 ZEGO_EXTERN NSString *const kZegoStreamIDKey;           ///< 流ID，值为 NSString
-ZEGO_EXTERN NSString *const kZegoPublishIDKey;
-ZEGO_EXTERN NSString *const kZegoPublishNameKey;
-ZEGO_EXTERN NSString *const kZegoStreamTitleKey;
-
-ZEGO_EXTERN NSString *const kZegoOnlineNumsKey;         ///< 在线人数
-ZEGO_EXTERN NSString *const kZegoOnlineCountKey;        ///< 历史观看人数
-
-ZEGO_EXTERN NSString *const kZegoPublishStreamIDKey;    ///< 主播流ID，值为 NSString
-ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观看 url，值为 NSString
-
-
+ZEGO_EXTERN NSString *const kZegoMixStreamIDKey;        ///< 混流ID，值为 NSString
+ZEGO_EXTERN NSString *const kZegoRtmpUrlListKey;        ///< rtmp 播放 url 列表，值为 NSArray<NSString *>
+ZEGO_EXTERN NSString *const kZegoHlsUrlListKey;         ///< hls 播放 url 列表，值为 NSArray<NSString *>
+ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列表，值为 NSArray<NSString *>
 
 
 @protocol ZegoVideoCaptureFactory;
@@ -46,7 +39,7 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \param streamID 发布流ID
 /// \param channel 所在 channel
 /// \param playUrl 主播流的播放 url
-- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel playUrl:(NSString *)playUrl;
+- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel streamInfo:(NSDictionary *)info;
 
 /// \brief 发布直播失败
 /// \param err 1 正常结束, 非 1 异常结束
@@ -92,7 +85,8 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 + (void)setLogLevel:(int)logLevel;
 
 /// \brief 设置业务类型
-/// \param type 0 - 支持多主播连麦, 1 - 仅支持单主播直播(此时要求 liveID 与 streamID 相同)，默认为 0
+/// \param type 业务类型，默认为 0
+/// \note 确保在创建接口对象前调用
 + (void)setBusinessType:(int)type;
 
 /// \brief 初始化SDK

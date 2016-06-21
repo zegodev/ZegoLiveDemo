@@ -68,7 +68,6 @@ public class ZegoApiManager {
         };
         int appID = 1;
 
-
         // 初始化sdk
         mZegoAVKit.init(appID, signKey, context);
 

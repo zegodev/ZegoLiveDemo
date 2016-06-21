@@ -600,8 +600,8 @@ const int kMaxPlayViewCount = 2;
 #pragma mark - ZegoLiveApiDelegate
 
 /// \brief 发布直播成功
-- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel playUrl:(NSString *)playUrl {
-    NSLog(@"%s, stream: %@, url: %@", __func__, streamID, playUrl);
+- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel streamInfo:(NSDictionary *)info {
+    NSLog(@"%s, stream: %@", __func__, info);
     self.liveStatus.text = [NSString stringWithFormat:@"stream: %@", streamID];
     self.isPublishing = YES;
     
