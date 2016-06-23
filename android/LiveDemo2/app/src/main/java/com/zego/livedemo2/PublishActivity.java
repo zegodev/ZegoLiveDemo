@@ -29,10 +29,10 @@ public class PublishActivity extends BaseShowActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        super.initViews(savedInstanceState);
-
         // 隐藏发布按钮
         btnPublish.setVisibility(View.INVISIBLE);
+
+        super.initViews(savedInstanceState);
     }
 
     @Override

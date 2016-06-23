@@ -152,6 +152,8 @@ public abstract class BaseShowActivity extends AbsShowActivity {
 
     protected int mSelectedFilter = 0;
 
+    protected boolean mHaveBeenCalled = false;
+
     /**
      * 发布与播放前的操作.
      */
@@ -633,7 +635,7 @@ public abstract class BaseShowActivity extends AbsShowActivity {
      */
     protected void initPhoneCallingListener(){
 
-        TelephonyManager tm = (TelephonyManager)getSystemService(Service.TELEPHONY_SERVICE);
+        final TelephonyManager tm = (TelephonyManager)getSystemService(Service.TELEPHONY_SERVICE);
         tm.listen(new PhoneStateListener(){
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -641,13 +643,18 @@ public abstract class BaseShowActivity extends AbsShowActivity {
                 switch(state){
                     case TelephonyManager.CALL_STATE_IDLE:
                         Log.i("TestPhoneState", "挂断");
-                        // 登陆频道
-                        ZegoUser zegoUser = new ZegoUser(PreferenceUtils.getInstance().getUserID(), PreferenceUtils.getInstance().getUserName());
-                        mZegoAVKit.loginChannel(zegoUser, mLiveChannel);
+                        if(mHaveBeenCalled){
+                            mHaveBeenCalled = false;
+                            // 登陆频道
+                            ZegoUser zegoUser = new ZegoUser(PreferenceUtils.getInstance().getUserID(), PreferenceUtils.getInstance().getUserName());
+                            mZegoAVKit.loginChannel(zegoUser, mLiveChannel);
+                        }
                         break;
-
                     case TelephonyManager.CALL_STATE_RINGING:
                         Log.i("TestPhoneState", "响铃:来电号码"+incomingNumber);
+                        if(!mHaveBeenCalled){
+                            mHaveBeenCalled = true;
+                        }
                         // 来电停止发布与播放
                         logout();
                         break;
