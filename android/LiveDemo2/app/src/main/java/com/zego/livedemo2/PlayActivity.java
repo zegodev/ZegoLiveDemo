@@ -26,7 +26,7 @@ public class PlayActivity extends BaseShowActivity {
 
     @Override
     protected void prePublishAndPlay() {
-        if(mListSreamAndOrdinal.size() == 0){
+        if(mListOrdinalAndStreamID.size() == 0){
             newDialog(mListVideoView.get(0));
         }else {
             restorePublishAndPlay();

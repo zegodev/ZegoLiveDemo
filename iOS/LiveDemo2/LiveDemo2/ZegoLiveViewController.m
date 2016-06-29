@@ -15,6 +15,7 @@
 @interface ZegoDemoAnchorCongig : NSObject
 
 @property BOOL enableMic;
+@property BOOL enableCam;
 @property BOOL useFrontCamera;
 @property NSInteger beautifyFeature;
 @property NSInteger filterIndex;
@@ -26,6 +27,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _enableCam = YES;
         _enableMic = YES;
         _useFrontCamera = YES;
         _beautifyFeature = 0;
@@ -44,6 +46,8 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 
 @interface ZegoLiveViewController () <ZegoLiveApiDelegate>
+
+@property (weak, nonatomic) IBOutlet UIButton *btnEnableCam;
 
 @property (weak, nonatomic) IBOutlet UIButton *btnFrontCamera;
 @property (weak, nonatomic) IBOutlet UIButton *btnEnableMic;
@@ -367,6 +371,7 @@ const int kMaxPlayViewCount = 2;
     
     self.btnEnableMic.backgroundColor = _anchorConfig.enableMic ? hightlightedBGColor : [UIColor clearColor];
     self.btnFrontCamera.backgroundColor = _anchorConfig.useFrontCamera ? hightlightedBGColor : [UIColor clearColor];
+    self.btnEnableCam.backgroundColor = !_anchorConfig.enableCam ? hightlightedBGColor : [UIColor clearColor];
 }
 
 
@@ -399,10 +404,10 @@ const int kMaxPlayViewCount = 2;
     [self setupAnchorToolBox];
 }
 
-- (IBAction)toggleTorch:(id)sender {
-    static bool on = false;
-    [getZegoAV_ShareInstance() enableTorch:on];
-    on = !on;
+- (IBAction)enableCam:(id)sender {
+    _anchorConfig.enableCam = !_anchorConfig.enableCam;
+    [getZegoAV_ShareInstance() enableCamera:_anchorConfig.enableCam];
+    [self setupAnchorToolBox];
 }
 
 - (IBAction)toggleFilterPicker:(id)sender {
@@ -628,7 +633,7 @@ const int kMaxPlayViewCount = 2;
 }
 
 /// \brief 发布直播失败
-/// \param err 1 异常结束，2 正常结束
+/// \param err 1 正常结束，非 1 异常结束
 - (void)onPublishStop:(uint32)err stream:(NSString *)streamID channel:(NSString *)channel {
     NSLog(@"%s, stream: %@, err: %u", __func__, streamID, err);
     
@@ -673,7 +678,6 @@ const int kMaxPlayViewCount = 2;
                 assert(b);
                 NSLog(@"%s, ret: %d", __func__, ret);
             }
-            self.anchorToolBox.hidden = NO;
         } else if (_liveType == 2) {
             // 恢复publish
             if(self.publishAfterPlay == YES){

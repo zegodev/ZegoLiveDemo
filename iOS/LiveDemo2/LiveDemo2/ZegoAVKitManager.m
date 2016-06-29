@@ -12,6 +12,7 @@ NSData *g_signKey = nil;
 uint32 g_appID = 0;
 
 BOOL g_useTestEnv = NO;
+int g_bizType = 0;
 BOOL g_requireHardwareAccelerated = NO;
 
 void setCustomAppIDAndSign(uint32 appid, NSData* data)
@@ -63,6 +64,7 @@ ZegoLiveApi * getZegoAV_ShareInstance()
     if (g_zegoAV == nil) {
         [ZegoLiveApi setLogLevel:4];
         [ZegoLiveApi setUseTestEnv:g_useTestEnv];
+        [ZegoLiveApi setBusinessType:g_bizType];
         
         ZegoSetVideoCaptureDevice();
         

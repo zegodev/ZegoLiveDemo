@@ -235,9 +235,9 @@
                                             <constraint firstAttribute="height" constant="36" id="qqx-FV-LKT"/>
                                         </constraints>
                                         <color key="tintColor" red="0.86740813220000001" green="1" blue="0.66907846849999997" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" image="Torch"/>
+                                        <state key="normal" image="no_cam"/>
                                         <connections>
-                                            <action selector="toggleTorch:" destination="iIk-lm-Ddg" eventType="touchUpInside" id="dk7-gf-beN"/>
+                                            <action selector="enableCam:" destination="iIk-lm-Ddg" eventType="touchUpInside" id="W8t-HE-HfF"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O79-nq-9ei">
@@ -449,6 +449,7 @@
                         <outlet property="audienceBox" destination="7uL-to-AE7" id="s2q-HY-LAG"/>
                         <outlet property="beautifyPicker" destination="tRc-t6-Dz0" id="QbC-QE-Xo6"/>
                         <outlet property="bigView" destination="GU6-mk-DjW" id="TOn-pY-RjQ"/>
+                        <outlet property="btnEnableCam" destination="Vfp-Td-sDV" id="WQb-01-1RF"/>
                         <outlet property="btnEnableMic" destination="gKb-a5-kIt" id="u7y-j9-X9y"/>
                         <outlet property="btnFrontCamera" destination="hvY-cM-jVy" id="4Lm-xm-6Mg"/>
                         <outlet property="btnJoin" destination="h4N-BD-wEB" id="lvG-P3-9Al"/>
@@ -1045,13 +1046,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Torch" width="10" height="23"/>
         <image name="close" width="24" height="24"/>
         <image name="expand_less" width="24" height="24"/>
         <image name="ic_camera" width="31" height="23"/>
         <image name="ic_continue" width="24" height="23"/>
         <image name="ic_microphone" width="13" height="22"/>
         <image name="ic_setting" width="24" height="24"/>
+        <image name="no_cam" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="727-mN-U1U"/>

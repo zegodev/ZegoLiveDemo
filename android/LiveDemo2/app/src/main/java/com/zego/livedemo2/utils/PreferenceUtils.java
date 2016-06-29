@@ -2,8 +2,15 @@ package com.zego.livedemo2.utils;
 
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 
 import com.zego.livedemo2.ZegoApplication;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Copyright © 2016 Zego. All rights reserved.
@@ -109,6 +116,34 @@ public class PreferenceUtils {
 
     public int getPublishLevel(){
         return getIntValue(KEY_PUBLISH_LEVEL, -1);
+    }
+
+    public Object getObjectFromString(String key){
+        Object value = null;
+        try{
+            byte[] bytes = Base64.decode(PreferenceUtils.getInstance().getStringValue(key, ""), Base64.DEFAULT);
+            ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+            ObjectInputStream oisArray = new ObjectInputStream(bais);
+            value = oisArray.readObject();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return value;
+    }
+
+    public void setObjectToString(String key, Object value){
+
+        try{
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos;
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(value);
+            String data = new String(Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT));
+            PreferenceUtils.getInstance().setStringValue(key, data);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 }

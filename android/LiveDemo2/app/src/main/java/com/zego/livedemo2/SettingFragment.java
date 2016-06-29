@@ -265,7 +265,7 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
                     }
 
                     ZegoApiManager.getInstance().getZegoAVKit().unInit();
-                    ZegoApiManager.getInstance().getZegoAVKit().init(Integer.valueOf(appID), signKey, ZegoApplication.sApplicationContext);
+                    ZegoApiManager.getInstance().getZegoAVKit().init(Long.valueOf(appID), signKey, ZegoApplication.sApplicationContext);
                 }
             }
         }).start();

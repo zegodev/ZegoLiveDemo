@@ -37,7 +37,7 @@ public class PublishActivity extends BaseShowActivity {
 
     @Override
     protected void prePublishAndPlay() {
-        if(mListSreamAndOrdinal.size() == 0){
+        if(mListOrdinalAndStreamID.size() == 0){
             startPublish(mListVideoView.get(0));
         }else {
             restorePublishAndPlay();
