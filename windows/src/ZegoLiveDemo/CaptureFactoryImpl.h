@@ -36,6 +36,8 @@ public:
 	virtual int SetPowerlineFreq(unsigned int nFreq);
 
 public:
+	void SetCaptureWindow(HWND hWnd);
+public:
 	void OnRecvWndMsg(WPARAM wParam, LPARAM lParam);
 	void OnTimer();
 
@@ -58,7 +60,6 @@ protected:
 protected:
 	void PostMessageToMainWnd(int type, LPARAM lParam = 0);
 	void SendMessageToMainWnd(int type, LPARAM lParam = 0);
-	HBITMAP ConvertIconToBitmap(HICON hIcon);
 	void SetCaptureTimer();
 	void KillCaptureTimer();
 private:
@@ -74,6 +75,8 @@ private:
 	int m_torch;
 
 	HICON m_hIcon;
+
+	HWND m_hWnd;
 };
 
 class CaptureFactoryImpl : public VideoCaptureFactory
@@ -86,7 +89,10 @@ public:
 	virtual void Destroy(VideoCaptureDevice *vc);
 
 public:
+	void SetCaptureWindow(HWND hWnd);
+public:
 	void OnRecvWndMsg(WPARAM wParam, LPARAM lParam);
 private:
 	VideoCaptureImageDevice* m_pDevice;
+	HWND m_hWnd;
 };

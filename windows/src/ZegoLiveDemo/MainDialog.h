@@ -28,12 +28,11 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButtonSetting();
-
+	afx_msg void OnTimer(UINT_PTR id);
 protected:
 	LRESULT OnZegoLiveMessage(WPARAM wParam, LPARAM lParam);
 	LRESULT OnCaptureMessage(WPARAM wParam, LPARAM lParam);
 	virtual BOOL OnInitDialog();
-
 public:
 	virtual void OnCaptureVideoSizeChanged(int nWidth, int nHeight) {};
 	virtual void OnVideoSizeChanged(const char* pStreamID, int nWidth, int nHeight);
@@ -46,7 +45,7 @@ public:
 	virtual void OnCountsUpdate(const char* pszUserID, const char* pszChannelID, unsigned int uiOnlineNums, unsigned int uiOnlineCount);
 
 	virtual void OnPublishStateUpdate(const char* pszUserID, const char* pszChannelID, ZegoAVAPIState eState,
-		const char* pszStreamID, const char* pszPlayUrl);
+		const char* pszStreamID, const ZegoStreamInfo& oStreamInfo);
 	virtual void OnPlayStateUpdate(const char* pszUserID, const char* pszChannelID, ZegoAVAPIState eState, const char* pszStreamID);
 
 	virtual void OnDisconnected(const char* pszUserID, const char* pszChannelID, unsigned int uiErr);
@@ -85,6 +84,9 @@ private:
 	CString m_strPlayStreamId1;
 	CString m_strPlayStatus;
 
+
+	CComboBox m_cbWindowList;
+
 	bool m_bLogin;
 	bool m_bIsPublishing;
 
@@ -93,6 +95,10 @@ private:
 
 	HICON m_hIcon;
 	CaptureFactoryImpl m_CaptureFactoryImpl;
+
+	std::vector<std::tuple<std::wstring, std::wstring, HWND> > m_vecWindowList;
+	bool m_hasSetCapture;
+	HWND m_hCaptureWnd;
 public:
 	afx_msg void OnBnClickedButtonGetinroom();
 	afx_msg void OnBnClickedButtonLeaveChannel();
@@ -104,5 +110,5 @@ public:
 	afx_msg void OnClose();
     afx_msg void OnBnClickedButtonInitsdk();
     afx_msg void OnBnClickedButtonUninitsdk();
-	afx_msg void OnBnClickedButtonCapture();
+	afx_msg void OnCbnSelchangeComboWindowlist();
 };

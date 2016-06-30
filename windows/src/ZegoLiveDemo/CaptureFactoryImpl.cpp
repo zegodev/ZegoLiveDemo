@@ -4,6 +4,7 @@
 #include "ZegoLiveDemo.h"
 #include <utility>
 
+
 enum CAPTURE_MESSAGE_TYPE
 {
 	CAPTURE_MESSAGE_TYPE_StartCapture,
@@ -37,6 +38,9 @@ VideoCaptureDevice* CaptureFactoryImpl::Create(const char* device_id)
 {
 	m_pDevice = new VideoCaptureImageDevice;
 	g_pDevice = m_pDevice;
+
+	m_pDevice->SetCaptureWindow(m_hWnd);
+
 	return m_pDevice;
 }
 
@@ -45,6 +49,15 @@ void CaptureFactoryImpl::Destroy(VideoCaptureDevice *vc)
 	delete m_pDevice;
 	m_pDevice = nullptr;
 	g_pDevice = nullptr;
+}
+
+void CaptureFactoryImpl::SetCaptureWindow(HWND hWnd)
+{
+	m_hWnd = hWnd;
+	if (g_pDevice)
+	{
+		g_pDevice->SetCaptureWindow(hWnd);
+	}
 }
 
 void CaptureFactoryImpl::OnRecvWndMsg(WPARAM wParam, LPARAM lParam)
@@ -152,6 +165,14 @@ void VideoCaptureImageDevice::OnRecvWndMsg(WPARAM wParam, LPARAM lParam)
 	}
 }
 
+
+void VideoCaptureImageDevice::SetCaptureWindow(HWND hWnd)
+{
+	m_hWnd = hWnd;
+
+	ZEGO::AV::AddWindowCapture(m_hWnd, true);
+}
+
 void VideoCaptureImageDevice::AllocateAndStart(VideoCaptureDevice::Client* client)
 {
 	m_pClient = client;
@@ -173,8 +194,14 @@ int VideoCaptureImageDevice::StartCapture()
 		return 0;
 	}
 
+	if (!::IsWindow(m_hWnd))
+	{
+		return 0;
+	}
+
 	m_isCapturing = true;
 
+	
 	PostMessageToMainWnd(CAPTURE_MESSAGE_TYPE_StartCapture);
 
 	return 0;
@@ -360,43 +387,26 @@ void VideoCaptureImageDevice::OnTimer()
 		return;
 	}
 
-	int dwSize = m_height * m_width * 4;
-	unsigned char* pBits = new unsigned char[dwSize];
-	ZeroMemory(pBits, dwSize);
+	ZEGO::AV::RefreshWindowCapture(m_hWnd);
 
-	// debug
-	if (1)
-	{
-		for (int h = 0; h < m_height; h++)
-		{
-			unsigned char *line = pBits + h * m_width * 4;
-			for (int w = 0; w < m_width; w++)
-			{
-				unsigned char *p = line + w * 4;
+	unsigned int size = 0;
+	unsigned int width = 0;
+	unsigned int height = 0;
+	unsigned int time = 0;
 
-				p[0] = 255;
-				p[1] = 0;
-				p[2] = 0;
-				p[3] = 0;
+	
+	BYTE* data =ZEGO::AV::GetWindowCaptureData(m_hWnd, size, width, height, time);
 
-				if ((w == 0) || (w == m_width - 1) || (h == 0) || (h == m_height - 1) || (w == m_width / 2) || (h == m_height / 2))
-				{
-					p[2] = 255;
-				}
-			}
-		}
-	}
-
-	//bitCapture.GetBitmapBits(dwSize, pBits);
+	
 	VideoCaptureFormat format;
-	format.width = m_width;
-	format.height = m_height;
+	format.width = width;
+	format.height = height;
 	format.pixel_format = PIXEL_FORMAT_BGRA32;
 
-	m_pClient->OnIncomingCapturedData((char*)pBits, dwSize, format, GetTickCount(), 1000);
-
-
-	delete[] pBits;
+	if (m_pClient && data)
+	{
+		m_pClient->OnIncomingCapturedData((char*)data, size, format, GetTickCount(), 1000);
+	}
 }
 
 void CALLBACK _OnTimer(HWND, UINT, UINT_PTR, DWORD)
@@ -429,29 +439,4 @@ void VideoCaptureImageDevice::KillCaptureTimer()
 	{
 		pMainWnd->KillTimer(g_capture_time_id);
 	}
-}
-
-HBITMAP VideoCaptureImageDevice::ConvertIconToBitmap(HICON hIcon)
-{
-	HBITMAP hBmp;
-	BITMAP bmp;
-	CDC bmpDC;
-	CDC iconDC;
-	ICONINFO csII;
-	int bRetValue = ::GetIconInfo(hIcon, &csII);
-	if (bRetValue == FALSE) return NULL;
-	bmpDC.Attach(::GetDC(NULL));
-	iconDC.CreateCompatibleDC(&bmpDC);
-	if (::GetObject(csII.hbmColor, sizeof(BITMAP), &bmp))
-	{
-		DWORD dwWidth = csII.xHotspot * 2;
-		DWORD dwHeight = csII.yHotspot * 2;
-		hBmp = ::CreateBitmap(dwWidth, dwHeight, bmp.bmPlanes,
-			bmp.bmBitsPixel, NULL);
-		iconDC.SelectObject(csII.hbmColor);
-		bmpDC.SelectObject(hBmp);
-		bmpDC.BitBlt(0, 0, dwWidth, dwHeight, &iconDC, 0, 0, SRCCOPY);
-		return hBmp;
-	}
-	return NULL;
 }

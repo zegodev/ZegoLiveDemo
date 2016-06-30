@@ -43,6 +43,9 @@ CMainDialog::CMainDialog(CWnd* pParent /*=NULL*/)
 	m_pDlg = NULL;
 
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+	m_hasSetCapture = false;
+	m_hCaptureWnd = nullptr;
 }
 
 CMainDialog::~CMainDialog()
@@ -63,6 +66,7 @@ void CMainDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_PLAY2, m_strPlayStreamId1);
 	DDX_Text(pDX, IDC_STATIC_PLAY_STATUS, m_strPlayStatus);
 	DDX_Text(pDX, IDC_EDIT_PUBLISH_URL, m_strPublishState);
+	DDX_Control(pDX, IDC_COMBO_WINDOWLIST, m_cbWindowList);
 }
 
 
@@ -78,9 +82,10 @@ BEGIN_MESSAGE_MAP(CMainDialog, CDialogEx)
 	ON_BN_CLICKED(IIDC_BUTTON_PLAY2, &CMainDialog::OnBnClickedButtonPlay2)
 	ON_BN_CLICKED(IDC_BUTTON_STOPPUB, &CMainDialog::OnBnClickedButtonStoppub)
 	ON_WM_CLOSE()
+	ON_WM_TIMER()
     ON_BN_CLICKED(IDC_BUTTON_INITSDK, &CMainDialog::OnBnClickedButtonInitsdk)
     ON_BN_CLICKED(IDC_BUTTON_UNINITSDK, &CMainDialog::OnBnClickedButtonUninitsdk)
-	ON_BN_CLICKED(IDC_BUTTON_CAPTURE, &CMainDialog::OnBnClickedButtonCapture)
+	ON_CBN_SELCHANGE(IDC_COMBO_WINDOWLIST, &CMainDialog::OnCbnSelchangeComboWindowlist)
 END_MESSAGE_MAP()
 
 
@@ -130,6 +135,31 @@ BOOL CMainDialog::OnInitDialog()
 
 	m_strPlayStreamId0 = L"2015";
 	m_strPlayStreamId1 = L"7840";
+
+	unsigned int window_count = 0;
+	ZEGO::AV::WindowsDecs* pWindowList = ZEGO::AV::FillWindowList(window_count, true);
+
+	for (unsigned int i = 0; i < window_count; ++i)
+	{
+		std::wstring title = AvRoomApp::Utility::UTF8ToWString(pWindowList[i].szTitle);
+		std::wstring  exe = AvRoomApp::Utility::UTF8ToWString(pWindowList[i].szExe);
+		HWND hWnd = (HWND)pWindowList[i].wnd;
+
+		if (title.empty() || exe.empty())
+		{
+			continue;
+		}
+
+		CString strDesc;
+		strDesc.Format(L"[%s]:%s", exe.c_str(), title.c_str());
+		m_cbWindowList.AddString(strDesc);
+
+		m_vecWindowList.push_back(std::tuple<std::wstring, std::wstring, HWND>(title, exe, hWnd));
+	}
+
+	ZEGO::AV::FreeWindowList(pWindowList);
+	pWindowList = NULL;
+
 
 	UpdateData(FALSE);
 
@@ -238,12 +268,13 @@ void CMainDialog::UninitSdk()
 {
 	if (m_hasInitSdk)
 	{
+		ZEGO::AV::LogoutChannel();
 		ZEGO::AV::StopPreview();
 		ZEGO::AV::StopPlayStream(AvRoomApp::Utility::WStringToUTF8(m_strPlayStreamId0).c_str());
 		ZEGO::AV::StopPlayStream(AvRoomApp::Utility::WStringToUTF8(m_strPlayStreamId1).c_str());
 		ZEGO::AV::StopPublish();
 		ZEGO::AV::UninitSDK();
-		ZEGO::AV::LogoutChannel();
+		
 		m_hasInitSdk = false;
 	}
 }
@@ -261,6 +292,8 @@ void CMainDialog::OnBnClickedButtonSetting()
 	delete m_pDlg;
 	m_pDlg = NULL;
 }
+
+
 
 LRESULT CMainDialog::OnCaptureMessage(WPARAM wParam, LPARAM lParam)
 {
@@ -391,14 +424,14 @@ void CMainDialog::OnCountsUpdate(const char* pszUserID, const char* pszChannelID
 }
 
 void CMainDialog::OnPublishStateUpdate(const char* pszUserID, const char* pszChannelID, ZegoAVAPIState eState,
-	const char* streamID, const char* pszPlayUrl)
+	const char* pszStreamID, const ZegoStreamInfo& oStreamInfo)
 {
 	if (IsWindow(m_hWnd))
 	{
 		std::string url;
-		if (pszPlayUrl)
+		if (oStreamInfo.uiRtmpURLCount > 0)
 		{
-			url = pszPlayUrl;
+			url = oStreamInfo.arrRtmpURLs[0];
 		}
 
 		auto* pParam = new std::tuple<std::string, ZegoAVAPIState>(url, eState);
@@ -516,6 +549,7 @@ void CMainDialog::OnBnClickedButtonLog()
 void CMainDialog::OnBnClickedButtonStoppub()
 {
 	ZEGO::AV::StopPublish();
+	KillTimer(10000);
 }
 
 
@@ -538,7 +572,40 @@ void CMainDialog::OnBnClickedButtonUninitsdk()
 }
 
 
-void CMainDialog::OnBnClickedButtonCapture()
+void CMainDialog::OnTimer(UINT_PTR id)
 {
-	ZEGO::AV::SetVideoCaptureFactory(&m_CaptureFactoryImpl);
+	HWND hWnd = GetDlgItem(IDC_STATIC_LOCALVIEW)->GetSafeHwnd();
+	HDC hDc = ::GetDC(hWnd);
+	RECT rc;
+	::GetClientRect(hWnd, &rc);
+	ZEGO::AV::RenderWindowCapture(m_hCaptureWnd, hDc, 0, 0, rc.right - rc.left, rc.bottom - rc.top);
+}
+
+void CMainDialog::OnCbnSelchangeComboWindowlist()
+{
+	if (!m_hasSetCapture)
+	{
+		m_hasSetCapture = true;
+		ZEGO::AV::SetVideoCaptureFactory(&m_CaptureFactoryImpl);
+	}
+
+	int index = m_cbWindowList.GetCurSel();
+	if (index < 0 || index + 1 > m_vecWindowList.size())
+	{
+		return;
+	}
+
+	HWND hWnd = std::get<2>(m_vecWindowList[index]);
+	if (!::IsWindow(hWnd))
+	{
+		MessageBox(L"不是有效的窗口");
+		return;
+	}
+
+	ZEGO::AV::RemoveWindowCapture(m_hCaptureWnd);
+
+	m_hCaptureWnd = hWnd;
+	m_CaptureFactoryImpl.SetCaptureWindow(hWnd);
+
+	SetTimer(10000, 20, NULL);
 }

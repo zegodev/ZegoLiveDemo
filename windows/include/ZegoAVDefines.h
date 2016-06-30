@@ -25,6 +25,13 @@ namespace ZEGO
 {
     namespace AV
     {
+        /// \brief 业务类型
+        enum BusinessType
+        {
+            MultiPublishers = 0,    ///< 支持多主播连麦直播
+            SinglePublisher = 1,    ///< 仅支持单主播直播，此时要求 liveID 与 streamID 相同
+        };
+        
         enum RemoteViewIndex
         {
             RemoteViewIndex_First = 0,
@@ -57,6 +64,21 @@ namespace ZEGO
             char szName[ZEGO_MAX_COMMON_LEN];
         };
 
+        struct ZegoStreamInfo
+        {
+            char szStreamID[ZEGO_MAX_COMMON_LEN] = "\0";        ///< 流ID
+            char szMixStreamID[ZEGO_MAX_COMMON_LEN] = "\0";     ///< 混流ID
+            
+            char* arrRtmpURLs[ZEGO_MAX_URL_COUNT];              ///< rtmp 播放 url 列表
+            unsigned int uiRtmpURLCount = 0;                    ///< rtmp url 个数
+            
+            char* arrFlvRULs[ZEGO_MAX_URL_COUNT];
+            unsigned int uiFlvURLCount = 0;
+            
+            char* arrHlsURLs[ZEGO_MAX_URL_COUNT];
+            unsigned int uiHlsURLCount = 0;
+        };
+        
         enum ZegoAVAPIState
         {
             AVStateBegin = 0,               ///< 直播开始
@@ -69,6 +91,8 @@ namespace ZEGO
             NoStreamError = 6,              ///< 无流信息
             MediaServerNetWorkError = 7,    ///< 媒体服务器连接失败
             DNSResolveError = 8,            ///< DNS 解释失败
+            
+            NotLoginError = 9,              ///< 未登陆
         };
 
         enum ZEGONetType
@@ -90,6 +114,13 @@ namespace ZEGO
             Generic = 3,    ///< 通常在发布产品中使用
             Debug = 4       ///< 调试阶段使用
         };
+
+		struct WindowsDecs
+		{
+			char szTitle[ZEGO_MAX_COMMON_LEN];
+			char szExe[ZEGO_MAX_COMMON_LEN];
+			void* wnd;
+		};
     }
 }
 

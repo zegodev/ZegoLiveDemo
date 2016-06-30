@@ -23,7 +23,9 @@ namespace ZEGO
 		/// \note jvm 与 ctx 仅用于 android
 		ZEGOAVKIT_API bool InitPlatform(void* jvm, void* ctx);
 
-        
+        /// \brief 设置业务类型
+        /// \param nType 类型，默认为 0
+        ZEGOAVKIT_API bool SetBusinessType(int nType);
         
         /// \brief 设置外部采集模块
         /// \param
@@ -45,7 +47,6 @@ namespace ZEGO
 		* @return       true:调用成功；false:调用失败
 		*/
 		ZEGOAVKIT_API bool InitSDK(unsigned int uiAppID, unsigned char* pBufAppSignature, int nSignatureSize);
-
 
 		/**
 		* 反初始化SDK
@@ -99,8 +100,6 @@ namespace ZEGO
 		/// \return 0 成功，等待异步结果回调，否则失败
 		ZEGOAVKIT_API bool StopPlayStream(const char* pszStreamID);
 
-
-
 		/// \brief 设置视频载体 view，没有考虑多主播展示情况，引擎持有该对象
 		ZEGOAVKIT_API bool SetView(void* pView, unsigned int uiChannelIndex = 0);
 		ZEGOAVKIT_API bool SetPreviewView(void* pView);
@@ -140,7 +139,7 @@ namespace ZEGO
 
 		/// \brief 混音开关
 		/// \param bEable true 启用混音输入；false 关闭混音输入
-		ZEGOAVKIT_API bool EnableAux(bool bEable);
+		ZEGOAVKIT_API bool EnableAux(bool bEnable);
 
         /// \brief 混音输入播放静音开关
         /// \param bMute true: aux 输入播放静音；false: 不静音
@@ -158,6 +157,21 @@ namespace ZEGO
         ZEGOAVKIT_API const char* GetSDKVersion();
         
         ZEGOAVKIT_API void SetUseTestEnv(bool bTestEnv);
+
+		/// \brief void* = HWND
+		ZEGOAVKIT_API bool AddWindowCapture(void* hWnd, bool cursor);
+		ZEGOAVKIT_API void RemoveWindowCapture(void* hWnd);
+		ZEGOAVKIT_API bool RefreshWindowCapture(void* hWnd);
+		/// \brief void* = HDC
+		ZEGOAVKIT_API bool RenderWindowCapture(void* hWnd, void* hTargetDC, int x, int y, unsigned int width, unsigned int height);
+		
+		ZEGOAVKIT_API unsigned char* GetWindowCaptureData(void* hWnd, unsigned int& size, unsigned int& width, unsigned int& height, unsigned int& time);
+
+#if WIN32
+		ZEGOAVKIT_API WindowsDecs* FillWindowList(unsigned int& window_count, bool include_minimized);
+		ZEGOAVKIT_API void FreeWindowList(WindowsDecs* window_list);
+#endif
+
 	}
 }
 
