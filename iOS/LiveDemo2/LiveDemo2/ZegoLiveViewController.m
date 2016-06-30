@@ -10,23 +10,24 @@
 #import "ZegoAVKitManager.h"
 #import "ZegoSettingViewController.h"
 
-#import <CoreTelephony/CTCallCenter.h>
-#import <CoreTelephony/CTCall.h>
+#import <AVFoundation/AVAudioSession.h>
 
-@interface ZegoDemoAnchorCongif : NSObject
+@interface ZegoDemoAnchorCongig : NSObject
 
 @property BOOL enableMic;
+@property BOOL enableCam;
 @property BOOL useFrontCamera;
 @property NSInteger beautifyFeature;
 @property NSInteger filterIndex;
 
 @end
 
-@implementation ZegoDemoAnchorCongif
+@implementation ZegoDemoAnchorCongig
 
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _enableCam = YES;
         _enableMic = YES;
         _useFrontCamera = YES;
         _beautifyFeature = 0;
@@ -46,6 +47,8 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 @interface ZegoLiveViewController () <ZegoLiveApiDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *btnEnableCam;
+
 @property (weak, nonatomic) IBOutlet UIButton *btnFrontCamera;
 @property (weak, nonatomic) IBOutlet UIButton *btnEnableMic;
 @property (weak, nonatomic) IBOutlet UIButton *btnJoin;
@@ -59,6 +62,9 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 @property (weak, nonatomic) IBOutlet UIView *bigView;
 @property (weak, nonatomic) IBOutlet UIView *smallView1;
 @property (weak, nonatomic) IBOutlet UIView *smallView2;
+@property (weak, nonatomic) IBOutlet UIView *smallView3;
+@property (weak, nonatomic) IBOutlet UIView *smallView4;
+@property (weak, nonatomic) IBOutlet UIView *smallView5;
 
 @property (weak, nonatomic) IBOutlet UILabel *liveIDField;
 @property (weak, nonatomic) IBOutlet UIView *anchorToolBox;
@@ -74,13 +80,12 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 @property (readonly) NSArray *beautifyList;
 @property (readonly) NSArray *filterList;
-
-@property (strong) UITapGestureRecognizer *smallView1TapGestureRecognizer;
-@property (strong) UITapGestureRecognizer *smallView2TapGestureRecognizer;
+@property NSMutableArray *playStreamArray;
 
 @property (nonatomic) BOOL isPublishing;
 @property BOOL isPreviewOn;
 @property (nonatomic) BOOL isLogin;
+@property (nonatomic) BOOL publishAfterPlay;
 
 @property NSMutableArray<NSDictionary *> *videoViewInfo;
 
@@ -88,14 +93,16 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 @implementation ZegoLiveViewController
 {
-    ZegoDemoAnchorCongif *_anchorConfig;
-    CTCallCenter *_callCenter;
+    ZegoDemoAnchorCongig *_anchorConfig;
+    NSArray<UIView*> *_smallViewList;
 }
+
+const int kMaxPlayViewCount = 2;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    _anchorConfig = [[ZegoDemoAnchorCongif alloc] init];
+    _anchorConfig = [[ZegoDemoAnchorCongig alloc] init];
     [self setupAnchorToolBox];
     
     _beautifyList = @[
@@ -123,16 +130,11 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
                     @"夜色"
                     ];
     
-    if (!_callCenter) {
-        _callCenter = [[CTCallCenter alloc] init];
-    }
+    _playStreamArray = [[NSMutableArray alloc] init];
+    _publishAfterPlay = NO;
     
-    // 监听电话事件，电话来时关闭直播
-    __weak ZegoLiveViewController *weakSelf = self;
-    _callCenter.callEventHandler = ^(CTCall* call) {
-        ZegoLiveViewController *strongSelf = weakSelf;
-        [strongSelf handlePhoneCallEvent:call];
-    };
+    // 监听电话事件
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSessionWasInterrupted:) name:AVAudioSessionInterruptionNotification object:nil];
     
     [self setupLiveKit];
     
@@ -151,8 +153,24 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     assert(ret);
     NSLog(@"%s, ret: %d", __func__, ret);
     
-    self.smallView1.hidden = YES;
-    self.smallView2.hidden = YES;
+    NSMutableArray<UIView*> *viewList = [NSMutableArray arrayWithCapacity:kMaxPlayViewCount];
+    
+    for (int idx = 0; idx < kMaxPlayViewCount; idx++) {
+        SEL viewGetter = NSSelectorFromString([NSString stringWithFormat:@"smallView%d", idx+1]);
+        UIView *view = (UIView *)[self performSelector:viewGetter withObject:nil];
+        if (view) {
+            [viewList addObject:view];
+        }
+    }
+    
+    _smallViewList = [viewList copy];
+    
+    for (UIView *view in _smallViewList) {
+        view.hidden = YES;
+        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSmallViewTap:)];
+        [view addGestureRecognizer:tapGestureRecognizer];
+    }
+    
     _videoViewInfo = [NSMutableArray array];
     self.anchorToolBox.hidden = YES;
  
@@ -164,36 +182,22 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     
-    if (!self.smallView1TapGestureRecognizer) {
-        self.smallView1TapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSmallViewTap:)];
-    }
-
-    if (!self.smallView2TapGestureRecognizer) {
-        self.smallView2TapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSmallViewTap:)];
-    }
-
-    [self.smallView1 addGestureRecognizer:self.smallView1TapGestureRecognizer];
-    [self.smallView2 addGestureRecognizer:self.smallView2TapGestureRecognizer];
-    
     // 设置当前的手机姿势
-    [self didRotateFromInterfaceOrientation:self.interfaceOrientation];
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    [self setRotateFromInterfaceOrientation:orientation];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    
-    _callCenter = nil;
-    
-    [self.smallView1 removeGestureRecognizer:self.smallView1TapGestureRecognizer];
-    [self.smallView2 removeGestureRecognizer:self.smallView2TapGestureRecognizer];
-    
+- (void)viewWillDisappear:(BOOL)animated{
+    _smallViewList = nil;
+   
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [super viewWillDisappear:animated];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+- (void)setRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    switch (self.interfaceOrientation) {
+    switch (fromInterfaceOrientation) {
         case UIInterfaceOrientationPortrait:
             [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_0];
             break;
@@ -215,19 +219,90 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     }
 }
 
-- (void)handlePhoneCallEvent:(CTCall *)call {
-    NSLog(@"%s, state: %@", __func__, call.callState);
-    // 电话来时，关闭直播
-    [self leave:self];
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+//    NSLog(@"viewWillTransitionToSize");
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        [self setRotateFromInterfaceOrientation:orientation];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        
+    }];
+    
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+//    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    [self setRotateFromInterfaceOrientation:toInterfaceOrientation];
+    
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+
+- (void)audioSessionWasInterrupted:(NSNotification *)notification
+{
+    if ([notification.userInfo count] == 0)
+    {
+        return;
+    }
+    
+    if (AVAudioSessionInterruptionTypeBegan == [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue])
+    {
+        if(self.isPublishing && self.liveType == 2){
+            _publishAfterPlay = YES;
+        }
+        
+        // 停止直播
+        if (self.isPublishing) {
+            self.isPublishing = NO;
+            [getZegoAV_ShareInstance() stopPreview];
+            [getZegoAV_ShareInstance() stopPublishing];
+        }
+        
+        // 停止流的播放
+        if([_playStreamArray count] > 0){
+            for(int i = 0; i < [_playStreamArray count]; i++){
+                [getZegoAV_ShareInstance() stopPlayStream:[_playStreamArray objectAtIndex:i]];
+            }
+        }
+        
+        // 退出房间
+        [getZegoAV_ShareInstance() logoutChannel];
+        
+    }
+    else if(AVAudioSessionInterruptionTypeEnded == [notification.userInfo[AVAudioSessionInterruptionTypeKey] intValue])
+    {
+        // 重新登录
+        ZegoUser *user = [self userInfo];
+        [getZegoAV_ShareInstance() loginChannel:self.liveChannel user:user];
+       
+    }
+}
+
+-(RemoteViewIndex)getRemoteViewIndex:(int)index{
+    RemoteViewIndex remoteViewIndex;
+    switch (index) {
+        case 0:
+            remoteViewIndex = RemoteViewIndex_First;
+            break;
+        case 1:
+            remoteViewIndex = RemoteViewIndex_Second;
+            break;
+        case 2:
+            remoteViewIndex = RemoteViewIndex_Third;
+            break;
+        default:
+            break;
+    }
+    return remoteViewIndex;
 }
 
 -(void)handleSmallViewTap:(UIGestureRecognizer*)gestureRecognizer {
-    UIView *view = nil;
-    if (gestureRecognizer == self.smallView1TapGestureRecognizer) {
-        view = self.smallView1;
-    } else if (gestureRecognizer == self.smallView2TapGestureRecognizer) {
-        view = self.smallView2;
-    }
+    UIView *view = gestureRecognizer.view;
+    if (view == nil)
+        return;
     
     [self switchVideoView:view];
 }
@@ -292,10 +367,11 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 - (void)setupAnchorToolBox {
     
-    UIColor *hightlightedBGColor = [[UIColor alloc] initWithRed:92.0/255 green:211.0/255 blue:255.0/255 alpha:0.5];
+    UIColor *hightlightedBGColor = [UIColor colorWithRed:92.0/255 green:211.0/255 blue:255.0/255 alpha:0.5];
     
     self.btnEnableMic.backgroundColor = _anchorConfig.enableMic ? hightlightedBGColor : [UIColor clearColor];
     self.btnFrontCamera.backgroundColor = _anchorConfig.useFrontCamera ? hightlightedBGColor : [UIColor clearColor];
+    self.btnEnableCam.backgroundColor = !_anchorConfig.enableCam ? hightlightedBGColor : [UIColor clearColor];
 }
 
 
@@ -328,10 +404,10 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     [self setupAnchorToolBox];
 }
 
-- (IBAction)toggleTorch:(id)sender {
-    static bool on = false;
-    [getZegoAV_ShareInstance() enableTorch:on];
-    on = !on;
+- (IBAction)enableCam:(id)sender {
+    _anchorConfig.enableCam = !_anchorConfig.enableCam;
+    [getZegoAV_ShareInstance() enableCamera:_anchorConfig.enableCam];
+    [self setupAnchorToolBox];
 }
 
 - (IBAction)toggleFilterPicker:(id)sender {
@@ -384,7 +460,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     NSMutableString *status = [NSMutableString string];
     for (NSDictionary *viewInfo in self.videoViewInfo) {
         if (status.length > 0) {
-            [status appendString:@"\n"];
+            [status appendString:@"\t"];
         }
 
         if ([viewInfo[kZegoDemoViewTypeKey] isEqual:@(1)]) {
@@ -415,7 +491,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     
     if (self.isPublishing) {
         [getZegoAV_ShareInstance() stopPublishing];
-    } else if (self.videoViewInfo.count < 2) {
+    } else if (self.videoViewInfo.count <= kMaxPlayViewCount) {
         [self enablePreview:YES];
         [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];
         bool ret = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:[self publishStreamID]];
@@ -425,15 +501,14 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     }
 }
 
-- (IBAction)playExtractStream:(id)sender {
-    NSString *streamID = self.playStreamID.text;
+- (void)playStream:(NSString *)streamID{
     if (streamID.length > 0) {
         
         if ([self videoViewInfoOfStream:streamID]) {
             NSLog(@"%s, %@ is being play.", __func__, streamID);
             return;
         }
-
+        
         UIView *videoView = [self availableVideoView];
         if (videoView == nil) {
             return;
@@ -450,7 +525,14 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
             videoView.hidden = NO;
             [self addVideoView:videoView type:2 viewIndex:viewIndex streamID:streamID];
         }
+        
+        [self.view endEditing:YES];
     }
+}
+
+- (IBAction)playExtractStream:(id)sender {
+    NSString *streamID = self.playStreamID.text;
+    [self playStream:streamID];
 }
 
 - (void)handleKeyboardWillShow:(NSNotification *)notification {
@@ -474,6 +556,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self.view endEditing:YES];
+    [self playExtractStream:self.playStreamID.text];
     return YES;
 }
 
@@ -522,9 +605,9 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 #pragma mark - ZegoLiveApiDelegate
 
 /// \brief 发布直播成功
-- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel playUrl:(NSString *)playUrl {
-    NSLog(@"%s, stream: %@, url: %@", __func__, streamID, playUrl);
-    self.liveStatus.text = streamID;
+- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel streamInfo:(NSDictionary *)info {
+    NSLog(@"%s, stream: %@", __func__, info);
+    self.liveStatus.text = [NSString stringWithFormat:@"stream: %@", streamID];
     self.isPublishing = YES;
     
     assert([channel isEqualToString:self.liveChannel]);
@@ -550,7 +633,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 }
 
 /// \brief 发布直播失败
-/// \param err 1 异常结束，2 正常结束
+/// \param err 1 正常结束，非 1 异常结束
 - (void)onPublishStop:(uint32)err stream:(NSString *)streamID channel:(NSString *)channel {
     NSLog(@"%s, stream: %@, err: %u", __func__, streamID, err);
     
@@ -559,6 +642,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     
     self.btnJoin.enabled = YES;
 }
+
 
 /// \brief 获取流信息结果
 /// \param err 0 成功，进一步等待流信息更新，否则出错
@@ -594,11 +678,29 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
                 assert(b);
                 NSLog(@"%s, ret: %d", __func__, ret);
             }
-            self.anchorToolBox.hidden = NO;
         } else if (_liveType == 2) {
-            // wait for play info update
+            // 恢复publish
+            if(self.publishAfterPlay == YES){
+                self.publishAfterPlay = NO;
+                
+                [self enablePreview:YES];
+                [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];
+                bool ret = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:[self publishStreamID]];
+                
+                assert(ret);
+                NSLog(@"%s, ret: %d", __func__, ret);
+            }
+            
         }
-
+        
+        // 恢复播放流
+        if([_playStreamArray count] > 0){
+            for(int i = 0; i < [_playStreamArray count]; i++){
+                [self playStream:[_playStreamArray objectAtIndex:i]];
+            }
+        }
+        
+        
     } else {
         [self.liveIDField setText:[NSString stringWithFormat:@"Login failed: %u!", err]];
     }
@@ -608,6 +710,12 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 /// \param streamID 直播流的唯一标识
 - (void)onPlaySucc:(NSString *)streamID channel:(NSString *)channel {
     NSLog(@"%s, stream: %@", __func__, streamID);
+    
+     //  保存流ID用于恢复播放
+    if(![_playStreamArray containsObject:streamID]){
+        [_playStreamArray addObject:streamID];
+    }
+    
     self.liveStatus.text = [NSString stringWithFormat:@"Play %@ Started.", streamID];
     [self updateLiveStatus];
 }
@@ -687,7 +795,8 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 }
 
 - (void)setupLiveKit {
-    [getZegoAV_ShareInstance() setDelegate:self];
+//    [getZegoAV_ShareInstance() setDelegate:self];
+    getZegoAV_ShareInstance().delegate = self;
 }
 
 
@@ -741,15 +850,19 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 }
 
 - (UIView *)availableVideoView {
-    if (self.videoViewInfo.count > 2) {
+    if (self.videoViewInfo.count > kMaxPlayViewCount) {
         return nil;
     }
     
     bool foundBigView = false;
     bool foundSmallView1 = false;
     bool foundSmallView2 = false;
+    bool foundSmallView3 = false;
+    bool foundSmallView4 = false;
+    bool foundSmallView5 = false;
     
     for (NSDictionary *info in self.videoViewInfo) {
+        
         UIView *view = info[kZegoDemoVideoViewKey];
         if (view == self.bigView) {
             foundBigView = true;
@@ -757,6 +870,12 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
             foundSmallView1 = true;
         } else if (view == self.smallView2) {
             foundSmallView2 = true;
+        } else if (view == self.smallView3) {
+            foundSmallView3 = true;
+        } else if (view == self.smallView4) {
+            foundSmallView4 = true;
+        } else if (view == self.smallView5) {
+            foundSmallView5 = true;
         }
     }
     
@@ -766,6 +885,12 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
         return self.smallView1;
     } else if (!foundSmallView2) {
         return self.smallView2;
+    } else if (!foundSmallView3) {
+        return self.smallView3;
+    } else if (!foundSmallView4) {
+        return self.smallView4;
+    } else if (!foundSmallView5) {
+        return self.smallView5;
     }
     
     assert(false);
@@ -777,15 +902,28 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
     bool foundFirst = false;
     bool foundSecond = false;
     bool foundThird = false;
+    bool foundFourth = false;
+    bool foundFifth = false;
     
     for (NSDictionary *info in self.videoViewInfo) {
-        RemoteViewIndex index = (RemoteViewIndex)[info[kZegoDemoViewIndexKey] integerValue];
+        
+        NSInteger type = [info[kZegoDemoViewTypeKey] integerValue];
+        if (type == 1) {
+            continue;
+        }
+        
+        NSInteger index = (RemoteViewIndex)[info[kZegoDemoViewIndexKey] integerValue];
+        
         if (index == RemoteViewIndex_First) {
             foundFirst = true;
         } else if (index == RemoteViewIndex_Second) {
             foundSecond = true;
         } else if (index == RemoteViewIndex_Third) {
             foundThird = true;
+        } else if (index == 3) {
+            foundFourth = true;
+        } else if (index == 4) {
+            foundFifth = true;
         }
     }
     
@@ -795,6 +933,10 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
         return RemoteViewIndex_Second;
     } else if (!foundThird) {
         return RemoteViewIndex_Third;
+    } else if (!foundFourth) {
+        return 3;
+    } else if (!foundFifth) {
+        return 4;
     }
     
     return -1;
@@ -803,7 +945,7 @@ const NSString *kZegoDemoStreamIDKey  = @"stream_id";
 - (void)addVideoView:(UIView *)view type:(NSInteger)type viewIndex:(NSInteger)idx streamID:(NSString *)streamID {
     assert(view != nil);
     
-    if (!view || self.videoViewInfo.count > 2) {
+    if (!view || self.videoViewInfo.count > kMaxPlayViewCount) {
         return;
     }
     

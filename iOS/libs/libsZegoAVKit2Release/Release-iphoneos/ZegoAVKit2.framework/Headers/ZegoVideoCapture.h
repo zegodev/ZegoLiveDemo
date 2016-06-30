@@ -12,21 +12,21 @@
 
 @protocol ZegoVideoCaptureClientDelegate <NSObject>
 - (void)destroy;
-- (void)onIncomingCapturedData:(CVImageBufferRef)image withPresentationTimeStamp:(CMTime)time;
-- (void)onError:(NSString*)reason;
-- (void)onTakeSnapshot:(CGImageRef)image;
+- (void)onIncomingCapturedData:(nullable CVImageBufferRef)image withPresentationTimeStamp:(CMTime)time;
+- (void)onError:(nullable NSString*)reason;
+- (void)onTakeSnapshot:(nonnull CGImageRef)image;
 @end
 
 @protocol ZegoVideoCaptureDevice <NSObject>
 
-- (void)allocateAndStart:(id<ZegoVideoCaptureClientDelegate>) client;
+- (void)allocateAndStart:(nonnull id<ZegoVideoCaptureClientDelegate>) client;
 - (void)stopAndDeAllocate;
 - (int)startCapture;
 - (int)stopCapture;
 - (int)setFrameRate:(int)framerate;
 - (int)setWidth:(int)width andHeight:(int)height;
 - (int)setFrontCam:(int)bFront;
-- (int)setView:(UIView*)view;
+- (int)setView:(UIView* _Nullable )view;
 - (int)setViewMode:(int)mode;
 - (int)setViewRotation:(int)rotation;
 - (int)setCaptureRotation:(int)rotaion;
@@ -40,8 +40,8 @@
 
 @protocol ZegoVideoCaptureFactory <NSObject>
 
-- (id<ZegoVideoCaptureDevice>)create:(NSString*)deviceId;
-- (void)destroy:(id<ZegoVideoCaptureDevice>)device;
+- (nonnull id<ZegoVideoCaptureDevice>)create:(nonnull NSString*)deviceId;
+- (void)destroy:(nonnull id<ZegoVideoCaptureDevice>)device;
 
 @end
 

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/dimen_80"
+        android:layout_marginTop="@dimen/dimen_55"
         android:background="@android:color/transparent"
         >
         <RadioButton

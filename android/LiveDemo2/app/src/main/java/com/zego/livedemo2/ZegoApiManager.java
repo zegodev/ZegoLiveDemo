@@ -25,18 +25,18 @@ public class ZegoApiManager {
         String userID = PreferenceUtils.getInstance().getUserID();
         String userName = PreferenceUtils.getInstance().getUserName();
 
-        if(TextUtils.isEmpty(userID) || TextUtils.isEmpty(userName)){
+        if (TextUtils.isEmpty(userID) || TextUtils.isEmpty(userName)) {
             // 初始化用户信息
             long ms = System.currentTimeMillis();
             userID = ms + "";
-            userName = "Android-"+ms;
+            userName = "Android-" + ms;
 
             PreferenceUtils.getInstance().setUserID(userID);
             PreferenceUtils.getInstance().setUserName(userName);
         }
 
         // 初始化频道
-        if(TextUtils.isEmpty(PreferenceUtils.getInstance().getChannel())){
+        if (TextUtils.isEmpty(PreferenceUtils.getInstance().getChannel())) {
             PreferenceUtils.getInstance().setChannel(ZegoApplication.sApplicationContext.getString(R.string.defult_channel));
         }
     }
@@ -89,7 +89,7 @@ public class ZegoApiManager {
         return mZegoAVKit;
     }
 
-    public void setZegoConfig(ZegoAvConfig config){
+    public void setZegoConfig(ZegoAvConfig config) {
         mZegoAVKit.setAVConfig(config);
     }
 }

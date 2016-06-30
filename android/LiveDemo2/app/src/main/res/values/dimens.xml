@@ -54,6 +54,7 @@
     <dimen name="dimen_78">78dp</dimen>
     <dimen name="dimen_80">80dp</dimen>
     <dimen name="dimen_85">85dp</dimen>
+    <dimen name="dimen_90">90dp</dimen>
     <dimen name="dimen_94">94dp</dimen>
     <dimen name="dimen_98">98dp</dimen>
     <dimen name="dimen_100">100dp</dimen>
@@ -80,7 +81,7 @@
     <dimen name="action_bar_height">@dimen/dimen_43</dimen>
 
     <!--字体大小-->
-    <dimen name="text_size_1">10sp</dimen>
+    <dimen name="text_size_1">9sp</dimen>
     <dimen name="text_size_2">11.7sp</dimen>
     <dimen name="text_size_3">13.3sp</dimen>
     <dimen name="text_size_4">14.7sp</dimen>
@@ -91,8 +92,8 @@
     <dimen name="round_radius">@dimen/dimen_50</dimen>
     <dimen name="actionbar_height">@dimen/dimen_50</dimen>
 
-    <dimen name="local_view_width">@dimen/dimen_160</dimen>
-    <dimen name="local_view_height">@dimen/dimen_210</dimen>
+    <dimen name="local_view_width">@dimen/dimen_120</dimen>
+    <dimen name="local_view_height">@dimen/dimen_150</dimen>
 
     <dimen name="avatar_width">@dimen/dimen_60</dimen>
     <dimen name="avatar_height">@dimen/dimen_60</dimen>

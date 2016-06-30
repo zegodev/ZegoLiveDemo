@@ -21,6 +21,15 @@
             android:layout_marginBottom="@dimen/dimen_70"/>
 
         <RelativeLayout
+            android:id="@+id/rlyt_small_video_parent3"
+            android:layout_width="@dimen/local_view_width"
+            android:visibility="invisible"
+            android:layout_height="@dimen/local_view_height"
+            android:layout_toLeftOf="@id/rlyt_small_video_parent1"
+            android:layout_alignBottom="@id/rlyt_small_video_parent1"
+            android:layout_marginRight="@dimen/dimen_5"/>
+
+        <RelativeLayout
             android:id="@+id/rlyt_big_video_parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,12 +45,18 @@
             android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/dimen_70"
             />
+
+        <RelativeLayout
+            android:id="@+id/rlyt_small_video_parent4"
+            android:layout_width="@dimen/local_view_width"
+            android:visibility="invisible"
+            android:layout_height="@dimen/local_view_height"
+            android:layout_toLeftOf="@id/rlyt_small_video_parent2"
+            android:layout_alignBottom="@id/rlyt_small_video_parent2"
+            android:layout_marginRight="@dimen/dimen_5"/>
     </RelativeLayout>
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -109,101 +124,13 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/rlyt_info"
+        <TextView
+            android:id="@+id/tv_play_info"
+            android:textColor="@color/text_white"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_70"
             android:layout_alignParentBottom="true"
-            android:background="@android:color/transparent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/llyt_publish_state"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="PublState:null"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_white"
-                    android:textSize="@dimen/text_size_2"
-
-                    />
-
-                <TextView
-                    android:text="PublStream:null"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_white"
-                    android:textSize="@dimen/text_size_2"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llyt_play_sate1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="PlayState1:null"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_white"
-                    android:textSize="@dimen/text_size_2"/>
-
-                <TextView
-                    android:text="PlayStream1:null"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_white"
-                    android:textSize="@dimen/text_size_2"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llyt_play_sate2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-                    android:text="PlayState2:null"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_white"
-                    android:textSize="@dimen/text_size_2"/>
-
-                <TextView
-                    android:text="PlayStream2:null"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/text_white"
-                    android:textSize="@dimen/text_size_2"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
+            android:background="@android:color/transparent"/>
 
 
     </RelativeLayout>

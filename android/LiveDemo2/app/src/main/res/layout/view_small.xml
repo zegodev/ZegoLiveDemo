@@ -14,7 +14,7 @@
         android:orientation="horizontal"
         android:background="@android:color/transparent"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/dimen_80"
+        android:layout_marginTop="@dimen/dimen_55"
         >
         <RadioButton
             android:layout_width="wrap_content"

@@ -19,15 +19,10 @@
 #endif
 
 ZEGO_EXTERN NSString *const kZegoStreamIDKey;           ///< 流ID，值为 NSString
-ZEGO_EXTERN NSString *const kZegoPublishIDKey;
-ZEGO_EXTERN NSString *const kZegoPublishNameKey;
-ZEGO_EXTERN NSString *const kZegoStreamTitleKey;
-
-ZEGO_EXTERN NSString *const kZegoOnlineNumsKey;         ///< 在线人数
-ZEGO_EXTERN NSString *const kZegoOnlineCountKey;        ///< 历史观看人数
-
-ZEGO_EXTERN NSString *const kZegoPublishStreamIDKey;    ///< 主播流ID，值为 NSString
-ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观看 url，值为 NSString
+ZEGO_EXTERN NSString *const kZegoMixStreamIDKey;        ///< 混流ID，值为 NSString
+ZEGO_EXTERN NSString *const kZegoRtmpUrlListKey;        ///< rtmp 播放 url 列表，值为 NSArray<NSString *>
+ZEGO_EXTERN NSString *const kZegoHlsUrlListKey;         ///< hls 播放 url 列表，值为 NSArray<NSString *>
+ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列表，值为 NSArray<NSString *>
 
 
 @protocol ZegoVideoCaptureFactory;
@@ -44,7 +39,7 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \param streamID 发布流ID
 /// \param channel 所在 channel
 /// \param playUrl 主播流的播放 url
-- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel playUrl:(NSString *)playUrl;
+- (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel streamInfo:(NSDictionary *)info;
 
 /// \brief 发布直播失败
 /// \param err 1 正常结束, 非 1 异常结束
@@ -88,6 +83,11 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// 设置日志记录等级
 /// \param logLevel 4 - debug, 3 - generic
 + (void)setLogLevel:(int)logLevel;
+
+/// \brief 设置业务类型
+/// \param type 业务类型，默认为 0
+/// \note 确保在创建接口对象前调用
++ (void)setBusinessType:(int)type;
 
 /// \brief 初始化SDK
 /// \param appID Zego派发的数字ID，各个开发者的唯一标识
@@ -199,29 +199,29 @@ ZEGO_EXTERN NSString *const kZegoPublishStreamURLKey;   ///< 当前直播流观�
 /// \brief 登录频道
 /// \param channel 频道 ID
 /// \param user 用户
-/// \return YES 成功，等待异步回调，否则失败
+/// \return true 成功，等待异步回调，否则失败
 - (bool)loginChannel:(NSString *)channel user:(ZegoUser *)user;
 
 /// \brief 作为主播开始直播
 /// \param user 发布用户
 /// \param streamID 流 ID
 /// \param liveChannel 频道 ID
-/// \return YES 成功，等待异步结果回调，否则失败
+/// \return true 成功，等待异步结果回调，否则失败
 - (bool)startPublishingWithTitle:(NSString *)title streamID:(NSString *)streamID;
 
 /// \brief 停止主播
-/// \return YES 成功，否则失败
+/// \return true 成功，否则失败
 - (bool)stopPublishing;
 
 /// \brief 观看直播流
 /// \param streamID 要观看的流 ID
 /// \param index 视频播放的 view 编号
-/// \return YES 成功，等待异步回调，否则失败
+/// \return true 成功，等待异步回调，否则失败
 - (bool)startPlayStream:(NSString *)streamID viewIndex:(RemoteViewIndex)index;
 
 /// \brief 停止观看直播
 /// \param streamID 要停止的流 ID
-/// \return YES 成功，等待异步回调，否则失败
+/// \return true 成功，等待异步回调，否则失败
 - (bool)stopPlayStream:(NSString *)streamID;
 
 /// \brief 退出当前频道
