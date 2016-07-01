@@ -434,6 +434,18 @@ void CMainDialog::OnPublishStateUpdate(const char* pszUserID, const char* pszCha
 			url = oStreamInfo.arrRtmpURLs[0];
 		}
 
+		if (oStreamInfo.uiHlsURLCount > 0)
+		{
+			url += "\r\n";
+			url += oStreamInfo.arrHlsURLs[0];
+		}
+
+		if (oStreamInfo.uiFlvURLCount > 0)
+		{
+			url += "\r\n";
+			url += oStreamInfo.arrFlvRULs[0];
+		}
+
 		auto* pParam = new std::tuple<std::string, ZegoAVAPIState>(url, eState);
 		PostMessage(WM_ZEGOLIVE_MESSAGE, (WPARAM)ZEGOLIVE_MESSAGE_TYPE_OnPublishStateUpdate, (LPARAM)pParam);
 	}
