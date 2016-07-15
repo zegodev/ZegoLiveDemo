@@ -361,8 +361,21 @@ const int kMaxPlayViewCount = 2;
     firstViewInfo[kZegoDemoVideoViewKey] = secondView;
     secondViewInfo[kZegoDemoVideoViewKey] = firstView;
     
-    [self.videoViewInfo addObject:firstViewInfo];
-    [self.videoViewInfo addObject:secondViewInfo];
+    BOOL foundEmtpyView = NO;
+    
+    if (firstViewInfo) {
+        [self.videoViewInfo addObject:firstViewInfo];
+        foundEmtpyView = YES;
+    }
+    
+    if (secondViewInfo) {
+        [self.videoViewInfo addObject:secondViewInfo];
+        foundEmtpyView = YES;
+    }
+    
+    if (foundEmtpyView) {
+        smallView.hidden = YES;
+    }
 }
 
 - (void)setupAnchorToolBox {
@@ -408,6 +421,8 @@ const int kMaxPlayViewCount = 2;
     _anchorConfig.enableCam = !_anchorConfig.enableCam;
     [getZegoAV_ShareInstance() enableCamera:_anchorConfig.enableCam];
     [self setupAnchorToolBox];
+    
+    [getZegoAV_ShareInstance() enableTorch:_anchorConfig.enableCam];
 }
 
 - (IBAction)toggleFilterPicker:(id)sender {
@@ -502,10 +517,19 @@ const int kMaxPlayViewCount = 2;
 }
 
 - (void)playStream:(NSString *)streamID{
+    
+    NSString *realStreamID = nil;
+    NSRange r = [streamID rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"?"]];
+    
+    if (r.location != NSNotFound) {
+        realStreamID = [streamID substringToIndex:r.location];
+    } else {
+        realStreamID = streamID;
+    }
+    
     if (streamID.length > 0) {
-        
-        if ([self videoViewInfoOfStream:streamID]) {
-            NSLog(@"%s, %@ is being play.", __func__, streamID);
+        if ([self videoViewInfoOfStream:realStreamID]) {
+            NSLog(@"%s, %@ is being play.", __func__, realStreamID);
             return;
         }
         
@@ -523,7 +547,7 @@ const int kMaxPlayViewCount = 2;
         
         if (ret) {
             videoView.hidden = NO;
-            [self addVideoView:videoView type:2 viewIndex:viewIndex streamID:streamID];
+            [self addVideoView:videoView type:2 viewIndex:viewIndex streamID:realStreamID];
         }
         
         [self.view endEditing:YES];
@@ -656,7 +680,13 @@ const int kMaxPlayViewCount = 2;
             if (!self.isPublishing) {
                 ZegoLiveApi *api = getZegoAV_ShareInstance();
                 
-                int ret = [api setAVConfig:[ZegoSettings sharedInstance].currentConfig];
+                ZegoAVConfig *config = [ZegoSettings sharedInstance].currentConfig;
+//                CGSize size = CGSizeZero;
+//                size.height = 360;
+//                size.width = 640;
+//                [config setCustomVideoResolution:size];
+                
+                int ret = [api setAVConfig:config];
                 assert(ret == 0);
                 
                 bool b = [api setFrontCam:_anchorConfig.useFrontCamera];
@@ -744,6 +774,62 @@ const int kMaxPlayViewCount = 2;
     }
     
     [self updateLiveStatus];
+}
+
+/// \brief 发布质量更新
+/// \param quality: 0 ~ 3 分别对应优良中差
+/// \param streamID 发布流ID
+- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID {
+    UIColor *c = self.anchorToolBox.backgroundColor;
+    
+    switch (quality) {
+        case 0:
+            c = [UIColor greenColor];
+            break;
+        case 1:
+            c = [UIColor blueColor];
+            break;
+        case 2:
+            c = [UIColor yellowColor];
+            break;
+        case 3:
+            c = [UIColor redColor];
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.anchorToolBox.backgroundColor = c;
+    [self.view setNeedsDisplay];
+}
+
+/// \brief 观看质量更新
+/// \param quality: 0 ~ 3 分别对应优良中差
+/// \param streamID 观看流ID
+- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID {
+    UIColor *c = self.anchorToolBox.backgroundColor;
+    
+    switch (quality) {
+        case 0:
+            c = [UIColor greenColor];
+            break;
+        case 1:
+            c = [UIColor blueColor];
+            break;
+        case 2:
+            c = [UIColor yellowColor];
+            break;
+        case 3:
+            c = [UIColor redColor];
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.audienceBox.backgroundColor = c;
+    [self.view setNeedsDisplay];
 }
 
 /// \brief 视频的宽度和高度变化通知,startPlay后，如果视频宽度或者高度发生变化(首次的值也会)，则收到该通知

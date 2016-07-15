@@ -14,7 +14,7 @@
 		</data>
 		<key>Headers/ZegoLiveApi.h</key>
 		<data>
-		dDcEeX1DKwzwLaYga0/Vs2os9X8=
+		dQmO5Hh1Vdoa8YIOzAZC2HMCJi4=
 		</data>
 		<key>Headers/ZegoUser.h</key>
 		<data>
@@ -26,7 +26,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		3YimcTQb0lYxZDp5Bwh3ZM/yyTs=
+		a4PacunoRr3qjNqHBrozbcITdw8=
+		</data>
+		<key>ZegoAVKit2-Info.plist</key>
+		<data>
+		Tsk+WjkENvJRa9IU8nhdgNDyJcY=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -57,11 +61,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			dDcEeX1DKwzwLaYga0/Vs2os9X8=
+			dQmO5Hh1Vdoa8YIOzAZC2HMCJi4=
 			</data>
 			<key>hash2</key>
 			<data>
-			k9L21eWcxqeLzPhQLkDo4vDfIXQeACckxpD5PAP65BU=
+			dY3sFBHjifN+WDVrC1pemkO7X28Qbg58/BiMw7hBiU8=
 			</data>
 		</dict>
 		<key>Headers/ZegoUser.h</key>
@@ -84,6 +88,17 @@
 			<key>hash2</key>
 			<data>
 			tNDZ6sO04aqCzhRLQY7vctGsc+HbYwIelAHk8NfyhTs=
+			</data>
+		</dict>
+		<key>ZegoAVKit2-Info.plist</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Tsk+WjkENvJRa9IU8nhdgNDyJcY=
+			</data>
+			<key>hash2</key>
+			<data>
+			xs75df/vBqTWA3uwYFK4pMZ6xYzzkaIFR9QuCIPH8AY=
 			</data>
 		</dict>
 	</dict>

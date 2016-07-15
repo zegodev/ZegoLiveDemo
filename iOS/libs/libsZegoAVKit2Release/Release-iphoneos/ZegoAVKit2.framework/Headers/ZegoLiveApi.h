@@ -54,6 +54,16 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 /// \param streamID 直播流的唯一标识
 - (void)onPlayStop:(uint32)err streamID:(NSString *)streamID channel:(NSString *)channel;
 
+/// \brief 发布质量更新
+/// \param quality: 0 ~ 3 分别对应优良中差
+/// \param streamID 发布流ID
+- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID;
+
+/// \brief 观看质量更新
+/// \param quality: 0 ~ 3 分别对应优良中差
+/// \param streamID 观看流ID
+- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID;
+
 /// \brief 视频的宽度和高度变化通知,startPlay后，如果视频宽度或者高度发生变化(首次的值也会)，则收到该通知
 /// \param streamID 流的唯一标识
 /// \param width 宽
