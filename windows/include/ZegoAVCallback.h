@@ -23,6 +23,9 @@ namespace ZEGO
             virtual void OnPublishStateUpdate(const char* pszUserID, const char* pszChannelID, ZegoAVAPIState eState,
 				const char* pszStreamID, const ZegoStreamInfo& oStreamInfo) = 0;
             virtual void OnPlayStateUpdate(const char* pszUserID, const char* pszChannelID, ZegoAVAPIState eState, const char* pszStreamID) = 0;
+            
+            virtual void OnPlayQualityUpdate(const char* pszStreamID, int quality) = 0;
+            virtual void OnPublishQulityUpdate(const char* pszStreamID, int quality) = 0;
 
             virtual void OnDisconnected(const char* pszUserID, const char* pszChannelID, unsigned int uiErr) = 0;
             virtual void OnReconnected(const char* pszUserID, const char* pszChannelID) = 0;

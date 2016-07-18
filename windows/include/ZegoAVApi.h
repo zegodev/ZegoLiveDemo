@@ -84,7 +84,7 @@ namespace ZEGO
 		/// \param userID 用户 ID，每个用户唯一
 		/// \param userName 用户名
 		/// \param liveID 频道 ID
-		/// \return 0 成功，等待异步结果回调，否则失败
+		/// \return true 成功，等待异步结果回调，否则失败
 		ZEGOAVKIT_API bool LoginChannel(const char* pszUserID, const char* pszUserName, const char* pszLiveID, int nNetType);
 
 		ZEGOAVKIT_API bool LogoutChannel();
@@ -92,12 +92,12 @@ namespace ZEGO
 		/// \brief 播放
 		/// \param streamID 流 ID
 		/// \param chn 播放通道
-		/// \return 0 成功，等待异步结果回调，否则失败
+		/// \return true 成功，等待异步结果回调，否则失败
 		ZEGOAVKIT_API bool PlayStream(const char* pszStreamID, unsigned int uiChannelID);
 
 		/// \brief 停止播放
 		/// \param streamID 流 ID
-		/// \return 0 成功，等待异步结果回调，否则失败
+		/// \return true 成功，等待异步结果回调，否则失败
 		ZEGOAVKIT_API bool StopPlayStream(const char* pszStreamID);
 
 		/// \brief 设置视频载体 view，没有考虑多主播展示情况，引擎持有该对象
