@@ -57,6 +57,9 @@ public:
 	/// IZegoAuxCallback
 	virtual void OnAuxCallback(unsigned char *pData, int *pDataLen, int *pSampleRate, int *pNumChannels);
 
+	virtual void OnPlayQualityUpdate(const char* pszStreamID, int quality) {}
+	virtual void OnPublishQulityUpdate(const char* pszStreamID, int quality) {}
+
 protected:
 	void LoadAuxData();
 	void InitSdk();
