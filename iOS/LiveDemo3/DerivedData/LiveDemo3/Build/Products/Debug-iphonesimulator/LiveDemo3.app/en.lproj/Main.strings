@@ -1,0 +1,156 @@
+
+/* Class = "UILabel"; text = "Label2"; ObjectID = "0Hn-F6-6f0"; */
+"0Hn-F6-6f0.text" = "Label2";
+
+/* Class = "UITabBarItem"; title = "Live List"; ObjectID = "2FN-G2-ncA"; */
+"2FN-G2-ncA.title" = "Live List";
+
+/* Class = "UITextField"; placeholder = "Describe your live video..."; ObjectID = "2zn-ty-plE"; */
+"2zn-ty-plE.placeholder" = "Describe your live video...";
+
+/* Class = "UILabel"; text = "Hardware Acceleration"; ObjectID = "4Ri-Js-k0Z"; */
+"4Ri-Js-k0Z.text" = "Hardware Acceleration";
+
+/* Class = "UILabel"; text = "Advanced"; ObjectID = "4Sg-tZ-uJT"; */
+"4Sg-tZ-uJT.text" = "Advanced";
+
+/* Class = "UIButton"; normalTitle = "静音"; ObjectID = "4jW-xr-IGD"; */
+"4jW-xr-IGD.normalTitle" = "Muted";
+
+/* Class = "UILabel"; text = "Flashlight"; ObjectID = "7Ms-VQ-5YF"; */
+"7Ms-VQ-5YF.text" = "Flashlight";
+
+/* Class = "UIButton"; normalTitle = "Settings"; ObjectID = "7fB-Q3-gmf"; */
+"7fB-Q3-gmf.normalTitle" = "Settings";
+
+/* Class = "UILabel"; text = "User ID"; ObjectID = "7ye-0B-hMK"; */
+"7ye-0B-hMK.text" = "User ID";
+
+/* Class = "UIButton"; normalTitle = "Close"; ObjectID = "7zZ-Oy-hnb"; */
+"7zZ-Oy-hnb.normalTitle" = "Close";
+
+/* Class = "UINavigationItem"; title = "Log"; ObjectID = "8Fk-br-2oe"; */
+"8Fk-br-2oe.title" = "Log";
+
+/* Class = "UILabel"; text = "APP Sign"; ObjectID = "8N8-cz-szf"; */
+"8N8-cz-szf.text" = "APP Sign";
+
+/* Class = "UITableViewSection"; headerTitle = "ACCOUNT"; ObjectID = "AbT-oW-RiA"; */
+"AbT-oW-RiA.headerTitle" = "ACCOUNT";
+
+/* Class = "UILabel"; text = "User Name"; ObjectID = "All-0X-hsS"; */
+"All-0X-hsS.text" = "User Name";
+
+/* Class = "UILabel"; text = "Front Camera"; ObjectID = "B3b-QL-Xbr"; */
+"B3b-QL-Xbr.text" = "Front Camera";
+
+/* Class = "UITextField"; placeholder = "User Name"; ObjectID = "BBv-Qo-9gN"; */
+"BBv-Qo-9gN.placeholder" = "User Name";
+
+/* Class = "UILabel"; text = "Frame rate"; ObjectID = "Bf5-3c-Zfw"; */
+"Bf5-3c-Zfw.text" = "Frame rate";
+
+/* Class = "UILabel"; text = "title"; ObjectID = "CcK-dC-NJ2"; */
+"CcK-dC-NJ2.text" = "title";
+
+/* Class = "UINavigationItem"; title = "ZEGO"; ObjectID = "EOU-3F-kL2"; */
+"EOU-3F-kL2.title" = "ZEGO";
+
+/* Class = "UIButton"; normalTitle = "Join"; ObjectID = "EkK-yU-Yba"; */
+"EkK-yU-Yba.normalTitle" = "Join";
+
+/* Class = "UILabel"; text = "APP ID"; ObjectID = "G2a-pj-qyz"; */
+"G2a-pj-qyz.text" = "APP ID";
+
+/* Class = "UILabel"; text = "Resolution"; ObjectID = "Hvu-Zy-5DA"; */
+"Hvu-Zy-5DA.text" = "Resolution";
+
+/* Class = "UILabel"; text = "Quality Options"; ObjectID = "IOQ-HA-FF9"; */
+"IOQ-HA-FF9.text" = "Quality Options";
+
+/* Class = "UITableViewSection"; headerTitle = "VIDEO"; ObjectID = "Itg-Ux-4c2"; */
+"Itg-Ux-4c2.headerTitle" = "VIDEO";
+
+/* Class = "UIButton"; normalTitle = "Go Live!"; ObjectID = "Jgp-sm-xjN"; */
+"Jgp-sm-xjN.normalTitle" = "Go Live!";
+
+/* Class = "UILabel"; text = "Label1"; ObjectID = "K2T-2n-OEc"; */
+"K2T-2n-OEc.text" = "Label1";
+
+/* Class = "UINavigationItem"; title = "ZEGO"; ObjectID = "O4O-FK-8J4"; */
+"O4O-FK-8J4.title" = "ZEGO";
+
+/* Class = "UITextField"; placeholder = "User ID"; ObjectID = "PFD-Zo-zF5"; */
+"PFD-Zo-zF5.placeholder" = "User ID";
+
+/* Class = "UITableViewSection"; headerTitle = "VERSION"; ObjectID = "Qmu-yC-eHi"; */
+"Qmu-yC-eHi.headerTitle" = "VERSION";
+
+/* Class = "UIBarButtonItem"; title = "OK"; ObjectID = "Ruk-WV-SMh"; */
+"Ruk-WV-SMh.title" = "OK";
+
+/* Class = "UIButton"; normalTitle = "Log"; ObjectID = "ZPY-ks-mH7"; */
+"ZPY-ks-mH7.normalTitle" = "Log";
+
+/* Class = "UITableViewSection"; headerTitle = "ADVANCED"; ObjectID = "cXf-zk-UaB"; */
+"cXf-zk-UaB.headerTitle" = "ADVANCED";
+
+/* Class = "UILabel"; text = "Upload Log"; ObjectID = "gJG-84-fEo"; */
+"gJG-84-fEo.text" = "Upload Log";
+
+/* Class = "UINavigationItem"; title = "ZEGO"; ObjectID = "hac-3R-Qpj"; */
+"hac-3R-Qpj.title" = "ZEGO";
+
+/* Class = "UILabel"; text = "Label3"; ObjectID = "iJc-0e-9Vh"; */
+"iJc-0e-9Vh.text" = "Label3";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "lWC-Ck-7ns"; */
+"lWC-Ck-7ns.text" = "Label";
+
+/* Class = "UILabel"; text = "V1.0.0"; ObjectID = "lyq-mw-KrZ"; */
+"lyq-mw-KrZ.text" = "V1.0.0";
+
+/* Class = "UITableViewSection"; headerTitle = "ADVANCED"; ObjectID = "n4T-Ac-YsO"; */
+"n4T-Ac-YsO.headerTitle" = "ADVANCED";
+
+/* Class = "UIButton"; normalTitle = "Muted"; ObjectID = "nOB-ZH-Wpq"; */
+"nOB-ZH-Wpq.normalTitle" = "Muted";
+
+/* Class = "UIButton"; normalTitle = "Log"; ObjectID = "ogL-0b-VpG"; */
+"ogL-0b-VpG.normalTitle" = "Log";
+
+/* Class = "UIButton"; normalTitle = "Stop"; ObjectID = "pRg-Vy-4cb"; */
+"pRg-Vy-4cb.normalTitle" = "Stop";
+
+/* Class = "UITableViewSection"; headerTitle = "ABOUT"; ObjectID = "ppJ-9M-v1N"; */
+"ppJ-9M-v1N.headerTitle" = "ABOUT";
+
+/* Class = "UITabBarItem"; title = "Publish"; ObjectID = "q6W-xW-o6w"; */
+"q6W-xW-o6w.title" = "Publish";
+
+/* Class = "UILabel"; text = "Test Environment"; ObjectID = "rx3-lY-NSP"; */
+"rx3-lY-NSP.text" = "Test Environment";
+
+/* Class = "UILabel"; text = "Rate"; ObjectID = "sWm-gM-66A"; */
+"sWm-gM-66A.text" = "Rate";
+
+/* Class = "UIButton"; normalTitle = "Settings"; ObjectID = "t5W-2v-nh7"; */
+"t5W-2v-nh7.normalTitle" = "Settings";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "uaH-fg-qTt"; */
+"uaH-fg-qTt.text" = "About";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "vKm-hk-qrv"; */
+"vKm-hk-qrv.text" = "Label";
+
+/* Class = "UILabel"; text = "2 People are Broadcasting"; ObjectID = "vxu-tg-nSl"; */
+"vxu-tg-nSl.text" = "2 People are Broadcasting";
+
+/* Class = "UIBarButtonItem"; title = "About"; ObjectID = "w3Q-J6-Gdt"; */
+"w3Q-J6-Gdt.title" = "About";
+
+/* Class = "UIButton"; normalTitle = "Close"; ObjectID = "x0M-vo-9Bb"; */
+"x0M-vo-9Bb.normalTitle" = "Close";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "yMN-Xc-Jes"; */
+"yMN-Xc-Jes.title" = "Settings";

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/main_content"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/rlytVideoGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_black"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rlyt_small_video_parent1"
+                android:layout_width="@dimen/local_view_width"
+                android:visibility="invisible"
+                android:layout_height="@dimen/local_view_height"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_10"/>
+
+            <RelativeLayout
+                android:id="@+id/rlyt_small_video_parent3"
+                android:layout_width="@dimen/local_view_width"
+                android:visibility="invisible"
+                android:layout_height="@dimen/local_view_height"
+                android:layout_toLeftOf="@id/rlyt_small_video_parent1"
+                android:layout_alignBottom="@id/rlyt_small_video_parent1"
+                android:layout_marginRight="@dimen/dimen_5"/>
+
+            <RelativeLayout
+                android:id="@+id/rlyt_big_video_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+
+            <RelativeLayout
+                android:id="@+id/rlyt_small_video_parent2"
+                android:layout_width="@dimen/local_view_width"
+                android:layout_height="@dimen/local_view_height"
+                android:visibility="invisible"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_10"
+                />
+
+            <RelativeLayout
+                android:id="@+id/rlyt_small_video_parent4"
+                android:layout_width="@dimen/local_view_width"
+                android:visibility="invisible"
+                android:layout_height="@dimen/local_view_height"
+                android:layout_toLeftOf="@id/rlyt_small_video_parent2"
+                android:layout_alignBottom="@id/rlyt_small_video_parent2"
+                android:layout_marginRight="@dimen/dimen_5"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50"
+                android:background="@android:color/transparent"
+                android:layout_marginLeft="@dimen/dimen_30"
+                android:layout_marginRight="@dimen/dimen_30">
+
+
+                <TextView
+                    android:id="@+id/tv_log_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="日志"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_5"
+                    android:textColor="@color/sl_btn"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_publish_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="直播设置"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_5"
+                    android:textColor="@color/sl_btn"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_publish_control"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_5"
+                    android:textColor="@color/sl_btn"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/tv_close"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="关闭"
+                    android:gravity="center"
+                    android:textSize="@dimen/text_size_5"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <com.zego.livedemo3.widgets.PublishSettingsPannel
+        android:id="@+id/publishSettingsPannel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        app:behavior_peekHeight="1dp"
+        app:behavior_hideable="true"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        android:background="#60ffffff"
+        >
+
+    </com.zego.livedemo3.widgets.PublishSettingsPannel>
+
+</android.support.design.widget.CoordinatorLayout>
+
+

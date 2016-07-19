@@ -1,0 +1,938 @@
+[
+    {
+        "outputFile": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/values-pl/values-pl.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 105,
+                    "endColumn": 115,
+                    "endOffset": 216
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 115,
+                        "endOffset": 166
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 221,
+                    "endColumn": 107,
+                    "endOffset": 324
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 171,
+                        "endColumn": 107,
+                        "endOffset": 274
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 329,
+                    "endColumn": 122,
+                    "endOffset": 447
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 279,
+                        "endColumn": 122,
+                        "endOffset": 397
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 452,
+                    "endColumn": 101,
+                    "endOffset": 549
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 402,
+                        "endColumn": 101,
+                        "endOffset": 499
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 554,
+                    "endColumn": 107,
+                    "endOffset": 657
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 504,
+                        "endColumn": 107,
+                        "endOffset": 607
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 662,
+                    "endColumn": 85,
+                    "endOffset": 743
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 612,
+                        "endColumn": 85,
+                        "endOffset": 693
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 748,
+                    "endColumn": 108,
+                    "endOffset": 852
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 698,
+                        "endColumn": 108,
+                        "endOffset": 802
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 9,
+                    "startColumn": 4,
+                    "startOffset": 857,
+                    "endColumn": 118,
+                    "endOffset": 971
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 807,
+                        "endColumn": 118,
+                        "endOffset": 921
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 10,
+                    "startColumn": 4,
+                    "startOffset": 976,
+                    "endColumn": 77,
+                    "endOffset": 1049
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 926,
+                        "endColumn": 77,
+                        "endOffset": 999
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 11,
+                    "startColumn": 4,
+                    "startOffset": 1054,
+                    "endColumn": 76,
+                    "endOffset": 1126
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1004,
+                        "endColumn": 76,
+                        "endOffset": 1076
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 12,
+                    "startColumn": 4,
+                    "startOffset": 1131,
+                    "endColumn": 81,
+                    "endOffset": 1208
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1081,
+                        "endColumn": 81,
+                        "endOffset": 1158
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 13,
+                    "startColumn": 4,
+                    "startOffset": 1213,
+                    "endColumn": 108,
+                    "endOffset": 1317
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1163,
+                        "endColumn": 108,
+                        "endOffset": 1267
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 14,
+                    "startColumn": 4,
+                    "startOffset": 1322,
+                    "endColumn": 108,
+                    "endOffset": 1426
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1272,
+                        "endColumn": 108,
+                        "endOffset": 1376
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 15,
+                    "startColumn": 4,
+                    "startOffset": 1431,
+                    "endColumn": 98,
+                    "endOffset": 1525
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 1381,
+                        "endColumn": 98,
+                        "endOffset": 1475
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 16,
+                    "startColumn": 4,
+                    "startOffset": 1530,
+                    "endColumn": 108,
+                    "endOffset": 1634
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 1480,
+                        "endColumn": 108,
+                        "endOffset": 1584
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 17,
+                    "startColumn": 4,
+                    "startOffset": 1639,
+                    "endColumn": 110,
+                    "endOffset": 1745
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 1589,
+                        "endColumn": 110,
+                        "endOffset": 1695
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 18,
+                    "startColumn": 4,
+                    "startOffset": 1750,
+                    "endColumn": 107,
+                    "endOffset": 1853
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 1700,
+                        "endColumn": 107,
+                        "endOffset": 1803
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 19,
+                    "startColumn": 4,
+                    "startOffset": 1858,
+                    "endColumn": 122,
+                    "endOffset": 1976
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 1808,
+                        "endColumn": 122,
+                        "endOffset": 1926
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 20,
+                    "startColumn": 4,
+                    "startOffset": 1981,
+                    "endColumn": 95,
+                    "endOffset": 2072
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 1931,
+                        "endColumn": 95,
+                        "endOffset": 2022
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 21,
+                    "startColumn": 4,
+                    "startOffset": 2077,
+                    "endColumn": 276,
+                    "endOffset": 2349
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 24,
+                        "startColumn": 4,
+                        "startOffset": 3538,
+                        "endColumn": 280,
+                        "endOffset": 3814
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 22,
+                    "startColumn": 4,
+                    "startOffset": 2354,
+                    "endColumn": 124,
+                    "endOffset": 2474
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 10,
+                        "startColumn": 4,
+                        "startOffset": 1340,
+                        "endColumn": 124,
+                        "endOffset": 1460
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 23,
+                    "startColumn": 4,
+                    "startOffset": 2479,
+                    "endColumn": 199,
+                    "endOffset": 2674
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 9,
+                        "startColumn": 4,
+                        "startOffset": 1136,
+                        "endColumn": 203,
+                        "endOffset": 1335
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 24,
+                    "startColumn": 4,
+                    "startOffset": 2679,
+                    "endColumn": 123,
+                    "endOffset": 2798
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 1012,
+                        "endColumn": 123,
+                        "endOffset": 1131
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 25,
+                    "startColumn": 4,
+                    "startOffset": 2803,
+                    "endColumn": 127,
+                    "endOffset": 2926
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 884,
+                        "endColumn": 127,
+                        "endOffset": 1007
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 26,
+                    "startColumn": 4,
+                    "startOffset": 2931,
+                    "endColumn": 224,
+                    "endOffset": 3151
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 426,
+                        "endColumn": 228,
+                        "endOffset": 650
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 27,
+                    "startColumn": 4,
+                    "startOffset": 3156,
+                    "endColumn": 224,
+                    "endOffset": 3376
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 655,
+                        "endColumn": 228,
+                        "endOffset": 879
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 28,
+                    "startColumn": 4,
+                    "startOffset": 3381,
+                    "endColumn": 126,
+                    "endOffset": 3503
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 299,
+                        "endColumn": 126,
+                        "endOffset": 421
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 29,
+                    "startColumn": 4,
+                    "startOffset": 3508,
+                    "endColumn": 164,
+                    "endOffset": 3668
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 19,
+                        "startColumn": 4,
+                        "startOffset": 2768,
+                        "endColumn": 164,
+                        "endOffset": 2928
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 30,
+                    "startColumn": 4,
+                    "startOffset": 3673,
+                    "endColumn": 124,
+                    "endOffset": 3793
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 18,
+                        "startColumn": 4,
+                        "startOffset": 2643,
+                        "endColumn": 124,
+                        "endOffset": 2763
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 31,
+                    "startColumn": 4,
+                    "startOffset": 3798,
+                    "endColumn": 168,
+                    "endOffset": 3962
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 17,
+                        "startColumn": 4,
+                        "startOffset": 2474,
+                        "endColumn": 168,
+                        "endOffset": 2638
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 32,
+                    "startColumn": 4,
+                    "startOffset": 3967,
+                    "endColumn": 116,
+                    "endOffset": 4079
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 16,
+                        "startColumn": 4,
+                        "startOffset": 2357,
+                        "endColumn": 116,
+                        "endOffset": 2469
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 33,
+                    "startColumn": 4,
+                    "startOffset": 4084,
+                    "endColumn": 128,
+                    "endOffset": 4208
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 170,
+                        "endColumn": 128,
+                        "endOffset": 294
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 34,
+                    "startColumn": 4,
+                    "startOffset": 4213,
+                    "endColumn": 178,
+                    "endOffset": 4387
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 28,
+                        "startColumn": 4,
+                        "startOffset": 4230,
+                        "endColumn": 178,
+                        "endOffset": 4404
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 35,
+                    "startColumn": 4,
+                    "startOffset": 4392,
+                    "endColumn": 129,
+                    "endOffset": 4517
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 27,
+                        "startColumn": 4,
+                        "startOffset": 4100,
+                        "endColumn": 129,
+                        "endOffset": 4225
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 36,
+                    "startColumn": 4,
+                    "startOffset": 4522,
+                    "endColumn": 158,
+                    "endOffset": 4676
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 26,
+                        "startColumn": 4,
+                        "startOffset": 3941,
+                        "endColumn": 158,
+                        "endOffset": 4095
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 37,
+                    "startColumn": 4,
+                    "startOffset": 4681,
+                    "endColumn": 121,
+                    "endOffset": 4798
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 25,
+                        "startColumn": 4,
+                        "startOffset": 3819,
+                        "endColumn": 121,
+                        "endOffset": 3936
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 38,
+                    "startColumn": 4,
+                    "startOffset": 4803,
+                    "endColumn": 262,
+                    "endOffset": 5061
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/res/values-pl/common_strings.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 170,
+                        "endColumn": 266,
+                        "endOffset": 432
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 39,
+                    "startColumn": 4,
+                    "startOffset": 5066,
+                    "endColumn": 269,
+                    "endOffset": 5331
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 3055,
+                        "endColumn": 273,
+                        "endOffset": 3324
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 40,
+                    "startColumn": 4,
+                    "startOffset": 5336,
+                    "endColumn": 121,
+                    "endOffset": 5453
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 20,
+                        "startColumn": 4,
+                        "startOffset": 2933,
+                        "endColumn": 121,
+                        "endOffset": 3050
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 41,
+                    "startColumn": 4,
+                    "startOffset": 5458,
+                    "endColumn": 110,
+                    "endOffset": 5564
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 4,
+                        "startOffset": 3329,
+                        "endColumn": 110,
+                        "endOffset": 3435
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 42,
+                    "startColumn": 4,
+                    "startOffset": 5569,
+                    "endColumn": 205,
+                    "endOffset": 5770
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 12,
+                        "startColumn": 4,
+                        "startOffset": 1595,
+                        "endColumn": 209,
+                        "endOffset": 1800
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 43,
+                    "startColumn": 4,
+                    "startOffset": 5775,
+                    "endColumn": 129,
+                    "endOffset": 5900
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 11,
+                        "startColumn": 4,
+                        "startOffset": 1465,
+                        "endColumn": 129,
+                        "endOffset": 1590
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 44,
+                    "startColumn": 4,
+                    "startOffset": 5905,
+                    "endColumn": 217,
+                    "endOffset": 6118
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 15,
+                        "startColumn": 4,
+                        "startOffset": 2135,
+                        "endColumn": 221,
+                        "endOffset": 2352
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 45,
+                    "startColumn": 4,
+                    "startOffset": 6123,
+                    "endColumn": 138,
+                    "endOffset": 6257
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 14,
+                        "startColumn": 4,
+                        "startOffset": 1996,
+                        "endColumn": 138,
+                        "endOffset": 2130
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 46,
+                    "startColumn": 4,
+                    "startOffset": 6262,
+                    "endColumn": 190,
+                    "endOffset": 6448
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 13,
+                        "startColumn": 4,
+                        "startOffset": 1805,
+                        "endColumn": 190,
+                        "endOffset": 1991
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 47,
+                    "startColumn": 4,
+                    "startOffset": 6453,
+                    "endColumn": 97,
+                    "endOffset": 6546
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 23,
+                        "startColumn": 4,
+                        "startOffset": 3440,
+                        "endColumn": 97,
+                        "endOffset": 3533
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 48,
+                    "startColumn": 4,
+                    "startOffset": 6551,
+                    "endColumn": 95,
+                    "endOffset": 6642
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 29,
+                        "startColumn": 4,
+                        "startOffset": 4409,
+                        "endColumn": 95,
+                        "endOffset": 4500
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 49,
+                    "startColumn": 4,
+                    "startOffset": 6647,
+                    "endColumn": 113,
+                    "endOffset": 6756
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/values-pl/base_strings.xml",
+                    "position": {
+                        "startLine": 30,
+                        "startColumn": 4,
+                        "startOffset": 4505,
+                        "endColumn": 113,
+                        "endOffset": 4614
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 50,
+                    "startColumn": 4,
+                    "startOffset": 6761,
+                    "endColumn": 100,
+                    "endOffset": 6857
+                },
+                "from": {
+                    "file": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/values-pl/values-pl.xml",
+                    "position": {
+                        "startLine": 21,
+                        "startColumn": 4,
+                        "startOffset": 2027,
+                        "endColumn": 100,
+                        "endOffset": 2123
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,146 @@
+[
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/scale_rotate.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/scale_rotate.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/hold.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/hold.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_fade_out.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_fade_out.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_grow_fade_in_from_bottom.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/design_fab_out.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/res/anim/design_fab_out.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/push_left_in.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/push_left_in.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_fade_in.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_fade_in.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_popup_enter.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_popup_enter.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_slide_out_top.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_slide_out_top.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/zoom_enter.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/zoom_enter.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/push_up_out.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/push_up_out.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/my_scale_action.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/my_scale_action.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/slide_up_in.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/slide_up_in.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/slide_left.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/slide_left.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/design_snackbar_out.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/res/anim/design_snackbar_out.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/scale_translate_rotate.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/scale_translate_rotate.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/hyperspace_in.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/hyperspace_in.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_slide_out_bottom.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/slide_right.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/slide_right.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_popup_exit.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_popup_exit.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/design_bottom_sheet_slide_in.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/res/anim/design_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_shrink_fade_out_from_bottom.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/hyperspace_out.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/hyperspace_out.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/push_left_out.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/push_left_out.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/zoom_exit.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/zoom_exit.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/slide_down_out.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/slide_down_out.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/design_snackbar_in.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/res/anim/design_snackbar_in.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/scale_translate.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/scale_translate.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/my_alpha_action.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/my_alpha_action.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_slide_in_bottom.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/push_up_in.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/push_up_in.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/design_fab_in.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/res/anim/design_fab_in.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/abc_slide_in_top.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/res/anim/abc_slide_in_top.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/fade.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/fade.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/wave_scale.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/src/main/res/anim/wave_scale.xml"
+    },
+    {
+        "merged": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/res/merged/debug/anim/design_bottom_sheet_slide_out.xml",
+        "source": "/Users/zego-builder/GitCode/ZegoLiveDemo/android/LiveDemo3/app/build/intermediates/exploded-aar/com.android.support/design/23.4.0/res/anim/design_bottom_sheet_slide_out.xml"
+    }
+]

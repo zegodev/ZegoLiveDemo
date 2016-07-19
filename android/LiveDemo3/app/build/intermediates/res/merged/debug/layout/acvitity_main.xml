@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:navigationIcon="@mipmap/ic_setting_72"
+        app:title="@string/app_name"
+        />
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.zego.livedemo3.widgets.NavigationBar
+                android:id="@+id/nb"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50"
+                android:layout_alignParentBottom="true"
+                app:tabTitles="@array/navigation_bar_titles"/>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/nb">
+            </android.support.v4.view.ViewPager>
+        </RelativeLayout>
+
+
+        <fragment
+            android:id="@+id/setting_fragment"
+            android:name="com.zego.livedemo3.ui.SettingFragment"
+            android:layout_width="@dimen/dimen_300"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:tag="LEFT"/>
+
+
+    </android.support.v4.widget.DrawerLayout>
+
+</LinearLayout>
