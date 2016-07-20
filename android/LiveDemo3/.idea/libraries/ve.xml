@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ve">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/ve.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
