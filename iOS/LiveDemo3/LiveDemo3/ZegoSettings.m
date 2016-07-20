@@ -185,25 +185,30 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
 - (ZegoAVConfigVideoResolution)currentResolution {
     CGSize size = [self.currentConfig getVideoResolution];
     
-    ZegoAVConfigVideoResolution r = ZegoAVConfigVideoResolution_640x480;
+    ZegoAVConfigVideoResolution r = ZegoAVConfigVideoResolution_640x360;
     switch ((int)size.width) {
         case 320:
-            r = (ZegoAVConfigVideoResolution)0;
+            r = ZegoAVConfigVideoResolution_320x240;
             break;
         case 352:
-            r = (ZegoAVConfigVideoResolution)1;
+            r = ZegoAVConfigVideoResolution_352x288;
             break;
         case 640:
-            r = (ZegoAVConfigVideoResolution)2;
+        {
+            if (size.height == 480)
+                r = ZegoAVConfigVideoResolution_640x480;
+            else if (size.height == 360)
+                r = ZegoAVConfigVideoResolution_640x360;
+        }
             break;
         case 960:
             r = (ZegoAVConfigVideoResolution)3;
             break;
         case 1280:
-            r = (ZegoAVConfigVideoResolution)4;
+            r = ZegoAVConfigVideoResolution_1280x720;
             break;
         case 1920:
-            r = (ZegoAVConfigVideoResolution)5;
+            r = ZegoAVConfigVideoResolution_1920x1080;
             break;
             
         default:

@@ -52,7 +52,7 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = ['libs', 'bizlibs']
         }
     }
 
@@ -64,6 +64,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'bizlibs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:appcompat-v7:23.4.0'

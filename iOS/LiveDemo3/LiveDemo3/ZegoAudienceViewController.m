@@ -287,8 +287,8 @@
     self.publishStreamID = streamID;
     self.optionButton.enabled = YES;
     
-    [ZegoSettings sharedInstance].publishingStreamID = streamID;
-    [ZegoSettings sharedInstance].publishingLiveChannel = self.liveChannel;
+//    [ZegoSettings sharedInstance].publishingStreamID = streamID;
+//    [ZegoSettings sharedInstance].publishingLiveChannel = self.liveChannel;
     
     [self reportStreamAction:YES streamID:streamID];
 }

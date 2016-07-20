@@ -281,8 +281,8 @@
     [self.stopPublishButton setTitle:NSLocalizedString(@"停止直播", nil) forState:UIControlStateNormal];
     
     //记录当前的发布信息
-    [ZegoSettings sharedInstance].publishingStreamID = streamID;
-    [ZegoSettings sharedInstance].publishingLiveChannel = self.liveChannel;
+//    [ZegoSettings sharedInstance].publishingStreamID = streamID;
+//    [ZegoSettings sharedInstance].publishingLiveChannel = self.liveChannel;
     
     [self reportStreamAction:YES streamID:self.streamID];
     

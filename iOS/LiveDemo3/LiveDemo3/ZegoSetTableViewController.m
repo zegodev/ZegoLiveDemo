@@ -34,6 +34,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.videoResolutionSlider.maximumValue = 5;
+    
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44, 0);
 }
 
@@ -109,7 +111,20 @@
     
     if (sender == self.videoResolutionSlider) {
         int v = (int)self.videoResolutionSlider.value;
-        [config setVideoResolution:(ZegoAVConfigVideoResolution)v];
+        ZegoAVConfigVideoResolution resolution = ZegoAVConfigVideoResolution_640x360;
+        if (v == 0)
+            resolution = ZegoAVConfigVideoResolution_320x240;
+        else if (v == 1)
+            resolution = ZegoAVConfigVideoResolution_352x288;
+        else if (v == 2)
+            resolution = ZegoAVConfigVideoResolution_640x360;
+        else if (v == 3)
+            resolution = ZegoAVConfigVideoResolution_640x480;
+        else if (v == 4)
+            resolution = ZegoAVConfigVideoResolution_1280x720;
+        else if (v == 5)
+            resolution = ZegoAVConfigVideoResolution_1920x1080;
+        [config setVideoResolution:resolution];
     } else if (sender == self.videoFrameRateSlider) {
         int v = (int)self.videoFrameRateSlider.value;
         [config setVideoFPS:v];
@@ -127,7 +142,24 @@
 - (void)updateViedoSettingUI {
     ZegoAVConfig *config = [[ZegoSettings sharedInstance] currentConfig];
     
-    self.videoResolutionSlider.value = [ZegoSettings sharedInstance].currentResolution;
+    float value = 3;
+    ZegoAVConfigVideoResolution resolution = [ZegoSettings sharedInstance].currentResolution;
+    if (resolution == ZegoAVConfigVideoResolution_320x240)
+        value = 0;
+    else if (resolution == ZegoAVConfigVideoResolution_352x288)
+        value = 1;
+    else if (resolution == ZegoAVConfigVideoResolution_640x360)
+        value = 2;
+    else if (resolution == ZegoAVConfigVideoResolution_640x480)
+        value = 3;
+    else if (resolution == ZegoAVConfigVideoResolution_1280x720)
+        value = 4;
+    else if (resolution == ZegoAVConfigVideoResolution_1920x1080)
+        value = 5;
+    else
+        value = 2;
+    self.videoResolutionSlider.value = value;
+    
     CGSize r = [config getVideoResolution];
     self.videoResolution.text = [NSString stringWithFormat:@"%d X %d", (int)r.width, (int)r.height];
     
