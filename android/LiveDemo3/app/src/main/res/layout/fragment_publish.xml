@@ -39,7 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="前置摄像头:"
+                    android:text="@string/front_camera"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_2"/>
 
@@ -63,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="手电筒:"
+                    android:text="@string/flashlight"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_2"/>
 
@@ -113,7 +113,7 @@
             android:layout_below="@id/rlyt_header"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_100"
-            android:hint="给直播取一个吸引人的标题"
+            android:hint="@string/make_a_title"
             android:paddingLeft="@dimen/dimen_5"
             android:singleLine="true"
             android:textColor="@color/text_gray"
@@ -121,12 +121,13 @@
             android:textSize="@dimen/text_size_4"/>
 
         <Button
+            android:textAllCaps="false"
             android:id="@+id/btn_start_publish"
             android:layout_width="@dimen/dimen_150"
             android:layout_height="@dimen/dimen_50"
             android:layout_below="@id/et_publish_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_50"
-            android:text="开始直播"/>
+            android:text="@string/go_publish"/>
     </RelativeLayout>
 </FrameLayout>

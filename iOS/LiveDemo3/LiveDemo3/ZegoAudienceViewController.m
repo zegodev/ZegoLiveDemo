@@ -65,7 +65,9 @@
     
     [self setupLiveKit];
     [self loginRoom];
-        
+    
+    [self setBackgroundImage:[UIImage imageNamed:@"AppIcon60x60"] playerView:self.playViewContainer];
+    
     self.publishButton.enabled = NO;
     self.optionButton.enabled = NO;
 }
@@ -85,6 +87,11 @@
 {
     [self setIdelTimerDisable:NO];
     [super viewWillDisappear:animated];
+}
+
+- (void)setBackgroundImage:(UIImage *)image playerView:(UIView *)playerView
+{
+    playerView.backgroundColor = [UIColor colorWithPatternImage:image];
 }
 
 - (void)audioSessionWasInterrupted:(NSNotification *)notification
@@ -133,11 +140,13 @@
 
 - (IBAction)onCloseAudience:(id)sender
 {
+    [self setBackgroundImage:nil playerView:self.playViewContainer];
+    
     [self clearAllStream];
     
     [getZegoAV_ShareInstance() logoutChannel];
     [getBizRoomInstance() leaveLiveRoom];
-    
+
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -321,6 +330,17 @@
     [self removeStreamViewContainer:streamID];
 }
 
+- (void)onVideoSizeChanged:(NSString *)streamID width:(uint32)width height:(uint32)height
+{
+    NSLog(@"%s, streamID %@", __func__, streamID);
+    
+//    [self setPlayViewBackgroundImage:nil];
+    
+    UIView *view = self.viewContainersDict[streamID];
+    if (view)
+        [self setBackgroundImage:nil playerView:view];
+}
+
 #pragma mark BizRoomStreamDelegate
 - (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken
 {
@@ -356,13 +376,29 @@
         NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"流列表有更新, 此时还未登录channel", nil)];
         [self addLogString:logString];
         
+        if (flag == 1)
+            return;
+        
+        //先把流缓存起来
+        for (NSDictionary *dic in streamList)
+        {
+            NSString *streamID = dic[kRoomStreamIDKey];
+            if ([self isStreamIDExist:streamID])
+            {
+                continue;
+            }
+            
+            ZegoStreamInfo *streamInfo = [ZegoStreamInfo getStreamInfo:dic];
+            [self.streamList addObject:streamInfo];
+        }
+        
         return;
     }
     
     if (streamList.count == 0)
     {
-        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"流列表有变化，但是流列表为空！", nil)];
-        [self addLogString:logString];
+//        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"流列表有变化，但是流列表为空！", nil)];
+//        [self addLogString:logString];
         return;
     }
     
@@ -464,6 +500,8 @@
         [bigView removeFromSuperview];
         return;
     }
+    
+    [self setBackgroundImage:[UIImage imageNamed:@"AppIcon60x60"] playerView:bigView];
     
     self.viewContainersDict[streamID] = bigView;
     self.viewIndexDict[streamID] = @(index);

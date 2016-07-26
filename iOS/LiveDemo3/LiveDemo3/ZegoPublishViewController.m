@@ -22,12 +22,13 @@
 @property (nonatomic, weak) IBOutlet UITextField *titleField;
 @property (nonatomic, weak) IBOutlet UIButton *publishButton;
 
-@property (nonatomic, weak) IBOutlet UIView *preView;
 @property (nonatomic, weak) IBOutlet UIView *settingView;
 @property (nonatomic, weak) IBOutlet UIView *boxView;
 
 @property (readonly) NSArray *beautifyList;
 @property (readonly) NSArray *filterList;
+
+@property (nonatomic, strong) UIView *preView;
 
 @end
 
@@ -76,6 +77,27 @@
     
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     [self setRotateFromInterfaceOrientation:orientation];
+    
+    [self addPreview];
+}
+
+- (void)addPreview
+{
+    _preView = [[UIView alloc] init];
+    self.preView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.preView];
+    [self.view sendSubviewToBack:self.preView];
+    
+    [self addPreviewConstraints];
+    [UIView animateWithDuration:0.1 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+- (void)addPreviewConstraints
+{
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_preView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_preView)]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_preView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_preView)]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -110,12 +132,16 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationDeactive:) name:UIApplicationWillResignActiveNotification object:nil];
     
+    if (self.preView == nil)
+        [self addPreview];
+    
     [self startPreview];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self stopPreview];
+    if (self.preView)
+        [self stopPreview];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super viewWillDisappear:animated];
@@ -240,6 +266,10 @@
         anchorViewController.enableTorch = self.switchTorch.on;
         anchorViewController.beautifyFeature = [self.beautifyPicker selectedRowInComponent:0];
         anchorViewController.filter = [self.filterPicker selectedRowInComponent:0];
+        
+        [self.preView removeFromSuperview];
+        anchorViewController.publishView = self.preView;
+        self.preView = nil;
         
         self.titleField.text = nil;
     }

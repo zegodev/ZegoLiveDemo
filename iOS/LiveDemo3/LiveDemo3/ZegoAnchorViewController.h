@@ -12,5 +12,7 @@
 @interface ZegoAnchorViewController : ZegoLiveViewController
 //直播标题
 @property (nonatomic, copy) NSString *liveTitle;
+//预览的界面view
+@property (nonatomic, strong) UIView *publishView;
 
 @end

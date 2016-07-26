@@ -16,6 +16,7 @@
 
 @property (nonatomic, strong) NSMutableDictionary *requestAlertDict;
 @property (nonatomic, strong) NSMutableDictionary *requestAlertContextDict;
+@property (assign) UIInterfaceOrientation currentOrientation;
 
 @end
 
@@ -44,6 +45,7 @@
     
     // 设置当前的手机姿势
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    self.currentOrientation = orientation;
     [self setRotateFromInterfaceOrientation:orientation];
     
     // 监听电话事件
@@ -131,6 +133,7 @@
     
     _useFrontCamera = useFrontCamera;
     [getZegoAV_ShareInstance() setFrontCam:useFrontCamera];
+    [self setRotateFromInterfaceOrientation:self.currentOrientation];
 }
 
 - (void)setEnableMicrophone:(BOOL)enableMicrophone
@@ -548,6 +551,7 @@
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        self.currentOrientation = orientation;
         [self setRotateFromInterfaceOrientation:orientation];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         
@@ -559,6 +563,7 @@
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [self setRotateFromInterfaceOrientation:toInterfaceOrientation];
+    self.currentOrientation = toInterfaceOrientation;
     
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }

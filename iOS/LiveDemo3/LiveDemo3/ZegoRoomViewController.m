@@ -43,6 +43,7 @@
     self.liveView.tableFooterView = [[UIView alloc] init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRoomInstanceClear:) name:@"RoomInstanceClear" object:nil];
     
 }
 
@@ -74,6 +75,12 @@
 - (void)onApplicationActive:(NSNotification *)notification
 {
     [self handleRefresh:self.refreshControl];
+}
+
+- (void)onRoomInstanceClear:(NSNotification *)notification
+{
+    [self setupChatRoomKit];
+    [self getLiveRoom];
 }
 
 - (void)setupChatRoomKit

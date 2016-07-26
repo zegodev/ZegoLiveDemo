@@ -74,7 +74,10 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [self.view endEditing:YES];
+    if (!self.appID.isEditing && ![self.appSign isFirstResponder])
+    {
+        [self.view endEditing:YES];
+    }
 }
 
 - (void)onTapTableView:(UIGestureRecognizer *)gesture

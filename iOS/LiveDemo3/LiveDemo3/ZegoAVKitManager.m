@@ -94,14 +94,22 @@ BizLiveRoom *getBizRoomInstance()
         
         if (g_appID != 0 && g_signKey != nil)
         {
-            g_bizRoom = [[BizLiveRoom alloc] initWithBizID:g_appID bizSignature:g_signKey];
+            Byte signKey[] = {0xf9,0xe4,0x7b,0x67,0xa,0x8f,0x46,0x14,0x3e,0xdb,0xfb,0xc0,0x66,0x2a,0xc4,0xfe,0x88,0xde,0xb6,0x3f,0x79,0xad,0xc5,0xc4,0xe3,0xa6,0x18,0x1b,0x7d,0xe3,0x1e,0x91};
+            NSData *appSign = [NSData dataWithBytes:signKey length:32];
+            g_bizRoom = [[BizLiveRoom alloc] initWithBizID:308895348 bizSignature:appSign];
         }
         else
         {
-            //此处用跟AVKitFramework同样的签名，可以使用不同的签名
             NSData *appSign = zegoAppSignFromServer();
             g_bizRoom = [[BizLiveRoom alloc] initWithBizID:1 bizSignature:appSign];
         }
+        
+        if (g_bizRoom == nil)
+        {
+            assert(g_bizRoom != nil);
+            NSLog(@"Zego Only, Others Cannot Use this framework");
+        }
+        
         
 //        [g_bizRoom setTestEnvironment:g_useTestEnv];
     }
@@ -154,10 +162,14 @@ void ZegoDemoSetCustomAppIDAndSign(uint32 appid, NSString* strSign)
     
     if (d.length == 32 && appid != 0) {
         g_appID = appid;
-        g_signKey = d;
+        g_signKey = [[NSData alloc] initWithData:d];
     }
     
     g_zegoAV = nil;
+    
+    //清理bizRoom对象时，还需要重新设置一下原来的delegate
+    g_bizRoom = nil;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"RoomInstanceClear" object:nil userInfo:nil];
 }
 
 void setUseTestEnv(BOOL testEnv)

@@ -3,7 +3,10 @@ package com.zego.livedemo3;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 
 import com.zego.livedemo3.base.AbsBaseActivity;
 
@@ -18,6 +21,9 @@ public class AboutZegoActivity extends AbsBaseActivity {
 
     @Bind(R.id.webView)
     public WebView webView;
+
+    @Bind(R.id.pb_progress)
+    public ProgressBar pbProgress;
 
     public static void actionStart(Activity activity){
         Intent intent = new Intent(activity, AboutZegoActivity.class);
@@ -36,7 +42,19 @@ public class AboutZegoActivity extends AbsBaseActivity {
 
     @Override
     protected void initVariables(Bundle savedInstanceState) {
-
+        pbProgress.setMax(100);
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if(newProgress >= 100){
+                    pbProgress.setVisibility(View.GONE);
+                }else {
+                    pbProgress.setVisibility(View.VISIBLE);
+                    pbProgress.setProgress(newProgress);
+                }
+                super.onProgressChanged(view, newProgress);
+            }
+        });
     }
 
     @Override

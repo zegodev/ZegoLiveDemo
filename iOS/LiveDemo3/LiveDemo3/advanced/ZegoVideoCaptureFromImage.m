@@ -198,10 +198,26 @@ static CVPixelBufferRef pb = NULL;
 
 - (CVPixelBufferRef)pixelBufferFromCGImage:(CGImageRef)image {
     
+    int width = m_oSettings.width;
+    int height = m_oSettings.height;
+    
+    // 要求宽高为 16 的倍数
+    int w_m = width % 16;
+    if (w_m)
+    {
+        width += (16 - w_m);
+    }
+    
+    int h_m = height % 16;
+    if (h_m)
+    {
+        height += (16 - h_m);
+    }
+    
     CVPixelBufferRef pixelBuffer;
     CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
-                                          m_oSettings.width,
-                                          m_oSettings.height,
+                                          width,
+                                          height,
                                           kCVPixelFormatType_32BGRA, // no support kCVPixelFormatType_32RGBA?
                                           NULL,
                                           &pixelBuffer);
@@ -225,15 +241,15 @@ static CVPixelBufferRef pb = NULL;
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
     
     CGContextRef context = CGBitmapContextCreate(data,
-                                                 m_oSettings.width,
-                                                 m_oSettings.height,
+                                                 width,
+                                                 height,
                                                  8,
                                                  CVPixelBufferGetBytesPerRow(pixelBuffer),
                                                  rgbColorSpace,
                                                  kCGImageAlphaNoneSkipLast);
     
     CGImageRef bgraImage = [self CreateBGRAImageFromRGBAImage:image];
-
+    
     CGFloat imageWith = CGImageGetWidth(image);
     CGFloat imageHeight = CGImageGetHeight(image);
     
@@ -241,8 +257,8 @@ static CVPixelBufferRef pb = NULL;
     static time_t lastTime = 0;
     
     if (lastTime != currentTime) {
-        origin.x = rand() % (int)(m_oSettings.width - imageWith);
-        origin.y = rand() % (int)(m_oSettings.height - imageHeight);
+        origin.x = rand() % (int)(width - imageWith);
+        origin.y = rand() % (int)(height - imageHeight);
         
         lastTime = currentTime;
     }

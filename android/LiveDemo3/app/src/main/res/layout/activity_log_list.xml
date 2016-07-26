@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="日志"
+            android:text="@string/log"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_size_5"/>
 
@@ -26,7 +26,7 @@
             android:layout_height="@dimen/dimen_50"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:text="返回"
+            android:text="@string/back"
             android:textColor="@color/sl_btn"
             android:textSize="@dimen/text_size_4"/>
 

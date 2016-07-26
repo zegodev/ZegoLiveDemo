@@ -5,20 +5,18 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.zego.biz.BizLiveRoom;
-import com.zego.biz.BizUser;
 import com.zego.livedemo3.utils.PreferenceUtil;
+import com.zego.zegoavkit2.ZegoAVKit;
 
 
 /**
  * des: zego api管理器.
  */
-public class BizApiManager {
+public class  BizApiManager {
 
     private static BizApiManager sInstance = null;
 
     private BizLiveRoom mBizLiveRoom = null;
-
-    private BizUser mBizUser;
 
     private BizApiManager() {
         mBizLiveRoom = new BizLiveRoom();
@@ -35,10 +33,6 @@ public class BizApiManager {
             PreferenceUtil.getInstance().setUserID(userID);
             PreferenceUtil.getInstance().setUserName(userName);
         }
-
-        mBizUser = new BizUser();
-        mBizUser.userID = userID;
-        mBizUser.userName = userName;
     }
 
     public static BizApiManager getInstance() {
@@ -56,6 +50,10 @@ public class BizApiManager {
      * 初始化sdk.
      */
     public void init(Context context) {
+
+        // 设置日志level
+        mBizLiveRoom.setLogLevel(context, ZegoAVKit.LOG_LEVEL_DEBUG, null);
+
         // 即构分配的key与id
         byte[] signKey = {
                 (byte) 0x91, (byte) 0x93, (byte) 0xcc, (byte) 0x66, (byte) 0x2a, (byte) 0x1c, (byte) 0xe, (byte) 0xc1,
@@ -65,7 +63,7 @@ public class BizApiManager {
         };
         long appID = 1;
 
-        mBizLiveRoom.initSdk(appID, signKey, signKey.length);
+        mBizLiveRoom.initSdk(appID, signKey, signKey.length, context);
     }
 
 
@@ -80,7 +78,4 @@ public class BizApiManager {
         return mBizLiveRoom;
     }
 
-    public BizUser getBizUser(){
-        return mBizUser;
-    }
 }

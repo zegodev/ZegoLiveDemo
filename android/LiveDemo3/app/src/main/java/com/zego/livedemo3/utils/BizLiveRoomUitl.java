@@ -55,8 +55,8 @@ public class BizLiveRoomUitl {
         Map<String, Object> requestInfo = new HashMap<>();
 
         requestInfo.put(KEY_COMMAND, command);
-        requestInfo.put(KEY_FROM_USER_ID, BizApiManager.getInstance().getBizUser().userID);
-        requestInfo.put(KEY_FROM_USRE_NAME, BizApiManager.getInstance().getBizUser().userName);
+        requestInfo.put(KEY_FROM_USER_ID, PreferenceUtil.getInstance().getUserID());
+        requestInfo.put(KEY_FROM_USRE_NAME, PreferenceUtil.getInstance().getUserName());
 
         if(listToUsers != null && listToUsers.size() > 0){
             List<HashMap<String, String>> listMapToUsers = new ArrayList<>();

@@ -12,8 +12,8 @@
     <string-array name="resolutions">
         <item >320 x 240</item>
         <item >352 x 288</item>
-        <item >640 x 480</item>
-        <item >640 x 480</item>
+        <item >640 x 360</item>
+        <item >640 x 360</item>
         <item >1280 x 720</item>
         <item >1920 x 1080</item>
     </string-array>

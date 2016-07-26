@@ -13,10 +13,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Surface;
-import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -34,9 +33,9 @@ import com.zego.zegoavkit2.entity.ZegoUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.OnClick;
 
@@ -45,13 +44,15 @@ import butterknife.OnClick;
  */
 public abstract class BaseDisplayActivity extends AbsShowActivity {
 
-    public static final String KEY_LIVE_CHANNEL = "KEY_LIVE_CHANNEL";
+    public static final String KEY_CHANNEL = "KEY_CHANNEL";
 
     public static final String KEY_PUBLISH_TITLE = "KEY_PUBLISH_TITLE";
 
     public static final String KEY_PUBLISH_STREAM_ID = "KEY_PUBLISH_STREAM_ID";
 
     public static final String KEY_IS_PUBLISHING = "KEY_IS_PUBLISHING";
+
+    public static final String KEY_ENABLE_CAMERA = "KEY_ENABLE_CAMERA";
 
     public static final String KEY_ENABLE_FRONT_CAM = "KEY_ENABLE_FRONT_CAM";
 
@@ -61,23 +62,17 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
 
     public static final String KEY_ENABLE_MIC = "KEY_ENABLE_MIC";
 
-    public static final String KEY_ENABLE_CAM = "KEY_ENABLE_CAM";
-
-    public static final String KEY_HAD_BEEN_LOGINNED = "KEY_HAD_BEEN_LOGINNED";
-
-    public static final String KEY_LIST_ORDINAL_AND_STREAM_ID = "KEY_LIST_ORDINAL_AND_STREAM_ID";
-
-    public static final String KEY_MAP_FREE_ZEGO_REMOTE_VIEW_INDEX = "KEY_MAP_FREE_ZEGO_REMOTE_VIEW_INDEX";
-
-    public static final String KEY_LIST_LOG = "KEY_LIST_LOG";
+    public static final String KEY_HAVE_LOGINNED_CHANNEL = "KEY_HAVE_LOGINNED_CHANNEL";
 
     public static final String KEY_SELECTED_BEAUTY = "KEY_SELECTED_BEAUTY";
 
     public static final String KEY_SELECTED_FILTER = "KEY_SELECTED_FILTER";
 
-    public static final String KEY_LIST_MAGIC_NUM = "KEY_LIST_MAGIC_NUM";
+    public static final String KEY_PUBLISH_NUMBER = "KEY_PUBLISH_NUMBER";
 
-    public static final String KEY_LIVE_COUNT = "KEY_LIVE_COUNT";
+    public static final String KEY_LIST_TEXTUREVIEW_TAG = "KEY_LIST_TEXTUREVIEW_TAG";
+
+    public static final String KEY_LIST_LOG = "KEY_LIST_LOG";
 
     public static final String MY_SELF = "MySelf";
 
@@ -89,48 +84,42 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
 
     public static final String SEPARATOR = "&";
 
-    public static final String TAG_VIEW_IS_FREE = FREE_VIEW_ORDINAL + SEPARATOR + NONE_STREAM_ID;
+    public static final String TAG_OF_FREE_VIEW = FREE_VIEW_ORDINAL + SEPARATOR + NONE_STREAM_ID;
 
     protected ZegoAVKit mZegoAVKit;
 
     protected BizLiveRoom mBizLiveRoom;
 
-    protected RelativeLayout.LayoutParams mParamsSmall;
-    protected RelativeLayout.LayoutParams mParamsBig;
-
-    protected List<RelativeLayout> mListVideoView = new ArrayList<>();
-    protected List<RelativeLayout> mListViewParent = new ArrayList<>();
-    protected List<String> mListOrdinalAndStreamID = new ArrayList<>();
-    protected Map<ZegoAVKitCommon.ZegoRemoteViewIndex, String> mMapFreeZegoRemoteViewIndex = new HashMap<>();
-    protected List<String> mListMagicNum = new ArrayList<>();
+    protected LinkedList<TextureView> mListTextureView = new LinkedList<>();
+    protected List<String> mListTextureViewTag = new ArrayList<>();
+    protected LinkedHashMap<ZegoAVKitCommon.ZegoRemoteViewIndex, String> mMapFreeViewIndex = new LinkedHashMap<>();
     protected LinkedList<String> mListLog = new LinkedList<>();
-    protected RelativeLayout mRlytBigVideoParent;
 
     public TextView tvPublisnControl;
 
     public TextView tvPublishSetting;
 
+    public TextView tvSpeaker;
+
+    public RelativeLayout mRlytControlPanel;
+
     public FrameLayout mFlytMainContent;
 
-    /**
-     * 发布流的Title.
-     */
+    public CoordinatorLayout coordinatorLayout;
+
+    public PublishSettingsPannel mPublishSettingsPannel;
+
+    private BottomSheetBehavior mBehavior;
+
     protected String mPublishTitle;
 
-    /**
-     * 发布流的ID.
-     */
     protected String mPublishStreamID;
 
-    /**
-     * 频道ID.
-     */
     protected String mChannel;
 
-    /**
-     * 发布标记, false表示"未发布".
-     */
     protected boolean mIsPublishing = false;
+
+    protected boolean mEnableCamera = true;
 
     protected boolean mEnableFrontCam = true;
 
@@ -140,50 +129,32 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
 
     protected boolean mEnableMic = true;
 
-    protected boolean mEnableCam = true;
-
-    protected boolean mHadBeenLoginned = false;
-
-    /**
-     * 美颜.
-     */
     protected int mSelectedBeauty = 0;
 
-    /**
-     * 滤镜.
-     */
     protected int mSelectedFilter = 0;
 
-    protected int mLiveCount = 0;
+    protected int mPublishNumber = 0;
 
-    /**
-     * 标记是否有电话呼入, false表示没有.
-     */
-    protected boolean mHaveBeenCalled = false;
+    protected boolean mHaveLoginedChannel = false;
 
-    /**
-     * 监听屏幕变化.
-     */
+    protected boolean mActivityHasBeenPaused = false;
+
+    protected boolean mHostHasBeenCalled = false;
+
+    protected boolean mHostHasBeenCalled2 = false;
+
+    protected ZegoAVKitCommon.ZegoCameraCaptureRotation mZegoCameraCaptureRotation;
+
     protected DisplayManager.DisplayListener mDisplayListener;
 
-    /**
-     * 电话监听.
-     */
     protected PhoneStateListener mPhoneStateListener;
 
-    public CoordinatorLayout coordinatorLayout;
-
-    public PublishSettingsPannel mPublishSettingsPannel;
-
-    private BottomSheetBehavior mBehavior;
-
-
-    /**
-     * 登录channel后, publish或者play.
-     */
     protected abstract void doLiveBusinessAfterLoginChannel();
 
     protected abstract void setPublishControlText();
+
+    protected abstract void afterPlaySuccess();
+
 
     @Override
     protected int getContentViewLayout() {
@@ -193,14 +164,9 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
 
     @Override
     protected void initExtraData(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            mMapFreeZegoRemoteViewIndex.put(ZegoAVKitCommon.ZegoRemoteViewIndex.First, NONE_STREAM_ID);
-            mMapFreeZegoRemoteViewIndex.put(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, NONE_STREAM_ID);
-            mMapFreeZegoRemoteViewIndex.put(ZegoAVKitCommon.ZegoRemoteViewIndex.Third, NONE_STREAM_ID);
-        } else {
-
+        if (savedInstanceState != null) {
             // Activity 后台被回收后重新启动, 恢复数据
-            mChannel = PreferenceUtil.getInstance().getStringValue(KEY_LIVE_CHANNEL, null);
+            mChannel = PreferenceUtil.getInstance().getStringValue(KEY_CHANNEL, null);
             mPublishTitle = PreferenceUtil.getInstance().getStringValue(KEY_PUBLISH_TITLE, null);
             mPublishStreamID = PreferenceUtil.getInstance().getStringValue(KEY_PUBLISH_STREAM_ID, null);
             mIsPublishing = PreferenceUtil.getInstance().getBooleanValue(KEY_IS_PUBLISHING, false);
@@ -208,30 +174,22 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
             mEnableTorch = PreferenceUtil.getInstance().getBooleanValue(KEY_ENABLE_TORCH, false);
             mEnableSpeaker = PreferenceUtil.getInstance().getBooleanValue(KEY_ENABLE_SPEAKER, false);
             mEnableMic = PreferenceUtil.getInstance().getBooleanValue(KEY_ENABLE_MIC, false);
-            mEnableCam = PreferenceUtil.getInstance().getBooleanValue(KEY_ENABLE_CAM, false);
-            mHadBeenLoginned = PreferenceUtil.getInstance().getBooleanValue(KEY_HAD_BEEN_LOGINNED, false);
+            mEnableCamera = PreferenceUtil.getInstance().getBooleanValue(KEY_ENABLE_CAMERA, false);
+            mHaveLoginedChannel = PreferenceUtil.getInstance().getBooleanValue(KEY_HAVE_LOGINNED_CHANNEL, false);
             mSelectedBeauty = PreferenceUtil.getInstance().getIntValue(KEY_SELECTED_BEAUTY, 0);
             mSelectedFilter = PreferenceUtil.getInstance().getIntValue(KEY_SELECTED_FILTER, 0);
-            mLiveCount = PreferenceUtil.getInstance().getIntValue(KEY_LIVE_COUNT, 0);
+            mPublishNumber = PreferenceUtil.getInstance().getIntValue(KEY_PUBLISH_NUMBER, 0);
 
-            mMapFreeZegoRemoteViewIndex = (Map<ZegoAVKitCommon.ZegoRemoteViewIndex, String>) PreferenceUtil.getInstance().getObjectFromString(KEY_MAP_FREE_ZEGO_REMOTE_VIEW_INDEX);
-            if (mMapFreeZegoRemoteViewIndex == null) {
-                mMapFreeZegoRemoteViewIndex = new HashMap<>();
-            }
-
-            mListOrdinalAndStreamID = (List<String>) PreferenceUtil.getInstance().getObjectFromString(KEY_LIST_ORDINAL_AND_STREAM_ID);
-            if (mListOrdinalAndStreamID == null) {
-                mListOrdinalAndStreamID = new ArrayList<>();
+            mListTextureViewTag = (List<String>) PreferenceUtil.getInstance().getObjectFromString(KEY_LIST_TEXTUREVIEW_TAG);
+            if (mListTextureViewTag == null) {
+                mListTextureViewTag = new ArrayList<>();
             }
 
             mListLog = (LinkedList<String>) PreferenceUtil.getInstance().getObjectFromString(KEY_LIST_LOG);
             if (mListLog == null) {
                 mListLog = new LinkedList<>();
             }
-
-            mListMagicNum = (List<String>) PreferenceUtil.getInstance().getObjectFromString(KEY_LIST_MAGIC_NUM);
         }
-
     }
 
 
@@ -242,6 +200,10 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
 
         mBizLiveRoom = BizApiManager.getInstance().getBizLiveRoom();
 
+        mMapFreeViewIndex.put(ZegoAVKitCommon.ZegoRemoteViewIndex.First, NONE_STREAM_ID);
+        mMapFreeViewIndex.put(ZegoAVKitCommon.ZegoRemoteViewIndex.Second, NONE_STREAM_ID);
+        mMapFreeViewIndex.put(ZegoAVKitCommon.ZegoRemoteViewIndex.Third, NONE_STREAM_ID);
+
         // 初始化sdk回调
         initCallback();
         // 初始化电话监听器
@@ -250,166 +212,118 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
         initRotationListener();
     }
 
-    private void initPublishSettingsCallback() {
-      mPublishSettingsPannel.setPublishSettingsCallback(new PublishSettingsPannel.PublishSettingsCallback() {
-          @Override
-          public void onEnableCamera(boolean isEnable) {
-              mEnableCam = isEnable;
-              mZegoAVKit.enableCamera(isEnable);
-          }
-
-          @Override
-          public void onEnableFrontCamera(boolean isEnable) {
-              mEnableFrontCam = isEnable;
-              mZegoAVKit.setFrontCam(isEnable);
-          }
-
-          @Override
-          public void onEnalbeSpeaker(boolean isEnable) {
-              mEnableSpeaker =isEnable;
-              mZegoAVKit.enableSpeaker(isEnable);
-          }
-
-          @Override
-          public void onEnableMic(boolean isEnable) {
-              mEnableMic = isEnable;
-              mZegoAVKit.enableMic(isEnable);
-          }
-
-          @Override
-          public void onEnableTorch(boolean isEnable) {
-              mEnableTorch = isEnable;
-              mZegoAVKit.enableTorch(isEnable);
-          }
-
-          @Override
-          public void onSetBeauty(int beauty) {
-              mSelectedBeauty = beauty;
-              mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(beauty));
-          }
-
-          @Override
-          public void onSetFilter(int filter) {
-              mSelectedFilter = filter;
-              mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(filter));
-          }
-      });
-    }
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
 
-        mFlytMainContent = (FrameLayout) findViewById(R.id.main_content);
-
-        tvPublishSetting = (TextView)findViewById(R.id.tv_publish_settings);
+        tvPublishSetting = (TextView) findViewById(R.id.tv_publish_settings);
         tvPublisnControl = (TextView) findViewById(R.id.tv_publish_control);
         setPublishControlText();
+        tvSpeaker = (TextView) findViewById(R.id.tv_speaker);
+
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
         mPublishSettingsPannel = (PublishSettingsPannel) findViewById(R.id.publishSettingsPannel);
         mBehavior = BottomSheetBehavior.from(mPublishSettingsPannel);
-        mPublishSettingsPannel.initPublishSettings(mEnableCam, mEnableFrontCam, mEnableSpeaker, mEnableMic, mEnableTorch, mSelectedBeauty, mSelectedFilter);
+        mPublishSettingsPannel.initPublishSettings(mEnableCamera, mEnableFrontCam, mEnableMic, mEnableTorch, mSelectedBeauty, mSelectedFilter);
         initPublishSettingsCallback();
+
+        mFlytMainContent = (FrameLayout) findViewById(R.id.main_content);
         mFlytMainContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                if (mBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             }
         });
-
-        mRlytBigVideoParent = (RelativeLayout) findViewById(R.id.rlyt_big_video_parent);
-        RelativeLayout rlytBigVideo = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_show, null);
-        mRlytBigVideoParent.addView(rlytBigVideo);
-        mParamsBig = (RelativeLayout.LayoutParams) rlytBigVideo.getLayoutParams();
-        mListViewParent.add(mRlytBigVideoParent);
-        mListVideoView.add(rlytBigVideo);
-        // 标记View是空闲的
-        rlytBigVideo.setTag(TAG_VIEW_IS_FREE);
+        mRlytControlPanel = (RelativeLayout) findViewById(R.id.rlyt_control_panel);
 
 
-        //两个SurfaceView重叠时, 其中一个无法显示视频, 所以用这个办法绕过去
-        final RelativeLayout rlytSmallVideoParent1;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            rlytSmallVideoParent1 = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent1);
-            findViewById(R.id.rlyt_small_video_parent2).setVisibility(View.GONE);
-        } else {
-            rlytSmallVideoParent1 = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent2);
-            findViewById(R.id.rlyt_small_video_parent1).setVisibility(View.GONE);
+        TextureView tvBigVideo = (TextureView) findViewById(R.id.tv_big_video);
+        if (tvBigVideo != null) {
+            tvBigVideo.setTag(TAG_OF_FREE_VIEW);
+            mListTextureView.add(tvBigVideo);
         }
-        RelativeLayout rlytSmallVideo1 = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_show, null);
-        rlytSmallVideoParent1.addView(rlytSmallVideo1);
-        mParamsSmall = (RelativeLayout.LayoutParams) rlytSmallVideo1.getLayoutParams();
-        rlytSmallVideoParent1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                exchangeViewSize((RelativeLayout) v);
-            }
-        });
-        mListViewParent.add(rlytSmallVideoParent1);
-        mListVideoView.add(rlytSmallVideo1);
-        // 标记View是空闲的
-        rlytSmallVideo1.setTag(TAG_VIEW_IS_FREE);
 
-
-        //两个SurfaceView重叠时, 其中一个无法显示视频
-        final RelativeLayout rlytSmallVideoParent2;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            rlytSmallVideoParent2 = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent3);
-            findViewById(R.id.rlyt_small_video_parent4).setVisibility(View.GONE);
-        } else {
-            rlytSmallVideoParent2 = (RelativeLayout) findViewById(R.id.rlyt_small_video_parent4);
-            findViewById(R.id.rlyt_small_video_parent3).setVisibility(View.GONE);
+        TextureView tvSmallVideo1 = (TextureView) findViewById(R.id.tv_small_video1);
+        if (tvSmallVideo1 != null) {
+            tvSmallVideo1.setTag(TAG_OF_FREE_VIEW);
+            tvSmallVideo1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    exchangeTextureViewSize((TextureView) v);
+                }
+            });
+            mListTextureView.add(tvSmallVideo1);
         }
-        RelativeLayout rlytSmallVideo2 = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_show, null);
-        rlytSmallVideoParent2.addView(rlytSmallVideo2);
-        rlytSmallVideoParent2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                exchangeViewSize((RelativeLayout) v);
-            }
-        });
-        mListViewParent.add(rlytSmallVideoParent2);
-        mListVideoView.add(rlytSmallVideo2);
-        // 标记View是空闲的
-        rlytSmallVideo2.setTag(TAG_VIEW_IS_FREE);
+
+        TextureView tvSmallVideo2 = (TextureView) findViewById(R.id.tv_small_video2);
+        if (tvSmallVideo2 != null) {
+            tvSmallVideo2.setTag(TAG_OF_FREE_VIEW);
+            tvSmallVideo2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    exchangeTextureViewSize((TextureView) v);
+                }
+            });
+            mListTextureView.add(tvSmallVideo2);
+        }
 
         mZegoAVKit.enableSpeaker(mEnableSpeaker);
+        tvSpeaker.setSelected(!mEnableSpeaker);
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mHaveLoginedChannel) {
+            if (mActivityHasBeenPaused) {
+                mActivityHasBeenPaused = false;
+                replayAndRepublish();
+            }
+        }
+    }
 
     @Override
     protected void onPause() {
         super.onPause();
 
         // 保存数据, 用于Activity在后台被回收后重新恢复
-        PreferenceUtil.getInstance().setStringValue(KEY_LIVE_CHANNEL, mChannel);
+        PreferenceUtil.getInstance().setStringValue(KEY_CHANNEL, mChannel);
         PreferenceUtil.getInstance().setStringValue(KEY_PUBLISH_TITLE, mPublishTitle);
         PreferenceUtil.getInstance().setStringValue(KEY_PUBLISH_STREAM_ID, mPublishStreamID);
         PreferenceUtil.getInstance().setBooleanValue(KEY_IS_PUBLISHING, mIsPublishing);
+        PreferenceUtil.getInstance().setBooleanValue(KEY_ENABLE_CAMERA, mEnableCamera);
         PreferenceUtil.getInstance().setBooleanValue(KEY_ENABLE_FRONT_CAM, mEnableFrontCam);
         PreferenceUtil.getInstance().setBooleanValue(KEY_ENABLE_TORCH, mEnableTorch);
         PreferenceUtil.getInstance().setBooleanValue(KEY_ENABLE_SPEAKER, mEnableSpeaker);
         PreferenceUtil.getInstance().setBooleanValue(KEY_ENABLE_MIC, mEnableMic);
-        PreferenceUtil.getInstance().setBooleanValue(KEY_ENABLE_CAM, mEnableCam);
-        PreferenceUtil.getInstance().setBooleanValue(KEY_HAD_BEEN_LOGINNED, mHadBeenLoginned);
+        PreferenceUtil.getInstance().setBooleanValue(KEY_HAVE_LOGINNED_CHANNEL, mHaveLoginedChannel);
         PreferenceUtil.getInstance().setIntValue(KEY_SELECTED_BEAUTY, mSelectedBeauty);
         PreferenceUtil.getInstance().setIntValue(KEY_SELECTED_FILTER, mSelectedFilter);
-        PreferenceUtil.getInstance().setIntValue(KEY_LIVE_COUNT, mLiveCount);
-
-        PreferenceUtil.getInstance().setObjectToString(KEY_MAP_FREE_ZEGO_REMOTE_VIEW_INDEX, mMapFreeZegoRemoteViewIndex);
-
-        // 获取每个播放View上的流信息,用于恢复播放
-        mListOrdinalAndStreamID = new ArrayList<>();
-        for (int i = 0, size = mListViewParent.size(); i < size; i++) {
-            mListOrdinalAndStreamID.add((String) mListViewParent.get(i).getChildAt(0).getTag());
-        }
-        PreferenceUtil.getInstance().setObjectToString(KEY_LIST_ORDINAL_AND_STREAM_ID, mListOrdinalAndStreamID);
+        PreferenceUtil.getInstance().setIntValue(KEY_PUBLISH_NUMBER, mPublishNumber);
 
         PreferenceUtil.getInstance().setObjectToString(KEY_LIST_LOG, mListLog);
 
-        PreferenceUtil.getInstance().setObjectToString(KEY_LIST_MAGIC_NUM, mListMagicNum);
+        // 获取每个播放View上的流信息, 用于恢复播放
+        if (!mHostHasBeenCalled2) {
+            mActivityHasBeenPaused = true;
+
+            mListTextureViewTag = new ArrayList<>();
+            for (int i = 0, size = mListTextureView.size(); i < size; i++) {
+                mListTextureViewTag.add((String) mListTextureView.get(i).getTag());
+            }
+            PreferenceUtil.getInstance().setObjectToString(KEY_LIST_TEXTUREVIEW_TAG, mListTextureViewTag);
+
+        } else {
+            mHostHasBeenCalled2 = false;
+        }
+
+        for (int i = 0, size = mListTextureView.size(); i < size; i++) {
+            mListTextureView.get(i).setTag(TAG_OF_FREE_VIEW);
+        }
     }
 
     /**
@@ -421,18 +335,15 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
             mDisplayListener = new DisplayManager.DisplayListener() {
                 @Override
                 public void onDisplayAdded(int displayId) {
-                    Log.i("Display", "Display #" + displayId + " added.");
                 }
 
                 @Override
                 public void onDisplayChanged(int displayId) {
-                    // Log.i("Display", "Display #" + displayId + " changed.");
                     changeRotation();
                 }
 
                 @Override
                 public void onDisplayRemoved(int displayId) {
-                    Log.i("Display", "Display #" + displayId + " removed.");
                 }
             };
 
@@ -462,15 +373,15 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
     /**
      * 恢复发布与播放.
      */
-    protected void restorePublishAndPlay() {
-        for (int i = 0, size = mListOrdinalAndStreamID.size(); i < size; i++) {
-            int playStreamOrdinal = getPlayStreamOrdinalFromTag(mListOrdinalAndStreamID.get(i));
-            String playStreamID = getPlayStreamIDFromTag(mListOrdinalAndStreamID.get(i));
+    protected void replayAndRepublish() {
+        for (int i = 0, size = mListTextureViewTag.size(); i < size; i++) {
+            int playStreamOrdinal = getPlayStreamOrdinalFromTag(mListTextureViewTag.get(i));
+            String playStreamID = getPlayStreamIDFromTag(mListTextureViewTag.get(i));
             switch (playStreamOrdinal) {
                 case 0:
                 case 1:
                 case 2:
-                    startPlay(playStreamID);
+                    startPlay(playStreamID, getZegoRemoteViewIndexByOrdinal(playStreamOrdinal));
                     break;
                 case BIG_VIDEO_ORDINAL:
                     startPublish();
@@ -480,44 +391,117 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
     }
 
     /**
+     * 切换全屏.
+     *
+     * @param textureViewBeClicked
+     */
+    protected void exchangeTextureViewSize(TextureView textureViewBeClicked) {
+
+        TextureView tvBigVideo = mListTextureView.get(0);
+        TextureView tvSmallViedo = textureViewBeClicked;
+
+        String bigVideoTag = (String) tvBigVideo.getTag();
+        String smallVideoTag = (String) tvSmallViedo.getTag();
+
+        switch (getPlayStreamOrdinalFromTag(bigVideoTag)) {
+            case 0:
+            case 1:
+            case 2:
+                mZegoAVKit.setRemoteView(getZegoRemoteViewIndexByOrdinal(getPlayStreamOrdinalFromTag(bigVideoTag)), tvSmallViedo);
+                break;
+            case BIG_VIDEO_ORDINAL:
+                mZegoAVKit.setLocalView(tvSmallViedo);
+                break;
+        }
+
+        switch (getPlayStreamOrdinalFromTag(smallVideoTag)) {
+            case 0:
+            case 1:
+            case 2:
+                mZegoAVKit.setRemoteView(getZegoRemoteViewIndexByOrdinal(getPlayStreamOrdinalFromTag(smallVideoTag)), tvBigVideo);
+                break;
+            case BIG_VIDEO_ORDINAL:
+                mZegoAVKit.setLocalView(tvBigVideo);
+                break;
+        }
+
+        tvBigVideo.setTag(smallVideoTag);
+        tvSmallViedo.setTag(bigVideoTag);
+    }
+
+
+    protected ZegoAVKitCommon.ZegoRemoteViewIndex getZegoRemoteViewIndexByOrdinal(int playStreamOrdinal) {
+        ZegoAVKitCommon.ZegoRemoteViewIndex index = null;
+
+        switch (playStreamOrdinal) {
+            case 0:
+                index = ZegoAVKitCommon.ZegoRemoteViewIndex.First;
+                break;
+            case 1:
+                index = ZegoAVKitCommon.ZegoRemoteViewIndex.Second;
+                break;
+            case 2:
+                index = ZegoAVKitCommon.ZegoRemoteViewIndex.Third;
+                break;
+        }
+
+        return index;
+    }
+
+    protected ZegoAVKitCommon.ZegoRemoteViewIndex getFreeZegoRemoteViewIndex() {
+        ZegoAVKitCommon.ZegoRemoteViewIndex freeIndex = null;
+        for (ZegoAVKitCommon.ZegoRemoteViewIndex index : mMapFreeViewIndex.keySet()) {
+            if (NONE_STREAM_ID.equals(mMapFreeViewIndex.get(index))) {
+                freeIndex = index;
+                break;
+            }
+        }
+        return freeIndex;
+    }
+
+    /**
      * 获取空闲的View用于播放或者发布.
      *
      * @return
      */
-    protected RelativeLayout getFreeView() {
-        RelativeLayout rlytFreeView = null;
-        for (int i = 0, size = mListVideoView.size(); i < size; i++) {
-            RelativeLayout rlytView = mListVideoView.get(i);
-            if (getPlayStreamOrdinalFromTag((String) rlytView.getTag()) == FREE_VIEW_ORDINAL) {
-                rlytFreeView = rlytView;
-                getSurfaceView(rlytView).setVisibility(View.VISIBLE);
+    protected TextureView getFreeTextureView() {
+        TextureView tvFreeView = null;
+        for (int i = 0, size = mListTextureView.size(); i < size; i++) {
+            TextureView textureView = mListTextureView.get(i);
+            if (getPlayStreamOrdinalFromTag((String) textureView.getTag()) == FREE_VIEW_ORDINAL) {
+                tvFreeView = textureView;
+                tvFreeView.setVisibility(View.VISIBLE);
                 break;
             }
         }
-        return rlytFreeView;
+        return tvFreeView;
     }
 
     /**
-     * 释放View用于再次播放.
+     * 释放View用于再次播放, 释放remoteViewIndex.
      *
      * @param streamID
      */
-    protected void releaseViewAndRemoteViewIndex(String streamID) {
-        for (int i = 0, size = mListVideoView.size(); i < size; i++) {
-            RelativeLayout rlytView = mListVideoView.get(i);
-            String tag = (String) rlytView.getTag();
+    protected void releaseTextureViewAndRemoteViewIndex(String streamID) {
+        for (int i = 0, size = mListTextureView.size(); i < size; i++) {
+            TextureView textureView = mListTextureView.get(i);
+            String tag = (String) textureView.getTag();
             if (getPlayStreamIDFromTag(tag).equals(streamID)) {
-                // 设置View可用
-                rlytView.setTag(TAG_VIEW_IS_FREE);
-                getSurfaceView(rlytView).setVisibility(View.GONE);
+                int j = i;
+                for (; j < size - 1; j++) {
+                    mListTextureView.get(j).setTag(mListTextureView.get(j + 1).getTag());
+                }
+                // 标记最后一个View可用
+                mListTextureView.get(j).setTag(TAG_OF_FREE_VIEW);
+                mListTextureView.get(j).setVisibility(View.INVISIBLE);
                 break;
             }
         }
 
-        for (ZegoAVKitCommon.ZegoRemoteViewIndex index : mMapFreeZegoRemoteViewIndex.keySet()) {
-            if (mMapFreeZegoRemoteViewIndex.get(index).equals(streamID)) {
-                // 设置remoteViewIndex可用
-                mMapFreeZegoRemoteViewIndex.put(index, NONE_STREAM_ID);
+        for (ZegoAVKitCommon.ZegoRemoteViewIndex index : mMapFreeViewIndex.keySet()) {
+            if (mMapFreeViewIndex.get(index).equals(streamID)) {
+                // 标记remoteViewIndex可用
+                mMapFreeViewIndex.put(index, NONE_STREAM_ID);
                 break;
             }
         }
@@ -536,8 +520,8 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
                     recordLog(MY_SELF + ": login channel(" + liveChannel + ") success");
                     doLiveBusinessAfterLoginChannel();
 
-                    if(!mHadBeenLoginned){
-                        mHadBeenLoginned = true;
+                    if (!mHaveLoginedChannel) {
+                        mHaveLoginedChannel = true;
                     }
                 } else {
                     recordLog(MY_SELF + ": login channel(" + liveChannel + ") fail --errCode:" + retCode);
@@ -550,6 +534,7 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
                 recordLog(MY_SELF + ": publish stream(" + streamID + ") success");
                 setPublishControlText();
                 mBizLiveRoom.reportStreamState(true, streamID, PreferenceUtil.getInstance().getUserID());
+                mRlytControlPanel.bringToFront();
             }
 
             @Override
@@ -558,22 +543,26 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
                 // 停止预览
                 mZegoAVKit.stopPreview();
                 // 释放View
-                releaseViewAndRemoteViewIndex(streamID);
+                releaseTextureViewAndRemoteViewIndex(streamID);
                 recordLog(MY_SELF + ": publish stream(" + streamID + ") stop --errCode:" + retCode);
                 setPublishControlText();
                 mBizLiveRoom.reportStreamState(false, streamID, PreferenceUtil.getInstance().getUserID());
+                mRlytControlPanel.bringToFront();
             }
 
             @Override
             public void onPlaySucc(String streamID, String liveChannel) {
                 recordLog(MY_SELF + ": play stream(" + streamID + ") success");
+                mRlytControlPanel.bringToFront();
+                afterPlaySuccess();
             }
 
             @Override
             public void onPlayStop(int retCode, String streamID, String liveChannel) {
                 recordLog(MY_SELF + ": play stream(" + streamID + ") stop --errCode:" + retCode);
                 // 释放View
-                releaseViewAndRemoteViewIndex(streamID);
+                releaseTextureViewAndRemoteViewIndex(streamID);
+                mRlytControlPanel.bringToFront();
             }
 
             @Override
@@ -595,6 +584,50 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
 
     }
 
+    private void initPublishSettingsCallback() {
+        mPublishSettingsPannel.setPublishSettingsCallback(new PublishSettingsPannel.PublishSettingsCallback() {
+            @Override
+            public void onEnableCamera(boolean isEnable) {
+                mEnableCamera = isEnable;
+                mZegoAVKit.enableCamera(isEnable);
+            }
+
+            @Override
+            public void onEnableFrontCamera(boolean isEnable) {
+                mEnableFrontCam = isEnable;
+                mZegoAVKit.setFrontCam(isEnable);
+                if(mZegoCameraCaptureRotation != null){
+                    mZegoAVKit.setDisplayRotation(mZegoCameraCaptureRotation);
+                }
+
+            }
+
+            @Override
+            public void onEnableMic(boolean isEnable) {
+                mEnableMic = isEnable;
+                mZegoAVKit.enableMic(isEnable);
+            }
+
+            @Override
+            public void onEnableTorch(boolean isEnable) {
+                mEnableTorch = isEnable;
+                mZegoAVKit.enableTorch(isEnable);
+            }
+
+            @Override
+            public void onSetBeauty(int beauty) {
+                mSelectedBeauty = beauty;
+                mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(beauty));
+            }
+
+            @Override
+            public void onSetFilter(int filter) {
+                mSelectedFilter = filter;
+                mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(filter));
+            }
+        });
+    }
+
     /**
      * 电话状态监听.
      */
@@ -606,25 +639,29 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
                 super.onCallStateChanged(state, incomingNumber);
                 switch (state) {
                     case TelephonyManager.CALL_STATE_IDLE:
-                        Log.i("TestPhoneState", "挂断");
-                        if (mHaveBeenCalled) {
-                            mHaveBeenCalled = false;
+
+                        if (mHostHasBeenCalled) {
+                            mHostHasBeenCalled = false;
                             // 登陆频道
                             ZegoUser zegoUser = new ZegoUser(PreferenceUtil.getInstance().getUserID(), PreferenceUtil.getInstance().getUserName());
                             mZegoAVKit.loginChannel(zegoUser, mChannel);
                         }
+
                         break;
                     case TelephonyManager.CALL_STATE_RINGING:
-                        Log.i("TestPhoneState", "响铃:来电号码" + incomingNumber);
-                        if (!mHaveBeenCalled) {
-                            mHaveBeenCalled = true;
+                        mHostHasBeenCalled2 = true;
+                        mHostHasBeenCalled = true;
+
+                        mListTextureViewTag = new ArrayList<>();
+                        for (int i = 0, size = mListTextureView.size(); i < size; i++) {
+                            mListTextureViewTag.add((String) mListTextureView.get(i).getTag());
                         }
+
                         // 来电停止发布与播放
                         stopAllStream();
                         break;
 
                     case TelephonyManager.CALL_STATE_OFFHOOK:
-                        Log.i("TestPhoneState", "接听");
                         break;
                 }
             }
@@ -632,81 +669,6 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
 
         TelephonyManager tm = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);
         tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-    }
-
-    /**
-     * 获取SurfaceView.
-     *
-     * @param viewGroup
-     * @return
-     */
-    protected SurfaceView getSurfaceView(RelativeLayout viewGroup) {
-        SurfaceView surfaceView = null;
-        if (viewGroup != null) {
-            for (int i = 0, childCount = viewGroup.getChildCount(); i < childCount; i++) {
-                if (viewGroup.getChildAt(i) instanceof SurfaceView) {
-                    surfaceView = (SurfaceView) viewGroup.getChildAt(i);
-                    break;
-                }
-            }
-        }
-        return surfaceView;
-    }
-
-    /**
-     * 切换全屏.
-     *
-     * @param rlytSmallVideoParent
-     */
-    protected void exchangeViewSize(RelativeLayout rlytSmallVideoParent) {
-
-        RelativeLayout rlytSmallVideo = (RelativeLayout) rlytSmallVideoParent.getChildAt(0);
-        RelativeLayout rlytBigVideo = (RelativeLayout) mRlytBigVideoParent.getChildAt(0);
-
-        rlytSmallVideoParent.removeViewAt(0);
-        mRlytBigVideoParent.removeViewAt(0);
-
-        rlytSmallVideo.setLayoutParams(mParamsBig);
-        rlytBigVideo.setLayoutParams(mParamsSmall);
-
-        rlytSmallVideoParent.addView(rlytBigVideo);
-        mRlytBigVideoParent.addView(rlytSmallVideo);
-    }
-
-
-    /**
-     * 获取用于播放视频的Viuew的序号.
-     *
-     * @param playStreamOrdinal
-     * @return
-     */
-    protected ZegoAVKitCommon.ZegoRemoteViewIndex getZegoRemoteViewIndex(int playStreamOrdinal) {
-        ZegoAVKitCommon.ZegoRemoteViewIndex index = null;
-
-        switch (playStreamOrdinal) {
-            case 0:
-                index = ZegoAVKitCommon.ZegoRemoteViewIndex.First;
-                break;
-            case 1:
-                index = ZegoAVKitCommon.ZegoRemoteViewIndex.Second;
-                break;
-            case 2:
-                index = ZegoAVKitCommon.ZegoRemoteViewIndex.Third;
-                break;
-        }
-
-        return index;
-    }
-
-    protected ZegoAVKitCommon.ZegoRemoteViewIndex getFreeZegoReoteViewIndex() {
-        ZegoAVKitCommon.ZegoRemoteViewIndex freeIndex = null;
-        for (ZegoAVKitCommon.ZegoRemoteViewIndex index : mMapFreeZegoRemoteViewIndex.keySet()) {
-            if (NONE_STREAM_ID.equals(mMapFreeZegoRemoteViewIndex.get(index))) {
-                freeIndex = index;
-                break;
-            }
-        }
-        return freeIndex;
     }
 
 
@@ -719,17 +681,14 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
      * 开始发布.
      */
     protected void startPublish() {
-        if (mIsPublishing) {
-            return;
-        }
 
-        final RelativeLayout rlytFreeView = getFreeView();
-        if (rlytFreeView == null) {
+        final TextureView freeTextureView = getFreeTextureView();
+        if (freeTextureView == null) {
             return;
         }
 
         // 标记view已经被占用
-        rlytFreeView.setTag(BIG_VIDEO_ORDINAL + SEPARATOR + mPublishStreamID);
+        freeTextureView.setTag(BIG_VIDEO_ORDINAL + SEPARATOR + mPublishStreamID);
 
         // 输出发布状态
         recordLog(MY_SELF + ": start publishing " + mPublishStreamID);
@@ -738,17 +697,8 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
         mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
         mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ((RelativeLayout) rlytFreeView.getParent()).setVisibility(View.VISIBLE);
-                ((RelativeLayout) rlytFreeView.getParent()).bringToFront();
-
-            }
-        }, 200);
-
         // 开始播放
-        mZegoAVKit.setLocalView(getSurfaceView(rlytFreeView));
+        mZegoAVKit.setLocalView(freeTextureView);
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
@@ -767,41 +717,36 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
     /**
      * 开始播放流.
      */
-    protected void startPlay(String streamID) {
+    protected void startPlay(String streamID, ZegoAVKitCommon.ZegoRemoteViewIndex remoteViewIndex) {
 
-        final RelativeLayout rlytFreeView = getFreeView();
-        ZegoAVKitCommon.ZegoRemoteViewIndex freeRemoteViewIndex = getFreeZegoReoteViewIndex();
+        if (remoteViewIndex == null) {
+            return;
+        }
 
-        if (rlytFreeView == null || freeRemoteViewIndex == null) {
+        final TextureView freeTextureView = getFreeTextureView();
+        if (freeTextureView == null) {
             return;
         }
 
         // 标记remoteViewIndex已经被占用
-        mMapFreeZegoRemoteViewIndex.put(freeRemoteViewIndex, streamID);
+        mMapFreeViewIndex.put(remoteViewIndex, streamID);
 
         // 标记view已经被占用
-        rlytFreeView.setTag(freeRemoteViewIndex.code + SEPARATOR + streamID);
+        freeTextureView.setTag(remoteViewIndex.code + SEPARATOR + streamID);
 
         // 输出播放状态
         recordLog(MY_SELF + ": start playing " + streamID);
 
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ((RelativeLayout) rlytFreeView.getParent()).setVisibility(View.VISIBLE);
-                ((RelativeLayout) rlytFreeView.getParent()).bringToFront();
-            }
-        }, 500);
 
         // 播放
-        mZegoAVKit.setRemoteViewMode(freeRemoteViewIndex, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
-        mZegoAVKit.setRemoteView(freeRemoteViewIndex, getSurfaceView(rlytFreeView));
-        mZegoAVKit.startPlayStream(streamID, freeRemoteViewIndex);
+        mZegoAVKit.setRemoteViewMode(remoteViewIndex, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+        mZegoAVKit.setRemoteView(remoteViewIndex, freeTextureView);
+        mZegoAVKit.startPlayStream(streamID, remoteViewIndex);
     }
 
     protected void stopPlay(String streamID) {
-        for (ZegoAVKitCommon.ZegoRemoteViewIndex index : mMapFreeZegoRemoteViewIndex.keySet()) {
-            if (mMapFreeZegoRemoteViewIndex.get(index).equals(streamID)) {
+        for (ZegoAVKitCommon.ZegoRemoteViewIndex index : mMapFreeViewIndex.keySet()) {
+            if (mMapFreeViewIndex.get(index).equals(streamID)) {
                 mZegoAVKit.stopPlayStream(streamID);
                 mZegoAVKit.setRemoteView(index, null);
                 break;
@@ -813,15 +758,19 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
         switch (getWindowManager().getDefaultDisplay().getRotation()) {
             case Surface.ROTATION_0:
                 mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0);
+                mZegoCameraCaptureRotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0;
                 break;
             case Surface.ROTATION_90:
                 mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90);
+                mZegoCameraCaptureRotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90;
                 break;
             case Surface.ROTATION_180:
                 mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_180);
+                mZegoCameraCaptureRotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_180;
                 break;
             case Surface.ROTATION_270:
                 mZegoAVKit.setDisplayRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270);
+                mZegoCameraCaptureRotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270;
                 break;
         }
     }
@@ -852,8 +801,8 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
         return playStreamID;
     }
 
-    protected void logout(){
-        AlertDialog dialog = new AlertDialog.Builder(this).setMessage("确定要退出直播页面吗").setTitle("提示").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+    protected void logout() {
+        AlertDialog dialog = new AlertDialog.Builder(this).setMessage(getString(R.string.do_you_really_want_to_leave)).setTitle(getString(R.string.hint)).setPositiveButton(getString(R.string.Yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -864,7 +813,7 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
 
                 finish();
             }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        }).setNegativeButton(getString(R.string.No), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -879,31 +828,32 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
      */
     protected void stopAllStream() {
 
-        for (int i = 0, size = mListVideoView.size(); i < size; i++) {
-            int playStreamOrdinal = getPlayStreamOrdinalFromTag((String) mListVideoView.get(i).getTag());
-            String playStreamID = getPlayStreamIDFromTag((String) mListVideoView.get(i).getTag());
+        for (int i = 0, size = mListTextureView.size(); i < size; i++) {
+            int playStreamOrdinal = getPlayStreamOrdinalFromTag((String) mListTextureView.get(i).getTag());
+            String playStreamID = getPlayStreamIDFromTag((String) mListTextureView.get(i).getTag());
             switch (playStreamOrdinal) {
                 case 0:
                 case 1:
                 case 2:
-                    mZegoAVKit.stopPlayStream(playStreamID);
-                    mZegoAVKit.setRemoteView(getZegoRemoteViewIndex(playStreamOrdinal), null);
+                    stopPlay(playStreamID);
                     break;
                 case BIG_VIDEO_ORDINAL:
                     stopPublish();
                     break;
             }
+
+
         }
 
         mZegoAVKit.logoutChannel();
 
     }
 
-    protected void setPublishControlState(){
-        if(!mIsPublishing){
-            if(mLiveCount >= 3){
+    protected void setPublishControlState() {
+        if (!mIsPublishing) {
+            if (mPublishNumber >= 3) {
                 tvPublisnControl.setEnabled(false);
-            }else {
+            } else {
                 tvPublisnControl.setEnabled(true);
             }
         }
@@ -912,10 +862,10 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if(mBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+            if (mBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                 mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 return false;
-            }else {
+            } else {
                 // 退出
                 logout();
             }
@@ -938,8 +888,20 @@ public abstract class BaseDisplayActivity extends AbsShowActivity {
         }
     }
 
+    @OnClick(R.id.tv_speaker)
+    public void doSpeaker() {
+        if (mEnableSpeaker) {
+            mEnableSpeaker = false;
+        } else {
+            mEnableSpeaker = true;
+        }
+
+        mZegoAVKit.enableSpeaker(mEnableSpeaker);
+        tvSpeaker.setSelected(!mEnableSpeaker);
+    }
+
     @OnClick(R.id.tv_close)
-    public void close(){
+    public void close() {
         logout();
     }
 

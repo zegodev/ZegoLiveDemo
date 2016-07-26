@@ -3,20 +3,30 @@ package com.zego.livedemo3.advanced;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.TextureView;
+import android.view.View;
 
 import com.zego.zegoavkit2.ZegoVideoCaptureDevice;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * Created by robotding on 16/6/5.
- */
-public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements SurfaceHolder.Callback, Camera.PreviewCallback {
+public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCaptureDevice implements Camera.PreviewCallback, TextureView.SurfaceTextureListener {
+    private static final String TAG = "VideoCaptureDeviceDemo";
+    private static final int CAMERA_STOP_TIMEOUT_MS = 7000;
+
     private Camera mCam = null;
     private Camera.CameraInfo mCamInfo = null;
     int mFront = 0;
@@ -25,65 +35,87 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
     int mFrameRate = 15;
     int mRotation = 0;
 
-    ZegoVideoCaptureDevice.Client mClient = null;
+    com.zego.zegoavkit2.ZegoVideoCaptureDevice.Client mClient = null;
 
-    private SurfaceView mSurView = null;
+    private TextureView mView = null;
+    private SurfaceTexture mTexture = null;
     private SurfaceHolder mHolder = null;
 
-    boolean mIsPreview = false;
-    boolean mIsCapture = false;
+    // Arbitrary queue depth.  Higher number means more memory allocated & held,
+    // lower number means more sensitivity to processing time in the client (and
+    // potentially stalling the capturer if it runs out of buffers to write to).
+    private static final int NUMBER_OF_CAPTURE_BUFFERS = 3;
+    private final Set<byte[]> queuedBuffers = new HashSet<byte[]>();
+    private int mFrameSize = 0;
 
-    private ByteBuffer mTempBuffer = null;
+    private HandlerThread mThread = null;
+    private volatile Handler cameraThreadHandler = null;
+    private final AtomicBoolean isCameraRunning = new AtomicBoolean();
+    private final Object pendingCameraRestartLock = new Object();
+    private volatile boolean pendingCameraRestart;
 
-    protected void allocateAndStart(ZegoVideoCaptureDevice.Client client) {
+    protected void allocateAndStart(com.zego.zegoavkit2.ZegoVideoCaptureDevice.Client client) {
         mClient = client;
+        mThread = new HandlerThread("camera-cap");
+        mThread.start();
+        cameraThreadHandler = new Handler(mThread.getLooper());
     }
 
     protected void stopAndDeAllocate() {
         mClient.destroy();
         mClient = null;
+        stopCapture();
+        mThread.quit();
+        mThread = null;
     }
 
     protected int startCapture() {
-        if (mIsCapture) {
+        if (isCameraRunning.getAndSet(true)) {
+            Log.e(TAG, "Camera has already been started.");
             return 0;
         }
 
-        if (!mIsPreview) {
-            // * Create and Start Cam
-            createCam();
-            startCam();
-        }
-
-        mIsCapture = true;
+        final boolean didPost = maybePostOnCameraThread(new Runnable() {
+            @Override
+            public void run() {
+                // * Create and Start Cam
+                createCamOnCameraThread();
+                startCamOnCameraThread();
+            }
+        });
 
         return 0;
     }
 
     protected int stopCapture() {
-        if (!mIsCapture) {
-            // * not started
+        Log.d(TAG, "stopCapture");
+        final CountDownLatch barrier = new CountDownLatch(1);
+        final boolean didPost = maybePostOnCameraThread(new Runnable() {
+            @Override public void run() {
+                stopCaptureOnCameraThread(true /* stopHandler */);
+                releaseCam();
+                barrier.countDown();
+            }
+        });
+        if (!didPost) {
+            Log.e(TAG, "Calling stopCapture() for already stopped camera.");
             return 0;
         }
-
-        mIsCapture = false;
-
-        // * to_do: notify EOS
-
-        if (!mIsPreview) {
-            // * Stop and destroy cam
-            stopCam();
-            releaseCam();
+        try {
+            if (!barrier.await(CAMERA_STOP_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
+                Log.e(TAG, "Camera stop timeout");
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        Log.d(TAG, "stopCapture done");
 
         return 0;
     }
 
     protected int setFrameRate(int framerate) {
         mFrameRate = framerate;
-        if (mCam != null) {
-            updateRate(framerate);
-        }
+            updateRateOnCameraThread(framerate);
         return 0;
     }
 
@@ -100,15 +132,20 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
         return 0;
     }
 
-    protected int setView(SurfaceView view) {
-        removeView();
-        mSurView = view;
-        if (mSurView != null) {
-            mHolder = mSurView.getHolder();
-            if (mHolder != null) {
-                mHolder.addCallback(this);
+    protected int setView(final View view) {
+        if (mView != null) {
+            mView.setSurfaceTextureListener(null);
+            mView = null;
+            mTexture = null;
+        }
+        mView = (TextureView) view;
+        if (mView != null) {
+            mView.setSurfaceTextureListener(VideoCaptureDeviceDemo.this);
+            if (mView.isAvailable()) {
+                mTexture = mView.getSurfaceTexture();
             }
         }
+
         return 0;
     }
 
@@ -116,60 +153,24 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
         return 0;
     }
 
-    protected int setViewRotation(int nRotation) { return 0; }
-
     protected int setCaptureRotation(int nRotation) {
         mRotation = nRotation;
         return 0;
     }
 
     protected int startPreview() {
-        if (mIsPreview) {
-            // * already started
-            return 0;
-        }
-
-        if (!mIsCapture) {
-            // * Create and Start Cam
-            createCam();
-            startCam();
-        }
-
-        // * set flags
-        mIsPreview = true;
-        return 0;
+        return startCapture();
     }
 
     protected int stopPreview() {
-        if (!mIsPreview) {
-            // * not started
-            return 0;
-        }
-
-        mIsPreview = false;
-
-        // * to_do: notify EOS
-
-        if (!mIsCapture) {
-            // * Stop and destroy cam
-            stopCam();
-            releaseCam();
-        }
-
-        return 0;
+        return stopCapture();
     }
 
     protected int enableTorch(boolean bEnable) {
-        if (bEnable) {
-            return openTorch();
-        } else {
-            return closeTorch();
-        }
+        return 0;
     }
 
     protected int takeSnapshot() {
-        int i = 0;
-        i++;
         return 0;
     }
 
@@ -177,16 +178,12 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
         return 0;
     }
 
-
-    private int getOrientation() {
-        if (mCamInfo != null) {
-            return mCamInfo.orientation;
+    private int updateRateOnCameraThread(final int framerate) {
+        checkIsOnCameraThread();
+        if (mCam == null) {
+            return 0;
         }
 
-        return 0;
-    }
-
-    private int updateRate(final int framerate) {
         mFrameRate = framerate;
 
         Camera.Parameters parms = mCam.getParameters();
@@ -210,20 +207,41 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
         try {
             mCam.setParameters(parms);
         } catch (Exception ex) {
-            Log.i("ve", "vcap: update fps -- set camera parameters error with exception\n");
+            Log.i(TAG, "vcap: update fps -- set camera parameters error with exception\n");
             ex.printStackTrace();
         }
         return 0;
     }
 
-    private int createCam() {
-        Log.i("ve", "board: " + Build.BOARD);
-        Log.i("ve", "device: " + Build.DEVICE);
-        Log.i("ve", "manufacturer: " + Build.MANUFACTURER);
-        Log.i("ve", "brand: " + Build.BRAND);
-        Log.i("ve", "model: " + Build.MODEL);
-        Log.i("ve", "product: " + Build.PRODUCT);
-        Log.i("ve", "sdk: " + Build.VERSION.SDK_INT);
+    private void checkIsOnCameraThread() {
+        if (cameraThreadHandler == null) {
+            Log.e(TAG, "Camera is not initialized - can't check thread.");
+        } else if (Thread.currentThread() != cameraThreadHandler.getLooper().getThread()) {
+            throw new IllegalStateException("Wrong thread");
+        }
+    }
+
+    private boolean maybePostOnCameraThread(Runnable runnable) {
+        return cameraThreadHandler != null && isCameraRunning.get()
+                && cameraThreadHandler.postAtTime(runnable, this, SystemClock.uptimeMillis());
+    }
+
+    // Note that this actually opens the camera, and Camera callbacks run on the
+    // thread that calls open(), so this is done on the CameraThread.
+    private int createCamOnCameraThread() {
+        checkIsOnCameraThread();
+        if (!isCameraRunning.get()) {
+            Log.e(TAG, "startCaptureOnCameraThread: Camera is stopped");
+            return 0;
+        }
+
+        Log.i(TAG, "board: " + Build.BOARD);
+        Log.i(TAG, "device: " + Build.DEVICE);
+        Log.i(TAG, "manufacturer: " + Build.MANUFACTURER);
+        Log.i(TAG, "brand: " + Build.BRAND);
+        Log.i(TAG, "model: " + Build.MODEL);
+        Log.i(TAG, "product: " + Build.PRODUCT);
+        Log.i(TAG, "sdk: " + Build.VERSION.SDK_INT);
 
         int nFacing = (mFront != 0) ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
 
@@ -245,11 +263,11 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
 
         // * no camera found ??
         if (mCam == null) {
-            Log.i("ve", "[WARNING] no camera found, try default\n");
+            Log.i(TAG, "[WARNING] no camera found, try default\n");
             mCam = Camera.open();
 
             if (mCam == null) {
-                Log.i("ve", "[ERROR] no camera found\n");
+                Log.i(TAG, "[ERROR] no camera found\n");
                 return -1;
             }
         }
@@ -260,101 +278,13 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
         boolean bSizeSet = false;
         Camera.Parameters parms = mCam.getParameters();
         Camera.Size psz = parms.getPreferredPreviewSizeForVideo();
-        int nCandidateWidth = 0;
-        int nCandidateHeight = 0;
-        int nLargestWidth = 0;
-        int nLargestHeight = 0;
 
-        List<Camera.Size> lst = parms.getSupportedVideoSizes();
-        if (lst == null) {
-            lst = parms.getSupportedPreviewSizes();
-        }
-        // * for(Camera.Size sz : parms.getSupportedPreviewSizes())
-        for (Camera.Size sz : lst) {
-            // * find max
-            if (sz.width * sz.height > nLargestWidth * nLargestHeight) {
-                nLargestWidth = sz.width;
-                nLargestHeight = sz.height;
-            }
-        }
-
-        for (Camera.Size sz : lst) {
-            if (sz.width * nLargestHeight != sz.height * nLargestWidth) {
-                continue;
-            }
-
-            // * find best candidate
-            if ((sz.width >= mWidth) && (sz.height >= mHeight)) {
-                // * candidate
-                if ((nCandidateWidth < mWidth) || (nCandidateHeight < mHeight)) {
-                    nCandidateWidth = sz.width;
-                    nCandidateHeight = sz.height;
-                } else if ((sz.width * sz.height) < (nCandidateWidth * nCandidateHeight)) {
-                    nCandidateWidth = sz.width;
-                    nCandidateHeight = sz.height;
-                }
-            } else if (sz.width >= mWidth) {
-                if ((nCandidateWidth >= mWidth) && (nCandidateHeight >= mHeight)) {
-                    // * candidate is better, dont change
-                } else if ((nCandidateWidth < mWidth) && (nCandidateHeight < mHeight)) {
-                    nCandidateWidth = sz.width;
-                    nCandidateHeight = sz.height;
-                } else if ((nCandidateWidth >= mWidth) && (sz.height > nCandidateHeight)) {
-                    nCandidateWidth = sz.width;
-                    nCandidateHeight = sz.height;
-                } else if ((sz.width * sz.height) > (nCandidateWidth * nCandidateHeight)) {
-                    nCandidateWidth = sz.width;
-                    nCandidateHeight = sz.height;
-                }
-            } else if (sz.height >= mHeight) {
-                if ((nCandidateWidth >= mWidth) && (nCandidateHeight >= mHeight)) {
-                    // * candidate is better, dont change
-                } else if ((nCandidateWidth < mWidth) && (nCandidateHeight < mHeight)) {
-                    nCandidateWidth = sz.width;
-                    nCandidateHeight = sz.height;
-                } else if ((nCandidateHeight >= mHeight) && (sz.width > nCandidateWidth)) {
-                    nCandidateWidth = sz.width;
-                    nCandidateHeight = sz.height;
-                } else if ((sz.width * sz.height) > (nCandidateWidth * nCandidateHeight)) {
-                    nCandidateWidth = sz.width;
-                    nCandidateHeight = sz.height;
-                }
-            }
-        }
-
-        if (!bSizeSet) {
-            if (nCandidateWidth * nCandidateHeight != 0) {
-                parms.setPreviewSize(nCandidateWidth, nCandidateHeight);
-                mWidth = nCandidateWidth;
-                mHeight = nCandidateHeight;
-                bSizeSet = true;
-            } else {
-                parms.setPreviewSize(nLargestWidth, nLargestHeight);
-                mWidth = nLargestWidth;
-                mHeight = nLargestHeight;
-                bSizeSet = true;
-            }
-        }
-
-        // * use preferred preview size for the following device
-        if (Build.MANUFACTURER.equals("Xiaomi") && Build.MODEL.equals("MI 4LTE") && (Build.VERSION.SDK_INT <= 19)) {
-            Log.i("ve", "$$$$$$$$ FIX Xiaomi MI 4LTE crash $$$$$$$$");
-            bSizeSet = false;
-        }
-
-        // * hack -- use prefer preview size, too many phones don't handle aspect ratio correctly
-//		if(psz != null)
-//		{
-//			if (psz.width >= mWidth && psz.height >= mHeight) {
-//				bSizeSet = false;
-//			}
-//		}
-//
-        if (!bSizeSet && (psz != null)) {
-            parms.setPreviewSize(psz.width, psz.height);
-            mWidth = psz.width;
-            mHeight = psz.height;
-        }
+        // hardcode
+        psz.width = 640;
+        psz.height = 480;
+        parms.setPreviewSize(psz.width, psz.height);
+        mWidth = psz.width;
+        mHeight = psz.height;
 
         // *
         // * Now set fps
@@ -392,13 +322,13 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
                     bFocusModeSet = true;
                     break;
                 } catch (Exception ex) {
-                    Log.i("ve", "[WARNING] vcap: set focus mode error (stack trace followed)!!!\n");
+                    Log.i(TAG, "[WARNING] vcap: set focus mode error (stack trace followed)!!!\n");
                     ex.printStackTrace();
                 }
             }
         }
         if (!bFocusModeSet) {
-            Log.i("ve", "[WARNING] vcap: focus mode left unset !!\n");
+            Log.i(TAG, "[WARNING] vcap: focus mode left unset !!\n");
         }
 
         // *
@@ -407,19 +337,16 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
         try {
             mCam.setParameters(parms);
         } catch (Exception ex) {
-            Log.i("ve", "vcap: set camera parameters error with exception\n");
+            Log.i(TAG, "vcap: set camera parameters error with exception\n");
             ex.printStackTrace();
         }
 
         Camera.Parameters actualParm = mCam.getParameters();
         mWidth = actualParm.getPreviewSize().width;
         mHeight = actualParm.getPreviewSize().height;
-        Log.i("ve", "[WARNING] vcap: focus mode " + actualParm.getFocusMode());
+        Log.i(TAG, "[WARNING] vcap: focus mode " + actualParm.getFocusMode());
 
-        int size = mWidth * mHeight * 3 / 2;
-        if (mTempBuffer == null || mTempBuffer.capacity() != size) {
-            mTempBuffer = ByteBuffer.allocateDirect(size);
-        }
+        createPool();
 
         int result;
         if (mCamInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -433,44 +360,87 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
         return 0;
     }
 
-    private int startCam() {
+    private void createPool() {
+        queuedBuffers.clear();
+        mFrameSize = mWidth * mHeight * 3 / 2;
+        for (int i = 0; i < NUMBER_OF_CAPTURE_BUFFERS; ++i) {
+            final ByteBuffer buffer = ByteBuffer.allocateDirect(mFrameSize);
+            queuedBuffers.add(buffer.array());
+            mCam.addCallbackBuffer(buffer.array());
+        }
+    }
+
+    private int startCamOnCameraThread() {
+        checkIsOnCameraThread();
+        if (!isCameraRunning.get() || mCam == null) {
+            Log.e(TAG, "startPreviewOnCameraThread: Camera is stopped");
+            return 0;
+        }
+
         // * mCam.setDisplayOrientation(90);
-        if (mHolder == null) {
-            Log.i("ve", "vcap: mHolder == null\n");
+        if (mTexture == null) {
             return -1;
         }
 
         try {
+            //mCam.setPreviewTexture(mTexture);
             mCam.setPreviewDisplay(mHolder);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mCam.setPreviewCallback(this);
+
+        mCam.setPreviewCallbackWithBuffer(this);
         mCam.startPreview();
         return 0;
     }
 
-    private int stopCam() {
+    private int stopCaptureOnCameraThread(boolean stopHandler) {
+        checkIsOnCameraThread();
+        Log.d(TAG, "stopCaptureOnCameraThread");
+
+        if (stopHandler) {
+            // Clear the cameraThreadHandler first, in case stopPreview or
+            // other driver code deadlocks. Deadlock in
+            // android.hardware.Camera._stopPreview(Native Method) has
+            // been observed on Nexus 5 (hammerhead), OS version LMY48I.
+            // The camera might post another one or two preview frames
+            // before stopped, so we have to check |isCameraRunning|.
+            // Remove all pending Runnables posted from |this|.
+            isCameraRunning.set(false);
+            cameraThreadHandler.removeCallbacksAndMessages(this /* token */);
+        }
+
         if (mCam != null) {
             mCam.stopPreview();
-            mCam.setPreviewCallback(null);
-            try {
-                mCam.setPreviewDisplay(null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            mCam.setPreviewCallbackWithBuffer(null);
         }
+        queuedBuffers.clear();
         return 0;
     }
 
     private int restartCam() {
-        boolean bStarted = mIsPreview || mIsCapture;
-        if(bStarted) {
-            stopCam();
-            releaseCam();
-            createCam();
-            startCam();
+        synchronized (pendingCameraRestartLock) {
+            if (pendingCameraRestart) {
+                // Do not handle multiple camera switch request to avoid blocking
+                // camera thread by handling too many switch request from a queue.
+                Log.w(TAG, "Ignoring camera switch request.");
+                return 0;
+            }
+            pendingCameraRestart = true;
         }
+
+        final boolean didPost = maybePostOnCameraThread(new Runnable() {
+            @Override
+            public void run() {
+                stopCaptureOnCameraThread(false);
+                releaseCam();
+                createCamOnCameraThread();
+                startCamOnCameraThread();
+                synchronized (pendingCameraRestartLock) {
+                    pendingCameraRestart = false;
+                }
+            }
+        });
 
         return 0;
     }
@@ -487,149 +457,53 @@ public class VideoCaptureDeviceDemo extends ZegoVideoCaptureDevice implements Su
         return 0;
     }
 
-    private int setSurfaceTexture(SurfaceTexture st) {
-        if (mCam == null) {
-            return -1;
-        }
-
-        try {
-            mCam.setPreviewTexture(st);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return -1;
-        }
-
-        return 0;
-    }
-
-    private int openTorch() {
-        if (mCam == null) {
-            return -1;
-        }
-        Camera.Parameters parms = mCam.getParameters();
-
-        boolean bFlashModeSet = false;
-        for (String fmode : parms.getSupportedFlashModes()) {
-            if (fmode.compareTo(Camera.Parameters.FLASH_MODE_TORCH) == 0) {
-                try {
-                    bFlashModeSet = true;
-                    parms.setFlashMode(fmode);
-                } catch (Exception ex) {
-                    Log.i("ve", "[ERROR] vcap: set flash mode failed\n");
-                    ex.printStackTrace();
-                }
-            }
-        }
-
-        if (!bFlashModeSet) {
-            Log.i("ve", "vcap: flash mode left unset\n");
-            return 0;
-        }
-
-        try {
-            mCam.setParameters(parms);
-        } catch (Exception ex) {
-            Log.i("ve", "vcap: set flash mode -- set camera parameters error with exception\n");
-            ex.printStackTrace();
-        }
-
-        return 0;
-    }
-
-    private int closeTorch() {
-        if (mCam == null) {
-            return -1;
-        }
-        Camera.Parameters parms = mCam.getParameters();
-
-        boolean bFlashModeSet = false;
-        for (String fmode : parms.getSupportedFlashModes()) {
-            if (fmode.compareTo(Camera.Parameters.FLASH_MODE_OFF) == 0) {
-                try {
-                    bFlashModeSet = true;
-                    parms.setFlashMode(fmode);
-                } catch (Exception ex) {
-                    Log.i("ve", "[ERROR] vcap: set flash mode failed\n");
-                    ex.printStackTrace();
-                }
-            }
-        }
-
-        if (!bFlashModeSet) {
-            Log.i("ve", "vcap: flash mode left unset\n");
-            return 0;
-        }
-
-        try {
-            mCam.setParameters(parms);
-        } catch (Exception ex) {
-            Log.i("ve", "vcap: set flash mode -- set camera parameters error with exception\n");
-            ex.printStackTrace();
-        }
-
-        return 0;
-    }
-
-    private int removeView() {
-        if (mSurView != null) {
-            SurfaceHolder sh = mSurView.getHolder();
-            if (sh != null) {
-                sh.removeCallback(this);
-            }
-            mSurView = null;
-            mHolder = null;
-        }
-        return 0;
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        mHolder = holder;
-        restartCam();
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        mHolder = holder;
-        restartCam();
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        mHolder = null;
-        mIsCapture = false;
-        mIsPreview = false;
-        stopCam();
-        releaseCam();
-    }
-
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        if (!mIsCapture) {
-            return ;
+        checkIsOnCameraThread();
+        if (!isCameraRunning.get()) {
+            Log.e(TAG, "onPreviewFrame: Camera is stopped");
+            return;
+        }
+
+        if (!queuedBuffers.contains(data)) {
+            // |data| is an old invalid buffer.
+            return;
         }
 
         if (mClient == null) {
             return;
         }
 
-        if (mTempBuffer == null || mTempBuffer.capacity() != data.length) {
-            mTempBuffer = ByteBuffer.allocateDirect(data.length);
-        }
-
-        if (!mTempBuffer.isDirect()) {
-            return ;
-        }
-
-        mTempBuffer.clear();
-        mTempBuffer.put(data);
-        mTempBuffer.position(0);
-        mTempBuffer.limit(data.length);
-
         VideoCaptureFormat format = new ZegoVideoCaptureDevice.VideoCaptureFormat();
         format.width = mWidth;
         format.height = mHeight;
         format.pixel_format = PIXEL_FORMAT_NV21;
-        mClient.onIncomingCapturedData(mTempBuffer, format, System.currentTimeMillis(), 1000);
+        mClient.onByteBufferFrameCaptured(data, mFrameSize, format, System.currentTimeMillis(), 1000);
+
+        camera.addCallbackBuffer(data);
+    }
+
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        mTexture = surface;
+        restartCam();
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        mTexture = surface;
+        restartCam();
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        mTexture = null;
+        stopCapture();
+        return false;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
     }
 }

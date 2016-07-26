@@ -3,26 +3,23 @@
     <string name="action_settings">Settings</string>
 
     <string name="recent">刚刚</string>
-    <string name="minutes_ago">分钟前</string>
-    <string name="hours_ago">小时前</string>
-    <string name="day_ago">天前</string>
-    <string name="year_ago">年前</string>
+    <string name="minutes_ago">&#160;分钟前</string>
+    <string name="hours_ago">&#160;小时前</string>
+    <string name="day_ago">&#160;天前</string>
+    <string name="year_ago">&#160;年前</string>
 
-    <string name="user_account">账号:</string>
+    <string name="user_id">账号:</string>
     <string name="user_name">名字:</string>
-    <string name="channel">频道:</string>
-    <string name="resolution_type">直播品质:</string>
+    <string name="quality_options">直播品质:</string>
     <string name="sdk_version">SDK:</string>
     <string name="upload_log">上传日志</string>
-    <string name="about">关于ZEGO</string>
-    <string name="demo_version">版本: </string>
-    <string name="upload_log_successfully">上传日志成功</string>
-    <string name="set_test_env_successfully">成功打开测试环境</string>
-    <string name="close_test_env">已关闭测试环境</string>
+    <string name="about">关于</string>
+    <string name="demo_version">版本:&#160;</string>
+    <string name="upload_log_successfully">日志上传成功</string>
 
-    <string name="resolution_prefix">分辨率  <xliff:g id="value">%1$s</xliff:g></string>
-    <string name="fps_prefix">帧率  <xliff:g id="value">%1$s</xliff:g></string>
-    <string name="bitrate_prefix">码率  <xliff:g id="value">%1$s</xliff:g></string>
+    <string name="resolution_prefix">分辨率&#160;<xliff:g id="value">%1$s</xliff:g></string>
+    <string name="fps_prefix">帧率&#160;<xliff:g id="value">%1$s</xliff:g></string>
+    <string name="bitrate_prefix">码率&#160;<xliff:g id="value">%1$s</xliff:g></string>
 
     <string name="app_loading_more">加载中…</string>
     <string name="app_no_more_data">没有更多数据了…</string>
@@ -31,9 +28,43 @@
     <string name="zego">ZEGO</string>
     <string name="advanced">高级</string>
     <string name="hint_pull_refresh">下拉刷新^_^</string>
-    <string name="request_publish_ing">正在请求连麦....</string>
 
     <string name="textOn">开启</string>
     <string name="textOff">关闭</string>
+    <string name="back">返回</string>
+    <string name="close">关闭</string>
+    <string name="publish_setting">设置</string>
+    <string name="make_a_title">给直播取一个吸引人的标题</string>
+    <string name="go_publish">开始直播</string>
+    <string name="test_env">测试环境</string>
+    <string name="appid">appID:</string>
+    <string name="appkey">appKEY:</string>
+    <string name="mute">静音</string>
+    <string name="front_camera">前置摄像头</string>
+    <string name="camera">摄像头</string>
+    <string name="speaker">声音</string>
+    <string name="mic">麦克风</string>
+    <string name="flashlight">手电筒</string>
+    <string name="beauty">美颜</string>
+    <string name="filter">滤镜</string>
+    <string name="start_publishing">开始直播</string>
+    <string name="request_to_join">请求连麦</string>
+    <string name="stop_publishing">停止直播</string>
 
+    <!--broadcast-->
+    <string name="hint">提示</string>
+    <string name="someone_is_requesting_to_broadcast_allow"><xliff:g id="value">%1$s</xliff:g>&#160;正在请求连麦, 是否同意?"</string>
+    <string name="Allow">同意</string>
+    <string name="Deny">拒绝</string>
+    <string name="your_request_has_been_denied">你的连麦请求被拒绝</string>
+    <string name="got_it">知道了</string>
+    <string name="do_you_really_want_to_leave">确定要退出直播页面吗</string>
+    <string name="Yes">确定</string>
+    <string name="No">取消</string>
+
+    <!--log-->
+    <string name="someone_is_requesting_to_broadcast"><xliff:g id="value">%1$s</xliff:g>:&#160;正在请求连麦</string>
+    <string name="request_of_broadcast_has_been_allowed"><xliff:g id="value">%1$s</xliff:g>:&#160;连麦请求被通过</string>
+    <string name="request_of_broadcast_has_been_denied"><xliff:g id="value">%1$s</xliff:g>:&#160;连麦请求被拒绝</string>
+    <string name="please_wait">请稍后...</string>
 </resources>

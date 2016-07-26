@@ -25,12 +25,18 @@
             android:layout_width="@dimen/dimen_50"
             android:layout_height="@dimen/dimen_50"
             android:gravity="center"
-            android:text="返回"
+            android:text="@string/back"
             android:textColor="@color/sl_btn"
             android:textSize="@dimen/text_size_4"/>
 
 
     </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_2"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        />
 
     <WebView
         android:id="@+id/webView"

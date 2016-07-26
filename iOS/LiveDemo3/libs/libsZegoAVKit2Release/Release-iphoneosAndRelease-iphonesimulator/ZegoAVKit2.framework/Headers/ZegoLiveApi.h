@@ -242,6 +242,7 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 
 /// \brief 获取 SDK 版本
 - (NSString *)version;
+- (NSString *)version2;
 
 /// \brief 是否启用测试环境
 + (void)setUseTestEnv:(bool)useTestEnv;

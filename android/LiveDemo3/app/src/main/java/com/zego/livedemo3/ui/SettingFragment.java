@@ -16,6 +16,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.zego.livedemo3.AboutZegoActivity;
+import com.zego.livedemo3.BizApiManager;
 import com.zego.livedemo3.MainActivity;
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.ZegoApiManager;
@@ -193,10 +194,8 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    Toast.makeText(mParentActivity, R.string.set_test_env_successfully, Toast.LENGTH_SHORT).show();
                     ZegoApiManager.getInstance().getZegoAVKit().setTestEnv(true);
                 } else {
-                    Toast.makeText(mParentActivity, R.string.close_test_env, Toast.LENGTH_SHORT).show();
                     ZegoApiManager.getInstance().getZegoAVKit().setTestEnv(false);
                 }
             }
@@ -323,6 +322,19 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
 
                     ZegoApiManager.getInstance().getZegoAVKit().unInit();
                     ZegoApiManager.getInstance().getZegoAVKit().init(Long.valueOf(appID), signKey, ZegoApplication.sApplicationContext);
+
+                    // 即构分配的key与id
+                    byte[] signKeyBiz = {
+                            (byte)0xf9,(byte)0xe4,(byte)0x7b,(byte)0x67,(byte)0xa,(byte)0x8f,(byte)0x46,
+                            (byte)0x14,(byte)0x3e,(byte)0xdb,(byte)0xfb,(byte)0xc0,(byte)0x66,(byte)0x2a,
+                            (byte)0xc4,(byte)0xfe,(byte)0x88,(byte)0xde,(byte)0xb6,(byte)0x3f,(byte)0x79,
+                            (byte)0xad,(byte)0xc5,(byte)0xc4,(byte)0xe3,(byte)0xa6,(byte)0x18,(byte)0x1b,
+                            (byte)0x7d,(byte)0xe3,(byte)0x1e,(byte)0x91
+                    };
+                    long appIDBiz = 308895348;
+
+                    BizApiManager.getInstance().getBizLiveRoom().unInitSdk();
+                    BizApiManager.getInstance().getBizLiveRoom().initSdk(appIDBiz, signKeyBiz, signKeyBiz.length, ZegoApplication.sApplicationContext);
                 }
             }
         }).start();

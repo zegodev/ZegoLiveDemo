@@ -30,7 +30,7 @@
 "有用户请求连麦" = "Someone is Requesting Broadcast";
 "新增一条流, 流ID:%@" = "Stream Added, Stream ID:%@";
 "删除一条流, 流ID:%@" = "Stream Removed, Stream ID:%@";
-"流列表有变化，但是流列表为空！" = "Stream List Updated, But is Empty!";
+"流列表有变化，但是流列表为空！" = "Stream Updated List is Empty!";
 "播放流成功, 流ID:%@" = "Play Succeed, Stream ID:%@";
 "播放流失败, 流ID:%@,  error:%d" = "Play Failed, Stream ID:%@,  error:%d";
 

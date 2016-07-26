@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_20"
-        android:text="高级"
+        android:text="@string/advanced"
         android:textSize="@dimen/text_size_2"/>
 
     <View style="@style/HorizontalDivider"/>
@@ -26,13 +26,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="启用摄像头"
+            android:text="@string/camera"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_size_3"/>
 
         <ToggleButton
             style="@style/ToggleButtonText"
-
             android:id="@+id/tb_camera"
             android:layout_width="@dimen/dimen_80"
             android:layout_height="@dimen/dimen_40"
@@ -54,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="前置摄像头"
+            android:text="@string/front_camera"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_size_3"/>
 
@@ -82,35 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="声音"
-            android:textColor="@color/text_black"
-            android:textSize="@dimen/text_size_3"/>
-
-        <ToggleButton
-            style="@style/ToggleButtonText"
-
-            android:id="@+id/tb_speaker"
-            android:layout_width="@dimen/dimen_80"
-            android:layout_height="@dimen/dimen_40"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
-
-        <View
-            style="@style/HorizontalDivider"
-            android:layout_alignParentBottom="true"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_45"
-        android:paddingLeft="@dimen/dimen_15"
-        android:paddingRight="@dimen/dimen_15">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="麦克风"
+            android:text="@string/mic"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_size_3"/>
 
@@ -138,7 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="手电筒"
+            android:text="@string/flashlight"
             android:textColor="@color/text_black"
             android:textSize="@dimen/text_size_3"/>
 
@@ -160,7 +131,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_20"
-        android:text="美颜"
+        android:text="@string/beauty"
         android:textSize="@dimen/text_size_2"/>
     <View
         style="@style/HorizontalDivider"
@@ -180,7 +151,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="滤镜"
+        android:text="@string/filter"
         android:textSize="@dimen/text_size_2"/>
 
     <View

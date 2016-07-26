@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EFAF4B331D2B6C7800560B00"
-               BuildableName = "LiveDemo3iOS7.app"
+               BuildableName = "LiveDemo3.app"
                BlueprintName = "LiveDemo3iOS7"
                ReferencedContainer = "container:LiveDemo3.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EFAF4B331D2B6C7800560B00"
-            BuildableName = "LiveDemo3iOS7.app"
+            BuildableName = "LiveDemo3.app"
             BlueprintName = "LiveDemo3iOS7"
             ReferencedContainer = "container:LiveDemo3.xcodeproj">
          </BuildableReference>
@@ -42,7 +42,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "iOS7Static"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -56,7 +56,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EFAF4B331D2B6C7800560B00"
-            BuildableName = "LiveDemo3iOS7.app"
+            BuildableName = "LiveDemo3.app"
             BlueprintName = "LiveDemo3iOS7"
             ReferencedContainer = "container:LiveDemo3.xcodeproj">
          </BuildableReference>
@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EFAF4B331D2B6C7800560B00"
-            BuildableName = "LiveDemo3iOS7.app"
+            BuildableName = "LiveDemo3.app"
             BlueprintName = "LiveDemo3iOS7"
             ReferencedContainer = "container:LiveDemo3.xcodeproj">
          </BuildableReference>

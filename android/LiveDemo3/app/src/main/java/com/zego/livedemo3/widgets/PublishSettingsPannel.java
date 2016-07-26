@@ -25,8 +25,6 @@ public class PublishSettingsPannel extends LinearLayout {
 
     private ToggleButton mTbFrontCam;
 
-    private ToggleButton mTbSpeaker;
-
     private ToggleButton mTbMic;
 
     private ToggleButton mTbTorch;
@@ -79,15 +77,6 @@ public class PublishSettingsPannel extends LinearLayout {
             }
         });
 
-        mTbSpeaker = (ToggleButton) mRootView.findViewById(R.id.tb_speaker);
-        mTbSpeaker.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(mPublishSettingsCallback != null){
-                    mPublishSettingsCallback.onEnalbeSpeaker(isChecked);
-                }
-            }
-        });
 
         mTbMic = (ToggleButton)mRootView.findViewById(R.id.tb_mic);
         mTbMic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -148,13 +137,12 @@ public class PublishSettingsPannel extends LinearLayout {
         mPublishSettingsCallback = callback;
     }
 
-    public void initPublishSettings(boolean isEnableCamera, boolean isEnableFrontCam, boolean isEnableSpeaker, boolean isEnableMic, boolean isEnableTorch, int beauty, int filter){
+    public void initPublishSettings(boolean isEnableCamera, boolean isEnableFrontCam, boolean isEnableMic, boolean isEnableTorch, int beauty, int filter){
         if(isEnableFrontCam){
             mTbTorch.setEnabled(false);
         }
         mTbCamera.setChecked(isEnableCamera);
         mTbFrontCam.setChecked(isEnableFrontCam);
-        mTbSpeaker.setChecked(isEnableSpeaker);
         mTbMic.setChecked(isEnableMic);
         mTbTorch.setChecked(isEnableTorch);
         mSpBeauty.setSelection(beauty);
@@ -164,7 +152,6 @@ public class PublishSettingsPannel extends LinearLayout {
     public interface PublishSettingsCallback{
         void onEnableCamera(boolean isEnable);
         void onEnableFrontCamera(boolean isEnable);
-        void onEnalbeSpeaker(boolean isEnable);
         void onEnableMic(boolean isEnable);
         void onEnableTorch(boolean isEnable);
         void onSetBeauty(int beauty);

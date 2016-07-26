@@ -43,6 +43,8 @@
 @property (nonatomic, strong) UIColor *defaultButtonColor;
 @property (nonatomic, strong) UIColor *disableButtonColor;
 
+//@property (nonatomic, strong) UIView *publishView;
+
 @end
 
 @implementation ZegoAnchorViewController
@@ -63,6 +65,11 @@
     self.mutedButton.enabled = NO;
     self.defaultButtonColor = [self.mutedButton titleColorForState:UIControlStateNormal];
     self.disableButtonColor = [self.mutedButton titleColorForState:UIControlStateDisabled];
+    
+    if (self.publishView)
+    {
+        [self updatePublishView:self.publishView];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -122,7 +129,8 @@
     [getZegoAV_ShareInstance() stopPublishing];
     [self reportStreamAction:NO streamID:self.streamID];
     [self removeStreamViewContainer:self.streamID];
-        
+    self.publishView = nil;
+    
     if (self.isPlaying)
     {
         for (ZegoStreamInfo *info in self.playStreamList)
@@ -132,8 +140,8 @@
         }
     }
     
-//    self.streamID = nil;
-//    [self.playStreamList removeAllObjects];
+    //    self.streamID = nil;
+    //    [self.playStreamList removeAllObjects];
     
     [self.viewContainersDict removeAllObjects];
     [self.viewIndexDict removeAllObjects];
@@ -151,8 +159,6 @@
 #pragma mark close publish
 - (IBAction)onClosePublish:(id)sender
 {
-    [self reportStreamAction:NO streamID:self.streamID];
-
     [self closeAllStream];
     
     [getZegoAV_ShareInstance() logoutChannel];
@@ -201,27 +207,33 @@
     }
 }
 
-- (UIView *)createPublishView:(NSString *)streamID
+- (BOOL)updatePublishView:(UIView *)publishView
 {
-    if (streamID.length == 0)
-        return nil;
-    
-    UIView *publishView = [[UIView alloc] init];
     publishView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.playViewContainer addSubview:publishView];
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapView:)];
     [publishView addGestureRecognizer:tapGesture];
     
-    BOOL bResult = [self setContainerConstraints:publishView containerView:self.playViewContainer viewCount:self.viewContainersDict.count];
+    BOOL bResult = [self setContainerConstraints:publishView containerView:self.playViewContainer viewCount:0];
     if (bResult == NO)
     {
         [publishView removeFromSuperview];
-        return nil;
+        return NO;
     }
     
-    self.viewContainersDict[streamID] = publishView;
     [self.playViewContainer bringSubviewToFront:publishView];
+    return YES;
+}
+
+- (UIView *)createPublishView
+{
+    UIView *publishView = [[UIView alloc] init];
+    publishView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    BOOL result = [self updatePublishView:publishView];
+    if (result == NO)
+        return nil;
     
     return publishView;
 }
@@ -237,23 +249,32 @@
         //TODO: error warning
         NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"登录channel失败, error:%d", nil), err];
         [self addLogString:logString];
+        return;
     }
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"登录channel成功", nil)];
     [self addLogString:logString];
     
     //登录成功后配置直播参数，开始直播 创建publishView
-    UIView *publishView = [self createPublishView:self.streamID];
-    if (publishView)
+    if (self.publishView.superview == nil)
+        self.publishView = nil;
+    
+    if (self.publishView == nil)
     {
-        [self setAnchorConfig:publishView];
-        bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
-        assert(b);
-        NSLog(@"%s, ret: %d", __func__, b);
-        
-        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"开始直播，流ID:%@", nil), self.streamID];
-        [self addLogString:logString];
+        self.publishView = [self createPublishView];
+        if (self.publishView)
+        {
+            [self setAnchorConfig:self.publishView];
+            [getZegoAV_ShareInstance() startPreview];
+        }
     }
+    
+    self.viewContainersDict[self.streamID] = self.publishView;
+    bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
+    assert(b);
+    NSLog(@"%s, ret: %d", __func__, b);
+    
+    [self addLogString:[NSString stringWithFormat:NSLocalizedString(@"开始直播，流ID:%@", nil), self.streamID]];
     
     if (self.playStreamList.count != 0)
     {
@@ -279,10 +300,6 @@
     self.isPublishing = YES;
     self.stopPublishButton.enabled = YES;
     [self.stopPublishButton setTitle:NSLocalizedString(@"停止直播", nil) forState:UIControlStateNormal];
-    
-    //记录当前的发布信息
-//    [ZegoSettings sharedInstance].publishingStreamID = streamID;
-//    [ZegoSettings sharedInstance].publishingLiveChannel = self.liveChannel;
     
     [self reportStreamAction:YES streamID:self.streamID];
     
@@ -314,6 +331,7 @@
     
     [self reportStreamAction:NO streamID:self.streamID];
     [self removeStreamViewContainer:streamID];
+    self.publishView = nil;
     
 //    self.streamID = nil;
 }
@@ -492,8 +510,8 @@
 {
     if (streamList.count == 0)
     {
-        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"流列表有变化，但是流列表为空！", nil)];
-        [self addLogString:logString];
+//        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"流列表有变化，但是流列表为空！", nil)];
+//        [self addLogString:logString];
         return;
     }
     

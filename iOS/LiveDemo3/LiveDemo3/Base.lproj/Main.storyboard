@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vC3-pB-5Vb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vC3-pB-5Vb">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -254,7 +254,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="User ID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PFD-Zo-zF5">
-                                                    <rect key="frame" x="112.5" y="13.5" width="471.5" height="17"/>
+                                                    <rect key="frame" x="85.5" y="13.5" width="498.5" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
@@ -265,7 +265,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="PFD-Zo-zF5" secondAttribute="trailing" constant="8" id="P3m-Io-HMN"/>
                                                 <constraint firstItem="7ye-0B-hMK" firstAttribute="leading" secondItem="nAa-XD-S2I" secondAttribute="leadingMargin" constant="8" id="c5y-GM-rAg"/>
-                                                <constraint firstItem="PFD-Zo-zF5" firstAttribute="leading" secondItem="7ye-0B-hMK" secondAttribute="trailing" constant="46" id="sEg-GX-EQj"/>
+                                                <constraint firstItem="PFD-Zo-zF5" firstAttribute="leading" secondItem="7ye-0B-hMK" secondAttribute="trailing" constant="19" id="sEg-GX-EQj"/>
                                                 <constraint firstItem="PFD-Zo-zF5" firstAttribute="centerY" secondItem="nAa-XD-S2I" secondAttribute="centerY" id="tRD-kJ-Sor"/>
                                                 <constraint firstItem="7ye-0B-hMK" firstAttribute="centerY" secondItem="nAa-XD-S2I" secondAttribute="centerY" id="ytT-jW-ZYy"/>
                                             </constraints>
@@ -717,10 +717,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rbz-0b-N55" userLabel="play view">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wIX-Ec-M3D" userLabel="setting view">
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <subviews>
@@ -906,12 +902,8 @@
                         <constraints>
                             <constraint firstItem="snz-st-9tr" firstAttribute="top" secondItem="wIX-Ec-M3D" secondAttribute="bottom" id="6V6-lr-rya"/>
                             <constraint firstItem="wIX-Ec-M3D" firstAttribute="leading" secondItem="6w6-9V-Tge" secondAttribute="leading" id="C6o-JJ-lSc"/>
-                            <constraint firstItem="Rbz-0b-N55" firstAttribute="top" secondItem="tMV-lx-bs6" secondAttribute="bottom" constant="-64" id="Cty-QJ-SFJ"/>
-                            <constraint firstItem="snz-st-9tr" firstAttribute="top" secondItem="Rbz-0b-N55" secondAttribute="bottom" constant="-49" id="Ls1-ZG-Saa"/>
                             <constraint firstAttribute="trailing" secondItem="wIX-Ec-M3D" secondAttribute="trailing" id="MKb-AP-Umd"/>
                             <constraint firstItem="wIX-Ec-M3D" firstAttribute="top" secondItem="tMV-lx-bs6" secondAttribute="bottom" id="PuS-N5-sgw"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Rbz-0b-N55" secondAttribute="trailing" constant="-20" id="mDE-cQ-jKu"/>
-                            <constraint firstItem="Rbz-0b-N55" firstAttribute="leading" secondItem="6w6-9V-Tge" secondAttribute="leadingMargin" constant="-20" id="sbx-wP-GcZ"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="发布直播" image="btn_live_normal" id="q6W-xW-o6w"/>
@@ -919,7 +911,6 @@
                         <outlet property="beautifyPicker" destination="zbw-8p-AlH" id="3c6-D7-Kwb"/>
                         <outlet property="boxView" destination="Fjc-cj-yyk" id="arD-9i-dHA"/>
                         <outlet property="filterPicker" destination="VWM-bh-Y18" id="s12-8t-ROa"/>
-                        <outlet property="preView" destination="Rbz-0b-N55" id="hiG-nF-FPf"/>
                         <outlet property="publishButton" destination="Jgp-sm-xjN" id="qKK-yZ-P4e"/>
                         <outlet property="settingView" destination="wIX-Ec-M3D" id="TDH-hI-83D"/>
                         <outlet property="switchCamera" destination="hRb-KE-PoH" id="3qL-h0-2bt"/>

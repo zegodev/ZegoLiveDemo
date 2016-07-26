@@ -17,11 +17,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
 
-import com.zego.livedemo3.BizApiManager;
 import com.zego.livedemo3.PublishActivity;
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.ZegoApiManager;
 import com.zego.livedemo3.base.AbsBaseFragment;
+import com.zego.livedemo3.utils.PreferenceUtil;
 import com.zego.livedemo3.utils.ZegoAVKitUtil;
 import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
@@ -165,10 +165,8 @@ public class PublishFragment extends AbsBaseFragment {
     public void startPublishing() {
         String publishTitle = etPublishTitle.getText().toString();
         if (TextUtils.isEmpty(publishTitle)) {
-            publishTitle = BizApiManager.getInstance().getBizUser().userName;
+            publishTitle = PreferenceUtil.getInstance().getUserName();
         }
-
-        stopPreview();
 
         hideInputWindow();
         PublishActivity.actionStart(mParentActivity, publishTitle, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter);

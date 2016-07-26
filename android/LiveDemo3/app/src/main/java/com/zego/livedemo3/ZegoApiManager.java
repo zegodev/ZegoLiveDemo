@@ -3,6 +3,7 @@ package com.zego.livedemo3;
 
 import android.content.Context;
 
+import com.zego.livedemo3.advanced.VideoCaptureFactoryDemo;
 import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAvConfig;
 
@@ -35,9 +36,16 @@ public class ZegoApiManager {
      * 初始化sdk.
      */
     public void initSDK(Context context) {
+
         // 设置日志level
         mZegoAVKit.setLogLevel(context, ZegoAVKit.LOG_LEVEL_DEBUG, null);
-        mZegoAVKit.setBusinessType(2);
+
+        boolean bUseVideoCapture = false;
+        if (bUseVideoCapture) {
+            // 外部采集
+            VideoCaptureFactoryDemo factoryDemo = new VideoCaptureFactoryDemo();
+            mZegoAVKit.setVideoCaptureFactory(factoryDemo);
+        }
 
         // 即构分配的key与id
         byte[] signKey = {

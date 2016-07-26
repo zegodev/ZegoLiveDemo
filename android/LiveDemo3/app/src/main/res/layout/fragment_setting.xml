@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:id="@+id/sv"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:id="@+id/sv"
             android:layout_height="match_parent"
     >
 
@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/user_account"
+                android:text="@string/user_id"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_size_4"/>
 
@@ -82,18 +82,19 @@
                 android:textSize="@dimen/text_size_2"
                 />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_40"
             android:layout_marginLeft="@dimen/dimen_5"
-            android:gravity="center_vertical"
             android:layout_marginTop="@dimen/dimen_10"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/resolution_type"
+                android:text="@string/quality_options"
                 android:textColor="@color/text_black"
                 android:textSize="@dimen/text_size_4"/>
 
@@ -206,9 +207,9 @@
                 android:background="@drawable/sl_btn"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dimen_5"
-                android:textSize="@dimen/text_size_4"
                 android:text="@string/upload_log"
-                android:textColor="@color/text_black"/>
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_4"/>
 
             <View
                 style="@style/HorizontalDivider"/>
@@ -220,9 +221,10 @@
                 android:background="@drawable/sl_btn"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dimen_5"
-                android:textSize="@dimen/text_size_4"
                 android:text="@string/about"
-                android:textColor="@color/text_black"/>
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_4"/>
+
             <View
                 style="@style/HorizontalDivider"/>
 
@@ -233,30 +235,46 @@
                 android:background="@drawable/sl_btn"
                 android:gravity="center_vertical"
                 android:paddingLeft="@dimen/dimen_5"
-                android:textSize="@dimen/text_size_4"
                 android:text="@string/advanced"
-                android:textColor="@color/text_black"/>
+                android:textColor="@color/text_black"
+                android:textSize="@dimen/text_size_4"/>
+
             <View
                 style="@style/HorizontalDivider"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="@dimen/dimen_5"
             android:id="@+id/llyt_hide_operation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="vertical">
-            <ToggleButton
-                android:id="@+id/tb_modify_test_env"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:textOff="打开测试环境"
-                android:textOn="关闭测试环境"
-                android:layout_marginLeft="@dimen/dimen_5"
-                />
+            android:layout_marginTop="@dimen/dimen_5"
+            android:orientation="vertical"
+            android:visibility="gone">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_45"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_5"
+
+                    android:text="@string/test_env"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_4"/>
+
+                <ToggleButton
+                    android:id="@+id/tb_modify_test_env"
+                    style="@style/ToggleButtonText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_10"
+                    android:checked="false"
+                    />
+            </LinearLayout>
 
 
             <LinearLayout
@@ -270,7 +288,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_5"
 
-                    android:text="appID:"
+                    android:text="@string/appid"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_4"/>
 
@@ -294,8 +312,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="appKEY:"
                     android:layout_marginLeft="@dimen/dimen_5"
+                    android:text="@string/appkey"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_4"/>
 

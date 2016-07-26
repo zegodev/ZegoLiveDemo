@@ -15,7 +15,7 @@
 "4Sg-tZ-uJT.text" = "Advanced";
 
 /* Class = "UIButton"; normalTitle = "静音"; ObjectID = "4jW-xr-IGD"; */
-"4jW-xr-IGD.normalTitle" = "Muted";
+"4jW-xr-IGD.normalTitle" = "Mute";
 
 /* Class = "UILabel"; text = "Flashlight"; ObjectID = "7Ms-VQ-5YF"; */
 "7Ms-VQ-5YF.text" = "Flashlight";

@@ -90,7 +90,7 @@ public class MainActivity extends AbsBaseActivity implements NavigationBar.Navig
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                toolBar.setTitle("设置");
+                toolBar.setTitle(getString(R.string.action_settings));
             }
 
             @Override
@@ -186,6 +186,7 @@ public class MainActivity extends AbsBaseActivity implements NavigationBar.Navig
         } else {
             // 释放Zego sdk
             ZegoApiManager.getInstance().releaseSDK();
+            BizApiManager.getInstance().releaseSDK();
             System.exit(0);
         }
     }

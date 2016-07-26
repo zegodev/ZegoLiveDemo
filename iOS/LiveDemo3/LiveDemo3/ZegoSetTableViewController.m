@@ -214,7 +214,8 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [self.view endEditing:YES];
+    if (!self.userID.isEditing && !self.userName.isEditing)
+        [self.view endEditing:YES];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
