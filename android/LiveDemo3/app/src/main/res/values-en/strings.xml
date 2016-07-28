@@ -68,4 +68,6 @@
     <string name="request_of_broadcast_has_been_allowed"><xliff:g id="value">%1$s</xliff:g>:&#160;request of broadcast has been allowed</string>
     <string name="request_of_broadcast_has_been_denied"><xliff:g id="value">%1$s</xliff:g>:&#160;request of broadcast has been denied</string>
     <string name="please_wait">Wait...</string>
+
+    <string name="live_quality">Quality:&#160;<xliff:g id="value">%1$s</xliff:g></string>
 </resources>

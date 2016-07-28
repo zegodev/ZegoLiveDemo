@@ -16,6 +16,7 @@
 - (void)onSelectedBeautify:(NSInteger)row;
 - (void)onSelectedFilter:(NSInteger)row;
 - (void)onEnableCamera:(BOOL)enabled;
+- (void)onEnableAux:(BOOL)enabled;
 
 @end
 
@@ -40,6 +41,7 @@
 @property (nonatomic, assign) NSUInteger beautifyRow;
 @property (nonatomic, assign) NSUInteger filterRow;
 @property (nonatomic, assign) BOOL enableCamera;
+@property (nonatomic, assign) BOOL enableAux;
 
 @property (nonatomic, weak) id<ZegoAnchorOptionDelegate> delegate;
 

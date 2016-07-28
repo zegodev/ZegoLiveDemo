@@ -310,4 +310,33 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
     return [NSString stringWithFormat:@"0x%x-0x%x", bizID, bizToken];
 }
 
+- (UIImage *)getBackgroundImage:(CGSize)viewSize withText:(NSString *)text
+{
+    NSTimeInterval beginTime = [[NSDate date] timeIntervalSince1970];
+    
+    UIImage *backgroundImage = [UIImage imageNamed:@"ZegoBK"];
+    UIGraphicsBeginImageContextWithOptions(viewSize, NO, [UIScreen mainScreen].scale);
+    
+    CGFloat height = viewSize.height;
+    if (viewSize.height < viewSize.width)
+        height = viewSize.width;
+//    CGFloat width = viewSize.width;
+    [backgroundImage drawInRect:CGRectMake((viewSize.width - height)/2, (viewSize.height - height)/2, height, height)];
+    
+    if (text.length != 0)
+    {
+        UIColor *textColor = [UIColor whiteColor];
+        UIFont *textFont = [UIFont systemFontOfSize:30];
+        NSDictionary *attributes = @{NSFontAttributeName: textFont, NSForegroundColorAttributeName: textColor};
+        CGRect textRect = [text boundingRectWithSize:CGSizeZero options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil];
+        [text drawAtPoint:CGPointMake((viewSize.width - textRect.size.width)/2, (viewSize.height - textRect.size.height)/2) withAttributes:attributes];
+    }
+    
+    UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    NSLog(@"cost time is %f", [[NSDate date] timeIntervalSince1970] - beginTime);
+    
+    return finalImage;
+}
 @end

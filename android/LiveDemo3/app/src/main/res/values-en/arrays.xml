@@ -47,4 +47,11 @@
         <item>Live List</item>
         <item>Publish</item>
     </string-array>
+
+    <string-array name="live_quality">
+        <item>Excelent</item>
+        <item>Good</item>
+        <item>Medium</item>
+        <item>Bad</item>
+    </string-array>
 </resources>

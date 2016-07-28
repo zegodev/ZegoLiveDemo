@@ -158,7 +158,13 @@
     b = [getZegoAV_ShareInstance() enableMic:YES];
     assert(b);
     
-    b = [getZegoAV_ShareInstance() enableBeautifying:self.switchTorch.on];
+    b = [getZegoAV_ShareInstance() enableTorch:self.switchTorch.on];
+    assert(b);
+    
+    b = [getZegoAV_ShareInstance() enableBeautifying:[self.beautifyPicker selectedRowInComponent:0]];
+    assert(b);
+    
+    b = [getZegoAV_ShareInstance() setFilter:[self.filterPicker selectedRowInComponent:0]];
     assert(b);
     
     [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];

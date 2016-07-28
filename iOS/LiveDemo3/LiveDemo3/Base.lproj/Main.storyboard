@@ -167,6 +167,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="closeButton" destination="x0M-vo-9Bb" id="1le-aS-kzR"/>
+                        <outlet property="logButton" destination="ZPY-ks-mH7" id="7EM-L6-Wo4"/>
                         <outlet property="mutedButton" destination="4jW-xr-IGD" id="nLK-wE-EwK"/>
                         <outlet property="optionButton" destination="t5W-2v-nh7" id="u5l-M4-XSj"/>
                         <outlet property="playViewContainer" destination="QSn-KF-s1q" id="d2K-Il-Gdu"/>

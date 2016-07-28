@@ -10,6 +10,7 @@
 #import "ZegoRoomInfo.h"
 #import "ZegoAVKitManager.h"
 #import "ZegoAudienceViewController.h"
+#import "ZegoStreamInfo.h"
 
 #define ITEM_COUNT_PER_PAGE 20
 
@@ -178,6 +179,15 @@
         roomInfo.createTime = [dict[kRoomInfoCreateTimeKey] integerValue];
         roomInfo.livesCount = [dict[kRoomInfoLivesCount] integerValue];
         roomInfo.firstLiveTitle = dict[kRoomInfoFirstLiveTitle];
+//        roomInfo.streamIDs = [NSArray arrayWithArray:dict[kRoomInfoLiveStreamIDs]];
+        NSArray *streamList = dict[kRoomInfoLiveStreamIDs];
+        NSMutableArray *streams = [NSMutableArray arrayWithCapacity:streamList.count];
+        for (NSDictionary *dict in streamList)
+        {
+            ZegoStreamInfo *stream = [ZegoStreamInfo getStreamInfo:dict];
+            [streams addObject:stream];
+        }
+        roomInfo.streamList = [NSArray arrayWithArray:streams];
         
         [self.roomList addObject:roomInfo];
     }
@@ -196,6 +206,7 @@
     ZegoAudienceViewController *audienceViewController = (ZegoAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"audienceID"];
     audienceViewController.bizToken = info.bizToken;
     audienceViewController.bizID = info.bizID;
+    audienceViewController.currentStreamList = [NSArray arrayWithArray:info.streamList];
     
     [self presentViewController:audienceViewController animated:YES completion:nil];
 }

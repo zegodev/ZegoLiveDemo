@@ -15,5 +15,6 @@
 @property (nonatomic, assign) NSUInteger createTime;
 @property (nonatomic, assign) NSUInteger livesCount;
 @property (nonatomic, copy) NSString *firstLiveTitle;
+@property (nonatomic, strong) NSArray *streamList;
 
 @end

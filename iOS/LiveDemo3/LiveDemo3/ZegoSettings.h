@@ -36,4 +36,6 @@
 //用token跟id拼接出一个channelID
 - (NSString *)getChannelID:(unsigned int)bizToken bizID:(unsigned int)bizID;
 
+- (UIImage *)getBackgroundImage:(CGSize)viewSize withText:(NSString *)text;
+
 @end

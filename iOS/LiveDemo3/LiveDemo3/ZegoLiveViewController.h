@@ -33,11 +33,15 @@
 @property (nonatomic, assign) BOOL enableCamera;
 //YES 扬声器打开
 @property (nonatomic, assign) BOOL enableSpeaker;
+//YES 混音
+@property (nonatomic, assign) BOOL enableAux;
 
 //日志记录
 @property (nonatomic, strong) NSMutableArray *logArray;
 
 - (void)setAnchorConfig:(UIView *)publishView;
+
+- (BOOL)isDeviceiOS7;
 
 - (BOOL)setContainerConstraints:(UIView *)view containerView:(UIView *)containerView viewCount:(NSUInteger)viewCount;
 - (void)updateContainerConstraintsForTap:(UIView *)tapView containerView:(UIView *)containerView;
@@ -61,4 +65,10 @@
 - (void)audioSessionWasInterrupted:(NSNotification *)notification;
 
 - (void)addLogString:(NSString *)logString;
+
+- (void)updateQuality:(int)quality view:(UIView *)playerView;
+
+//混流时的回调实现
+- (void)auxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount;
+
 @end

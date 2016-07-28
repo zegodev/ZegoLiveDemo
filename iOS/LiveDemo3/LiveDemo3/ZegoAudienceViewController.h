@@ -13,5 +13,6 @@
 
 @property (nonatomic, assign) unsigned int bizToken;
 @property (nonatomic, assign) unsigned int bizID;
+@property (nonatomic, strong) NSArray *currentStreamList;
 
 @end

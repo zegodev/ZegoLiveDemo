@@ -14,7 +14,7 @@
 @property (nonatomic, copy) NSString *streamID;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *userName;
-@property (nonatomic, copy) NSString *streamUrl;
+//@property (nonatomic, copy) NSString *streamUrl;
 
 + (instancetype)getStreamInfo:(NSDictionary *)streamDic;
 

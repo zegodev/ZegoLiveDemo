@@ -44,7 +44,7 @@ public class LogListActivity extends AbsBaseActivity {
 
     @Override
     protected void initVariables(Bundle savedInstanceState) {
-        mLinkedListData = (LinkedList<String>) PreferenceUtil.getInstance().getObjectFromString(BaseDisplayActivity.KEY_LIST_LOG);
+        mLinkedListData = (LinkedList<String>) PreferenceUtil.getInstance().getObjectFromString(BaseLiveActivity.KEY_LIST_LOG);
         if (mLinkedListData == null) {
             mLinkedListData = new LinkedList<>();
         }

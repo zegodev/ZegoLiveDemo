@@ -30,11 +30,13 @@ import butterknife.OnClick;
  * Copyright © 2016 Zego. All rights reserved.
  * des:
  */
-public class PlayActivity extends BaseDisplayActivity {
+public class PlayActivity extends BaseLiveActivity {
 
     protected long mRoomKey;
 
     protected long mServerKey;
+
+    protected ArrayList<BizStream> mListStream = new ArrayList<>();
 
     protected RelativeLayout mRlytBgPlay;
 
@@ -45,10 +47,15 @@ public class PlayActivity extends BaseDisplayActivity {
      *
      * @param activity 源activity
      */
-    public static void actionStart(Activity activity, long roomKey, long serverKey) {
+    public static void actionStart(Activity activity, long roomKey, long serverKey, BizStream[] listStream) {
         Intent intent = new Intent(activity, PlayActivity.class);
         intent.putExtra(IntentExtra.ROOM_KEY, roomKey);
         intent.putExtra(IntentExtra.SERVER_KEY, serverKey);
+        ArrayList<BizStream> arrayList = new ArrayList<>();
+        for (BizStream stream : listStream) {
+            arrayList.add(stream);
+        }
+        intent.putParcelableArrayListExtra(IntentExtra.LIST_STREAM, arrayList);
         activity.startActivity(intent);
         activity.overridePendingTransition(R.anim.scale_translate,
                 R.anim.my_alpha_action);
@@ -57,11 +64,13 @@ public class PlayActivity extends BaseDisplayActivity {
     @Override
     protected void initExtraData(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-
             Intent intent = getIntent();
             mRoomKey = intent.getLongExtra(IntentExtra.ROOM_KEY, 0);
             mServerKey = intent.getLongExtra(IntentExtra.SERVER_KEY, 0);
-
+            mListStream = intent.getParcelableArrayListExtra(IntentExtra.LIST_STREAM);
+            if (mListStream == null) {
+                mListStream = new ArrayList<>();
+            }
         }
         super.initExtraData(savedInstanceState);
     }
@@ -70,19 +79,23 @@ public class PlayActivity extends BaseDisplayActivity {
     protected void initViews(Bundle savedInstanceState) {
         super.initViews(savedInstanceState);
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             mRlytBgPlay = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_play_bg, null);
-            mRlytBgPlay.setLayoutParams(mListTextureView.get(0).getLayoutParams());
-            ((RelativeLayout)mListTextureView.get(0).getParent()).addView(mRlytBgPlay);
+            mRlytBgPlay.setLayoutParams(mListViewLive.get(0).getLayoutParams());
+            ((RelativeLayout) mListViewLive.get(0).getParent()).addView(mRlytBgPlay);
         }
     }
 
     @Override
     protected void doBusiness(Bundle savedInstanceState) {
-
         if (savedInstanceState == null) {
             // 登录业务房间
             mBizLiveRoom.getInExistedRoom(mRoomKey, mServerKey, PreferenceUtil.getInstance().getUserID(), PreferenceUtil.getInstance().getUserName());
+
+            // 登录频道
+            mChannel = BizLiveRoomUitl.getChannel(mRoomKey, mServerKey);
+            ZegoUser zegoUser = new ZegoUser(PreferenceUtil.getInstance().getUserID(), PreferenceUtil.getInstance().getUserName());
+            mZegoAVKit.loginChannel(zegoUser, mChannel);
         } else {
             // 恢复发布 播放
             replayAndRepublish();
@@ -92,11 +105,10 @@ public class PlayActivity extends BaseDisplayActivity {
             @Override
             public void onLoginRoom(int errCode, long roomKey, long serverKey) {
                 if (errCode == 0) {
-                    mChannel = BizLiveRoomUitl.getChannel(roomKey, serverKey);
-                    ZegoUser zegoUser = new ZegoUser(PreferenceUtil.getInstance().getUserID(), PreferenceUtil.getInstance().getUserName());
-                    mZegoAVKit.loginChannel(zegoUser, mChannel);
                     recordLog(MY_SELF + ": login room(" + roomKey + ") success");
                     recordLog(MY_SELF + ": start login channel(" + mChannel + ")");
+                    // 获取流信息
+                    mBizLiveRoom.getStreamList();
                 } else {
                     recordLog(MY_SELF + ": login room(" + roomKey + ") fail --errCode:" + errCode);
                 }
@@ -121,13 +133,14 @@ public class PlayActivity extends BaseDisplayActivity {
             @Override
             public void onStreamAdd(BizStream[] bizStreams) {
                 if (bizStreams != null && bizStreams.length > 0) {
-
                     for (BizStream bizStream : bizStreams) {
-                        recordLog(bizStream.userName + ": create stream(" + bizStream.streamID + ") success");
-                        startPlay(bizStream.streamID, getFreeZegoRemoteViewIndex());
-                        mPublishNumber++;
+                        if (mHaveLoginedChannel) {
+                            recordLog(bizStream.userName + ": create stream(" + bizStream.streamID + ") success");
+                            startPlay(bizStream.streamID, getFreeZegoRemoteViewIndex());
+                        } else {
+                            mListStream.add(bizStream);
+                        }
                     }
-                    setPublishControlState();
                 }
             }
 
@@ -137,9 +150,7 @@ public class PlayActivity extends BaseDisplayActivity {
                     for (BizStream bizStream : bizStreams) {
                         recordLog(bizStream.userName + ": delete stream(" + bizStream.streamID + ")");
                         stopPlay(bizStream.streamID);
-                        mPublishNumber--;
                     }
-                    setPublishControlState();
                 }
 
             }
@@ -153,23 +164,14 @@ public class PlayActivity extends BaseDisplayActivity {
 
     @Override
     protected void doLiveBusinessAfterLoginChannel() {
-        if (!mHaveLoginedChannel) {
-            mBizLiveRoom.getStreamList();
-        } else {
+        if (mHostHasBeenCalled) {
+            mHostHasBeenCalled = false;
             // 挂断电话重新恢复
-            for (int i = 0, size = mListTextureViewTag.size(); i < size; i++) {
-                int playStreamOrdinal = getPlayStreamOrdinalFromTag(mListTextureViewTag.get(i));
-                String playStreamID = getPlayStreamIDFromTag(mListTextureViewTag.get(i));
-                switch (playStreamOrdinal) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        startPlay(playStreamID, getZegoRemoteViewIndexByOrdinal(playStreamOrdinal));
-                        break;
-                    case BIG_VIDEO_ORDINAL:
-                        mBizLiveRoom.createSreamInRoom(mPublishTitle, mPublishStreamID);
-                        break;
-                }
+            replayAndRepublishAfterRingOff();
+        } else {
+            for (BizStream bizStream : mListStream) {
+                recordLog(bizStream.userName + ": create stream(" + bizStream.streamID + ") success");
+                startPlay(bizStream.streamID, getFreeZegoRemoteViewIndex());
             }
         }
     }
@@ -187,7 +189,7 @@ public class PlayActivity extends BaseDisplayActivity {
 
     @Override
     protected void afterPlaySuccess() {
-        if(mRlytBgPlay != null){
+        if (mRlytBgPlay != null) {
             mRlytBgPlay.setVisibility(View.GONE);
         }
     }
@@ -261,12 +263,12 @@ public class PlayActivity extends BaseDisplayActivity {
 
                     mDialogHandleRequestPublish = new AlertDialog.Builder(this).setTitle(getString(R.string.hint)).setMessage(getString(R.string.someone_is_requesting_to_broadcast_allow, fromUserName)).setPositiveButton(getString(R.string.Allow),
                             new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            BizLiveRoomUitl.sendMsg(BizLiveRoomUitl.KEY_REQUEST_PUBLISH_RESPOND, listToUsers, BizLiveRoomUitl.AGREE_PUBLISH, (String) mapData.get(BizLiveRoomUitl.KEY_MAGIC));
-                            dialog.dismiss();
-                        }
-                    }).setNegativeButton(getString(R.string.Deny), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    BizLiveRoomUitl.sendMsg(BizLiveRoomUitl.KEY_REQUEST_PUBLISH_RESPOND, listToUsers, BizLiveRoomUitl.AGREE_PUBLISH, (String) mapData.get(BizLiveRoomUitl.KEY_MAGIC));
+                                    dialog.dismiss();
+                                }
+                            }).setNegativeButton(getString(R.string.Deny), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             BizLiveRoomUitl.sendMsg(BizLiveRoomUitl.KEY_REQUEST_PUBLISH_RESPOND, listToUsers, BizLiveRoomUitl.DISAGREE_PUBLISH, (String) mapData.get(BizLiveRoomUitl.KEY_MAGIC));

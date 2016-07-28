@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ZegoAVKitManager.h"
 
 @interface AppDelegate () <UISplitViewControllerDelegate>
 
@@ -17,6 +18,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    getZegoAV_ShareInstance();
+    
     return YES;
 }
 

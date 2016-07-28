@@ -22,6 +22,8 @@
 #define ZEGO_MAX_COMMON_LEN     (512)
 #define ZEGO_MAX_NAME_LEN       (128)
 
+#define ZEGO_MAX_STREAM         (3)
+
 namespace ZEGO
 {
     namespace CHATROOM
@@ -51,7 +53,16 @@ namespace ZEGO
             UPDATE_ADDED,
             UPDATE_DELETED,
         };
-                
+        
+        struct ZegoStream
+        {
+            unsigned int index;
+            char title[ZEGO_MAX_NAME_LEN];
+            char streamID[ZEGO_MAX_NAME_LEN];
+            char userName[ZEGO_MAX_NAME_LEN];
+            //            char streamUrl[ZEGO_MAX_NAME_LEN];
+        };
+        
         struct ZegoRoomInfo
         {
             unsigned int dwID;
@@ -60,21 +71,13 @@ namespace ZEGO
             unsigned int serverKey;
             unsigned int livesCount;
             char firstLiveTitle[ZEGO_MAX_NAME_LEN];
+            ZegoStream streamList[ZEGO_MAX_STREAM];
         };
         
         struct ZegoUser
         {
             char userName[ZEGO_MAX_NAME_LEN];
             char userID[ZEGO_MAX_NAME_LEN];
-        };
-        
-        struct ZegoStream
-        {
-            unsigned int index;
-            char title[ZEGO_MAX_NAME_LEN];
-            char streamID[ZEGO_MAX_NAME_LEN];
-            char userName[ZEGO_MAX_NAME_LEN];
-//            char streamUrl[ZEGO_MAX_NAME_LEN];
         };
         
         enum ZegoMessageType

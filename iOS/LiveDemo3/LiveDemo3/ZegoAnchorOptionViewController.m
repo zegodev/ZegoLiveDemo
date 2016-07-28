@@ -169,6 +169,14 @@
     [self.tableView reloadData];
 }
 
+- (IBAction)toggleAux:(id)sender
+{
+    UISwitch *switchAux = (UISwitch *)sender;
+    self.enableAux = switchAux.on;
+    if ([self.delegate respondsToSelector:@selector(onEnableAux:)])
+        [self.delegate onEnableAux:switchAux.on];
+}
+
 #pragma mark UITableViewDataSource & Delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -178,7 +186,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0)
-        return 4;
+        return 5;
     
     return 1;
 }
@@ -251,6 +259,14 @@
             cell.switchButton.enabled = YES;
             [cell.switchButton removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchButton addTarget:self action:@selector(toggleCamera:) forControlEvents:UIControlEventValueChanged];
+        }
+        else if (indexPath.row == 4)
+        {
+            cell.titleLabel.text = NSLocalizedString(@"混音", nil);
+            cell.switchButton.on = self.enableAux;
+            cell.switchButton.enabled = YES;
+            [cell.switchButton removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchButton addTarget:self action:@selector(toggleAux:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }

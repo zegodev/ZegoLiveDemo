@@ -18,6 +18,10 @@
 @property (nonatomic, strong) NSMutableDictionary *requestAlertContextDict;
 @property (assign) UIInterfaceOrientation currentOrientation;
 
+//混流时的数据源
+@property (nonatomic, strong) NSData *auxData;
+@property (nonatomic, assign) void *pPos;
+
 @end
 
 @implementation ZegoLiveViewController
@@ -107,6 +111,11 @@
     self.enableSpeaker = enable;
 }
 
+- (void)onEnableAux:(BOOL)enabled
+{
+    self.enableAux = enabled;
+}
+
 #pragma mark setter
 - (void)setBeautifyFeature:(ZegoBeautifyFeature)beautifyFeature
 {
@@ -172,6 +181,21 @@
     [getZegoAV_ShareInstance() enableSpeaker:enableSpeaker];
 }
 
+- (void)setEnableAux:(BOOL)enableAux
+{
+    if (_enableAux == enableAux)
+        return;
+    
+    _enableAux = enableAux;
+    [getZegoAV_ShareInstance() enableAux:enableAux];
+    
+    if (enableAux == NO)
+    {
+        self.pPos = NULL;
+        self.auxData = nil;
+    }
+}
+
 - (void)setAnchorConfig:(UIView *)publishView
 {
     int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
@@ -184,6 +208,9 @@
     assert(b);
     
     b = [getZegoAV_ShareInstance() enableBeautifying:self.beautifyFeature];
+    assert(b);
+    
+    b = [getZegoAV_ShareInstance() setFilter:self.filter];
     assert(b);
     
     [self enablePreview:self.enablePreview LocalView:publishView];
@@ -570,7 +597,10 @@
 
 - (NSString *)getCurrentTime
 {
-    return [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970] * 1000];
+//    return [NSString stringWithFormat:@"%.0f", [[NSDate date] timeIntervalSince1970] * 1000];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"[HH-mm-ss:SSS]";
+    return [formatter stringFromDate:[NSDate date]];
 }
 
 - (void)addLogString:(NSString *)logString
@@ -615,6 +645,131 @@
     }
     
     [self.requestAlertContextDict removeObjectForKey:magicNumber];
+}
+
+- (void)updateQuality:(int)quality view:(UIView *)playerView
+{
+    if (playerView == nil)
+        return;
+    
+    CALayer *qualityLayer = nil;
+    CATextLayer *textLayer = nil;
+    
+    for (CALayer *layer in playerView.layer.sublayers)
+    {
+        if ([layer.name isEqualToString:@"quality"])
+            qualityLayer = layer;
+        
+        if ([layer.name isEqualToString:@"indicate"])
+            textLayer = (CATextLayer *)layer;
+    }
+    
+    int originQuality = 0;
+    if (qualityLayer != nil)
+    {
+        if (CGColorEqualToColor(qualityLayer.backgroundColor, [UIColor greenColor].CGColor))
+            originQuality = 0;
+        else if (CGColorEqualToColor(qualityLayer.backgroundColor, [UIColor yellowColor].CGColor))
+            originQuality = 1;
+        else if (CGColorEqualToColor(qualityLayer.backgroundColor, [UIColor redColor].CGColor))
+            originQuality = 2;
+        else
+            originQuality = 3;
+        
+        if (quality == originQuality)
+            return;
+    }
+    
+    UIFont *textFont = [UIFont systemFontOfSize:13];
+    
+    if (qualityLayer == nil)
+    {
+        qualityLayer = [CALayer layer];
+        qualityLayer.name = @"quality";
+        [playerView.layer addSublayer:qualityLayer];
+        qualityLayer.frame = CGRectMake(22, 22, 12, 12);
+        qualityLayer.contentsScale = [UIScreen mainScreen].scale;
+        qualityLayer.cornerRadius = 6.0f;
+    }
+    
+    if (textLayer == nil)
+    {
+        textLayer = [CATextLayer layer];
+        textLayer.name = @"indicate";
+        [playerView.layer addSublayer:textLayer];
+        textLayer.backgroundColor = [UIColor clearColor].CGColor;
+        textLayer.font = (__bridge CFTypeRef)textFont.fontName;
+        textLayer.foregroundColor = [UIColor blackColor].CGColor;
+        textLayer.fontSize = textFont.pointSize;
+    }
+    
+    UIColor *qualityColor = nil;
+    NSString *text = nil;
+    if (quality == 0)
+    {
+        qualityColor = [UIColor greenColor];
+        text = [NSString stringWithFormat:@"%@%@", NSLocalizedString(@"当前质量:", nil), NSLocalizedString(@"优", nil)];
+    }
+    else if (quality == 1)
+    {
+        qualityColor = [UIColor yellowColor];
+        text = [NSString stringWithFormat:@"%@%@", NSLocalizedString(@"当前质量:", nil), NSLocalizedString(@"良", nil)];
+    }
+    else if (quality == 2)
+    {
+        qualityColor = [UIColor redColor];
+        text = [NSString stringWithFormat:@"%@%@", NSLocalizedString(@"当前质量:", nil), NSLocalizedString(@"中", nil)];
+    }
+    else
+    {
+        qualityColor = [UIColor grayColor];
+        text = [NSString stringWithFormat:@"%@%@", NSLocalizedString(@"当前质量:", nil), NSLocalizedString(@"差", nil)];
+    }
+    
+    qualityLayer.backgroundColor = qualityColor.CGColor;
+    CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName: textFont}];
+    CGRect textFrame = CGRectMake(CGRectGetMaxX(qualityLayer.frame) + 3, CGRectGetMinY(qualityLayer.frame) + (CGRectGetHeight(qualityLayer.frame) - textSize.height)/2, textSize.width, textSize.height);
+    textLayer.frame = textFrame;
+    textLayer.string = text;
+}
+
+- (void)auxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount
+{
+    if (self.auxData == nil)
+    {
+        //初始化auxData
+        NSURL *auxURL = [[NSBundle mainBundle] URLForResource:@"a.pcm" withExtension:nil];
+        if (auxURL)
+        {
+            self.auxData = [NSData dataWithContentsOfURL:auxURL options:0 error:nil];
+            self.pPos = (void *)[self.auxData bytes];
+        }
+    }
+    
+    if (self.auxData)
+    {
+        int nLen = (int)[self.auxData length];
+        const void *pAuxData = [self.auxData bytes];
+        if (pAuxData == NULL)
+            return;
+        
+        int nLeftLen = (int)(pAuxData + nLen - self.pPos);
+        if (nLeftLen < *pDataLen) {
+            self.pPos = (void *)pAuxData;
+            *pDataLen = 0;
+            return;
+        }
+        
+        self.pPos = self.pPos + *pDataLen;
+        
+        if (pSampleRate)
+            *pSampleRate = 44100;
+        
+        if (pChannelCount)
+            *pChannelCount = 2;
+        
+        memcpy(pData, self.pPos, *pDataLen);
+    }
 }
 
 /*

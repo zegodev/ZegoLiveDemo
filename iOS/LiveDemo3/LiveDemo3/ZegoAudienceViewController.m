@@ -16,18 +16,22 @@
 
 //loginChannel->onLoginChannel->LoginInRoom->onLoginRoom
 
-@interface ZegoAudienceViewController () <BizRoomStreamDelegate, ZegoLiveApiDelegate>
+@interface ZegoAudienceViewController () <BizRoomStreamDelegate, ZegoLiveApiDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *playViewContainer;
 @property (weak, nonatomic) IBOutlet UIButton *publishButton;
 @property (weak, nonatomic) IBOutlet UIButton *optionButton;
 @property (weak, nonatomic) IBOutlet UIButton *mutedButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *closeButton;
+@property (weak, nonatomic) IBOutlet UIButton *logButton;
+
 @property (nonatomic, strong) NSMutableArray<ZegoStreamInfo *> *streamList;
 @property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
 @property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
 
 @property (nonatomic, assign) BOOL loginChannelSuccess;
+@property (nonatomic, assign) BOOL loginRoomSuccess;
 
 @property (nonatomic, assign) BOOL isPublishing;
 @property (nonatomic, copy) NSString *publishTitle;
@@ -39,6 +43,8 @@
 
 @property (nonatomic, strong) UIColor *defaultButtonColor;
 
+@property (nonatomic, strong) NSMutableArray *retryStreamList;
+
 @end
 
 @implementation ZegoAudienceViewController
@@ -46,7 +52,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
+    
     self.useFrontCamera = YES;
     self.enableTorch = NO;
     self.beautifyFeature = ZEGO_BEAUTIFY_NONE;
@@ -61,15 +67,41 @@
     _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     _requestingArray = [[NSMutableArray alloc] init];
     
+    _retryStreamList = [[NSMutableArray alloc] init];
+    
     self.liveChannel = [[ZegoSettings sharedInstance] getChannelID:self.bizToken bizID:self.bizID];
     
     [self setupLiveKit];
-    [self loginRoom];
     
-    [self setBackgroundImage:[UIImage imageNamed:@"AppIcon60x60"] playerView:self.playViewContainer];
+    //room信令与channel信令并行处理
+    [self loginRoom];
+    [self loginChannel];
+    
+    [self.streamList addObjectsFromArray:self.currentStreamList];
+    
+    UIImage *backgroundImage = [[ZegoSettings sharedInstance] getBackgroundImage:self.view.bounds.size withText:NSLocalizedString(@"加载中", nil)];
+    [self setBackgroundImage:backgroundImage playerView:self.playViewContainer];
+    
+    [self setButtonHidden:YES];
     
     self.publishButton.enabled = NO;
     self.optionButton.enabled = NO;
+}
+
+- (void)setButtonHidden:(BOOL)hidden
+{
+    if (hidden)
+    {
+        self.publishButton.alpha = 0;
+        self.optionButton.alpha = 0;
+        self.mutedButton.alpha = 0;
+    }
+    else
+    {
+        self.publishButton.alpha = 1;
+        self.optionButton.alpha = 1;
+        self.mutedButton.alpha = 1;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -127,6 +159,7 @@
     
     [self.viewIndexDict removeAllObjects];
     [self.viewContainersDict removeAllObjects];
+    [self.retryStreamList removeAllObjects];
     
     if (self.isPublishing)
     {
@@ -144,8 +177,11 @@
     
     [self clearAllStream];
     
-    [getZegoAV_ShareInstance() logoutChannel];
-    [getBizRoomInstance() leaveLiveRoom];
+    if (self.loginChannelSuccess)
+        [getZegoAV_ShareInstance() logoutChannel];
+    
+    if (self.loginRoomSuccess)
+        [getBizRoomInstance() leaveLiveRoom];
 
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -245,7 +281,7 @@
     }
     
     self.loginChannelSuccess = YES;
-    if (self.streamList.count == 0)
+    if (self.streamList.count == 0 && self.loginRoomSuccess)
         [self getStreamList];
     else
     {
@@ -265,6 +301,17 @@
         [getBizRoomInstance() cteateStreamInRoom:self.publishTitle preferredStreamID:self.publishStreamID];
 }
 
+- (BOOL)isRetryStreamStop:(NSString *)streamID
+{
+    for (NSString *stream in self.retryStreamList)
+    {
+        if ([streamID isEqualToString:stream])
+            return YES;
+    }
+    
+    return NO;
+}
+
 - (void)onPlaySucc:(NSString *)streamID channel:(NSString *)channel
 {
     NSLog(@"%s, streamID:%@", __func__, streamID);
@@ -279,6 +326,21 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流失败, 流ID:%@,  error:%d", nil), streamID, err];
     [self addLogString:logString];
+    
+    if (err == 2 && streamID.length != 0)
+    {
+        if (![self isRetryStreamStop:streamID] && [self.viewIndexDict objectForKey:streamID] != nil)
+        {
+            
+            NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"重新播放, 流ID:%@", nil), streamID];
+            [self addLogString:logString];
+            
+            [self.retryStreamList addObject:streamID];
+            //尝试重新play
+            RemoteViewIndex index = [self.viewIndexDict[streamID] unsignedIntValue];
+            [getZegoAV_ShareInstance() startPlayStream:streamID viewIndex:index];
+        }
+    }
 }
 
 /// \brief 发布直播成功
@@ -334,11 +396,29 @@
 {
     NSLog(@"%s, streamID %@", __func__, streamID);
     
-//    [self setPlayViewBackgroundImage:nil];
+    if (self.optionButton.alpha == 0)
+    {
+        [self setButtonHidden:NO];
+        [self setBackgroundImage:nil playerView:self.playViewContainer];
+    }
     
     UIView *view = self.viewContainersDict[streamID];
     if (view)
         [self setBackgroundImage:nil playerView:view];
+}
+
+- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID
+{
+    UIView *view = self.viewContainersDict[streamID];
+    if (view)
+        [self updateQuality:quality view:view];
+}
+
+- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID
+{
+    UIView *view = self.viewContainersDict[streamID];
+    if (view)
+        [self updateQuality:quality view:view];
 }
 
 #pragma mark BizRoomStreamDelegate
@@ -350,13 +430,46 @@
         NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"登录房间成功. token %d, id %d", nil), bizToken, bizID];
         [self addLogString:logString];
         
-        [self loginChannel];
+        self.loginRoomSuccess = YES;
+        
+        if (self.viewContainersDict.count < MAX_STREAM_COUNT)
+            self.publishButton.enabled = YES;
+        
+        [self getStreamList];
     }
     else
     {
         NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"登录房间失败. error: %d", nil), err];
         [self addLogString:logString];
+        
+        self.loginRoomSuccess = NO;
+        [self showNoLivesAlert];
     }
+}
+
+- (void)showNoLivesAlert
+{
+    if ([self isDeviceiOS7])
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString(@"主播已退出", nil) delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertView show];
+    }
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:NSLocalizedString(@"主播已退出", nil) preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [self onCloseAudience:nil];
+        }];
+        
+        [alertController addAction:okAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self onCloseAudience:nil];
 }
 
 - (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken
@@ -501,7 +614,8 @@
         return;
     }
     
-    [self setBackgroundImage:[UIImage imageNamed:@"AppIcon60x60"] playerView:bigView];
+    UIImage *backgroundImage = [[ZegoSettings sharedInstance] getBackgroundImage:self.view.bounds.size withText:NSLocalizedString(@"加载中", nil)];
+    [self setBackgroundImage:backgroundImage playerView:bigView];
     
     self.viewContainersDict[streamID] = bigView;
     self.viewIndexDict[streamID] = @(index);

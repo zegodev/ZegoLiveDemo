@@ -47,4 +47,11 @@
         <item>直播列表</item>
         <item>发布直播</item>
     </string-array>
+
+    <string-array name="live_quality">
+        <item>优</item>
+        <item>良</item>
+        <item>中</item>
+        <item>差</item>
+    </string-array>
 </resources>

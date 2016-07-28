@@ -29,6 +29,8 @@
 		EF9D0F5B1D2279F500002545 /* ZegoLiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF9D0F5A1D2279F500002545 /* ZegoLiveViewController.m */; };
 		EF9D0F5E1D23D17E00002545 /* ZegoPublishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF9D0F5D1D23D17E00002545 /* ZegoPublishViewController.m */; };
 		EF9D0F641D24D0A900002545 /* ZegoAdvancedTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF9D0F631D24D0A900002545 /* ZegoAdvancedTableViewController.m */; };
+		EFAC2FCF1D48E0AD000A7885 /* a.pcm in Resources */ = {isa = PBXBuildFile; fileRef = EFAC2FCE1D48E0AD000A7885 /* a.pcm */; };
+		EFAC2FD01D48E0AD000A7885 /* a.pcm in Resources */ = {isa = PBXBuildFile; fileRef = EFAC2FCE1D48E0AD000A7885 /* a.pcm */; };
 		EFAF4B351D2B6C7800560B00 /* video_capture_external_demo.m in Sources */ = {isa = PBXBuildFile; fileRef = EF871D2A1D1A437A00C2D08A /* video_capture_external_demo.m */; };
 		EFAF4B361D2B6C7800560B00 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF10EF91D1A297900ECE11E /* AppDelegate.m */; };
 		EFAF4B371D2B6C7800560B00 /* ZegoAnchorOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE0D8F91D1B7F920090F719 /* ZegoAnchorOptionViewController.m */; };
@@ -94,8 +96,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		EF110E2F1D36203F000620CD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
-		EF110E301D36203F000620CD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		EF871D0A1D1A329700C2D08A /* ZegoNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoNavigationViewController.h; sourceTree = "<group>"; };
 		EF871D0B1D1A329700C2D08A /* ZegoNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoNavigationViewController.m; sourceTree = "<group>"; };
 		EF871D0D1D1A32FD00C2D08A /* ZegoTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoTabBarViewController.h; sourceTree = "<group>"; };
@@ -134,6 +134,8 @@
 		EF9D0F5D1D23D17E00002545 /* ZegoPublishViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoPublishViewController.m; sourceTree = "<group>"; };
 		EF9D0F621D24D0A900002545 /* ZegoAdvancedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoAdvancedTableViewController.h; sourceTree = "<group>"; };
 		EF9D0F631D24D0A900002545 /* ZegoAdvancedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoAdvancedTableViewController.m; sourceTree = "<group>"; };
+		EFAC2FCD1D48D81C000A7885 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		EFAC2FCE1D48E0AD000A7885 /* a.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = a.pcm; sourceTree = "<group>"; };
 		EFAF4B5F1D2B6C7800560B00 /* LiveDemo3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveDemo3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAF4B611D2B771000560B00 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		EFE0D8F81D1B7F920090F719 /* ZegoAnchorOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoAnchorOptionViewController.h; sourceTree = "<group>"; };
@@ -157,10 +159,8 @@
 		EFF10F161D1A2B2A00ECE11E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		EFF10F181D1A2B3700ECE11E /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		EFF10F1A1D1A2B9B00ECE11E /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
-		EFFBF7591D3896F3002FD7F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		EFFBF76A1D38E378002FD7F2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EFFBF76C1D38E379002FD7F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		EFFBF76D1D38E37A002FD7F2 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -372,6 +372,7 @@
 				EFF10F011D1A297900ECE11E /* Main.storyboard */,
 				EFFBF76B1D38E378002FD7F2 /* Localizable.strings */,
 				EFF10F041D1A297900ECE11E /* Assets.xcassets */,
+				EFAC2FCE1D48E0AD000A7885 /* a.pcm */,
 				EFF10F061D1A297900ECE11E /* LaunchScreen.storyboard */,
 				EFF10F091D1A297900ECE11E /* Info.plist */,
 				EFF10EF51D1A297900ECE11E /* Supporting Files */,
@@ -480,7 +481,6 @@
 			knownRegions = (
 				en,
 				Base,
-				"zh-Hans",
 			);
 			mainGroup = EFF10EE91D1A297900ECE11E;
 			productRefGroup = EFF10EF31D1A297900ECE11E /* Products */;
@@ -498,6 +498,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFAC2FD01D48E0AD000A7885 /* a.pcm in Resources */,
 				EFAF4B551D2B6C7800560B00 /* LaunchScreen.storyboard in Resources */,
 				EFFBF7691D38E378002FD7F2 /* Localizable.strings in Resources */,
 				EFAF4B561D2B6C7800560B00 /* Assets.xcassets in Resources */,
@@ -512,6 +513,7 @@
 				EF9A38BF1D2A549000A5E996 /* ZegoLiveRoom.framework in Resources */,
 				EFFBF7681D38E378002FD7F2 /* Localizable.strings in Resources */,
 				EFE0D9281D1BB91F0090F719 /* ZegoAVKit2.framework in Resources */,
+				EFAC2FCF1D48E0AD000A7885 /* a.pcm in Resources */,
 				EFF10F081D1A297900ECE11E /* LaunchScreen.storyboard in Resources */,
 				EFF10F051D1A297900ECE11E /* Assets.xcassets in Resources */,
 				EFF10F031D1A297900ECE11E /* Main.storyboard in Resources */,
@@ -584,8 +586,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				EFF10F021D1A297900ECE11E /* Base */,
-				EF110E2F1D36203F000620CD /* zh-Hans */,
-				EFFBF7591D3896F3002FD7F2 /* en */,
+				EFAC2FCD1D48D81C000A7885 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -594,7 +595,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				EFF10F071D1A297900ECE11E /* Base */,
-				EF110E301D36203F000620CD /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -604,7 +604,6 @@
 			children = (
 				EFFBF76A1D38E378002FD7F2 /* Base */,
 				EFFBF76C1D38E379002FD7F2 /* en */,
-				EFFBF76D1D38E37A002FD7F2 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

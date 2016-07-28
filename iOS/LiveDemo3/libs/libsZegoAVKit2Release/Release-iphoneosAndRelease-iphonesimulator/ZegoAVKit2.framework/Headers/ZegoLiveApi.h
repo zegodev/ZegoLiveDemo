@@ -83,6 +83,17 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 /// \param img 图像数据
 - (void)onTakeLocalViewSnapshot:(CGImageRef)img;
 
+/// \brief 混音数据输入回调
+/// \param pData 数据缓存起始地址
+/// \param pDataLen [in] 缓冲区长度；[out]实际填充长度，必须为 0 或是缓冲区长度，代表有无混音数据
+/// \param pSampleRate 混音数据采样率
+/// \param pNumChannels 混音数据声道数
+/// \note 混音数据 bit depth 必须为 16
+- (void)onAuxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount;
+
+/// \breif 音视频引擎停止
+- (void)onAVEngineStop;
+
 @end
 
 
@@ -243,6 +254,10 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 /// \brief 获取 SDK 版本
 - (NSString *)version;
 - (NSString *)version2;
+
+/// \brief 混音开关
+/// \param bEable true 启用混音输入；false 关闭混音输入
+- (bool)enableAux:(BOOL)enable;
 
 /// \brief 是否启用测试环境
 + (void)setUseTestEnv:(bool)useTestEnv;

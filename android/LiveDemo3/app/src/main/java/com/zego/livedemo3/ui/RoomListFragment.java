@@ -96,7 +96,7 @@ public class RoomListFragment extends AbsBaseFragment {
             @Override
             public void OnItemClick(View view, int position) {
                 BizRoom roomInfo = mListRoomInfo.get(position);
-                PlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey);
+                PlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
             }
         });
     }

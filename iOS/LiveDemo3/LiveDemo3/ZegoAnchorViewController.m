@@ -44,6 +44,9 @@
 @property (nonatomic, strong) UIColor *disableButtonColor;
 
 //@property (nonatomic, strong) UIView *publishView;
+@property (nonatomic, strong) NSMutableArray *retryStreamList;
+
+
 
 @end
 
@@ -59,9 +62,10 @@
     _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     _playStreamList = [[NSMutableArray alloc] init];
-    
+    _retryStreamList = [[NSMutableArray alloc] init];
     
     self.stopPublishButton.enabled = NO;
+    
     self.mutedButton.enabled = NO;
     self.defaultButtonColor = [self.mutedButton titleColorForState:UIControlStateNormal];
     self.disableButtonColor = [self.mutedButton titleColorForState:UIControlStateDisabled];
@@ -145,6 +149,8 @@
     
     [self.viewContainersDict removeAllObjects];
     [self.viewIndexDict removeAllObjects];
+    [self.retryStreamList removeAllObjects];
+    
     self.isPublishing = NO;
     self.isPlaying = NO;
 }
@@ -168,7 +174,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma set muted button
+#pragma mark set muted button
 - (IBAction)onMutedButton:(id)sender
 {
     if (self.enableSpeaker)
@@ -246,7 +252,6 @@
     NSLog(@"%s, err: %u", __func__, err);
     if (err != 0)
     {
-        //TODO: error warning
         NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"登录channel失败, error:%d", nil), err];
         [self addLogString:logString];
         return;
@@ -334,6 +339,25 @@
     self.publishView = nil;
     
 //    self.streamID = nil;
+}
+
+- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID
+{
+    UIView *view = self.viewContainersDict[streamID];
+    if (view)
+        [self updateQuality:quality view:view];
+}
+
+- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID
+{
+    UIView *view = self.viewContainersDict[streamID];
+    if (view)
+        [self updateQuality:quality view:view];
+}
+
+- (void)onAuxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount
+{
+    [self auxCallback:pData dataLen:pDataLen sampleRate:pSampleRate channelCount:pChannelCount];
 }
 
 #pragma mark ZegoChatRoom Kit
@@ -552,6 +576,17 @@
     assert(ret);
 }
 
+- (BOOL)isRetryStreamStop:(NSString *)streamID
+{
+    for (NSString *stream in self.retryStreamList)
+    {
+        if ([streamID isEqualToString:stream])
+            return YES;
+    }
+    
+    return NO;
+}
+
 - (void)onPlaySucc:(NSString *)streamID channel:(NSString *)channel
 {
     NSLog(@"%s, streamID:%@", __func__, streamID);
@@ -566,6 +601,20 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流失败, 流ID:%@,  error:%d", nil), streamID, err];
     [self addLogString:logString];
+    
+    if (err == 2 && streamID.length != 0)
+    {
+        if (![self isRetryStreamStop:streamID] && [self.viewIndexDict objectForKey:streamID] != nil)
+        {
+            NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"重新播放, 流ID:%@", nil), streamID];
+            [self addLogString:logString];
+            
+            [self.retryStreamList addObject:streamID];
+            //尝试重新play
+            RemoteViewIndex index = [self.viewIndexDict[streamID] unsignedIntValue];
+            [getZegoAV_ShareInstance() startPlayStream:streamID viewIndex:index];
+        }
+    }
 }
 
 - (UIView *)createPlayView:(NSString *)streamID

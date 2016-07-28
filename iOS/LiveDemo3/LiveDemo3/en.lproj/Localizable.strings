@@ -60,7 +60,8 @@
 "麦克风" = "Microphone";
 "手电筒" = "Flashlight";
 "启用摄像头" = "Camera";
-"静音" = "Muted";
+"静音" = "Mute";
+"混音" = "Background Music";
 
 "开始登录channel, channel:%@" = "Login Channel, Channel:%@";
 "开始获取直播流列表" = "Get Live Stream List";
@@ -83,3 +84,13 @@
 "高质量" = "High";
 "超高质量" = "Highest";
 "自定义" = "Customize";
+
+"加载中" = "Loading...";
+"主播已退出" = "No Live Stream";
+"继续播放之前的流, 流ID:%@" = "Play Live Stream, Stream ID:%@";
+"当前质量:" = "Quality:";
+"优" = "Excelent";
+"良" = "Good";
+"中" = "Medium";
+"差" = "bad";
+"重新播放, 流ID:%@" = "Replay, Stream ID:%@";

@@ -22,4 +22,6 @@ public class IntentExtra {
 
     public static final String SELECTED_FILTER = "SELECTED_FILTER";
 
+    public static final String LIST_STREAM = "LIST_STREAM";
+
 }

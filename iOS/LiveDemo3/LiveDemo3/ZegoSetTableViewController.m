@@ -34,6 +34,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     self.videoResolutionSlider.maximumValue = 5;
     
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44, 0);

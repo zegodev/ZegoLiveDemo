@@ -28,6 +28,7 @@ BIZ_EXTERN NSString *const kRoomInfoBizIDKey;
 BIZ_EXTERN NSString *const kRoomInfoBizTokenKey;
 BIZ_EXTERN NSString *const kRoomInfoLivesCount;
 BIZ_EXTERN NSString *const kRoomInfoFirstLiveTitle;
+BIZ_EXTERN NSString *const kRoomInfoLiveStreamIDs;
 
 //onRoomUserUpdate dictionary key
 BIZ_EXTERN NSString *const kUserInfoIndexKey;

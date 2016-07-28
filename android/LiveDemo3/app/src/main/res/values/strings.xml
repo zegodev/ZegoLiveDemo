@@ -67,4 +67,6 @@
     <string name="request_of_broadcast_has_been_allowed"><xliff:g id="value">%1$s</xliff:g>:&#160;连麦请求被通过</string>
     <string name="request_of_broadcast_has_been_denied"><xliff:g id="value">%1$s</xliff:g>:&#160;连麦请求被拒绝</string>
     <string name="please_wait">请稍后...</string>
+
+    <string name="live_quality">当前质量:&#160;<xliff:g id="value">%1$s</xliff:g></string>
 </resources>

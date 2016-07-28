@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.TextureView;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -18,6 +17,7 @@ import com.zego.livedemo3.constants.IntentExtra;
 import com.zego.livedemo3.utils.BizLiveRoomUitl;
 import com.zego.livedemo3.utils.PreferenceUtil;
 import com.zego.livedemo3.utils.ZegoAVKitUtil;
+import com.zego.livedemo3.widgets.ViewLive;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
 import com.zego.zegoavkit2.entity.ZegoUser;
 
@@ -31,7 +31,7 @@ import butterknife.OnClick;
  * Copyright © 2016 Zego. All rights reserved.
  * des:
  */
-public class PublishActivity extends BaseDisplayActivity {
+public class PublishActivity extends BaseLiveActivity {
 
     protected AlertDialog mDialogHandleRequestPublish = null;
 
@@ -70,20 +70,22 @@ public class PublishActivity extends BaseDisplayActivity {
     protected void initViews(Bundle savedInstanceState) {
         super.initViews(savedInstanceState);
 
-        final TextureView freeTextureView = getFreeTextureView();
-        if (freeTextureView == null) {
+        ViewLive freeViewLive = getFreeViewLive();
+        if (freeViewLive == null) {
             return;
         }
 
         // 设置美颜 滤镜
-        mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
-        mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
-        mZegoAVKit.setLocalView(freeTextureView);
+        mZegoAVKit.setLocalView(freeViewLive.getTextureView());
         mZegoAVKit.startPreview();
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+
         mZegoAVKit.setFrontCam(mEnableFrontCam);
         mZegoAVKit.enableTorch(mEnableTorch);
         mZegoAVKit.enableMic(mEnableMic);
+
+        mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
+        mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
     }
 
     @Override
@@ -137,9 +139,7 @@ public class PublishActivity extends BaseDisplayActivity {
                     for (BizStream bizStream : bizStreams) {
                         recordLog(bizStream.userName + ": create stream(" + bizStream.streamID + ") success");
                         startPlay(bizStream.streamID, getFreeZegoRemoteViewIndex());
-                        mPublishNumber++;
                     }
-                    setPublishControlState();
                 }
             }
 
@@ -149,9 +149,7 @@ public class PublishActivity extends BaseDisplayActivity {
                     for (BizStream bizStream : bizStreams) {
                         recordLog(bizStream.userName + ": delete stream(" + bizStream.streamID + ")");
                         stopPlay(bizStream.streamID);
-                        mPublishNumber--;
                     }
-                    setPublishControlState();
                 }
             }
 
@@ -167,24 +165,12 @@ public class PublishActivity extends BaseDisplayActivity {
 
     @Override
     protected void doLiveBusinessAfterLoginChannel() {
-        if (!mHaveLoginedChannel) {
-            startPublish();
-        } else {
+        if (mHostHasBeenCalled) {
+            mHostHasBeenCalled = false;
             // 挂断电话重新恢复
-            for (int i = 0, size = mListTextureViewTag.size(); i < size; i++) {
-                int playStreamOrdinal = getPlayStreamOrdinalFromTag(mListTextureViewTag.get(i));
-                String playStreamID = getPlayStreamIDFromTag(mListTextureViewTag.get(i));
-                switch (playStreamOrdinal) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        startPlay(playStreamID, getZegoRemoteViewIndexByOrdinal(playStreamOrdinal));
-                        break;
-                    case BIG_VIDEO_ORDINAL:
-                        mBizLiveRoom.createSreamInRoom(mPublishTitle, mPublishStreamID);
-                        break;
-                }
-            }
+            replayAndRepublishAfterRingOff();
+        } else {
+            startPublish();
         }
     }
 
