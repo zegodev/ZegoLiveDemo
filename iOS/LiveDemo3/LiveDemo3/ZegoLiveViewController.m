@@ -40,6 +40,8 @@
     self.viewMode = ZegoVideoViewModeScaleAspectFill;
     self.enableCamera = YES;
     self.enableSpeaker = YES;
+    self.enableAux = NO;
+    [getZegoAV_ShareInstance() enableAux:NO];
     
     self.logArray = [NSMutableArray array];
     if ([self isDeviceiOS7])
@@ -424,6 +426,7 @@
     optionController.beautifyRow = self.beautifyFeature;
     optionController.filterRow = self.filter;
     optionController.enableCamera = self.enableCamera;
+    optionController.enableAux = self.enableAux;
     
     optionController.delegate = self;
     
