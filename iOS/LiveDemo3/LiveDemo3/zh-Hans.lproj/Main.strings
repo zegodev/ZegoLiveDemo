@@ -95,6 +95,9 @@
 /* Class = "UITableViewSection"; headerTitle = "ADVANCED"; ObjectID = "cXf-zk-UaB"; */
 "cXf-zk-UaB.headerTitle" = "ADVANCED";
 
+/* Class = "UILabel"; text = "内部测试环境(ZEGO专用)"; ObjectID = "gC6-9e-ZRz"; */
+"gC6-9e-ZRz.text" = "内部测试环境(ZEGO专用)";
+
 /* Class = "UILabel"; text = "上传日志"; ObjectID = "gJG-84-fEo"; */
 "gJG-84-fEo.text" = "上传日志";
 

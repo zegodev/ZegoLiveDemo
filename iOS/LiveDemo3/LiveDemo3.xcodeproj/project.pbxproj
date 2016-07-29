@@ -136,6 +136,9 @@
 		EF9D0F631D24D0A900002545 /* ZegoAdvancedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoAdvancedTableViewController.m; sourceTree = "<group>"; };
 		EFAC2FCD1D48D81C000A7885 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		EFAC2FCE1D48E0AD000A7885 /* a.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = a.pcm; sourceTree = "<group>"; };
+		EFAC2FE41D4B1A72000A7885 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		EFAC2FE51D4B1A72000A7885 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		EFAC2FE61D4B1A72000A7885 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		EFAF4B5F1D2B6C7800560B00 /* LiveDemo3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LiveDemo3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAF4B611D2B771000560B00 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		EFE0D8F81D1B7F920090F719 /* ZegoAnchorOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoAnchorOptionViewController.h; sourceTree = "<group>"; };
@@ -481,6 +484,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = EFF10EE91D1A297900ECE11E;
 			productRefGroup = EFF10EF31D1A297900ECE11E /* Products */;
@@ -587,6 +591,7 @@
 			children = (
 				EFF10F021D1A297900ECE11E /* Base */,
 				EFAC2FCD1D48D81C000A7885 /* en */,
+				EFAC2FE41D4B1A72000A7885 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -595,6 +600,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				EFF10F071D1A297900ECE11E /* Base */,
+				EFAC2FE51D4B1A72000A7885 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -604,6 +610,7 @@
 			children = (
 				EFFBF76A1D38E378002FD7F2 /* Base */,
 				EFFBF76C1D38E379002FD7F2 /* en */,
+				EFAC2FE61D4B1A72000A7885 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
