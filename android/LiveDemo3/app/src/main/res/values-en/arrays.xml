@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="resolution_types">
+        <item>Lowest</item>
+        <item>Low</item>
+        <item>Standard</item>
+        <item>High</item>
+        <item>Highest</item>
+        <item>Cutomize</item>
+    </string-array>
+
+    <string-array name="resolutions">
+        <item >320 x 240</item>
+        <item >352 x 288</item>
+        <item >640 x 360</item>
+        <item >640 x 360</item>
+        <item >1280 x 720</item>
+        <item >1920 x 1080</item>
+    </string-array>
+
+    <string-array name="filters">
+        <item>Default</item>
+        <item>Lomo</item>
+        <item>BalackWhite</item>
+        <item>OldStyle</item>
+        <item>Gothic</item>
+        <item>SharpColor</item>
+        <item>Fade</item>
+        <item>Wine</item>
+        <item>Lime</item>
+        <item>Romantic</item>
+        <item>Halo</item>
+        <item>Blue</item>
+        <item>Illusion</item>
+        <item>Dark</item>
+    </string-array>
+
+    <string-array name="beauties">
+        <item>Default</item>
+        <item>Polish</item>
+        <item>Whiten</item>
+        <item>Polish&amp;Whiten</item>
+        <item>Polish&amp;SkinWhiten</item>
+    </string-array>
+
+    <string-array name="navigation_bar_titles">
+        <item>Live List</item>
+        <item>Publish</item>
+    </string-array>
+
+    <string-array name="live_quality">
+        <item>Excelent</item>
+        <item>Good</item>
+        <item>Medium</item>
+        <item>Bad</item>
+    </string-array>
+</resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="resolution_types">
+        <item>超低质量</item>
+        <item>低质量</item>
+        <item>标准质量</item>
+        <item>高质量</item>
+        <item>超高质量</item>
+        <item>自定义</item>
+    </string-array>
+
+    <string-array name="resolutions">
+        <item >320 x 240</item>
+        <item >352 x 288</item>
+        <item >640 x 360</item>
+        <item >640 x 360</item>
+        <item >1280 x 720</item>
+        <item >1920 x 1080</item>
+    </string-array>
+
+    <string-array name="filters">
+        <item>无滤镜</item>
+        <item>简洁</item>
+        <item>黑白</item>
+        <item>老化</item>
+        <item>哥特</item>
+        <item>锐色</item>
+        <item>淡雅</item>
+        <item>酒红</item>
+        <item>青柠</item>
+        <item>浪漫</item>
+        <item>光晕</item>
+        <item>蓝调</item>
+        <item>梦幻</item>
+        <item>夜色</item>
+    </string-array>
+
+    <string-array name="beauties">
+        <item>无美颜</item>
+        <item>磨皮</item>
+        <item>全屏美白</item>
+        <item>磨皮+全屏美白</item>
+        <item>磨皮+皮肤美白</item>
+    </string-array>
+
+    <string-array name="navigation_bar_titles">
+        <item>直播列表</item>
+        <item>发布直播</item>
+    </string-array>
+
+    <string-array name="live_quality">
+        <item>优</item>
+        <item>良</item>
+        <item>中</item>
+        <item>差</item>
+    </string-array>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/zego"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_5"/>
+
+        <View
+            style="@style/HorizontalDivider"
+            android:layout_alignParentBottom="true"/>
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:gravity="center"
+            android:text="@string/back"
+            android:textColor="@color/sl_btn"
+            android:textSize="@dimen/text_size_4"/>
+
+
+    </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_2"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        />
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</LinearLayout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
+    <string name="app_name">LiveDemo3</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="recent">just now</string>
+    <string name="minutes_ago">&#160;minutes ago</string>
+    <string name="hours_ago">&#160;hours ago</string>
+    <string name="day_ago">&#160;days ago</string>
+    <string name="year_ago">&#160;years ago</string>
+
+    <string name="user_id">User ID:</string>
+    <string name="user_name">User Name:</string>
+    <string name="quality_options">Quality Options:</string>
+    <string name="sdk_version">SDK:</string>
+    <string name="upload_log">Upload Log</string>
+    <string name="about">About</string>
+    <string name="demo_version">Version:&#160;</string>
+    <string name="upload_log_successfully">Log has been uploaded successfully</string>
+
+    <string name="resolution_prefix">Resolution&#160;<xliff:g id="value">%1$s</xliff:g></string>
+    <string name="fps_prefix">Frame Rate&#160;<xliff:g id="value">%1$s</xliff:g></string>
+    <string name="bitrate_prefix">Bit Rate&#160;<xliff:g id="value">%1$s</xliff:g></string>
+
+    <string name="app_loading_more">loading…</string>
+    <string name="app_no_more_data">no more data…</string>
+    <string name="live_count"><xliff:g id="value">%1$s</xliff:g>&#160;Broadcasters</string>
+    <string name="log">Log</string>
+    <string name="zego">ZEGO</string>
+    <string name="advanced">Advanced</string>
+    <string name="hint_pull_refresh">Pulling to refresh data^_^</string>
+
+    <string name="textOn">On</string>
+    <string name="textOff">Off</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="publish_setting">Settings</string>
+    <string name="make_a_title">Describe your live video</string>
+    <string name="go_publish">Go Live!</string>
+    <string name="test_env">Test Environment:</string>
+    <string name="appid">appID:</string>
+    <string name="appkey">appKEY:</string>
+    <string name="mute">Mute</string>
+    <string name="front_camera">Front Camera</string>
+    <string name="camera">Camera</string>
+    <string name="speaker">Speaker</string>
+    <string name="mic">Microphone</string>
+    <string name="flashlight">Flashlight</string>
+    <string name="beauty">Beauty</string>
+    <string name="filter">Filter</string>
+    <string name="start_publishing">Live</string>
+    <string name="request_to_join">Join</string>
+    <string name="stop_publishing">Stop</string>
+
+    <!--broadcast-->
+    <string name="hint">Hint</string>
+    <string name="someone_is_requesting_to_broadcast_allow"><xliff:g id="value">%1$s</xliff:g>&#160;is requesting to broadcast, allow?</string>
+    <string name="Allow">Allow</string>
+    <string name="Deny">Deny</string>
+    <string name="your_request_has_been_denied">your request has been denied!</string>
+    <string name="got_it">got it</string>
+    <string name="do_you_really_want_to_leave">Do you really want to leave?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+
+    <!--log-->
+    <string name="someone_is_requesting_to_broadcast"><xliff:g id="value">%1$s</xliff:g>:&#160;is requesting to broadcast</string>
+    <string name="request_of_broadcast_has_been_allowed"><xliff:g id="value">%1$s</xliff:g>:&#160;request of broadcast has been allowed</string>
+    <string name="request_of_broadcast_has_been_denied"><xliff:g id="value">%1$s</xliff:g>:&#160;request of broadcast has been denied</string>
+    <string name="please_wait">Wait...</string>
+
+    <string name="live_quality">Quality:&#160;<xliff:g id="value">%1$s</xliff:g></string>
+</resources>

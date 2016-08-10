@@ -1,0 +1,39 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+
+    <!-- 水平分割线 -->
+    <style name="HorizontalDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1.5px</item>
+        <item name="android:background">@color/bg_gray</item>
+    </style>
+
+    <!-- 垂直分割线 -->
+    <style name="VerticalDivider">
+        <item name="android:layout_width">1.5px</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/divider_gray</item>
+    </style>
+
+    <style name="ToggleButtonText">
+        <item name="android:textOn">@string/textOn</item>
+        <item name="android:textOff">@string/textOff</item>
+    </style>
+</resources>

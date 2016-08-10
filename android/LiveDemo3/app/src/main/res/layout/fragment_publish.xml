@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_black">
+
+    <SurfaceView
+        android:id="@+id/sv_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical"
+        >
+
+
+        <RelativeLayout
+            android:id="@+id/rlyt_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#60ffffff">
+
+            <LinearLayout
+                android:id="@+id/llyt_front_cam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_20"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/front_camera"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_2"/>
+
+                <ToggleButton
+                    android:id="@+id/tb_enable_front_cam"
+                    style="@style/ToggleButtonText"
+                    android:layout_width="@dimen/dimen_80"
+                    android:layout_height="@dimen/dimen_40"
+                    android:checked="true"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/llyt_front_cam"
+                android:layout_marginRight="@dimen/dimen_20"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/flashlight"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_2"/>
+
+                <ToggleButton
+                    style="@style/ToggleButtonText"
+                    android:id="@+id/tb_enable_torch"
+                    android:layout_width="@dimen/dimen_80"
+                    android:layout_height="@dimen/dimen_40"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llyt_beauty_and_filter"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_below="@id/llyt_front_cam"
+                android:layout_marginLeft="@dimen/dimen_20"
+                android:layout_marginRight="@dimen/dimen_20"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:layout_marginBottom="@dimen/dimen_20"
+                android:orientation="horizontal"
+                >
+
+                <Spinner
+                    android:id="@+id/sp_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    />
+
+                <Spinner
+                    android:id="@+id/sp_beauties"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@id/sp_filters"
+                    android:layout_weight="1">
+
+                </Spinner>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <EditText
+            android:id="@+id/et_publish_title"
+            android:layout_width="@dimen/dimen_250"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_below="@id/rlyt_header"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_100"
+            android:hint="@string/make_a_title"
+            android:paddingLeft="@dimen/dimen_5"
+            android:singleLine="true"
+            android:textColor="@color/text_gray"
+            android:textColorHint="@color/text_gray"
+            android:textSize="@dimen/text_size_4"/>
+
+        <Button
+            android:textAllCaps="false"
+            android:id="@+id/btn_start_publish"
+            android:layout_width="@dimen/dimen_150"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_below="@id/et_publish_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_50"
+            android:text="@string/go_publish"/>
+    </RelativeLayout>
+</FrameLayout>

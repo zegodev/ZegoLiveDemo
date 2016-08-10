@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dimen_50"
+              android:orientation="horizontal"
+    android:id="@+id/llyt_root">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sl_item"
+        android:layout_weight="1">
+        <View style="@style/HorizontalDivider"
+              android:layout_height="1px"/>
+
+        <ImageView
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_home"
+            android:layout_marginTop="3dp"
+            android:layout_width="@dimen/dimen_42"
+            android:layout_height="@dimen/dimen_30"/>
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            tools:text="房间"
+            android:textSize="@dimen/text_size_3"
+            android:layout_marginBottom="1dp"/>
+    </RelativeLayout>
+    <View style="@style/VerticalDivider"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sl_item"
+        android:layout_weight="1">
+        <View style="@style/HorizontalDivider"
+            android:layout_height="1px"/>
+        <ImageView
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_live"
+            android:layout_marginTop="3dp"
+            android:layout_width="@dimen/dimen_40"
+            android:layout_height="@dimen/dimen_30"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            tools:text="直播"
+            android:textSize="@dimen/text_size_3"
+            android:layout_marginBottom="1dp"/>
+    </RelativeLayout>
+</LinearLayout>

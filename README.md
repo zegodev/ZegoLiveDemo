@@ -8,7 +8,7 @@ ZegoLiveDemo 是深圳市即构科技有限公司提供直播 SDKDemo ，包括 
 详细接口文档：
 
 * IOS ：[]()
-* Android : [ZegoAvDoc_Android.zip](https://github.com/zegodev/ZegoLiveDemo/blob/master/doc/ZegoAvDoc_Android.zip)
+* Android : [ZegoAvDoc_Android.zip](https://github.com/zegodev/ZegoLiveDemo/blob/master/doc/Zego直播API描述文档_Android.zip)
 
 即构科技专注于为移动应用开发者、企业提供高品质实时语音、视频云服务。 
 适用于游戏、社交娱乐应用、在线教育、在线医疗、远程会议、智能硬件等多种场景。

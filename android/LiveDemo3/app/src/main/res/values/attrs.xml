@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 圆形ImageView -->
+    <declare-styleable name="CirImageView">
+        <attr name="borderWidthEx" format="dimension" />
+        <attr name="borderColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="NavigationBar">
+        <attr name="tabTitles" format="reference"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="MaterialProgressBarSupport">
+        <attr name="progressSmallSize" format="boolean" />
+        <attr name="progressColor" format="color" />
+        <attr name="progressBackgroundColor" format="color" />
+    </declare-styleable>
+</resources>

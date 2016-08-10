@@ -1,0 +1,96 @@
+/*
+ Localizable.strings
+ LiveDemo3
+ 
+ Created by Strong on 16/7/13.
+ Copyright © 2016年 ZEGO. All rights reserved.
+ */
+
+"Refresh" = "Refresh";
+"Empty Title" = "[Empty Title]";
+"%lu人正在连麦" = "%lu Broadcasters";
+"Log Uploaded" = "Log Uploaded";
+"Login Channel" = "Login Channel";
+"登录channel失败, error:%d" = "Login Channel Failed, error:%d";
+"登录channel成功" = "Login Channel Succeed";
+"开始直播，流ID:%@" = "Start Broadcasting, Stream ID:%@";
+"停止直播" = "Stop";
+"发布直播成功,流ID:%@" = "Publish Succeed, Stream ID:%@";
+"开始直播" = "Live";
+"直播结束,流ID:%@" = "Live Stoped, Stream ID:%@";
+"直播结束,流ID：%@, error:%d" = "Live Stoped, Stream ID:%@, error:%d";
+"开始登录房间" = "Login Room";
+"创建流" = "Create a Stream";
+"登录房间成功. token %d, id %d" = "Login Room Succeed. token %d, id %d";
+"登录房间失败. error: %d" = "Login Room Failed. error: %d";
+"连接失败, error: %d" = "Disconnect, error: %d";
+"退出房间, error: %d" = "Leave the Room, error: %d";
+"创建流成功, streamID:%@" = "Create Stream Succeed, streamID:%@";
+"创建流失败" = "Create Stream Failed";
+"有用户请求连麦" = "Someone is Requesting Broadcast";
+"新增一条流, 流ID:%@" = "Stream Added, Stream ID:%@";
+"删除一条流, 流ID:%@" = "Stream Removed, Stream ID:%@";
+"流列表有变化，但是流列表为空！" = "Stream Updated List is Empty!";
+"播放流成功, 流ID:%@" = "Play Succeed, Stream ID:%@";
+"播放流失败, 流ID:%@,  error:%d" = "Play Failed, Stream ID:%@,  error:%d";
+
+"无美颜" = "DEFAULT";
+"磨皮" = "POLISH";
+"全屏美白" = "WHITEN";
+"磨皮＋全屏美白" = "POLISH & WHITEN";
+"磨皮+皮肤美白" = "POLISH & SKINWHITEN";
+"无滤镜" = "DEFAULT";
+"简洁" = "LOMO";
+"黑白" = "BLACKWHITE";
+"老化" = "OLDSTYLE";
+"哥特" = "GOTHIC";
+"锐色" = "SHARPCOLOR";
+"淡雅" = "FADE";
+"酒红" = "WINE";
+"青柠" = "LIME";
+"浪漫" = "ROMANTIC";
+"光晕" = "HALO";
+"蓝调" = "BLUE";
+"梦幻" = "ILLUSION";
+"夜色" = "DARK";
+"设置" = "ADVANCED";
+"美颜" = "BEAUTY";
+"滤镜" = "FILTER";
+"前置摄像头" = "Front Camera";
+"麦克风" = "Microphone";
+"手电筒" = "Flashlight";
+"启用摄像头" = "Camera";
+"静音" = "Mute";
+"混音" = "Background Music";
+
+"开始登录channel, channel:%@" = "Login Channel, Channel:%@";
+"开始获取直播流列表" = "Get Live Stream List";
+"发布直播失败, 流ID:%@" = "Publish Failed, Stream ID:%@";
+"发布直播结束, 流ID:%@" = "Live Stopped, Stream ID:%@";
+"请求连麦" = "Join";
+"流列表有更新, 此时还未登录channel" = "Stream List Updated, but not Login Channel";
+"开始发布直播" = "Start Broadcasting";
+"有主播拒绝请求连麦" = "One of the Anchor Refused";
+"有主播同意了你的请求" = "One of the Anchor Agreed";
+
+"%@ 请求直播，是否允许" = "%@ is Requesting Broadcast";
+"拒绝" = "NO";
+"允许" = "YES";
+"%@ 不允许连麦" = "%@ Disagreed";
+
+"超低质量" = "Lowest";
+"低质量" = "Low";
+"标准质量" = "Standard";
+"高质量" = "High";
+"超高质量" = "Highest";
+"自定义" = "Customize";
+
+"加载中" = "Loading...";
+"主播已退出" = "No Live Stream";
+"继续播放之前的流, 流ID:%@" = "Play Live Stream, Stream ID:%@";
+"当前质量:" = "Quality:";
+"优" = "Excelent";
+"良" = "Good";
+"中" = "Medium";
+"差" = "bad";
+"重新播放, 流ID:%@" = "Replay, Stream ID:%@";
