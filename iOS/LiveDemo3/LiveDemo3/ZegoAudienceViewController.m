@@ -477,7 +477,7 @@
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"连接失败, error: %d", nil), err];
     [self addLogString:logString];
     
-    [self onCloseAudience:nil];
+//    [self onCloseAudience:nil];
 }
 
 - (void)onStreamUpdate:(NSArray<NSDictionary *> *)streamList flag:(int)flag
@@ -694,6 +694,8 @@
         
         if (![self isStreamIDExist:streamID])
             continue;
+        
+        [getZegoAV_ShareInstance() stopPlayStream:streamID];
         
         [self removeStreamViewContainer:streamID];
         [self removeStreamInfo:streamID];

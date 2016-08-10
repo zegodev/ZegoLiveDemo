@@ -2,6 +2,7 @@ package com.zego.livedemo3.widgets;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.TextureView;
@@ -103,10 +104,14 @@ public class ViewLive extends RelativeLayout {
     public ViewLive(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        initViews(context);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ViewLive, defStyleAttr, 0);
+        boolean isFullScreen = a.getBoolean(R.styleable.ViewLive_isFullScreen, false);
+        a.recycle();
+
+        initViews(context, isFullScreen);
     }
 
-    private void initViews(Context context){
+    private void initViews(Context context, boolean isFullScreen){
 
         mResources = context.getResources();
 
@@ -118,7 +123,12 @@ public class ViewLive extends RelativeLayout {
 
         mArrLiveQuality = mResources.getStringArray(R.array.live_quality);
 
-        mRootView = LayoutInflater.from(context).inflate(R.layout.view_live, this);
+        if(isFullScreen){
+            mRootView = LayoutInflater.from(context).inflate(R.layout.view_live_full_screen, this);
+        }else {
+            mRootView = LayoutInflater.from(context).inflate(R.layout.view_live, this);
+        }
+
         mTextureView = (TextureView) mRootView.findViewById(R.id.textureView);
         mTvQualityColor = (TextView) mRootView.findViewById(R.id.tv_quality_color);
         mTvQuality = (TextView) mRootView.findViewById(R.id.tv_live_quality);

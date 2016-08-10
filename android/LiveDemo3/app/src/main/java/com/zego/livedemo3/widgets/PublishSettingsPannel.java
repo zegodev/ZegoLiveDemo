@@ -29,9 +29,13 @@ public class PublishSettingsPannel extends LinearLayout {
 
     private ToggleButton mTbTorch;
 
+    private ToggleButton mTbBackgroundMusic;
+
     private Spinner mSpBeauty;
 
     private Spinner mSpFilter;
+
+
 
     private PublishSettingsCallback mPublishSettingsCallback;
 
@@ -98,6 +102,16 @@ public class PublishSettingsPannel extends LinearLayout {
             }
         });
 
+        mTbBackgroundMusic = (ToggleButton)mRootView.findViewById(R.id.tb_background_music);
+        mTbBackgroundMusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(mPublishSettingsCallback != null){
+                    mPublishSettingsCallback.onEnableBackgroundMusic(isChecked);
+                }
+            }
+        });
+
         mSpBeauty = (Spinner) mRootView.findViewById(R.id.sp_beauties);
         ArrayAdapter<String> beautyAdapter = new ArrayAdapter<>(context, R.layout.item_spinner, context.getResources().getStringArray(R.array.beauties));
         mSpBeauty.setAdapter(beautyAdapter);
@@ -137,7 +151,8 @@ public class PublishSettingsPannel extends LinearLayout {
         mPublishSettingsCallback = callback;
     }
 
-    public void initPublishSettings(boolean isEnableCamera, boolean isEnableFrontCam, boolean isEnableMic, boolean isEnableTorch, int beauty, int filter){
+    public void initPublishSettings(boolean isEnableCamera, boolean isEnableFrontCam, boolean isEnableMic,
+                                    boolean isEnableTorch, boolean isEnableBackgroundMusic, int beauty, int filter){
         if(isEnableFrontCam){
             mTbTorch.setEnabled(false);
         }
@@ -145,6 +160,7 @@ public class PublishSettingsPannel extends LinearLayout {
         mTbFrontCam.setChecked(isEnableFrontCam);
         mTbMic.setChecked(isEnableMic);
         mTbTorch.setChecked(isEnableTorch);
+        mTbBackgroundMusic.setChecked(isEnableBackgroundMusic);
         mSpBeauty.setSelection(beauty);
         mSpFilter.setSelection(filter);
     }
@@ -154,6 +170,7 @@ public class PublishSettingsPannel extends LinearLayout {
         void onEnableFrontCamera(boolean isEnable);
         void onEnableMic(boolean isEnable);
         void onEnableTorch(boolean isEnable);
+        void onEnableBackgroundMusic(boolean isEnable);
         void onSetBeauty(int beauty);
         void onSetFilter(int filter);
     }

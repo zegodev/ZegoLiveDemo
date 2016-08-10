@@ -121,6 +121,32 @@
             android:layout_height="@dimen/dimen_40"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"/>
+        <View
+            style="@style/HorizontalDivider"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_45"
+        android:paddingLeft="@dimen/dimen_15"
+        android:paddingRight="@dimen/dimen_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/background_music"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_3"/>
+
+        <ToggleButton
+            style="@style/ToggleButtonText"
+            android:id="@+id/tb_background_music"
+            android:layout_width="@dimen/dimen_80"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
     <View

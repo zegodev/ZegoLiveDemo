@@ -12,7 +12,7 @@ NSData *g_signKey = nil;
 uint32 g_appID = 0;
 
 BOOL g_useTestEnv = NO;
-BOOL g_requireHardwareAccelerated = NO;
+BOOL g_requireHardwareAccelerated = YES;
 
 BizLiveRoom *g_bizRoom = nil;
 
@@ -106,8 +106,13 @@ BizLiveRoom *getBizRoomInstance()
         
         if (g_bizRoom == nil)
         {
+            NSString *alertMessage = NSLocalizedString(@"Zego Only", nil);
+            NSLog(@"%@", alertMessage);
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:alertMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alertView show];
+            
             assert(g_bizRoom != nil);
-            NSLog(@"Zego Only, Others Cannot Use this framework");
         }
         
         

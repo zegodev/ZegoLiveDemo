@@ -215,6 +215,7 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 
 /// \brief 开关硬件编解码
 /// \param bRequire 开关
+/// \note ！！！打开硬编硬解开关需后台可控，避免碰到版本升级或者硬件升级时出现硬编硬解失败的问题
 - (bool)requireHardwareAccelerated:(bool)bRequire;
 
 /// \brief 登录频道

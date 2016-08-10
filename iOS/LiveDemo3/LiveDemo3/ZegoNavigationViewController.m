@@ -27,12 +27,14 @@
 
 - (BOOL)shouldAutorotate
 {
-    return [self.visibleViewController shouldAutorotate];
+//    return [self.visibleViewController shouldAutorotate];
+    return YES;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
-    return [self.visibleViewController supportedInterfaceOrientations];
+//    return [self.visibleViewController supportedInterfaceOrientations];
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 /*

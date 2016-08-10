@@ -93,7 +93,7 @@
         cell = [[ZegoLogTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"logCell"];
     }
     if (indexPath.row >= self.logArray.count)
-        return nil;
+        return cell;
     
     // Configure the cell...
     NSString *logString = [self.logArray objectAtIndex:indexPath.row];

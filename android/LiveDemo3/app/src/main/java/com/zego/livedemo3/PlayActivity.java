@@ -38,7 +38,7 @@ public class PlayActivity extends BaseLiveActivity {
 
     protected ArrayList<BizStream> mListStream = new ArrayList<>();
 
-    protected RelativeLayout mRlytBgPlay;
+    protected RelativeLayout mRlytPlayBackground;
 
     protected AlertDialog mDialogHandleRequestPublish = null;
 
@@ -80,9 +80,9 @@ public class PlayActivity extends BaseLiveActivity {
         super.initViews(savedInstanceState);
 
         if (savedInstanceState == null) {
-            mRlytBgPlay = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_play_bg, null);
-            mRlytBgPlay.setLayoutParams(mListViewLive.get(0).getLayoutParams());
-            ((RelativeLayout) mListViewLive.get(0).getParent()).addView(mRlytBgPlay);
+            mRlytPlayBackground = (RelativeLayout) getLayoutInflater().inflate(R.layout.view_play_bg, null);
+            mRlytPlayBackground.setLayoutParams(mListViewLive.get(0).getLayoutParams());
+            ((RelativeLayout) mListViewLive.get(0).getParent()).addView(mRlytPlayBackground);
         }
     }
 
@@ -188,9 +188,9 @@ public class PlayActivity extends BaseLiveActivity {
     }
 
     @Override
-    protected void afterPlaySuccess() {
-        if (mRlytBgPlay != null) {
-            mRlytBgPlay.setVisibility(View.GONE);
+    protected void hidePlayBackground() {
+        if (mRlytPlayBackground != null) {
+            mRlytPlayBackground.setVisibility(View.GONE);
         }
     }
 

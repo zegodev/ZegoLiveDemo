@@ -186,7 +186,7 @@ public class PublishActivity extends BaseLiveActivity {
     }
 
     @Override
-    protected void afterPlaySuccess() {
+    protected void hidePlayBackground() {
 
     }
 

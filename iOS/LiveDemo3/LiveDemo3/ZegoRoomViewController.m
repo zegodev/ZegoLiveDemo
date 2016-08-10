@@ -116,7 +116,7 @@
     ZegoRoomTableViewCell *cell = (ZegoRoomTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"roomListID" forIndexPath:indexPath];
     
     if (indexPath.row >= self.roomList.count)
-        return nil;
+        return cell;
     
     ZegoRoomInfo *info = self.roomList[indexPath.row];
     

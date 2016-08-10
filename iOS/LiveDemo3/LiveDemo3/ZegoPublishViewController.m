@@ -10,10 +10,11 @@
 #import "ZegoAnchorViewController.h"
 #import "ZegoAVKitManager.h"
 #import "ZegoSettings.h"
+#import <AVFoundation/AVFoundation.h>
 
 #define MAX_TITLE_LENGTH    30
 
-@interface ZegoPublishViewController () <UIPickerViewDelegate, UIPickerViewDataSource>
+@interface ZegoPublishViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UIAlertViewDelegate>
 
 @property (nonatomic, weak) IBOutlet UISwitch *switchCamera;
 @property (nonatomic, weak) IBOutlet UISwitch *switchTorch;
@@ -79,6 +80,81 @@
     [self setRotateFromInterfaceOrientation:orientation];
     
     [self addPreview];
+    
+}
+
+- (void)showAuthorizationAlert:(NSString *)message title:(NSString *)title
+{
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0)
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:NSLocalizedString(@"取消", nil) otherButtonTitles:NSLocalizedString(@"设置权限", nil), nil];
+        [alertView show];
+    }
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"取消", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            self.publishButton.enabled = NO;
+        }];
+        UIAlertAction *settingAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"设置权限", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self openSetting];
+        }];
+        
+        [alertController addAction:settingAction];
+        [alertController addAction:cancelAction];
+        
+        alertController.preferredAction = settingAction;
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+#pragma mark alert view delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+        self.publishButton.enabled = NO;
+    else
+        [self openSetting];
+}
+
+- (void)openSetting
+{
+    NSURL *settingURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([[UIApplication sharedApplication] canOpenURL:settingURL])
+        [[UIApplication sharedApplication] openURL:settingURL];
+}
+
+//检查相机权限
+- (BOOL)checkVideoAuthorization
+{
+    AVAuthorizationStatus videoAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if (videoAuthStatus == AVAuthorizationStatusDenied || videoAuthStatus == AVAuthorizationStatusRestricted)
+        return NO;
+    if (videoAuthStatus == AVAuthorizationStatusNotDetermined)
+    {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if (granted == NO)
+                self.publishButton.enabled = NO;
+        }];
+    }
+    return YES;
+}
+
+- (BOOL)checkAudioAuthorization
+{
+    AVAuthorizationStatus audioAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    if (audioAuthStatus == AVAuthorizationStatusDenied || audioAuthStatus == AVAuthorizationStatusRestricted)
+        return NO;
+    if (audioAuthStatus == AVAuthorizationStatusNotDetermined)
+    {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+            if (granted == NO)
+                self.publishButton.enabled = NO;
+        }];
+    }
+    
+    return YES;
 }
 
 - (void)addPreview
@@ -107,7 +183,7 @@
 
 - (void)onApplicationActive:(NSNotification *)notification
 {
-    if (self.tabBarController.selectedIndex == 1 && self.presentedViewController == nil)
+    if (self.tabBarController.selectedIndex == 1 && self.presentedViewController == nil && self.preView != nil)
     {
         [self stopPreview];
         [self startPreview];
@@ -135,7 +211,21 @@
     if (self.preView == nil)
         [self addPreview];
     
-    [self startPreview];
+    BOOL videoAuthorization = [self checkVideoAuthorization];
+    BOOL audioAuthorization = [self checkAudioAuthorization];
+    
+    if (videoAuthorization == YES)
+    {
+        [self startPreview];
+        if (audioAuthorization == NO)
+        {
+            [self showAuthorizationAlert:NSLocalizedString(@"直播视频,访问麦克风", nil) title:NSLocalizedString(@"需要访问麦克风", nil)];
+        }
+    }
+    else
+    {
+        [self showAuthorizationAlert:NSLocalizedString(@"直播视频,访问相机", nil) title:NSLocalizedString(@"需要访问相机", nil)];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated

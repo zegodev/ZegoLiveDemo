@@ -41,10 +41,11 @@
     <string name="appkey">appKEY:</string>
     <string name="mute">静音</string>
     <string name="front_camera">前置摄像头</string>
-    <string name="camera">摄像头</string>
+    <string name="camera">开启摄像头</string>
     <string name="speaker">声音</string>
     <string name="mic">麦克风</string>
     <string name="flashlight">手电筒</string>
+    <string name="background_music">伴奏</string>
     <string name="beauty">美颜</string>
     <string name="filter">滤镜</string>
     <string name="start_publishing">开始直播</string>

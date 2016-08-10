@@ -704,6 +704,7 @@
         textLayer.font = (__bridge CFTypeRef)textFont.fontName;
         textLayer.foregroundColor = [UIColor blackColor].CGColor;
         textLayer.fontSize = textFont.pointSize;
+        textLayer.contentsScale = [UIScreen mainScreen].scale;
     }
     
     UIColor *qualityColor = nil;
@@ -731,7 +732,7 @@
     
     qualityLayer.backgroundColor = qualityColor.CGColor;
     CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName: textFont}];
-    CGRect textFrame = CGRectMake(CGRectGetMaxX(qualityLayer.frame) + 3, CGRectGetMinY(qualityLayer.frame) + (CGRectGetHeight(qualityLayer.frame) - textSize.height)/2, textSize.width, textSize.height);
+    CGRect textFrame = CGRectMake(CGRectGetMaxX(qualityLayer.frame) + 3, CGRectGetMinY(qualityLayer.frame) + (CGRectGetHeight(qualityLayer.frame) - ceilf(textSize.height))/2, ceilf(textSize.width), ceilf(textSize.height));
     textLayer.frame = textFrame;
     textLayer.string = text;
 }

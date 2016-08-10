@@ -4,6 +4,7 @@ package com.zego.livedemo3;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
@@ -27,16 +28,20 @@ import com.zego.livedemo3.utils.PreferenceUtil;
 import com.zego.livedemo3.utils.ZegoAVKitUtil;
 import com.zego.livedemo3.widgets.PublishSettingsPannel;
 import com.zego.livedemo3.widgets.ViewLive;
+import com.zego.zegoavkit2.AuxData;
 import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
 import com.zego.zegoavkit2.callback.ZegoLiveCallback;
 import com.zego.zegoavkit2.entity.ZegoUser;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.OnClick;
 
@@ -85,11 +90,14 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
 
     protected BizLiveRoom mBizLiveRoom;
 
+    protected InputStream mIsBackgroundMusic;
+
     protected LinkedList<ViewLive> mListViewLive= new LinkedList<>();
     protected List<String> mListLiveViewTag = new ArrayList<>();
     protected List<String> mListLiveViewTagForCallComing = new ArrayList<>();
     protected LinkedHashMap<ZegoAVKitCommon.ZegoRemoteViewIndex, String> mMapFreeViewIndex = new LinkedHashMap<>();
     protected LinkedList<String> mListLog = new LinkedList<>();
+    protected Map<String, Boolean> mMapReplayStreamID = new HashMap<>();
 
     public TextView tvPublisnControl;
 
@@ -109,15 +117,17 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
 
     protected boolean mIsPublishing = false;
 
+    protected boolean mEnableSpeaker = true;
+
     protected boolean mEnableCamera = true;
 
     protected boolean mEnableFrontCam = true;
 
+    protected boolean mEnableMic = true;
+
     protected boolean mEnableTorch = false;
 
-    protected boolean mEnableSpeaker = true;
-
-    protected boolean mEnableMic = true;
+    protected boolean mEnableBackgroundMusic = false;
 
     protected int mSelectedBeauty = 0;
 
@@ -139,7 +149,7 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
 
     protected abstract void setPublishControlText();
 
-    protected abstract void afterPlaySuccess();
+    protected abstract void hidePlayBackground();
 
 
     @Override
@@ -205,7 +215,7 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
     private void initSettingPannel() {
 
         PublishSettingsPannel settingsPannel = (PublishSettingsPannel) findViewById(R.id.publishSettingsPannel);
-        settingsPannel.initPublishSettings(mEnableCamera, mEnableFrontCam, mEnableMic, mEnableTorch, mSelectedBeauty, mSelectedFilter);
+        settingsPannel.initPublishSettings(mEnableCamera, mEnableFrontCam, mEnableMic, mEnableTorch, mEnableBackgroundMusic, mSelectedBeauty, mSelectedFilter);
         settingsPannel.setPublishSettingsCallback(new PublishSettingsPannel.PublishSettingsCallback() {
             @Override
             public void onEnableCamera(boolean isEnable) {
@@ -233,6 +243,23 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
             public void onEnableTorch(boolean isEnable) {
                 mEnableTorch = isEnable;
                 mZegoAVKit.enableTorch(isEnable);
+            }
+
+            @Override
+            public void onEnableBackgroundMusic(boolean isEnable) {
+                mEnableBackgroundMusic = isEnable;
+                mZegoAVKit.enableAux(isEnable);
+
+                if(!isEnable){
+                    if(mIsBackgroundMusic != null){
+                        try {
+                            mIsBackgroundMusic.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        mIsBackgroundMusic = null;
+                    }
+                }
             }
 
             @Override
@@ -547,10 +574,13 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
             public void onPlaySucc(String streamID, String liveChannel) {
                 recordLog(MY_SELF + ": play stream(" + streamID + ") success");
                 mRlytControlHeader.bringToFront();
-                afterPlaySuccess();
 
                 mPublishNumber++;
                 setPublishEnabled();
+
+                // 记录流ID用于play失败后重新play
+                mMapReplayStreamID.put(streamID, false);
+
             }
 
             @Override
@@ -562,10 +592,19 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
 
                 mPublishNumber--;
                 setPublishEnabled();
+
+                // 当一条流play失败后重新play一次
+                if(retCode == 2 && !TextUtils.isEmpty(streamID)){
+                    if(!mMapReplayStreamID.get(streamID)){
+                        mMapReplayStreamID.put(streamID, true);
+                        startPlay(streamID, getFreeZegoRemoteViewIndex());
+                    }
+                }
             }
 
             @Override
             public void onVideoSizeChanged(String streamID, int width, int height) {
+                hidePlayBackground();
             }
 
             @Override
@@ -589,6 +628,39 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
             @Override
             public void onPublishQulityUpdate(String streamID, int quality) {
                 setLiveQuality(streamID, quality);
+            }
+
+            @Override
+            public AuxData onAuxCallback(int dataLen) {
+                // 开启伴奏后, sdk每20毫秒一次取数据
+                if(!mEnableBackgroundMusic || dataLen <= 0){
+                    return null;
+                }
+
+                AuxData auxData = new AuxData();
+                auxData.dataBuf = new byte[dataLen];
+
+                try{
+                    AssetManager am = getAssets();
+                    if(mIsBackgroundMusic == null){
+                        mIsBackgroundMusic = am.open("a.pcm");
+                    }
+                    int len = mIsBackgroundMusic.read(auxData.dataBuf);
+
+                    if(len <= 0){
+                        // 歌曲播放完毕
+                        mIsBackgroundMusic.close();
+                        mIsBackgroundMusic = null;
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
+                auxData.channelCount = 2;
+                auxData.sampleRate = 44100;
+
+
+                return auxData;
             }
         });
 
