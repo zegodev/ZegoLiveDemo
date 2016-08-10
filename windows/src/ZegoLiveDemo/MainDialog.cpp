@@ -237,11 +237,21 @@ void CMainDialog::OnAuxCallback(unsigned char *pData, int *pDataLen, int *pSampl
 	}
 }
 
-void CMainDialog::InitSdk()
+void CMainDialog::InitSdk(bool refresh)
 {
+	if (!refresh )
+	{
+		if (m_hasInitSdk)
+		{
+			return;
+		}
+	}
+
 	UninitSdk();
 
 	m_hasInitSdk = true;
+
+	ZEGO::AV::SetCallback(this);
 
 	ZEGO::AV::InitSDK(m_setting.m_dwAppId, m_setting.m_signkey, 32);
 	//ZEGO::AV::SetCallback(this);
@@ -286,7 +296,7 @@ void CMainDialog::OnBnClickedButtonSetting()
 
 	if (IDOK == m_pDlg->DoModal())
 	{
-		InitSdk();
+		InitSdk(true);
 	}
 
 	delete m_pDlg;

@@ -155,6 +155,7 @@ namespace ZEGO
         
         ZEGOAVKIT_API void SetPlatformInfo(const char* pszInfo);
         ZEGOAVKIT_API const char* GetSDKVersion();
+        ZEGOAVKIT_API const char* GetSDKVersion2();
         
         ZEGOAVKIT_API void SetUseTestEnv(bool bTestEnv);
 
@@ -172,6 +173,9 @@ namespace ZEGO
 		ZEGOAVKIT_API void FreeWindowList(WindowsDecs* window_list);
 #endif
 
+		ZEGOAVKIT_API void SetPlayVolume(int volume);
+
+		ZEGOAVKIT_API void SetNetworkConnected(bool bNetworkConnected);
 	}
 }
 

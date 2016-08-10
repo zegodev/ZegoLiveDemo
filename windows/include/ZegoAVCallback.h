@@ -40,6 +40,8 @@ namespace ZEGO
 			/// \param pNumChannels 混音数据声道数
 			/// \note 混音数据 bit depth 必须为 16
             virtual void OnAuxCallback(unsigned char *pData, int *pDataLen, int *pSampleRate, int *pNumChannels) = 0;
+            
+            virtual void OnAVEngineStop() = 0;
         };
 
     }
