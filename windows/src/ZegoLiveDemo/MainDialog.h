@@ -60,9 +60,10 @@ public:
 	virtual void OnPlayQualityUpdate(const char* pszStreamID, int quality) {}
 	virtual void OnPublishQulityUpdate(const char* pszStreamID, int quality) {}
 
+	virtual void OnAVEngineStop(void) {}
 protected:
 	void LoadAuxData();
-	void InitSdk();
+	void InitSdk(bool refresh = false);
 	void UninitSdk();
 
 private:
