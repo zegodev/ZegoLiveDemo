@@ -13,11 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.zego.livedemo3.base.AbsBaseActivity;
-import com.zego.livedemo3.base.AbsBaseFragment;
-import com.zego.livedemo3.ui.PublishFragment;
-import com.zego.livedemo3.ui.RoomListFragment;
-import com.zego.livedemo3.widgets.NavigationBar;
+import com.zego.livedemo3.presenters.BizLivePresenter;
+import com.zego.livedemo3.ui.activities.AboutZegoActivity;
+import com.zego.livedemo3.ui.base.AbsBaseActivity;
+import com.zego.livedemo3.ui.base.AbsBaseFragment;
+import com.zego.livedemo3.ui.fragments.PublishFragment;
+import com.zego.livedemo3.ui.fragments.RoomListFragment;
+import com.zego.livedemo3.ui.widgets.NavigationBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,7 +188,7 @@ public class MainActivity extends AbsBaseActivity implements NavigationBar.Navig
         } else {
             // 释放Zego sdk
             ZegoApiManager.getInstance().releaseSDK();
-            BizApiManager.getInstance().releaseSDK();
+            BizLivePresenter.getInstance().unInit();
             System.exit(0);
         }
     }

@@ -7,7 +7,11 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#elif TARGET_OS_MAC
+#import <AppKit/AppKit.h>
+#endif
 
 
 @protocol ZegoVideoCaptureClientDelegate <NSObject>
@@ -26,7 +30,11 @@
 - (int)setFrameRate:(int)framerate;
 - (int)setWidth:(int)width andHeight:(int)height;
 - (int)setFrontCam:(int)bFront;
+#if TARGET_OS_IPHONE
 - (int)setView:(UIView* _Nullable )view;
+#elif TARGET_OS_MAC
+- (int)setView:(NSView* _Nullable )view;
+#endif
 - (int)setViewMode:(int)mode;
 - (int)setViewRotation:(int)rotation;
 - (int)setCaptureRotation:(int)rotaion;

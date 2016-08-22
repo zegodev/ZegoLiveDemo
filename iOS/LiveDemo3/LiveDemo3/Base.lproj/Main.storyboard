@@ -1217,9 +1217,9 @@
                 <tabBarController id="lpi-Qr-L5e" customClass="ZegoTabBarViewController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" title="ZEGO" id="O4O-FK-8J4">
                         <leftBarButtonItems>
-                            <barButtonItem title="关于" id="w3Q-J6-Gdt">
+                            <barButtonItem title="联系我们" id="w3Q-J6-Gdt">
                                 <connections>
-                                    <segue destination="YJo-yX-1f2" kind="show" id="fNh-Ft-kr7"/>
+                                    <action selector="onContactUs:" destination="lpi-Qr-L5e" id="5FI-gv-bYU"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem id="85S-ON-xIq"/>
@@ -1247,7 +1247,6 @@
         <image name="btn_user_normal" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="5zT-kX-hY1"/>
         <segue reference="W13-ST-aOy"/>
     </inferredMetricsTieBreakers>
 </document>

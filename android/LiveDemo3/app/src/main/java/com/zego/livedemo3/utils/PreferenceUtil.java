@@ -24,7 +24,7 @@ public class PreferenceUtil {
     public static PreferenceUtil sInstance;
 
 
-    public static final String SHARE_PREFERENCE_NAME = "Zego_live_demo2";
+    public static final String SHARE_PREFERENCE_NAME = "ZEGO_LIVE_DEMO3";
 
     public static final String PREFERENCE_KEY_USER_ID = "PREFERENCE_KEY_USER_ID";
 

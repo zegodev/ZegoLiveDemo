@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF32D6F71D6599B700A764FC /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D6F41D6599B700A764FC /* TencentOpenAPI.framework */; };
+		EF32D6F81D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EF32D6F51D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle */; };
+		EF32D6F91D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EF32D6F51D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle */; };
+		EF32D6FE1D659B5700A764FC /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D6FD1D659B5700A764FC /* libstdc++.tbd */; };
+		EF32D7001D659B7200A764FC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D6FF1D659B7200A764FC /* libz.tbd */; };
+		EF32D7011D659BDC00A764FC /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D6F41D6599B700A764FC /* TencentOpenAPI.framework */; };
+		EF32D7031D659C5400A764FC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7021D659C5400A764FC /* Security.framework */; };
+		EF32D7051D659C6000A764FC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7041D659C5F00A764FC /* SystemConfiguration.framework */; };
+		EF32D7071D659C6A00A764FC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7061D659C6A00A764FC /* CoreGraphics.framework */; };
+		EF32D7091D659C7300A764FC /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7081D659C7300A764FC /* libsqlite3.tbd */; };
 		EF871D0C1D1A329700C2D08A /* ZegoNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF871D0B1D1A329700C2D08A /* ZegoNavigationViewController.m */; };
 		EF871D0F1D1A32FD00C2D08A /* ZegoTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF871D0E1D1A32FD00C2D08A /* ZegoTabBarViewController.m */; };
 		EF871D1E1D1A33CB00C2D08A /* ZegoRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF871D1D1D1A33CB00C2D08A /* ZegoRoomViewController.m */; };
@@ -96,6 +106,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EF32D6F41D6599B700A764FC /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
+		EF32D6F51D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
+		EF32D6FD1D659B5700A764FC /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		EF32D6FF1D659B7200A764FC /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		EF32D7021D659C5400A764FC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		EF32D7041D659C5F00A764FC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		EF32D7061D659C6A00A764FC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		EF32D7081D659C7300A764FC /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		EF871D0A1D1A329700C2D08A /* ZegoNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoNavigationViewController.h; sourceTree = "<group>"; };
 		EF871D0B1D1A329700C2D08A /* ZegoNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoNavigationViewController.m; sourceTree = "<group>"; };
 		EF871D0D1D1A32FD00C2D08A /* ZegoTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoTabBarViewController.h; sourceTree = "<group>"; };
@@ -172,6 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFAF4B641D2B772C00560B00 /* ZegoLiveRoom.framework in Frameworks */,
+				EF32D6F71D6599B700A764FC /* TencentOpenAPI.framework in Frameworks */,
 				EFAF4B631D2B771F00560B00 /* ZegoAVKit2.framework in Frameworks */,
 				EFAF4B621D2B771000560B00 /* libresolv.tbd in Frameworks */,
 				EFAF4B4B1D2B6C7800560B00 /* libiconv.tbd in Frameworks */,
@@ -186,6 +205,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF32D7091D659C7300A764FC /* libsqlite3.tbd in Frameworks */,
+				EF32D7071D659C6A00A764FC /* CoreGraphics.framework in Frameworks */,
+				EF32D7051D659C6000A764FC /* SystemConfiguration.framework in Frameworks */,
+				EF32D7031D659C5400A764FC /* Security.framework in Frameworks */,
+				EF32D7011D659BDC00A764FC /* TencentOpenAPI.framework in Frameworks */,
+				EF32D7001D659B7200A764FC /* libz.tbd in Frameworks */,
+				EF32D6FE1D659B5700A764FC /* libstdc++.tbd in Frameworks */,
 				EFF10F1B1D1A2B9B00ECE11E /* libiconv.tbd in Frameworks */,
 				EFF10F191D1A2B3700ECE11E /* VideoToolbox.framework in Frameworks */,
 				EF9A38BB1D2A546400A5E996 /* ZegoLiveRoom.framework in Frameworks */,
@@ -199,6 +225,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EF32D6F31D6599B700A764FC /* thirdLib */ = {
+			isa = PBXGroup;
+			children = (
+				EF32D6F41D6599B700A764FC /* TencentOpenAPI.framework */,
+				EF32D6F51D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle */,
+			);
+			path = thirdLib;
+			sourceTree = "<group>";
+		};
 		EF871D281D1A436700C2D08A /* advanced */ = {
 			isa = PBXGroup;
 			children = (
@@ -394,8 +429,15 @@
 		EFF10F0F1D1A2A6A00ECE11E /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EFAF4B611D2B771000560B00 /* libresolv.tbd */,
+				EF32D6F31D6599B700A764FC /* thirdLib */,
 				EFF10F1C1D1A2BAF00ECE11E /* libs */,
+				EFAF4B611D2B771000560B00 /* libresolv.tbd */,
+				EF32D7081D659C7300A764FC /* libsqlite3.tbd */,
+				EF32D7061D659C6A00A764FC /* CoreGraphics.framework */,
+				EF32D7041D659C5F00A764FC /* SystemConfiguration.framework */,
+				EF32D7021D659C5400A764FC /* Security.framework */,
+				EF32D6FF1D659B7200A764FC /* libz.tbd */,
+				EF32D6FD1D659B5700A764FC /* libstdc++.tbd */,
 				EFF10F121D1A2B1800ECE11E /* CoreTelephony.framework */,
 				EFF10F141D1A2B2300ECE11E /* CoreMedia.framework */,
 				EFF10F161D1A2B2A00ECE11E /* AVFoundation.framework */,
@@ -502,6 +544,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF32D6F91D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				EFAC2FD01D48E0AD000A7885 /* a.pcm in Resources */,
 				EFAF4B551D2B6C7800560B00 /* LaunchScreen.storyboard in Resources */,
 				EFFBF7691D38E378002FD7F2 /* Localizable.strings in Resources */,
@@ -514,6 +557,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF32D6F81D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				EF9A38BF1D2A549000A5E996 /* ZegoLiveRoom.framework in Resources */,
 				EFFBF7681D38E378002FD7F2 /* Localizable.strings in Resources */,
 				EFE0D9281D1BB91F0090F719 /* ZegoAVKit2.framework in Resources */,
@@ -668,7 +712,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/thirdLib",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = LiveDemo3/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -689,6 +736,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
 					"$(PROJECT_DIR)/libs/libsZegoLiveRoomiOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
+					"$(PROJECT_DIR)/thirdLib",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/LiveDemo3/Info.plist";
@@ -754,7 +802,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/thirdLib",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = LiveDemo3/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -774,6 +825,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
 					"$(PROJECT_DIR)/libs/libsZegoLiveRoomiOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
+					"$(PROJECT_DIR)/thirdLib",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/LiveDemo3/Info.plist";
@@ -794,6 +846,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
 					"$(PROJECT_DIR)/libs/libsZegoLiveRoomiOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
+					"$(PROJECT_DIR)/thirdLib",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/LiveDemo3/Info.plist";
@@ -813,6 +866,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
 					"$(PROJECT_DIR)/libs/libsZegoLiveRoomiOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
+					"$(PROJECT_DIR)/thirdLib",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = "$(SRCROOT)/LiveDemo3/Info.plist";
@@ -921,7 +975,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited) ";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/thirdLib",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = LiveDemo3/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -939,7 +996,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
 				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/thirdLib",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				INFOPLIST_FILE = LiveDemo3/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;

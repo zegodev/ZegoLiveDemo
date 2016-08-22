@@ -15,12 +15,12 @@ android {
 
         ndk {
             //设置支持的SO库架构
-            abiFilters 'armeabi' , 'armeabi-v7a'
+            abiFilters 'armeabi' , 'armeabi-v7a', 'arm64-v8a'
         }
     }
     signingConfigs {
         release {
-            storeFile file("../../config/your_app_key.jks")
+            storeFile file("../../../config/your_app_key.jks")
             storePassword "your_keystore_password"
             keyAlias "your_key_alias"
             keyPassword "your_key_password"

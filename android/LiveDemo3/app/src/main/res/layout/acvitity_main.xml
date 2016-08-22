@@ -23,7 +23,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.zego.livedemo3.widgets.NavigationBar
+            <com.zego.livedemo3.ui.widgets.NavigationBar
                 android:id="@+id/nb"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_50"
@@ -41,7 +41,7 @@
 
         <fragment
             android:id="@+id/setting_fragment"
-            android:name="com.zego.livedemo3.ui.SettingFragment"
+            android:name="com.zego.livedemo3.ui.fragments.SettingFragment"
             android:layout_width="@dimen/dimen_300"
             android:layout_height="match_parent"
             android:layout_gravity="left"

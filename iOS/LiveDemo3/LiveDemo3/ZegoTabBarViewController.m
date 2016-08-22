@@ -12,6 +12,9 @@
 #import "ZegoPublishViewController.h"
 #import "ZegoRoomViewController.h"
 
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/QQApiInterfaceObject.h>
+
 @interface ZegoTabBarViewController () <ZegoRoomViewControllerDelegate>
 
 @end
@@ -83,6 +86,24 @@
     {
         [self setBarButtonItemTitle];
     }
+}
+
+- (IBAction)onContactUs:(id)sender
+{
+    if (![QQApiInterface isQQInstalled])
+    {
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"联系我们", nil)];
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"没有安装QQ", nil) message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertView show];
+        
+        return;
+    }
+    
+    QQApiWPAObject *wpaObject = [QQApiWPAObject objectWithUin:@"84328558"];
+    SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:wpaObject];
+    QQApiSendResultCode result = [QQApiInterface sendReq:req];
+    NSLog(@"share result %d", result);
 }
 
 #pragma mark - Navigation

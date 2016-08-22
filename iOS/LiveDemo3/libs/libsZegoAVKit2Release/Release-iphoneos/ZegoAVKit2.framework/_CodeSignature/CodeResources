@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/ZegoAVConfig.h</key>
 		<data>
-		BHG/JhfJq7rL+7ghvU0jdwHwCU4=
+		6XkJvBwIok41gspHCRsB38nsNdM=
 		</data>
 		<key>Headers/ZegoAVDefines.h</key>
 		<data>
@@ -14,7 +14,7 @@
 		</data>
 		<key>Headers/ZegoLiveApi.h</key>
 		<data>
-		OEiz8mAHpcRr5BcpnGYtPloz+4U=
+		k40ldL5APaJSsBTInD+A9FVVOHE=
 		</data>
 		<key>Headers/ZegoUser.h</key>
 		<data>
@@ -22,15 +22,15 @@
 		</data>
 		<key>Headers/ZegoVideoCapture.h</key>
 		<data>
-		mWBDErQFyqxC6yRmdj3ZbZ3fxSM=
+		9Jx4owAKHSavFtH5e1uXO33N9jg=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		u6zE3RP8+n+aw+2dt4ue75c+9Mc=
+		N+wSrHO0k54LA8REs8IxKFWIB6A=
 		</data>
 		<key>ZegoAVKit2-Info.plist</key>
 		<data>
-		KJALVyE77uhGUykczBmYVK8T9yM=
+		snQE97V1RE/Gvga2NlWM2t6iSYA=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -39,11 +39,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			BHG/JhfJq7rL+7ghvU0jdwHwCU4=
+			6XkJvBwIok41gspHCRsB38nsNdM=
 			</data>
 			<key>hash2</key>
 			<data>
-			x1VXs1quB2SB7lzdUbRlms746hS81hhQTzlY398DF4k=
+			tVj3DtjYcn70Rteoxk6jnVBNnS7snk9IZZPJ4bkG30g=
 			</data>
 		</dict>
 		<key>Headers/ZegoAVDefines.h</key>
@@ -61,11 +61,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			OEiz8mAHpcRr5BcpnGYtPloz+4U=
+			k40ldL5APaJSsBTInD+A9FVVOHE=
 			</data>
 			<key>hash2</key>
 			<data>
-			ThCZYnqRFaAM69fsHFDhpnEDjPDQHE/S4tbLwQV8wNM=
+			KdaQSWLMJ/9Z/olTPuyqHJo1D8JXSKTk0WuCDZe9kY4=
 			</data>
 		</dict>
 		<key>Headers/ZegoUser.h</key>
@@ -83,22 +83,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mWBDErQFyqxC6yRmdj3ZbZ3fxSM=
+			9Jx4owAKHSavFtH5e1uXO33N9jg=
 			</data>
 			<key>hash2</key>
 			<data>
-			tNDZ6sO04aqCzhRLQY7vctGsc+HbYwIelAHk8NfyhTs=
+			RqXa6xYSPRM3M7BrRv4NvjHHKLYrLflyHuL+1qzKgaY=
 			</data>
 		</dict>
 		<key>ZegoAVKit2-Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			KJALVyE77uhGUykczBmYVK8T9yM=
+			snQE97V1RE/Gvga2NlWM2t6iSYA=
 			</data>
 			<key>hash2</key>
 			<data>
-			Jiwa1X7H4HwhU05ykFZLK6iXvSNgbpBWqsuNXV2OJnM=
+			g/ZFq5GVVdwFJ38c2ZtZiogiHNtAVmat3eyGWyN78fE=
 			</data>
 		</dict>
 	</dict>

@@ -45,21 +45,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.zego.livedemo3.PublishActivity"
+            android:name="com.zego.livedemo3.ui.activities.PublishActivity"
             android:configChanges="orientation|screenSize"
             >
 
         </activity>
 
         <activity
-            android:name="com.zego.livedemo3.PlayActivity"
+            android:name="com.zego.livedemo3.ui.activities.PlayActivity"
             android:configChanges="orientation|screenSize"
             >
 
         </activity>
 
         <activity
-            android:name="com.zego.livedemo3.AboutZegoActivity"
+            android:name="com.zego.livedemo3.ui.activities.AboutZegoActivity"
             android:screenOrientation="portrait"
             >
 
@@ -67,7 +67,7 @@
 
 
         <activity
-            android:name=".LogListActivity"
+            android:name=".ui.activities.LogListActivity"
             android:screenOrientation="portrait"/>
 
     </application>

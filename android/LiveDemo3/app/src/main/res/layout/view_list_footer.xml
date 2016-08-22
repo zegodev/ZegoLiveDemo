@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="4dp">
 
-        <com.zego.livedemo3.widgets.MaterialProgressBarSupport
+        <com.zego.livedemo3.ui.widgets.MaterialProgressBarSupport
             android:id="@+id/progress_view"
             android:layout_width="28dp"
             android:layout_height="28dp"

@@ -11,8 +11,8 @@
 typedef enum {
     ZegoAVConfigPreset_Verylow  = 0,
     ZegoAVConfigPreset_Low      = 1,
-    ZegoAVConfigPreset_Generic  = 2,    ///< 手机端直播建议使用Generic配置，效果最优
-    ZegoAVConfigPreset_High     = 3,
+    ZegoAVConfigPreset_Generic  = 2,
+    ZegoAVConfigPreset_High     = 3,    ///< 手机端直播建议使用High配置，效果最优
     ZegoAVConfigPreset_Veryhigh = 4
 }ZegoAVConfigPreset;
 

@@ -169,7 +169,7 @@
     
     [getZegoAV_ShareInstance() logoutChannel];
     
-    [getBizRoomInstance() leaveLiveRoom];
+    [getBizRoomInstance() leaveLiveRoom:YES];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -221,7 +221,7 @@
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapView:)];
     [publishView addGestureRecognizer:tapGesture];
     
-    BOOL bResult = [self setContainerConstraints:publishView containerView:self.playViewContainer viewCount:0];
+    BOOL bResult = [self setContainerConstraints:publishView containerView:self.playViewContainer viewCount:self.playViewContainer.subviews.count - 1];
     if (bResult == NO)
     {
         [publishView removeFromSuperview];
@@ -364,21 +364,21 @@
 - (void)loginChatRoom
 {
     ZegoUser *user = [[ZegoSettings sharedInstance] getZegoUser];    
-    [getBizRoomInstance() loginLiveRoom:user.userID userName:user.userName bizToken:0 bizID:0];
+    [getBizRoomInstance() loginLiveRoom:user.userID userName:user.userName bizToken:0 bizID:0 isPublicRoom:YES];
     
     [self addLogString:[NSString stringWithFormat:NSLocalizedString(@"开始登录房间", nil)]];
 }
 
 - (void)createStream:(NSString *)preferredStreamID
 {
-    [getBizRoomInstance() cteateStreamInRoom:self.liveTitle preferredStreamID:preferredStreamID];
+    [getBizRoomInstance() cteateStreamInRoom:self.liveTitle preferredStreamID:preferredStreamID isPublicRoom:YES];
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"创建流", nil)];
     [self addLogString:logString];
 }
 
 #pragma mark ZeogStreamRoom delegate
-- (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken
+- (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken isPublicRoom:(bool)isPublicRoom
 {
     NSLog(@"%s, error: %d", __func__, err);
     if (err == 0)
@@ -396,7 +396,7 @@
     }
 }
 
-- (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken
+- (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken isPublicRoom:(bool)isPublicRoom
 {
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"连接失败, error: %d", nil), err];
     [self addLogString:logString];
@@ -404,7 +404,7 @@
 //    [self onClosePublish:nil];
 }
 
-- (void)onLeaveRoom:(int)err
+- (void)onLeaveRoom:(int)err isPublicRoom:(bool)isPublicRoom
 {
     NSLog(@"%s, error: %d", __func__, err);
     
@@ -412,7 +412,7 @@
     [self addLogString:logString];
 }
 
-- (void)onStreamCreate:(NSString *)streamID url:(NSString *)url
+- (void)onStreamCreate:(NSString *)streamID url:(NSString *)url isPublicRoom:(bool)isPublicRoom
 {
     if (streamID.length != 0)
     {
@@ -429,7 +429,7 @@
     }
 }
 
-- (void)onReceiveMessage:(NSData *)content messageType:(int)type
+- (void)onReceiveMessage:(NSData *)content messageType:(int)type isPublicRoom:(bool)isPublicRoom
 {
     //text
     if (type != 2)
@@ -531,7 +531,7 @@
     }
 }
 
-- (void)onStreamUpdate:(NSArray<NSDictionary *> *)streamList flag:(int)flag
+- (void)onStreamUpdate:(NSArray<NSDictionary *> *)streamList flag:(int)flag isPublicRoom:(bool)isPublicRoom
 {
     if (streamList.count == 0)
     {

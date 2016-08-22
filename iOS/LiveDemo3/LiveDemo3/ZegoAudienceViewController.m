@@ -11,7 +11,6 @@
 #import "ZegoSettings.h"
 #import "ZegoStreamInfo.h"
 #import "ZegoChatCommand.h"
-#import "ZegoSettings.h"
 #import "ZegoLogTableViewController.h"
 
 //loginChannel->onLoginChannel->LoginInRoom->onLoginRoom
@@ -181,7 +180,7 @@
         [getZegoAV_ShareInstance() logoutChannel];
     
     if (self.loginRoomSuccess)
-        [getBizRoomInstance() leaveLiveRoom];
+        [getBizRoomInstance() leaveLiveRoom:YES];
 
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -249,7 +248,7 @@
 {
 //    ZegoChatRoomUser *user = [[ZegoSettings sharedInstance] getZegoChatRoomUser];
     ZegoUser *user = [[ZegoSettings sharedInstance] getZegoUser];
-    [getBizRoomInstance() loginLiveRoom:user.userID userName:user.userName bizToken:self.bizToken bizID:self.bizID];
+    [getBizRoomInstance() loginLiveRoom:user.userID userName:user.userName bizToken:self.bizToken bizID:self.bizID isPublicRoom:YES];
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"开始登录房间", nil)];
     [self addLogString:logString];
@@ -257,7 +256,7 @@
 
 - (void)getStreamList
 {
-    [getBizRoomInstance() getStreamList];
+    [getBizRoomInstance() getStreamList:YES];
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"开始获取直播流列表", nil)];
     [self addLogString:logString];
@@ -298,7 +297,7 @@
     }
     
     if (self.publishStreamID.length != 0)
-        [getBizRoomInstance() cteateStreamInRoom:self.publishTitle preferredStreamID:self.publishStreamID];
+        [getBizRoomInstance() cteateStreamInRoom:self.publishTitle preferredStreamID:self.publishStreamID isPublicRoom:YES];
 }
 
 - (BOOL)isRetryStreamStop:(NSString *)streamID
@@ -405,6 +404,21 @@
     UIView *view = self.viewContainersDict[streamID];
     if (view)
         [self setBackgroundImage:nil playerView:view];
+    
+    
+    if ([self.publishStreamID isEqualToString:streamID])
+        return;
+    
+    if ([self isStreamIDExist:streamID] && view)
+    {
+        BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]);
+        int index = [self.viewIndexDict[streamID] intValue];
+        if ((!isLandscape && width > height) ||
+            (isLandscape && width < height))
+        {
+            [getZegoAV_ShareInstance() setRemoteViewMode:index mode:ZegoVideoViewModeScaleAspectFit];
+        }
+    }
 }
 
 - (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID
@@ -422,7 +436,7 @@
 }
 
 #pragma mark BizRoomStreamDelegate
-- (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken
+- (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken isPublicRoom:(bool)isPublicRoom
 {
     NSLog(@"%s, error: %d", __func__, err);
     if (err == 0)
@@ -472,7 +486,7 @@
     [self onCloseAudience:nil];
 }
 
-- (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken
+- (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken isPublicRoom:(bool)isPublicRoom
 {
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"连接失败, error: %d", nil), err];
     [self addLogString:logString];
@@ -480,7 +494,7 @@
 //    [self onCloseAudience:nil];
 }
 
-- (void)onStreamUpdate:(NSArray<NSDictionary *> *)streamList flag:(int)flag
+- (void)onStreamUpdate:(NSArray<NSDictionary *> *)streamList flag:(int)flag isPublicRoom:(bool)isPublicRoom
 {
     NSLog(@"%s, flag:%d count %lu", __func__, flag, (unsigned long)streamList.count);
     
@@ -525,7 +539,7 @@
     }
 }
 
-- (void)onStreamCreate:(NSString *)streamID url:(NSString *)url
+- (void)onStreamCreate:(NSString *)streamID url:(NSString *)url isPublicRoom:(bool)isPublicRoom
 {
     //创建stream成功
     NSLog(@"%s, streamID is %@", __func__, streamID);
@@ -758,7 +772,7 @@
 - (void)createStream
 {
     self.publishTitle = [NSString stringWithFormat:@"Hello-%@", [ZegoSettings sharedInstance].userName];
-    [getBizRoomInstance() cteateStreamInRoom:self.publishTitle preferredStreamID:nil];
+    [getBizRoomInstance() cteateStreamInRoom:self.publishTitle preferredStreamID:nil isPublicRoom:YES];
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"创建流", nil)];
     [self addLogString:logString];
@@ -799,7 +813,7 @@
     return NO;
 }
 
-- (void)onReceiveMessage:(NSData *)content messageType:(int)type
+- (void)onReceiveMessage:(NSData *)content messageType:(int)type isPublicRoom:(bool)isPublicRoom
 {
     if (type != 2)
         return;

@@ -4,7 +4,6 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.zego.biz.BizUser;
-import com.zego.livedemo3.BizApiManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,10 +46,7 @@ public class BizLiveRoomUitl {
        return "0x" + Long.toHexString(roomKey) + "-0x" + Long.toHexString(serverKey);
     }
 
-    public static void sendMsg(String command, List<BizUser> listToUsers, String content, String magicNumber){
-        if(TextUtils.isEmpty(command)){
-            return;
-        }
+    public static String formateMsg(String command, List<BizUser> listToUsers, String content, String magicNumber){
 
         Map<String, Object> requestInfo = new HashMap<>();
 
@@ -79,8 +75,6 @@ public class BizLiveRoomUitl {
         Gson gson = new Gson();
         String data = gson.toJson(requestInfo);
 
-        if(data != null){
-            BizApiManager.getInstance().getBizLiveRoom().sendRelayBroadcastCustomMsg(data, data.length());
-        }
+        return data;
     }
 }

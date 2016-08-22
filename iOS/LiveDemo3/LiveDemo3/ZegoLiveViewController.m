@@ -288,9 +288,9 @@
 {
     ZegoUser *user = [[ZegoSettings sharedInstance] getZegoUser];
     if (success)
-        [getBizRoomInstance() reportStreamAction:1 streamID:streamID userID:user.userID];
+        [getBizRoomInstance() reportStreamAction:1 streamID:streamID userID:user.userID isPublicRoom:YES];
     else
-        [getBizRoomInstance() reportStreamAction:2 streamID:streamID userID:user.userID];
+        [getBizRoomInstance() reportStreamAction:2 streamID:streamID userID:user.userID isPublicRoom:YES];
 }
 
 - (void)updateContainerConstraintsForTap:(UIView *)tapView containerView:(UIView *)containerView

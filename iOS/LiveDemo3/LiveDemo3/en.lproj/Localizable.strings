@@ -102,3 +102,6 @@
 "直播视频,访问相机" = "To broadcast, LiveDemo needs permission to access camera. Click the Settings Button,then toggle on the permissions swith for camera";
 "直播视频,访问麦克风" = "To broadcast, LiveDemo needs permission to access microphone. Click the settings Button, the toggle on the permissions swith for microphone";
 "设置权限" = "Setting";
+
+"没有安装QQ" = "You don't Install QQ";
+"联系我们" = "QQ:84328558\nWeChat:84328558";

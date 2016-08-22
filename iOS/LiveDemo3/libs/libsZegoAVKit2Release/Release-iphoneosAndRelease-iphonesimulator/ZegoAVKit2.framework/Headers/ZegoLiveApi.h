@@ -6,7 +6,12 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#elif TARGET_OS_MAC
+#import <AppKit/AppKit.h>
+#endif
 
 #import "ZegoUser.h"
 #import "ZegoAVConfig.h"
@@ -43,15 +48,36 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 
 /// \brief 发布直播失败
 /// \param err 1 正常结束, 非 1 异常结束
+
+///错误码	说明
+///AVStateEnd = 1	直播正常停止
+///TempBroken = 2	直播临时中断
+///FatalError = 3	直播遇到严重的问题
+///CreateStreamError = 4	创建直播流失败
+///FetchStreamError = 5	获取流信息失败
+///NoStreamError = 6	无流信息
+///MediaServerNetWorkError = 7	媒体服务器连接失败
+///DNSResolveError = 8	DNS 解释失败
 - (void)onPublishStop:(uint32)err stream:(NSString *)streamID channel:(NSString *)channel;
 
 /// \brief 观看直播成功
 /// \param streamID 直播流的唯一标识
+///
 - (void)onPlaySucc:(NSString *)streamID channel:(NSString *)channel;
 
 /// \brief 观看直播失败
 /// \param err 1 正常结束, 非 1 异常结束
 /// \param streamID 直播流的唯一标识
+
+///错误码	说明
+///AVStateEnd = 1	直播正常停止
+///TempBroken = 2	直播临时中断
+///FatalError = 3	直播遇到严重的问题
+///CreateStreamError = 4	创建直播流失败
+///FetchStreamError = 5     获取流信息失败
+///NoStreamError = 6	无流信息
+///MediaServerNetWorkError = 7	媒体服务器连接失败
+///DNSResolveError = 8	DNS 解释失败
 - (void)onPlayStop:(uint32)err streamID:(NSString *)streamID channel:(NSString *)channel;
 
 /// \brief 发布质量更新
@@ -119,7 +145,12 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 /// \param index View的序号，目前支持一个聊天室两个主播
 /// \param view 展示视频的View
 /// \return true:调用成功；false:调用失败
+
+#if TARGET_OS_IPHONE
 - (bool)setRemoteView:(RemoteViewIndex)index view:(UIView*)view;
+#elif TARGET_OS_MAC
+- (bool)setRemoteView:(RemoteViewIndex)index view:(NSView *)view;
+#endif
 
 /// \brief 设置观看直播的View的模式
 /// \param index View的序号
@@ -130,7 +161,11 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 /// \brief 设置本地预览视频的View
 /// \param view 展示视频的View
 /// \return true:调用成功；false:调用失败
+#if TARGET_OS_IPHONE
 - (bool)setLocalView:(UIView*)view;
+#elif TARGET_OS_MAC
+- (bool)setLocalView:(NSView *)view;
+#endif
 
 /// \brief 设置本地预览视频View的模式
 /// \param mode 模式，详见ZegoVideoViewMode
@@ -169,6 +204,19 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 /// \param bEnable true打开，false关闭
 /// \return true:调用成功；false:调用失败
 - (bool)enableNoiseSuppress:(bool)bEnable;
+
+/// \brief 开启采集监听
+/// \param bEnable true打开，false关闭
+/// \return true:调用成功；false:调用失败
+- (bool)enableLoopback:(bool)bEnable;
+
+/// \biref 设置播放音量
+/// \param volume 音量大小 0 ~ 100
+- (void)setPlayVolume:(int)volume;
+
+/// \biref 设置采集监听音量
+/// \param volume 音量大小 0 ~ 100
+- (void)setLoopbackVolume:(int)volume;
 
 /// \brief 开启关闭麦克风
 /// \param bEnable true打开，false关闭
@@ -267,5 +315,9 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 /// \param factory 工厂对象
 /// \note 必须在 InitSDK 前调用，并且不能置空
 + (void)setVideoCaptureFactory:(id<ZegoVideoCaptureFactory>)factory;
+
+/// \brief 设置音频前处理函数
+/// \param prep 前处理函数指针
++ (void)setAudioPrep:(void(*)(const short* inData, int inSamples, int sampleRate, short *outData))prep;
 
 @end
