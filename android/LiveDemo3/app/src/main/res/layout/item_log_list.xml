@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dimen_5"
         android:layout_marginTop="@dimen/dimen_5"
+        android:textIsSelectable="true"
         tools:text="xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"/>
 
     <View

@@ -90,6 +90,9 @@
 
 - (IBAction)onContactUs:(id)sender
 {
+    
+#if defined(__i386__)
+#else
     if (![QQApiInterface isQQInstalled])
     {
         NSString *message = [NSString stringWithFormat:NSLocalizedString(@"联系我们", nil)];
@@ -104,6 +107,8 @@
     SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:wpaObject];
     QQApiSendResultCode result = [QQApiInterface sendReq:req];
     NSLog(@"share result %d", result);
+#endif
+    
 }
 
 #pragma mark - Navigation

@@ -53,7 +53,7 @@
     if (self.appID.text.length > 0 && self.appSign.text.length > 0)
     {
         NSString *strAppID = self.appID.text;
-        unsigned long appID = [strAppID integerValue];
+        NSUInteger appID = (NSUInteger)[strAppID longLongValue];
         ZegoDemoSetCustomAppIDAndSign((uint32)appID, self.appSign.text);
     }
     

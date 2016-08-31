@@ -154,3 +154,6 @@
 
 /* Class = "UITabBarItem"; title = "Settings"; ObjectID = "yMN-Xc-Jes"; */
 "yMN-Xc-Jes.title" = "Settings";
+
+/* Class = "UIButton"; normalTitle = "fullscreen"; ObjectID = "t2t-qD-GfM"; */
+"t2t-qD-GfM.title" = "FullScreen";

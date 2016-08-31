@@ -71,4 +71,7 @@
 //混流时的回调实现
 - (void)auxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount;
 
+//获取第一个view
+- (UIView *)getFirstViewInContainer:(UIView *)containerView;
+
 @end

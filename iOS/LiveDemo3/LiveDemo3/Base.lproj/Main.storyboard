@@ -119,6 +119,13 @@
                                     <action selector="onCloseAudience:" destination="PzU-MK-Iwy" eventType="touchUpInside" id="6xg-tn-4cc"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t2t-qD-GfM">
+                                <rect key="frame" x="515" y="99" width="60" height="30"/>
+                                <state key="normal" title="进入全屏"/>
+                                <connections>
+                                    <action selector="onFullScreenButton:" destination="PzU-MK-Iwy" eventType="touchUpInside" id="9l8-LB-Cd8"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkK-yU-Yba">
                                 <rect key="frame" x="465" y="44" width="60" height="30"/>
                                 <state key="normal" title="请求连麦"/>
@@ -157,8 +164,10 @@
                             <constraint firstItem="QSn-KF-s1q" firstAttribute="top" secondItem="ICG-kc-QPx" secondAttribute="top" id="RRN-v1-sF4"/>
                             <constraint firstItem="ZPY-ks-mH7" firstAttribute="centerY" secondItem="t5W-2v-nh7" secondAttribute="centerY" id="SP7-gt-JHT"/>
                             <constraint firstItem="x0M-vo-9Bb" firstAttribute="top" secondItem="a1e-Hn-9HH" secondAttribute="bottom" constant="24" id="UGq-Rl-kd4"/>
+                            <constraint firstItem="t2t-qD-GfM" firstAttribute="trailing" secondItem="x0M-vo-9Bb" secondAttribute="trailing" id="VaY-ek-W1g"/>
                             <constraint firstItem="t5W-2v-nh7" firstAttribute="leading" secondItem="4jW-xr-IGD" secondAttribute="trailing" constant="24" id="WaK-fH-Vkh"/>
                             <constraint firstItem="QSn-KF-s1q" firstAttribute="leading" secondItem="ICG-kc-QPx" secondAttribute="leading" id="aSZ-aQ-WiR"/>
+                            <constraint firstItem="t2t-qD-GfM" firstAttribute="top" secondItem="x0M-vo-9Bb" secondAttribute="bottom" constant="25" id="dtX-TU-7hM"/>
                             <constraint firstAttribute="trailing" secondItem="QSn-KF-s1q" secondAttribute="trailing" id="eJL-Hh-8nr"/>
                             <constraint firstItem="chj-rN-tuX" firstAttribute="top" secondItem="QSn-KF-s1q" secondAttribute="bottom" id="edn-GC-cbe"/>
                             <constraint firstItem="EkK-yU-Yba" firstAttribute="centerY" secondItem="x0M-vo-9Bb" secondAttribute="centerY" id="mcJ-42-GxX"/>
@@ -168,6 +177,7 @@
                     </view>
                     <connections>
                         <outlet property="closeButton" destination="x0M-vo-9Bb" id="1le-aS-kzR"/>
+                        <outlet property="fullscreenButton" destination="t2t-qD-GfM" id="6Ye-zB-1Uc"/>
                         <outlet property="logButton" destination="ZPY-ks-mH7" id="7EM-L6-Wo4"/>
                         <outlet property="mutedButton" destination="4jW-xr-IGD" id="nLK-wE-EwK"/>
                         <outlet property="optionButton" destination="t5W-2v-nh7" id="u5l-M4-XSj"/>

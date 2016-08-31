@@ -70,6 +70,16 @@
             android:name=".ui.activities.LogListActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent"
+            android:launchMode="singleTask" />
+
+        <activity  android:name="com.tencent.connect.common.AssistActivity"
+                   android:screenOrientation="behind"
+                   android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                   android:configChanges="orientation|keyboardHidden" />
     </application>
 
 </manifest>

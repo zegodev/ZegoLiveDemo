@@ -839,26 +839,32 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
 
 
     protected void logout() {
-        AlertDialog dialog = new AlertDialog.Builder(this).setMessage(getString(R.string.do_you_really_want_to_leave)).setTitle(getString(R.string.hint)).setPositiveButton(getString(R.string.Yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
 
-                stopAllStreamAndLogout();
+        if(mIsPublishing){
+            AlertDialog dialog = new AlertDialog.Builder(this).setMessage(getString(R.string.do_you_really_want_to_leave)).setTitle(getString(R.string.hint)).setPositiveButton(getString(R.string.Yes), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-                BizLivePresenter.getInstance().leaveRoom();
+                    stopAllStreamAndLogout();
+                    BizLivePresenter.getInstance().leaveRoom();
+                    dialog.dismiss();
+                    finish();
+                }
+            }).setNegativeButton(getString(R.string.No), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create();
 
-                dialog.dismiss();
+            dialog.show();
+        }else {
 
-                finish();
-            }
-        }).setNegativeButton(getString(R.string.No), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).create();
+            stopAllStreamAndLogout();
+            BizLivePresenter.getInstance().leaveRoom();
+            finish();
+        }
 
-        dialog.show();
     }
 
     /**

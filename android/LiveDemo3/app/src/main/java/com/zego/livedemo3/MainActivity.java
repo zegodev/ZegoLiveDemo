@@ -1,5 +1,6 @@
 package com.zego.livedemo3;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.tencent.tauth.Tencent;
 import com.zego.livedemo3.presenters.BizLivePresenter;
 import com.zego.livedemo3.ui.activities.AboutZegoActivity;
 import com.zego.livedemo3.ui.base.AbsBaseActivity;
@@ -207,6 +209,11 @@ public class MainActivity extends AbsBaseActivity implements NavigationBar.Navig
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(id == R.id.action_contact_us){
+            Tencent.createInstance("", MainActivity.this).startWPAConversation(MainActivity.this, "84328558", "");
+            return true;
+        }
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             AboutZegoActivity.actionStart(MainActivity.this);
@@ -214,6 +221,11 @@ public class MainActivity extends AbsBaseActivity implements NavigationBar.Navig
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public interface OnSetConfigsCallback{

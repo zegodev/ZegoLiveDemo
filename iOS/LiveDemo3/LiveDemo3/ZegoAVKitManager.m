@@ -12,7 +12,12 @@ NSData *g_signKey = nil;
 uint32 g_appID = 0;
 
 BOOL g_useTestEnv = NO;
+
+#if TARGET_OS_SIMULATOR
+BOOL g_requireHardwareAccelerated = NO;
+#else
 BOOL g_requireHardwareAccelerated = YES;
+#endif
 
 BizLiveRoom *g_bizRoom = nil;
 
@@ -179,7 +184,11 @@ void ZegoDemoSetCustomAppIDAndSign(uint32 appid, NSString* strSign)
 
 void setUseTestEnv(BOOL testEnv)
 {
-    g_useTestEnv = testEnv;
+    if (g_useTestEnv != testEnv) {
+        releaseZegoAV_ShareInstance();
+    }
+    
+    g_useTestEnv = testEnv;    
     [ZegoLiveApi setUseTestEnv:testEnv];
 }
 

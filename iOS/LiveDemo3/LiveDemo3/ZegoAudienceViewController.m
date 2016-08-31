@@ -25,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
 @property (weak, nonatomic) IBOutlet UIButton *logButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *fullscreenButton;
+
 @property (nonatomic, strong) NSMutableArray<ZegoStreamInfo *> *streamList;
 @property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
 @property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
@@ -43,6 +45,8 @@
 @property (nonatomic, strong) UIColor *defaultButtonColor;
 
 @property (nonatomic, strong) NSMutableArray *retryStreamList;
+
+@property (nonatomic, strong) NSMutableDictionary *videoSizeDict;
 
 @end
 
@@ -64,6 +68,8 @@
     _streamList = [[NSMutableArray alloc] initWithCapacity:MAX_STREAM_COUNT];
     _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    
     _requestingArray = [[NSMutableArray alloc] init];
     
     _retryStreamList = [[NSMutableArray alloc] init];
@@ -85,6 +91,8 @@
     
     self.publishButton.enabled = NO;
     self.optionButton.enabled = NO;
+    
+    self.fullscreenButton.hidden = YES;
 }
 
 - (void)setButtonHidden:(BOOL)hidden
@@ -224,6 +232,95 @@
 - (IBAction)onShowPublishOption:(id)sender
 {
     [self showPublishOption];
+}
+
+- (NSString *)getStreamIDFromView:(UIView *)view
+{
+    for (NSString *streamID in self.viewContainersDict)
+    {
+        if (self.viewContainersDict[streamID] == view)
+            return streamID;
+    }
+    
+    return nil;
+}
+
+- (void)exitFullScreen:(NSString *)streamID viewIndex:(int)index
+{
+    BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]);
+    
+    [getZegoAV_ShareInstance() setRemoteViewMode:index mode:ZegoVideoViewModeScaleAspectFit];
+    if (isLandscape)
+        [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_90];
+    else
+        [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_0];
+    self.videoSizeDict[streamID] = @(NO);
+}
+
+- (void)enterFullScreen:(NSString *)streamID viewIndex:(int)index
+{
+    BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]);
+    
+    [getZegoAV_ShareInstance() setRemoteViewMode:index mode:ZegoVideoViewModeScaleAspectFill];
+    if (isLandscape)
+        [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_0];
+    else
+        [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_90];
+    self.videoSizeDict[streamID] = @(YES);
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        UIView *view = [self getFirstViewInContainer:self.playViewContainer];
+        NSString *streamID = [self getStreamIDFromView:view];
+        if (streamID == nil)
+            return;
+        
+        id info = self.videoSizeDict[streamID];
+        if (info == nil)
+            return;
+        
+        BOOL isfull = [info boolValue];
+        int index = [self.viewIndexDict[streamID] intValue];
+        if (isfull)
+        {
+            [self exitFullScreen:streamID viewIndex:index];
+            [self onFullScreenButton:nil];
+        }
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        
+    }];
+}
+
+- (IBAction)onFullScreenButton:(id)sender
+{
+    UIView *view = [self getFirstViewInContainer:self.playViewContainer];
+    NSString *streamID = [self getStreamIDFromView:view];
+    if (streamID == nil)
+        return;
+    
+    id info = self.videoSizeDict[streamID];
+    if (info == nil)
+        return;
+    
+    BOOL isfull = [info boolValue];
+    int index = [self.viewIndexDict[streamID] intValue];
+    if (isfull)
+    {
+        //退出全屏
+        [self exitFullScreen:streamID viewIndex:index];
+        [self.fullscreenButton setTitle:NSLocalizedString(@"进入全屏", nil) forState:UIControlStateNormal];
+    }
+    else
+    {
+        //进入全屏
+        [self enterFullScreen:streamID viewIndex:index];
+        [self.fullscreenButton setTitle:NSLocalizedString(@"退出全屏", nil) forState:UIControlStateNormal];
+    }
 }
 
 - (void)setupLiveKit
@@ -391,6 +488,11 @@
     [self removeStreamViewContainer:streamID];
 }
 
+- (void)onAuxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount
+{
+    [self auxCallback:pData dataLen:pDataLen sampleRate:pSampleRate channelCount:pChannelCount];
+}
+
 - (void)onVideoSizeChanged:(NSString *)streamID width:(uint32)width height:(uint32)height
 {
     NSLog(@"%s, streamID %@", __func__, streamID);
@@ -405,18 +507,20 @@
     if (view)
         [self setBackgroundImage:nil playerView:view];
     
-    
     if ([self.publishStreamID isEqualToString:streamID])
         return;
-    
+
     if ([self isStreamIDExist:streamID] && view)
     {
-        BOOL isLandscape = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]);
         int index = [self.viewIndexDict[streamID] intValue];
-        if ((!isLandscape && width > height) ||
-            (isLandscape && width < height))
+        if (width > height)
         {
             [getZegoAV_ShareInstance() setRemoteViewMode:index mode:ZegoVideoViewModeScaleAspectFit];
+            
+            self.videoSizeDict[streamID] = @(NO);
+            
+            if (CGRectEqualToRect(view.frame, self.playViewContainer.bounds))
+                self.fullscreenButton.hidden = NO;
         }
     }
 }
@@ -601,6 +705,21 @@
         return;
     
     [self updateContainerConstraintsForTap:view containerView:self.playViewContainer];
+    
+    UIView *firstView = [self getFirstViewInContainer:self.playViewContainer];
+    NSString *streamID = [self getStreamIDFromView:firstView];
+    if (streamID == nil)
+        return;
+    
+    id info = self.videoSizeDict[streamID];
+    if (info == nil)
+    {
+        self.fullscreenButton.hidden = YES;
+    }
+    else
+    {
+        self.fullscreenButton.hidden = NO;
+    }
 }
 
 - (void)addStreamViewContainer:(NSString *)streamID
