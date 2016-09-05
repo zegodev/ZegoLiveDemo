@@ -71,4 +71,8 @@
     <string name="please_wait">请稍后...</string>
 
     <string name="live_quality">当前质量:&#160;<xliff:g id="value">%1$s</xliff:g></string>
+    <string name="full_screen">全屏播放</string>
+    <string name="exit_full_screen">退出全屏</string>
+    <string name="allow_camera_permission">请开启摄像头权限</string>
+    <string name="open_recorder_permission">请开启录音权限</string>
 </resources>

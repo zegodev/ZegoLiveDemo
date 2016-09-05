@@ -1,15 +1,23 @@
 package com.zego.livedemo3.ui.base;
 
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -20,6 +28,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.ZegoApiManager;
@@ -306,27 +315,30 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
         initSettingPannel();
 
         final ViewLive vlBigView = (ViewLive) findViewById(R.id.vl_big_view);
+        vlBigView.setZegoAVKit(mZegoAVKit);
         if (vlBigView != null) {
             mListViewLive.add(vlBigView);
         }
 
         final ViewLive vlSmallView1 = (ViewLive) findViewById(R.id.vl_small_view1);
+        vlSmallView1.setZegoAVKit(mZegoAVKit);
         if (vlSmallView1 != null) {
             vlSmallView1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    vlSmallView1.toFullScreen(vlBigView, mZegoAVKit);
+                    vlSmallView1.toFullScreen(vlBigView);
                 }
             });
             mListViewLive.add(vlSmallView1);
         }
 
         final ViewLive vlSmallView2 = (ViewLive) findViewById(R.id.vl_small_view2);
+        vlSmallView2.setZegoAVKit(mZegoAVKit);
         if (vlSmallView2 != null) {
             vlSmallView2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    vlSmallView2.toFullScreen(vlBigView, mZegoAVKit);
+                    vlSmallView2.toFullScreen(vlBigView);
                 }
             });
             mListViewLive.add(vlSmallView2);
@@ -627,6 +639,7 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
             @Override
             public void onVideoSizeChanged(String streamID, int width, int height) {
                 hidePlayBackground();
+                setRemoteViewMode(streamID, width, height);
             }
 
             @Override
@@ -688,6 +701,24 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
 
     }
 
+    /**
+     * 设置view的mode.
+     */
+    private void setRemoteViewMode(String streamID, int width, int height){
+        if(TextUtils.isEmpty(streamID)){
+            return;
+        }
+        for(ViewLive vl : mListViewLive){
+            if(streamID.equals(vl.getStreamID())){
+                vl.setRemoteViewMode(width, height);
+                break;
+            }
+        }
+    }
+
+    /**
+     * 设置视频质量.
+     */
     private void setLiveQuality(String streamID, int quality){
         if(TextUtils.isEmpty(streamID)){
             return;
@@ -745,10 +776,36 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
     }
 
 
-    /**
-     * 开始发布.
-     */
-    protected void startPublish() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 101:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                           publishStream();
+                        }
+                    });
+                }else {
+
+
+                    if (grantResults[0] == PackageManager.PERMISSION_DENIED){
+                        Toast.makeText(this, R.string.allow_camera_permission, Toast.LENGTH_LONG).show();
+                    }
+                    if (grantResults[1] == PackageManager.PERMISSION_DENIED){
+                        Toast.makeText(this, R.string.open_recorder_permission, Toast.LENGTH_LONG).show();
+                    }
+
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                }
+                break;
+        }
+    }
+
+    protected void publishStream(){
 
         ViewLive freeViewLive = getFreeViewLive();
         if (freeViewLive == null) {
@@ -774,6 +831,24 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
         mZegoAVKit.setFrontCam(mEnableFrontCam);
         mZegoAVKit.enableTorch(mEnableTorch);
         mZegoAVKit.enableMic(mEnableMic);
+    }
+
+    /**
+     * 开始发布.
+     */
+    protected void startPublish() {
+        // 6.0及以上的系统需要在运行时申请CAMERA RECORD_AUDIO权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, 101);
+            } else {
+                publishStream();
+            }
+        } else {
+            publishStream();
+        }
     }
 
     protected void stopPublish() {
@@ -819,7 +894,6 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
 
         // 输出播放状态
         recordLog(MY_SELF + ": start play " + streamID);
-
 
         // 播放
         mZegoAVKit.setRemoteViewMode(remoteViewIndex, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);

@@ -72,4 +72,9 @@
     <string name="please_wait">Wait...</string>
 
     <string name="live_quality">Quality:&#160;<xliff:g id="value">%1$s</xliff:g></string>
+    <string name="full_screen">FullScreen</string>
+    <string name="exit_full_screen">Exit</string>
+
+    <string name="allow_camera_permission">Please allow the camera permission</string>
+    <string name="open_recorder_permission">Please allow the record audio permission</string>
 </resources>

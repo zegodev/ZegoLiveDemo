@@ -65,6 +65,10 @@ public class PublishFragment extends AbsBaseFragment {
 
     private boolean mIsVisiableToUser = false;
 
+    private boolean mSpinnerOfBeautyInitialed = false;
+
+    private boolean mSpinnerOfFilterInitialed = false;
+
     public static PublishFragment newInstance() {
         return new PublishFragment();
     }
@@ -92,7 +96,11 @@ public class PublishFragment extends AbsBaseFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mSelectedBeauty = position;
-                mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
+                if(mSpinnerOfBeautyInitialed){
+                    mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
+                }else {
+                    mSpinnerOfBeautyInitialed = true;
+                }
             }
 
             @Override
@@ -107,7 +115,13 @@ public class PublishFragment extends AbsBaseFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mSelectedFilter = position;
-                mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
+
+                if(mSpinnerOfFilterInitialed){
+                    mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
+                }else {
+                    mSpinnerOfFilterInitialed = true;
+                }
+
             }
 
             @Override

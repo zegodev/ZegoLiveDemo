@@ -10,29 +10,49 @@
         android:layout_height="match_parent"/>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_2"
-        android:layout_marginLeft="@dimen/dimen_2"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_quality_color"
-            android:layout_width="@dimen/dimen_8"
-            android:layout_height="@dimen/dimen_8"
-            android:layout_centerVertical="true"
-            tools:background="@drawable/circle_green"
-            />
-
-        <TextView
-            android:id="@+id/tv_live_quality"
+        <RelativeLayout
+            android:id="@+id/rlyt_quality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dimen_10"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/text_size_2"
-            tools:text="当前质量"/>
+            android:layout_marginTop="@dimen/dimen_2"
+            android:layout_marginLeft="@dimen/dimen_2"
+            >
+
+            <TextView
+                android:id="@+id/tv_quality_color"
+                android:layout_width="@dimen/dimen_8"
+                android:layout_height="@dimen/dimen_8"
+                android:layout_centerVertical="true"
+                tools:background="@drawable/circle_green"
+                />
+
+            <TextView
+                android:id="@+id/tv_live_quality"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:textColor="@color/text_white"
+                android:textSize="@dimen/text_size_2"
+                tools:text="当前质量"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_to_full_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dimen_5"
+            android:textColor="@color/sl_btn"
+            android:textSize="@dimen/text_size_3"
+            android:layout_below="@id/rlyt_quality"
+            android:visibility="gone"
+            />
     </RelativeLayout>
+
 
 </RelativeLayout>
