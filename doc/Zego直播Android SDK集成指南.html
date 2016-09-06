@@ -47,9 +47,8 @@
 </ul>
 </li>
 <li><a href="#八释放sdk">八、释放SDK</a></li>
-<li><a href="#九android-60运行时权限申请">九、Android 6.0运行时权限申请</a></li>
-<li><a href="#十混淆">十、混淆</a></li>
-<li><a href="#十一常见问题">十一、常见问题</a><ul>
+<li><a href="#九混淆">九、混淆</a></li>
+<li><a href="#十常见问题">十、常见问题</a><ul>
 <li><a href="#1-屏幕旋转处理方式">1. 屏幕旋转处理方式</a><ul>
 <li><a href="#11-正常直播-屏幕旋转处理方式">1.1 正常直播 屏幕旋转处理方式</a></li>
 <li><a href="#12-直播中前后摄像头切换屏幕旋转处理方式">1.2 直播中前后摄像头切换，屏幕旋转处理方式</a></li>
@@ -58,10 +57,12 @@
 <li><a href="#2-来电处理方式">2. 来电处理方式</a></li>
 <li><a href="#3-截图处理">3. 截图处理</a></li>
 <li><a href="#4-推流拉流质量">4. 推流拉流质量</a></li>
+<li><a href="#5-外部采集">5. 外部采集</a></li>
+<li><a href="#6-android-60运行时权限申请">6. Android 6.0运行时权限申请</a></li>
 </ul>
 </li>
-<li><a href="#十二sdk错误码说明">十二、SDK错误码说明</a></li>
-<li><a href="#十三其他api说明">十三、其他API说明</a></li>
+<li><a href="#十一sdk错误码说明">十一、SDK错误码说明</a></li>
+<li><a href="#十二其他api说明">十二、其他API说明</a></li>
 </ul>
 </li>
 </ul>
@@ -99,13 +100,13 @@
 
 <h3 id="二-初始化sdk">二、 初始化SDK</h3>
 
-<p><strong><code>！！！注意：这个Appid和signKey需要从server下发到App，避免在App中存储，防止盗用</code></strong> <br>
-<strong><code>！！！打开硬编硬解，业务侧需要有后台控制开关，避免碰到版本升级或者硬件升级时出现硬编硬解失败的问题</code> </strong> <br>
-注：推荐在Application的onCreate方法中初始化</p>
+<p><strong><code>！！！注意：这个Appid和signKey需要从server下发到App，避免在App中存储，防止盗用</code></strong></p>
+
+<p>注：推荐在Application的onCreate方法中初始化</p>
 
 
 
-<pre class="prettyprint hljs-dark"><code class="hljs objectivec"><span class="hljs-comment">// 设置日志级别, 只有调了这个APi, 才能生成日志 generic:3  de<span class="hljs-doctag">bug:</span>4</span><br>mZego<span class="hljs-built_in">AVKit</span><span class="hljs-variable">.setLogLevel</span>(context, Zego<span class="hljs-built_in">AVKit</span><span class="hljs-variable">.LOG_LEVEL_DEBUG</span>, null);<br><br><span class="hljs-comment">// ！！！注意：这个Appid和signKey需要从server下发到App，避免在App中存储，防止盗用</span><br>byte[] signKey = {};<br><span class="hljs-keyword">int</span> appID = <span class="hljs-number">1</span>;<br><br><span class="hljs-comment">// 初始化sdk</span><br>mZego<span class="hljs-built_in">AVKit</span><span class="hljs-variable">.init</span>(appID, signKey, context);<br><br><span class="hljs-comment">// 初始化设置级别为"High"</span><br>mZego<span class="hljs-built_in">AVKit</span><span class="hljs-variable">.setAVConfig</span>(new ZegoAvConfig(ZegoAvConfig<span class="hljs-variable">.Level</span><span class="hljs-variable">.High</span>));<br></code></pre>
+<pre class="prettyprint hljs-dark"><code class="hljs groovy"><span class="hljs-comment">// 设置日志级别, 只有调了这个APi, 才能生成日志 generic:3  de<span class="hljs-doctag">bug:</span>4</span><br>mZegoAVKit.setLogLevel(context, ZegoAVKit.LOG_LEVEL_DEBUG, <span class="hljs-literal">null</span>);<br><br><span class="hljs-comment">// 设置是否开启“测试环境”, true:开启 false:关闭</span><br>[ZegoLiveApi <span class="hljs-string">setUseTestEnv:</span><span class="hljs-literal">true</span>];<br><br><span class="hljs-comment">// ！！！注意：这个Appid和signKey需要从server下发到App，避免在App中存储，防止盗用</span><br><span class="hljs-typename">byte</span>[] signKey = {};<br><span class="hljs-typename">int</span> appID = <span class="hljs-number">1</span>;<br><br><span class="hljs-comment">// 初始化sdk</span><br>mZegoAVKit.init(appID, signKey, context);<br><br><span class="hljs-comment">// 初始化设置级别为"High"</span><br>mZegoAVKit.setAVConfig(<span class="hljs-keyword">new</span> ZegoAvConfig(ZegoAvConfig.Level.High));<br></code></pre>
 
 
 
@@ -123,7 +124,7 @@
 
 <h4 id="2-发布直播代码">2.  发布直播代码</h4>
 
-<p><strong><code>直播中的UserID、ChannelID、StreamID等信息都是业务侧自己定义和维护，userID，username的长度没有限制，channelID的长度不超过64个字符，StreamID的长度不超过128个字符，且非0非空，在同一个时间，channelID和StreamID是唯一的，只有一个直播源结束之后，这个channelId和StreamID才能被其他的直播源重新启用。</code></strong></p>
+<p><strong><code>直播中的User、ChannelID、StreamID等信息都是业务侧自己定义和维护，userID，username的长度不超过255个字节，且非空。channelID的长度不超过64个字符，StreamID的长度不超过128个字符，且非0非空，在同一个时间，StreamID必须唯一，只有一个直播源结束之后，这个StreamID才能被其他的直播源重新启用。</code></strong></p>
 
 
 
@@ -131,11 +132,11 @@
 
 
 
-<pre class="prettyprint hljs-dark"><code class="hljs aspectj"><span class="hljs-comment">// 登陆频道，登录结果会onLoginChannel回调中返回</span><br><span class="hljs-comment">// loginChannel这个步骤不能省略，发布直播和观看直播都要先loginchannel。</span><br>ZegoUser zegoUser = <span class="hljs-keyword">new</span> ZegoUser(userID, userName);<br>mZegoAVKit.loginChannel(zegoUser, mLiveChannel);<br><br><span class="hljs-comment">//设置回调</span><br>mZegoAVKit.setZegoLiveCallback(<span class="hljs-keyword">new</span> ZegoLiveCallback() {<br><br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onLoginChannel</span><span class="hljs-params">(<span class="hljs-keyword">int</span> retCode)</span> </span>{<br>     <span class="hljs-keyword">if</span> (retCode == <span class="hljs-number">0</span>) {<br>         <span class="hljs-comment">// 登录成功</span><br>         <span class="hljs-comment">// 调用startPublish开始直播</span><br>         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);<br>     }<span class="hljs-keyword">else</span> {<br>         <span class="hljs-comment">// 登录失败</span><br>     }<br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onPublishSucc</span><span class="hljs-params">(String streamID)</span> </span>{<br>           <span class="hljs-comment">// publish成功后返回流ID</span><br>     }<br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onPublishStop</span><span class="hljs-params">(<span class="hljs-keyword">int</span> retCode, String streamID)</span> </span>{<br>         <span class="hljs-comment">// publish停止，retCode标志停止的原因</span><br>     }<br><br></code></pre>
+<pre class="prettyprint hljs-dark"><code class="hljs processing"><span class="hljs-comment">// userID,userName是一个使用我们系统的帐号和昵称，一个帐号代表一个用户。</span><br>ZegoUser zegoUser = <span class="hljs-keyword">new</span> ZegoUser(userID, userName);<br><span class="hljs-comment">// 登陆频道，登录结果会onLoginChannel回调中返回</span><br><span class="hljs-comment">// loginChannel这个步骤不能省略，发布直播和观看直播前都要先loginchannel。</span><br>mZegoAVKit.loginChannel(zegoUser, mChannel);<br><br><span class="hljs-comment">//设置回调</span><br>mZegoAVKit.setZegoLiveCallback(<span class="hljs-keyword">new</span> ZegoLiveCallback() {<br><br>     @Override<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> onLoginChannel(<span class="hljs-keyword">String</span> liveChannel, <span class="hljs-built_in">int</span> retCode)) {<br>     <span class="hljs-keyword">if</span> (retCode == <span class="hljs-number">0</span>) {<br>         <span class="hljs-comment">// 登录成功</span><br>         <span class="hljs-comment">// 调用startPublish开始直播</span><br>         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);<br>     }<span class="hljs-keyword">else</span> {<br>         <span class="hljs-comment">// 登录失败</span><br>     }<br>     @Override<br>     <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> onPublishSucc(<span class="hljs-keyword">String</span> streamID, <span class="hljs-keyword">String</span> liveChannel, <span class="hljs-keyword">HashMap</span>&lt;<span class="hljs-keyword">String</span>, <span class="hljs-keyword">Object</span>&gt; info) {<br>           <span class="hljs-comment">// publish成功后返回流ID</span><br>     }<br>     @Override<br>     <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> onPublishStop(<span class="hljs-built_in">int</span> retCode, <span class="hljs-keyword">String</span> streamID, <span class="hljs-keyword">String</span> liveChannel) {<br>         <span class="hljs-comment">// publish停止，retCode标志停止的原因，具体错误码请参考</span><br>         <span class="hljs-comment">// 集成指南的最后一节&lt;SDK错误码说明&gt;</span><br>     }<br><br></code></pre>
 
 
 
-<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-comment">//  登录成功后发布直播（注：必须登录成功以后才能startPublish，否则会推流失败）</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">startPublish</span><span class="hljs-params">()</span> </span>{<br>     mZegoAVKit.setLocalView(svBig);<br>     mZegoAVKit.setLocalViewMode(<br>         ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);<br>     mZegoAVKit.startPreview();<br>     mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);<br>}<br></code></pre>
+<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-comment">//  登录成功后发布直播（注：必须登录成功以后才能startPublish，否则会推流失败）</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">startPublish</span><span class="hljs-params">()</span> </span>{<br>   mZegoAVKit.setLocalView(freeViewLive.getTextureView());<br>   mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);<br>   mZegoAVKit.startPreview();<br>   mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);<br>}<br></code></pre>
 
 
 
@@ -155,7 +156,7 @@
 
 
 
-<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-comment">// 停止publish前，必须停止预览</span><br>mZegoAVKit.stopPreview();<br>mZegoAVKit.stopPublish();<br><br><span class="hljs-comment">// 退出频道</span><br>mZegoAVKit.logoutChannel();<br></code></pre>
+<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-comment">// 停止publish前，必须停止预览</span><br>     mZegoAVKit.stopPreview();<br>     mZegoAVKit.stopPublish();<br>     mZegoAVKit.setLocalView(<span class="hljs-keyword">null</span>);<br><br><span class="hljs-comment">// 退出频道</span><br>     mZegoAVKit.logoutChannel();<br></code></pre>
 
 
 
@@ -173,17 +174,11 @@
 
 <h4 id="2-观看直播代码">2.  观看直播代码</h4>
 
-<p><strong><code>直播中的UserID、ChannelID、StreamID等信息都是业务侧自己定义和维护，userID，username的长度没有限制，channelID的长度不超过64个字符，StreamID的长度不超过128个字符，且非0非空，在同一个时间，channelID和StreamID是唯一的，只有一个直播源结束之后，这个channelId和StreamID才能被其他的直播源重新启用。</code></strong></p>
+<p><strong><code>直播中的User、ChannelID、StreamID等信息都是业务侧自己定义和维护，userID，username的长度不超过255个字节，且非空。channelID的长度不超过64个字符，StreamID的长度不超过128个字符，且非0非空，在同一个时间，StreamID必须唯一，只有一个直播源结束之后，这个StreamID才能被其他的直播源重新启用。</code></strong></p>
 
 
 
-<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-comment">// 从loginChannel成功后play第一条流，到获得第一帧数据会有一个短暂的时间差(具体时间取决于当时的网络状态)，推</span><br><span class="hljs-comment">// 荐在进入直播页面时加一张预览图以提升用户体验，在onVideoSizeChanged调中去掉预览图(注：sdk在获取到第一帧数据</span><br><span class="hljs-comment">// 后会回调onVideoSizeChanged)。</span><br><span class="hljs-comment">// 加预览图</span><br><span class="hljs-comment">// 伪代码</span><br>mRootView.addView(imageView);<br><br><span class="hljs-comment">// 登陆频道，登录结果会onLoginChannel回调中返回</span><br><span class="hljs-comment">// loginChannel这个步骤不能省略，发布直播和观看直播都要先loginchannel，</span><br><span class="hljs-comment">// 登录同一个的channelID才能观看。</span><br>ZegoUser zegoUser = <span class="hljs-keyword">new</span> ZegoUser(userID, userName);<br>mZegoAVKit.loginChannel(zegoUser, mLiveChannel);<br><br><span class="hljs-comment">//设置回调</span><br>mZegoAVKit.setZegoLiveCallback(<span class="hljs-keyword">new</span> ZegoLiveCallback() {<br>    <span class="hljs-annotation">@Override</span><br>     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onLoginChannel</span><span class="hljs-params">(<span class="hljs-keyword">int</span> retCode)</span> </span>{<br>     <span class="hljs-keyword">if</span> (retCode == <span class="hljs-number">0</span>) {<br>         <span class="hljs-comment">// 登录成功</span><br>         <span class="hljs-comment">// startPlay</span><br>         mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First,     <br>         ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);<br>         mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, svSmall);<br>         mZegoAVKit.startPlayStream(mPlayStreamID, ZegoAVKitCommon.ZegoRemoteViewIndex.First);<br>     }<span class="hljs-keyword">else</span> {<br>         <span class="hljs-comment">// 登录失败</span><br>     }<br><br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onPlaySucc</span><span class="hljs-params">(String streamID)</span> </span>{<br>          <span class="hljs-comment">// play成功</span><br>     }<br><br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onVideoSizeChanged</span><span class="hljs-params">(String streamID, <span class="hljs-keyword">int</span> width, <span class="hljs-keyword">int</span> height)</span> </span>{<br>          <span class="hljs-comment">//成功获取第一帧数据，去掉预览图，伪代码</span><br>         mRootView.removeView(imageView);<br>     }<br><br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onPlayStop</span><span class="hljs-params">(<span class="hljs-keyword">int</span> retCode, String streamID)</span> </span>{<br>        <span class="hljs-comment">// play停止，retCode标志停止的原因</span><br>     }<br><span class="hljs-comment">/// param err 1：正常结束，2：异常结束</span><br><span class="hljs-comment">// err返回5或6的时候，请检查以下原因，其他错误码请参考集成指南的最后说明：</span><br><span class="hljs-comment">// (1)主播和观众配置的AppID是否相同</span><br><span class="hljs-comment">// (2)主播和观众的Channel是否用的是同一个</span><br><span class="hljs-comment">// (3)主播和观众是否同时开启测试环境或同时在正式环境下</span><br><span class="hljs-comment">// (4)主播是否有推流成功</span><br></code></pre>
-
-<p>登录成功后播放视频（注：必须登录成功以后才能startPlay，否则会播放失败）</p>
-
-
-
-<pre class="prettyprint hljs-dark"><code class="language-cpp hljs"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">startPlay</span><span class="hljs-params">()</span> </span>{<br>    mZegoAVKit.setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex.First,  ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);<br>    mZegoAVKit.setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex.First, svSmall);<br>    mZegoAVKit.startPlayStream(mPlayStreamID, ZegoAVKitCommon.ZegoRemoteViewIndex.First);<br>}<br></code></pre>
+<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-comment">// 从loginChannel成功后play第一条流，到获得第一帧数据会有一个短暂的时间差(具体时间取决于当时的网络状态)，推</span><br><span class="hljs-comment">// 荐在进入直播页面时加一张预览图以提升用户体验，在onVideoSizeChanged调中去掉预览图(注：sdk在获取到第一帧数据后会回调onVideoSizeChanged)。</span><br><span class="hljs-comment">// 加预览图</span><br><span class="hljs-comment">// 伪代码</span><br>mRootView.addView(imageView);<br><br><span class="hljs-comment">// userID,userName是一个使用我们系统的帐号和昵称，一个帐号代表一个用户。</span><br>ZegoUser zegoUser = <span class="hljs-keyword">new</span> ZegoUser(userID, userName);<br><span class="hljs-comment">// 登陆频道，登录结果会onLoginChannel回调中返回</span><br><span class="hljs-comment">// loginChannel这个步骤不能省略，发布直播和观看直播都要先loginchannel，</span><br><span class="hljs-comment">// 观众的channelID和streamID必须和主播的一致才能观看主播的直播。</span><br>mZegoAVKit.loginChannel(zegoUser, mChannel);<br><br><span class="hljs-comment">//设置回调</span><br>mZegoAVKit.setZegoLiveCallback(<span class="hljs-keyword">new</span> ZegoLiveCallback() {<br>    <span class="hljs-annotation">@Override</span><br>     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onLoginChannel</span><span class="hljs-params">(<span class="hljs-keyword">int</span> retCode)</span> </span>{<br>     <span class="hljs-keyword">if</span> (retCode == <span class="hljs-number">0</span>) {<br>         <span class="hljs-comment">// 登录成功</span><br>         <span class="hljs-comment">// startPlay</span><br>      mZegoAVKit.setRemoteViewMode(remoteViewIndex, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);<br>      mZegoAVKit.setRemoteView(remoteViewIndex, freeViewLive.getTextureView());<br>      mZegoAVKit.startPlayStream(streamID, remoteViewIndex);<br><br>     }<span class="hljs-keyword">else</span> {<br>         <span class="hljs-comment">// 登录失败</span><br>     }<br><br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onPlaySucc</span><span class="hljs-params">(String streamID, String liveChannel)</span> </span>{<br>          <span class="hljs-comment">// play成功</span><br>     }<br><br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onVideoSizeChanged</span><span class="hljs-params">(String streamID, <span class="hljs-keyword">int</span> width, <span class="hljs-keyword">int</span> height)</span> </span>{<br>          <span class="hljs-comment">//成功获取第一帧数据，去掉预览图，伪代码</span><br>         mRootView.removeView(imageView);<br>     }<br><br>     <span class="hljs-annotation">@Override</span><br>     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onPlayStop</span><span class="hljs-params">(<span class="hljs-keyword">int</span> retCode, String streamID, String liveChannel)</span> </span>{<br>        <span class="hljs-comment">// play停止，retCode标志停止的原因</span><br>     }<br><span class="hljs-comment">/// param err 1：正常结束，2：异常结束</span><br><span class="hljs-comment">// err返回5或6的时候，请检查以下原因，其他错误码请参考集成指南的最后说明：</span><br><span class="hljs-comment">// (1)主播和观众配置的AppID是否相同</span><br><span class="hljs-comment">// (2)主播和观众的Channel是否用的是同一个</span><br><span class="hljs-comment">// (3)主播和观众是否同时开启测试环境或同时在正式环境下</span><br><span class="hljs-comment">// (4)主播是否有推流成功</span><br></code></pre>
 
 
 
@@ -203,7 +198,7 @@
 
 
 
-<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-comment">//停止观看</span><br>mZegoAVKit.stopPlayStream(streamID);<br><br><span class="hljs-comment">// 退出频道</span><br>mZegoAVKit.logoutChannel();<br></code></pre>
+<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-comment">//停止观看</span><br>mZegoAVKit.stopPlayStream(streamID);<br>mZegoAVKit.setRemoteView(index, <span class="hljs-keyword">null</span>);<br><br><span class="hljs-comment">// 退出频道</span><br>mZegoAVKit.logoutChannel();<br></code></pre>
 
 <p>备注：连麦情况下，要stop掉所有的stream后，才执行logoutchannel。</p>
 
@@ -225,7 +220,7 @@
 
 
 
-<pre class="prettyprint hljs-dark"><code class="hljs cpp"><span class="hljs-number">1.</span> 连麦情况下，多主播都必须在同一channel下才能实现连麦。ChannelID是一个直播频道（可以重复利用），在同一个时间，channelID是唯一的，只有一个直播源结束之后，这个channelId才能被其他的直播源重新启用。<br><br><span class="hljs-number">2.</span> 连麦成功后，如果两路连麦，观众需要设置两个remoteview去播放对应的两条流。<br><br><span class="hljs-number">3.</span> 一般来说，连麦的实现是主播和该主播的观众之间进行，如上图。<br>若主播和主播之间连麦的话，业务侧可以自己实现，只要确保两主播在同一个channel就可以。比如A主播要连麦B主播，可以让A主播stoppublish,登出原来的channel，然后登录B主播的channel去startpublish，这个过程，业务侧可以做一个过场动画，观众也需要有一个连接新主播的过场动画过程。<br><br><span class="hljs-number">4.</span> 连麦过程中，主播A连上主播B的时候，可能会出现主播B画面卡顿<span class="hljs-number">1</span>s左右，这是因为连麦成功后，播放线路优化的过程，优化后能降低连麦的延迟。<br></code></pre>
+<pre class="prettyprint hljs-dark"><code class="hljs cpp"><span class="hljs-number">1.</span> 连麦情况下，多主播都必须在同一channel下才能实现连麦。ChannelID是一个直播频道（可以重复利用），建议在一个直播源结束之后，这个channelId才给其他的直播源重新启用。<br><br><span class="hljs-number">2.</span> 连麦成功后，如果两路连麦，观众需要设置两个View（setRemoteView:(RemoteViewIndex)index view:(UIView*)view） 去播放对应的两条流。<br>注意：这两个view的index不能一致，同时这个index必须要和startPlayStream传入的index一致。（startPlayStream:(NSString *)streamID viewIndex:(RemoteViewIndex)index）<br><br><span class="hljs-number">3.</span> 一般来说，连麦的实现是主播和该主播的观众之间进行，如上图。主播发布直播，会有对应的channelID和StreamID，观众进去该channelID观看直播，当观众成为第二主播后，不需要重新登录Channel，直接startpublish另一条流就可以。<br><br><span class="hljs-number">4.</span> 若主播和主播之间连麦的话，业务侧可以自己实现，只要确保两主播在同一个channel就可以。比如A主播要连麦B主播，可以让A主播stoppublish,登出原来的channel，然后登录B主播的channel去startpublish，这个过程，业务侧可以做一个过场动画，观众也需要有一个连接新主播的过场动画过程。<br><br><span class="hljs-number">4.</span> 连麦过程中，主播A连上主播B的时候，可能会出现主播B画面卡顿<span class="hljs-number">1</span>s左右，这是因为连麦成功后，播放线路优化的过程，优化后能降低连麦的延迟。<br></code></pre>
 
 
 
@@ -239,17 +234,7 @@
 
 
 
-<h3 id="九android-60运行时权限申请">九、Android 6.0运行时权限申请</h3>
-
-<p>注：6.0及以上的系统需要在运行时申请CAMERA、RECORD_AUDIO权限</p>
-
-
-
-<pre class="prettyprint hljs-dark"><code class="language-java hljs"><span class="hljs-keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) {<br>        <span class="hljs-keyword">if</span> (ContextCompat.checkSelfPermission(<span class="hljs-keyword">this</span>, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED <br>        || ContextCompat.checkSelfPermission(<span class="hljs-keyword">this</span>, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {<br><br>   ActivityCompat.requestPermissions(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">new</span> String[]{<br>   Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, <span class="hljs-number">101</span>);<br><br>}<br></code></pre>
-
-
-
-<h3 id="十混淆">十、混淆</h3>
+<h3 id="九混淆">九、混淆</h3>
 
 
 
@@ -257,7 +242,7 @@
 
 
 
-<h3 id="十一常见问题">十一、常见问题</h3>
+<h3 id="十常见问题">十、常见问题</h3>
 
 
 
@@ -285,7 +270,7 @@
 
 
 
-<pre class="prettyprint hljs-dark"><code class="language-cpp hljs"> <span class="hljs-comment">/**<br>    * 电话状态监听.<br> */</span><br> <span class="hljs-comment">// 初始化来电状态, false表示没有来电</span><br> <span class="hljs-keyword">private</span> boolean mHaveBeenCalled = <span class="hljs-literal">false</span>;<br> <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initPhoneCallingListener</span><span class="hljs-params">()</span></span>{<br>    TelephonyManager tm = (TelephonyManager)getSystemService(Service.TELEPHONY_SERVICE);<br>    tm.listen(<span class="hljs-keyword">new</span> PhoneStateListener(){<br>       @<span class="hljs-function">Override<br>       <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCallStateChanged</span><span class="hljs-params">(<span class="hljs-keyword">int</span> state, String incomingNumber)</span> </span>{<br>             super.onCallStateChanged(state, incomingNumber);<br>             <span class="hljs-keyword">switch</span>(state){<br>                 <span class="hljs-keyword">case</span> TelephonyManager.CALL_STATE_RINGING:<br>                     Log.i(<span class="hljs-string">"TestPhoneState"</span>, <span class="hljs-string">"响铃:来电号码"</span>+incomingNumber);<br>                     <span class="hljs-keyword">if</span>(!mHaveBeenCalled){<br>                         <span class="hljs-comment">// 标记已来电</span><br>                         mHaveBeenCalled ＝ <span class="hljs-literal">true</span>;<br><br>                         <span class="hljs-comment">// 来电停止发布与播放</span><br>                         <span class="hljs-keyword">if</span>(mIsPlaying){<br>                            mZegoAVKit.stopPlayStream(playStreamID);<br>                            mZegoAVKit.setRemoteView(zegoRemoteViewIndex, null);<br>                         }<br>                         <span class="hljs-keyword">if</span>(mIsPublishing){<br>                            mZegoAVKit.stopPreview();<br>                            mZegoAVKit.stopPublish();<br>                            mZegoAVKit.setLocalView(null);<br>                         }<br>                         <span class="hljs-comment">// 退出频道</span><br>                         mZegoAVKit.logoutChannel();<br>                      }<br>                      <span class="hljs-keyword">break</span>;<br>                 <span class="hljs-keyword">case</span> TelephonyManager.CALL_STATE_IDLE:<br>                      Log.i(<span class="hljs-string">"TestPhoneState"</span>, <span class="hljs-string">"挂断电话"</span>);<br>                      <span class="hljs-keyword">if</span>（mHaveBeenCalled){<br>                          <span class="hljs-comment">// 恢复来电状态为false</span><br>                          mHaveBeenCalled = <span class="hljs-literal">false</span>;<br><br>                         <span class="hljs-comment">// 重新登陆频道</span><br>                         ZegoUser zegoUser = <span class="hljs-keyword">new</span> ZegoUser(<br>                         PreferenceUtils.getInstance().getUserID(), <br>                             PreferenceUtils.getInstance().getUserName());<br>                         mZegoAVKit.loginChannel(zegoUser, mLiveChannel);<br><br>                      }<br><br>                     <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">case</span> TelephonyManager.CALL_STATE_OFFHOOK:<br>                     Log.i(<span class="hljs-string">"TestPhoneState"</span>, <span class="hljs-string">"接听"</span>);<br>                     <span class="hljs-keyword">break</span>;<br>            }<br>       }<br>   }, PhoneStateListener.LISTEN_CALL_STATE);<br>}<br><br><span class="hljs-comment">// 重新登录后需要重新publish或play恢复之前的状态</span><br>mZegoAVKit.setZegoLiveCallback(<span class="hljs-keyword">new</span> ZegoLiveCallback() {<br>     @<span class="hljs-function">Override<br>     <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onLoginChannel</span><span class="hljs-params">(String liveChannel, <span class="hljs-keyword">int</span> retCode)</span> </span>{<br>            <span class="hljs-keyword">if</span> (retCode == <span class="hljs-number">0</span>) {<br>                 startPlay();<br>                 startPublish();<br>            } <br>     }<br>}<br></code></pre>
+<pre class="prettyprint hljs-dark"><code class="language-cpp hljs"> <span class="hljs-comment">/**<br>    * 电话状态监听.<br> */</span><br> <span class="hljs-comment">// 初始化来电状态, false表示没有来电</span><br> <span class="hljs-keyword">private</span> boolean mHaveBeenCalled = <span class="hljs-literal">false</span>;<br> <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initPhoneCallingListener</span><span class="hljs-params">()</span></span>{<br>    TelephonyManager tm = (TelephonyManager)getSystemService(Service.TELEPHONY_SERVICE);<br>    tm.listen(<span class="hljs-keyword">new</span> PhoneStateListener(){<br>       @<span class="hljs-function">Override<br>       <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCallStateChanged</span><span class="hljs-params">(<span class="hljs-keyword">int</span> state, String incomingNumber)</span> </span>{<br>             super.onCallStateChanged(state, incomingNumber);<br>             <span class="hljs-keyword">switch</span>(state){<br>                 <span class="hljs-keyword">case</span> TelephonyManager.CALL_STATE_RINGING:<br>                     Log.i(<span class="hljs-string">"TestPhoneState"</span>, <span class="hljs-string">"响铃:来电号码"</span>+incomingNumber);<br>                     <span class="hljs-keyword">if</span>(!mHaveBeenCalled){<br>                         <span class="hljs-comment">// 标记已来电</span><br>                         mHaveBeenCalled ＝ <span class="hljs-literal">true</span>;<br><br>                         <span class="hljs-comment">// 来电停止发布与播放</span><br>                         <span class="hljs-keyword">if</span>(mIsPlaying){<br>                            mZegoAVKit.stopPlayStream(playStreamID);<br>                            mZegoAVKit.setRemoteView(zegoRemoteViewIndex, null);<br>                         }<br>                         <span class="hljs-keyword">if</span>(mIsPublishing){<br>                            mZegoAVKit.stopPreview();<br>                            mZegoAVKit.stopPublish();<br>                            mZegoAVKit.setLocalView(null);<br>                         }<br>                         <span class="hljs-comment">// 退出频道</span><br>                         mZegoAVKit.logoutChannel();<br>                      }<br>                      <span class="hljs-keyword">break</span>;<br>                 <span class="hljs-keyword">case</span> TelephonyManager.CALL_STATE_IDLE:<br>                      Log.i(<span class="hljs-string">"TestPhoneState"</span>, <span class="hljs-string">"挂断电话"</span>);<br>                      <span class="hljs-keyword">if</span>（mHaveBeenCalled){<br>                          <span class="hljs-comment">// 恢复来电状态为false</span><br>                          mHaveBeenCalled = <span class="hljs-literal">false</span>;<br><br>                         <span class="hljs-comment">// 重新登陆频道</span><br>                         ZegoUser zegoUser = <span class="hljs-keyword">new</span> ZegoUser(<br>                         PreferenceUtils.getInstance().getUserID(), <br>                             PreferenceUtils.getInstance().getUserName());<br>                         mZegoAVKit.loginChannel(zegoUser, mChannel);<br><br>                      }<br><br>                     <span class="hljs-keyword">break</span>;<br>                <span class="hljs-keyword">case</span> TelephonyManager.CALL_STATE_OFFHOOK:<br>                     Log.i(<span class="hljs-string">"TestPhoneState"</span>, <span class="hljs-string">"接听"</span>);<br>                     <span class="hljs-keyword">break</span>;<br>            }<br>       }<br>   }, PhoneStateListener.LISTEN_CALL_STATE);<br>}<br><br><span class="hljs-comment">// 重新登录后需要重新publish或play恢复之前的状态</span><br>mZegoAVKit.setZegoLiveCallback(<span class="hljs-keyword">new</span> ZegoLiveCallback() {<br>     @<span class="hljs-function">Override<br>     <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onLoginChannel</span><span class="hljs-params">(String liveChannel, <span class="hljs-keyword">int</span> retCode)</span> </span>{<br>            <span class="hljs-keyword">if</span> (retCode == <span class="hljs-number">0</span>) {<br>                 startPlay();<br>                 startPublish();<br>            } <br>     }<br>}<br></code></pre>
 
 
 
@@ -305,7 +290,45 @@
 
 
 
-<h3 id="十二sdk错误码说明">十二、SDK错误码说明</h3>
+<h4 id="5-外部采集">5. 外部采集</h4>
+
+<ol start="1"><li rel="1">在初始化SDK时，指定videoCaptureFactory。</li>
+</ol>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs css"><span class="hljs-tag">mZegoAVKit</span><span class="hljs-class">.setVideoCaptureFactory</span>(<span class="hljs-tag">factoryDemo</span>);<br></code></pre>
+
+<ol start="2"><li rel="2">实现ZegoVideoCaptureFactory协议 </li>
+</ol>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs aspectj">  <span class="hljs-keyword">public</span> <span class="hljs-function">ZegoVideoCaptureDevice <span class="hljs-title">create</span><span class="hljs-params">(String device_id)</span> </span>{<br>        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">null</span> == mDevice) {<br>            mDevice = <span class="hljs-keyword">new</span> VideoCaptureDeviceDemo();<br>        }<br>        <span class="hljs-keyword">return</span> mDevice;<br>    }<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">(ZegoVideoCaptureDevice vc)</span> </span>{<br>        <span class="hljs-keyword">if</span> (vc == mDevice) {<br>            mDevice = <span class="hljs-keyword">null</span>;<br>        }<br>    }<br></code></pre>
+
+<ol start="3"><li rel="3">Create需要返回实现ZegoVideoCaptureDevice协议的对象</li>
+</ol>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs aspectj">     <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">allocateAndStart</span><span class="hljs-params">(ZegoVideoCaptureDevice.Client var1)</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">stopAndDeAllocate</span><span class="hljs-params">()</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">startCapture</span><span class="hljs-params">()</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">stopCapture</span><span class="hljs-params">()</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setFrameRate</span><span class="hljs-params">(<span class="hljs-keyword">int</span> var1)</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setResolution</span><span class="hljs-params">(<span class="hljs-keyword">int</span> var1, <span class="hljs-keyword">int</span> var2)</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setFrontCam</span><span class="hljs-params">(<span class="hljs-keyword">int</span> var1)</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setView</span><span class="hljs-params">(View var1)</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setViewMode</span><span class="hljs-params">(<span class="hljs-keyword">int</span> var1)</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setCaptureRotation</span><span class="hljs-params">(<span class="hljs-keyword">int</span> var1)</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">startPreview</span><span class="hljs-params">()</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">stopPreview</span><span class="hljs-params">()</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">enableTorch</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> var1)</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">takeSnapshot</span><span class="hljs-params">()</span></span>;<br>     <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setPowerlineFreq</span><span class="hljs-params">(<span class="hljs-keyword">int</span> var1)</span></span>;<br></code></pre>
+
+<ol start="4"><li rel="4">外部采集相关代码可以参考demo中的advanced下面的VideoCaptureDeviceDemo源文件。</li>
+</ol>
+
+
+
+<h4 id="6-android-60运行时权限申请">6. Android 6.0运行时权限申请</h4>
+
+<p>注：6.0及以上的系统需要在运行时申请CAMERA、RECORD_AUDIO权限，若检测到系统没有该权限，跳转到相应的手机页面去打开CAMERA、RECORD_AUDIO权限。</p>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs cpp"><span class="hljs-keyword">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) {<br><span class="hljs-keyword">if</span> (ContextCompat.checkSelfPermission(<span class="hljs-keyword">this</span>, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED&amp;&amp; ContextCompat.checkSelfPermission(<span class="hljs-keyword">this</span>,Manifest.permission.RECORD_AUDIO)  == PackageManager.PERMISSION_GRANTED) {<br>      <span class="hljs-comment">// 发布直播</span><br>      doPublish();                   <br>     }<span class="hljs-keyword">else</span>{<br>ActivityCompat.requestPermissions(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">new</span> String[]{<br>Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},  <span class="hljs-number">101</span>);<br>       }<br><br><span class="hljs-function">Override<br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onRequestPermissionsResult</span><span class="hljs-params">(<span class="hljs-keyword">int</span> requestCode, String[] permissions, <span class="hljs-keyword">int</span>[] grantResults)</span> </span>{<br>    <span class="hljs-keyword">switch</span> (requestCode) {<br>        <span class="hljs-keyword">case</span> <span class="hljs-number">101</span>:<br><span class="hljs-keyword">if</span> (grantResults[<span class="hljs-number">0</span>] == PackageManager.PERMISSION_GRANTED &amp;&amp; grantResults[<span class="hljs-number">1</span>] == PackageManager.PERMISSION_GRANTED) {<br>        <span class="hljs-comment">// 发布直播</span><br>        doPublish();<br><br>} <span class="hljs-keyword">else</span> {<br><br><span class="hljs-keyword">if</span> (grantResults[<span class="hljs-number">0</span>] == PackageManager.PERMISSION_DENIED) {<br><br>   Toast.makeText(<span class="hljs-keyword">this</span>, <span class="hljs-string">"请开启摄像头权限"</span>, Toast.LENGTH_LONG).show();<br>     }<br><br><span class="hljs-keyword">if</span> (grantResults[<span class="hljs-number">1</span>] == PackageManager.PERMISSION_DENIED) {<br><br>   Toast.makeText(<span class="hljs-keyword">this</span>, <span class="hljs-string">"请开启录音权限"</span>, Toast.LENGTH_LONG).show();<br>      }<br><br>   <span class="hljs-comment">// 跳转到应用详情页面</span><br>Intent intent = <span class="hljs-keyword">new</span> Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);<br>intent.setData(Uri.parse(<span class="hljs-string">"package:"</span> + getPackageName()));<br>startActivity(intent);<br> }<br>     <span class="hljs-keyword">break</span>;<br>     }<br>    }<br></code></pre>
+
+
+
+<h3 id="十一sdk错误码说明">十一、SDK错误码说明</h3>
 
 <p><strong>在LoginChannel的回调中出现以下错误码 说明：</strong></p>
 
@@ -385,7 +408,7 @@
 
 
 
-<h3 id="十三其他api说明">十三、其他API说明</h3>
+<h3 id="十二其他api说明">十二、其他API说明</h3>
 
 <table>
 <thead>
