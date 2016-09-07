@@ -286,7 +286,7 @@
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithDouble:dWidth], (id)kCVPixelBufferWidthKey,
                                    [NSNumber numberWithDouble:dHeight], (id)kCVPixelBufferHeightKey,
-                                   [NSNumber numberWithInt:kCVPixelFormatType_32BGRA], (id)kCVPixelBufferPixelFormatTypeKey,
+                                   [NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange], (id)kCVPixelBufferPixelFormatTypeKey,
                                    nil
                                    ];
     
@@ -427,7 +427,7 @@
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithDouble:dWidth], (id)kCVPixelBufferWidthKey,
                                    [NSNumber numberWithDouble:dHeight], (id)kCVPixelBufferHeightKey,
-                                   [NSNumber numberWithInt:kCVPixelFormatType_32BGRA], (id)kCVPixelBufferPixelFormatTypeKey,
+                                   [NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange], (id)kCVPixelBufferPixelFormatTypeKey,
                                    nil
                                    ];
     

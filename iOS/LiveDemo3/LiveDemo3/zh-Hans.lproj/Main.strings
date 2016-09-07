@@ -11,11 +11,17 @@
 /* Class = "UILabel"; text = "硬件加速"; ObjectID = "4Ri-Js-k0Z"; */
 "4Ri-Js-k0Z.text" = "硬件加速";
 
+/* Class = "UILabel"; text = "混流"; ObjectID = "3FU-nj-GdT"; */
+"3FU-nj-GdT.text" = "混流";
+
 /* Class = "UILabel"; text = "高级设置"; ObjectID = "4Sg-tZ-uJT"; */
 "4Sg-tZ-uJT.text" = "高级设置";
 
 /* Class = "UIButton"; normalTitle = "静音"; ObjectID = "4jW-xr-IGD"; */
 "4jW-xr-IGD.normalTitle" = "静音";
+
+/* Class = "UIButton"; normalTitle = "分享"; ObjectID = "J2Z-fM-00N"; */
+"J2Z-fM-00N.normalTitle" = "分享";
 
 /* Class = "UILabel"; text = "手电筒"; ObjectID = "7Ms-VQ-5YF"; */
 "7Ms-VQ-5YF.text" = "手电筒";

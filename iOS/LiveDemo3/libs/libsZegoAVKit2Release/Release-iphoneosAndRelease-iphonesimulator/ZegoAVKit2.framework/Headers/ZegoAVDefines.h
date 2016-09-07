@@ -71,4 +71,15 @@ typedef enum : NSUInteger {
     ZEGO_BEAUTIFY_SKINWHITEN    = 1 << 2    ///< 皮肤美白，一般与磨皮结合使用 ZEGO_BEAUTIFY_POLISH | ZEGO_BEAUTIFY_SKINWHITEN
 } ZegoBeautifyFeature;
 
+
+@interface ZegoMixStreamInfo : NSObject
+
+@property (copy) NSString *streamID;
+@property int top;
+@property int left;
+@property int bottom;
+@property int right;
+
+@end
+
 #endif /* ZegoAVApiDefines_h */

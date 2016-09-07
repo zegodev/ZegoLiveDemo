@@ -31,6 +31,8 @@
 @property (nonatomic, copy) NSString *publishingStreamID;
 @property (nonatomic, copy) NSString *publishingLiveChannel;
 
+@property (nonatomic, assign) BOOL mixStream;
+
 - (ZegoUser *)getZegoUser;
 
 //用token跟id拼接出一个channelID

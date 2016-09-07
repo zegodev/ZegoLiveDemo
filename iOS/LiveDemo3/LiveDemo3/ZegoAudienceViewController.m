@@ -950,7 +950,7 @@
         if ([command isEqualToString:kZEGO_CHAT_RESPOND_PUBLISH])
             [self onReceivePublishRespond:receiveInfo];
     }
-    else if (self.isPublishing)
+    else if (self.isPublishing && ![ZegoSettings sharedInstance].mixStream)
     {
         if ([command isEqualToString:kZEGO_CHAT_REQUEST_PUBLISH])
         {

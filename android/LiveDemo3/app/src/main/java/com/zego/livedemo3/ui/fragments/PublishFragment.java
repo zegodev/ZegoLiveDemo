@@ -130,6 +130,9 @@ public class PublishFragment extends AbsBaseFragment {
             }
         });
 
+        // 默认"全屏+美白"
+        spBeauties.setSelection(3);
+
         // 开启前置摄像头时, 手电筒不可用
         if (tbEnableFrontCam.isChecked()) {
             tbEnableTorch.setEnabled(false);

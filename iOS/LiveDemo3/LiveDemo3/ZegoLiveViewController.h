@@ -74,4 +74,8 @@
 //获取第一个view
 - (UIView *)getFirstViewInContainer:(UIView *)containerView;
 
+- (void)sendRequestPublishRespond:(BOOL)agreed magicNumber:(NSString *)magicNumber requestPublisher:(ZegoUser *)requestUser;
+
+- (void)shareToQQ:(NSString *)hls bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID;
+
 @end

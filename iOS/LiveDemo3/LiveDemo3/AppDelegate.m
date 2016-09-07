@@ -8,6 +8,12 @@
 
 #import "AppDelegate.h"
 #import "ZegoAVKitManager.h"
+#import "ZegoAnchorViewController.h"
+#import "ZegoAudienceViewController.h"
+#import "ZegoStreamInfo.h"
+
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
 
 @interface AppDelegate () <UISplitViewControllerDelegate>
 
@@ -19,6 +25,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     getZegoAV_ShareInstance();
+    
+#if !defined(__i386__)
+    [[TencentOAuth alloc] initWithAppId:@"1105666430" andDelegate:nil];
+#endif
     
     return YES;
 }
@@ -45,4 +55,81 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    if ([url.absoluteString hasPrefix:@"tencent"])
+    {
+#if !defined(__i386__)
+        return [QQApiInterface handleOpenURL:url delegate:nil];
+#else
+        return NO;
+#endif
+    }
+    else if ([url.absoluteString hasPrefix:@"ZegoLiveShare"])
+        return [self handleOpenLive:url];
+    
+    return NO;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
+{
+    if ([url.absoluteString hasPrefix:@"tencent"])
+    {
+#if !defined(__i386__)
+        return [QQApiInterface handleOpenURL:url delegate:nil];
+#else
+        return NO;
+#endif
+    }
+    else if ([url.absoluteString hasPrefix:@"zegoliveshare"])
+        return [self handleOpenLive:url];
+    
+    return NO;
+}
+
+- (BOOL)handleOpenLive:(NSURL *)url
+{
+    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+    if ([navigationController.topViewController isKindOfClass:[ZegoAnchorViewController class]] ||
+        [navigationController.topViewController isKindOfClass:[ZegoAudienceViewController class]])
+        return YES;
+    
+    NSMutableDictionary *queryStringDict = [NSMutableDictionary dictionary];
+    NSString *urlParams = [[url.absoluteString componentsSeparatedByString:@"?"] lastObject];
+    NSArray *urlComponents = [urlParams componentsSeparatedByString:@"&"];
+    
+    for (NSString *keyValuePair in urlComponents)
+    {
+        NSArray *pairComponents = [keyValuePair componentsSeparatedByString:@"="];
+        NSString *key = [[pairComponents firstObject] stringByRemovingPercentEncoding];
+        NSString *value = [[pairComponents lastObject] stringByRemovingPercentEncoding];
+        
+        [queryStringDict setObject:value forKey:key];
+    }
+    
+    NSLog(@"%@", queryStringDict);
+    
+    unsigned int bizToken = (unsigned int)[queryStringDict[@"token"] longLongValue];
+    unsigned int bizID = (unsigned int)[queryStringDict[@"id"] longLongValue];
+    if (bizToken == 0 && bizID == 0)
+        return YES;
+    
+    NSString *streamID = queryStringDict[@"stream"];
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    ZegoAudienceViewController *audienceViewController = (ZegoAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"audienceID"];
+    audienceViewController.bizToken = bizToken;
+    audienceViewController.bizID = bizID;
+    if (streamID.length != 0)
+    {
+        ZegoStreamInfo *streamInfo = [ZegoStreamInfo new];
+        streamInfo.streamID = streamID;
+        
+        audienceViewController.currentStreamList = @[streamInfo];
+    }
+    
+    [self.window.rootViewController presentViewController:audienceViewController animated:YES completion:nil];
+    
+    return YES;
+}
 @end

@@ -11,11 +11,17 @@
 /* Class = "UILabel"; text = "Hardware Acceleration"; ObjectID = "4Ri-Js-k0Z"; */
 "4Ri-Js-k0Z.text" = "Hardware Acceleration";
 
+/* Class = "UILabel"; text = "混流"; ObjectID = "3FU-nj-GdT"; */
+"3FU-nj-GdT.text" = "Mix Stram";
+
 /* Class = "UILabel"; text = "Advanced"; ObjectID = "4Sg-tZ-uJT"; */
 "4Sg-tZ-uJT.text" = "Advanced";
 
 /* Class = "UIButton"; normalTitle = "静音"; ObjectID = "4jW-xr-IGD"; */
 "4jW-xr-IGD.normalTitle" = "Mute";
+
+/* Class = "UIButton"; normalTitle = "分享"; ObjectID = "J2Z-fM-00N"; */
+"J2Z-fM-00N.normalTitle" = "Share";
 
 /* Class = "UILabel"; text = "Flashlight"; ObjectID = "7Ms-VQ-5YF"; */
 "7Ms-VQ-5YF.text" = "Flashlight";

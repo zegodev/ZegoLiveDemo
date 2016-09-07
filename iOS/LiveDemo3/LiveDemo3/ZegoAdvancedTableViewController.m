@@ -8,6 +8,7 @@
 
 #import "ZegoAdvancedTableViewController.h"
 #import "ZegoAVKitManager.h"
+#import "ZegoSettings.h"
 
 @interface ZegoAdvancedTableViewController () <UITextFieldDelegate, UITextViewDelegate>
 
@@ -16,6 +17,7 @@
 
 @property (weak, nonatomic) IBOutlet UISwitch *testEnvSwitch;
 @property (weak, nonatomic) IBOutlet UISwitch *hardwareAcceleratedSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *mixStreamSwitch;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 
@@ -38,6 +40,20 @@
         [self.appID setText:[NSString stringWithFormat:@"%u", ZegoGetAppID()]];
     }
     
+    self.mixStreamSwitch.on = [ZegoSettings sharedInstance].mixStream;
+    
+    UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onAlphaEnv:)];
+    gesture.numberOfTapsRequired = 5;
+    [self.tableView addGestureRecognizer:gesture];
+}
+
+- (void)onAlphaEnv:(UIGestureRecognizer *)gesture
+{
+    BOOL alpha = isUsingAlphaEnv();
+    setUseAlphaEnv(!alpha);
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"测试环境" message:alpha ? @"关闭Alpha环境" : @"打开Alpha环境" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alert show];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -70,6 +86,12 @@
 - (IBAction)toggleHardwareAccelerated:(id)sender {
     UISwitch *s = (UISwitch *)sender;
     ZegoRequireHardwareAccelerated(s.on);
+}
+
+- (IBAction)toggleMixStream:(id)sender
+{
+    UISwitch *s = (UISwitch *)sender;
+    [ZegoSettings sharedInstance].mixStream = s.on;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

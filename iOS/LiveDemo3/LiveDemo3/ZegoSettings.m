@@ -21,6 +21,7 @@ NSString *kZegoDemoVideoBitRateKey      = @"bitrate";
 NSString *kZegoDemoPublishingStreamID   = @"streamID";   ///< 当前直播流 ID
 NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频道 ID
 
+NSString *kZegoDemoMixStreamKey         = @"mixStream";
 
 @implementation ZegoSettings
 {
@@ -50,6 +51,8 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
                                     NSLocalizedString(@"超高质量", nil),
                                     NSLocalizedString(@"自定义", nil)];
         [self loadConfig];
+        
+        self.mixStream = [[NSUserDefaults standardUserDefaults] boolForKey:kZegoDemoMixStreamKey];
     }
     
     return self;
@@ -92,6 +95,16 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
         NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
         [ud setObject:_userID forKey:kZegoDemoUserIDKey];
     }
+}
+
+- (void)setMixStream:(BOOL)mixStream
+{
+    if (_mixStream == mixStream)
+        return;
+    
+    _mixStream = mixStream;
+    
+    [[NSUserDefaults standardUserDefaults] setBool:self.mixStream forKey:kZegoDemoMixStreamKey];
 }
 
 /*

@@ -120,6 +120,12 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 /// \breif 音视频引擎停止
 - (void)onAVEngineStop;
 
+/// \brief 混流配置更新结果回调
+/// \param errorCode 错误码，0 表示没有错误
+/// \param mixStreamID 混流ID
+/// \param info 混流播放信息
+- (void)onMixStreamConfigUpdate:(int)errorCode mixStream:(NSString *)mixStreamID streamInfo:(NSDictionary *)info;
+
 @end
 
 
@@ -273,11 +279,23 @@ ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列�
 - (bool)loginChannel:(NSString *)channel user:(ZegoUser *)user;
 
 /// \brief 作为主播开始直播
-/// \param user 发布用户
+/// \brief 直播标题
 /// \param streamID 流 ID
-/// \param liveChannel 频道 ID
 /// \return true 成功，等待异步结果回调，否则失败
 - (bool)startPublishingWithTitle:(NSString *)title streamID:(NSString *)streamID;
+
+/// \brief 作为主播开始直播
+/// \brief 直播标题
+/// \param streamID 流 ID
+/// \param mixStreamID 混流ID
+/// \param flag 推流标记(按位取值)
+/// \return true 成功，等待异步结果回调，否则失败
+- (bool)startPublishingWithTitle:(NSString *)title streamID:(NSString *)streamID mixStreamID:(NSString *)mixStreamID flag:(int)flag;
+
+/// \brief 更新混流配置
+/// \param lstMixStreamInfo 混流配置列表，按列表顺序叠加涂层
+/// \return true 成功，等待异步结果回调，否则失败
+- (bool)updateMixStreamConfig:(NSArray<ZegoMixStreamInfo*> *)lstMixStreamInfo;
 
 /// \brief 停止主播
 /// \return true 成功，否则失败

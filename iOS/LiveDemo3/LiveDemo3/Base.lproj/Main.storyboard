@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vC3-pB-5Vb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vC3-pB-5Vb">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -585,8 +585,36 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="RgW-Ah-pLA">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="44" id="lIb-zA-eBy">
                                         <rect key="frame" x="0.0" y="201.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lIb-zA-eBy" id="VhD-8T-sXI">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="混流" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3FU-nj-GdT">
+                                                    <rect key="frame" x="16" y="11" width="34" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="yfl-xe-WY9">
+                                                    <rect key="frame" x="535" y="6.5" width="51" height="31"/>
+                                                    <connections>
+                                                        <action selector="toggleMixStream:" destination="zK5-G6-LvE" eventType="touchUpInside" id="kLr-ck-jUK"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="3FU-nj-GdT" firstAttribute="leading" secondItem="VhD-8T-sXI" secondAttribute="leadingMargin" constant="8" id="8pf-pz-u1n"/>
+                                                <constraint firstItem="yfl-xe-WY9" firstAttribute="centerY" secondItem="VhD-8T-sXI" secondAttribute="centerY" id="iBE-Ob-PPG"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="yfl-xe-WY9" secondAttribute="trailing" constant="8" id="jDY-sn-3sV"/>
+                                                <constraint firstItem="3FU-nj-GdT" firstAttribute="centerY" secondItem="VhD-8T-sXI" secondAttribute="centerY" id="kPH-Zs-S74"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="RgW-Ah-pLA">
+                                        <rect key="frame" x="0.0" y="245.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RgW-Ah-pLA" id="aYG-th-guN">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -617,7 +645,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="64" id="Jaw-cT-wBC">
-                                        <rect key="frame" x="0.0" y="245.5" width="600" height="64"/>
+                                        <rect key="frame" x="0.0" y="289.5" width="600" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jaw-cT-wBC" id="9Jg-sn-z7S">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="63.5"/>
@@ -662,6 +690,7 @@
                         <outlet property="appID" destination="jnh-KH-dFE" id="Q3M-Ha-3pQ"/>
                         <outlet property="appSign" destination="Iik-se-dP9" id="ICk-i5-CH3"/>
                         <outlet property="hardwareAcceleratedSwitch" destination="CtH-Lf-YUS" id="PbR-b6-FwL"/>
+                        <outlet property="mixStreamSwitch" destination="yfl-xe-WY9" id="6CY-2i-FJj"/>
                         <outlet property="testEnvSwitch" destination="OIV-LR-Xuv" id="ZwO-Sl-mmH"/>
                     </connections>
                 </tableViewController>
@@ -981,6 +1010,13 @@
                                     <segue destination="leD-kB-IhU" kind="presentation" identifier="logSegueIdentifier" id="D8o-8q-m4j"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2Z-fM-00N">
+                                <rect key="frame" x="545" y="97" width="30" height="30"/>
+                                <state key="normal" title="分享"/>
+                                <connections>
+                                    <action selector="onShare:" destination="cZT-PC-ftu" eventType="touchUpInside" id="uIn-GR-gmV"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7zZ-Oy-hnb">
                                 <rect key="frame" x="545" y="44" width="30" height="30"/>
                                 <constraints>
@@ -1011,6 +1047,7 @@
                             <constraint firstItem="7fB-Q3-gmf" firstAttribute="centerY" secondItem="7zZ-Oy-hnb" secondAttribute="centerY" id="6x4-FN-Yiz"/>
                             <constraint firstItem="dus-T5-cbh" firstAttribute="leading" secondItem="Vj8-zT-zvE" secondAttribute="leading" id="Fco-dJ-55N"/>
                             <constraint firstItem="7zZ-Oy-hnb" firstAttribute="leading" secondItem="7fB-Q3-gmf" secondAttribute="trailing" constant="20" id="Gbc-SM-9ai"/>
+                            <constraint firstItem="J2Z-fM-00N" firstAttribute="top" secondItem="7zZ-Oy-hnb" secondAttribute="bottom" constant="23" id="IVr-OW-iOF"/>
                             <constraint firstItem="7zZ-Oy-hnb" firstAttribute="top" secondItem="kWr-3O-KRH" secondAttribute="bottom" constant="24" id="OEg-Bi-TA1"/>
                             <constraint firstItem="nOB-ZH-Wpq" firstAttribute="leading" secondItem="ogL-0b-VpG" secondAttribute="trailing" constant="25" id="Q4A-AO-vJj"/>
                             <constraint firstItem="X3M-7B-8mk" firstAttribute="top" secondItem="dus-T5-cbh" secondAttribute="bottom" id="XMJ-MO-BeM"/>
@@ -1019,6 +1056,7 @@
                             <constraint firstAttribute="trailing" secondItem="dus-T5-cbh" secondAttribute="trailing" id="bLU-pi-Yv4"/>
                             <constraint firstItem="nOB-ZH-Wpq" firstAttribute="centerY" secondItem="pRg-Vy-4cb" secondAttribute="centerY" id="h01-sL-fuM"/>
                             <constraint firstItem="pRg-Vy-4cb" firstAttribute="centerY" secondItem="7fB-Q3-gmf" secondAttribute="centerY" id="rQY-MO-0VE"/>
+                            <constraint firstItem="J2Z-fM-00N" firstAttribute="centerX" secondItem="7zZ-Oy-hnb" secondAttribute="centerX" id="sEL-Zy-QRl"/>
                             <constraint firstItem="7fB-Q3-gmf" firstAttribute="leading" secondItem="pRg-Vy-4cb" secondAttribute="trailing" constant="20" id="uef-uI-Psw"/>
                             <constraint firstItem="pRg-Vy-4cb" firstAttribute="leading" secondItem="nOB-ZH-Wpq" secondAttribute="trailing" constant="25" id="uhj-FH-7Pp"/>
                             <constraint firstItem="dus-T5-cbh" firstAttribute="top" secondItem="Vj8-zT-zvE" secondAttribute="top" id="vz5-S7-bzf"/>
@@ -1257,6 +1295,6 @@
         <image name="btn_user_normal" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="W13-ST-aOy"/>
+        <segue reference="D8o-8q-m4j"/>
     </inferredMetricsTieBreakers>
 </document>

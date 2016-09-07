@@ -108,3 +108,7 @@
 
 "进入全屏" = "FullScreen";
 "退出全屏" = "Exit";
+
+"混流结果: %d" = "Mix Result:%d";
+"混流rtmp: %@" = "Mix rtmp: %@";
+"混流hls: %@" = "Mix hls: %@";

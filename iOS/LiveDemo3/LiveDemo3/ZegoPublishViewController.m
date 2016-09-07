@@ -79,6 +79,8 @@
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     [self setRotateFromInterfaceOrientation:orientation];
     
+    [self.beautifyPicker selectRow:3 inComponent:0 animated:NO];
+    
     [self addPreview];
     
 }

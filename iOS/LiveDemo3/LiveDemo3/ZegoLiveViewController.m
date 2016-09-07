@@ -11,16 +11,20 @@
 #import "ZegoSettings.h"
 #import "ZegoChatCommand.h"
 
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/QQApiInterfaceObject.h>
 
 @interface ZegoLiveViewController () <UIAlertViewDelegate>
 
-@property (nonatomic, strong) NSMutableDictionary *requestAlertDict;
-@property (nonatomic, strong) NSMutableDictionary *requestAlertContextDict;
 @property (assign) UIInterfaceOrientation currentOrientation;
 
 //混流时的数据源
 @property (nonatomic, strong) NSData *auxData;
 @property (nonatomic, assign) void *pPos;
+
+//处理父view及子view弹框
+@property (nonatomic, strong) NSMutableDictionary *requestAlertDict;
+@property (nonatomic, strong) NSMutableDictionary *requestAlertContextDict;
 
 @end
 
@@ -753,6 +757,9 @@
     if (self.auxData)
     {
         int nLen = (int)[self.auxData length];
+        if (self.pPos == 0)
+            self.pPos = (void *)[self.auxData bytes];
+        
         const void *pAuxData = [self.auxData bytes];
         if (pAuxData == NULL)
             return;
@@ -764,8 +771,6 @@
             return;
         }
         
-        self.pPos = self.pPos + *pDataLen;
-        
         if (pSampleRate)
             *pSampleRate = 44100;
         
@@ -773,7 +778,30 @@
             *pChannelCount = 2;
         
         memcpy(pData, self.pPos, *pDataLen);
+        self.pPos = self.pPos + *pDataLen;
     }
+}
+
+- (void)shareToQQ:(NSString *)hls bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID
+{
+#if !defined(__i386__)
+    NSString *urlString = [NSString stringWithFormat:@"http://www.zego.im/share/index?video=%@&token=%@&id=%@&stream=%@", [hls stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], bizToken, bizID, streamID];
+    NSURL *url = [NSURL URLWithString:urlString];
+    UIImage *logoImage = [UIImage imageNamed:@"zego"];
+    NSData *previewImageData = UIImagePNGRepresentation(logoImage);
+    
+    NSString *title = @"LiveDemo";
+    NSString *description = @"快来围观我的直播";
+    
+    QQApiURLObject *urlObject = [QQApiURLObject objectWithURL:url title:title description:description previewImageData:previewImageData targetContentType:QQApiURLTargetTypeNews];
+    SendMessageToQQReq *req = [SendMessageToQQReq reqWithContent:urlObject];
+    QQApiSendResultCode result = [QQApiInterface sendReq:req];
+    
+    NSLog(@"share To QQ URL: %@, result %d", urlString, result);
+
+#endif
+//    NSURL *shareURL = [NSURL URLWithString:[];
+    
 }
 
 /*

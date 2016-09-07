@@ -201,19 +201,6 @@ static CVPixelBufferRef pb = NULL;
     int width = m_oSettings.width;
     int height = m_oSettings.height;
     
-    // 要求宽高为 16 的倍数
-    int w_m = width % 16;
-    if (w_m)
-    {
-        width += (16 - w_m);
-    }
-    
-    int h_m = height % 16;
-    if (h_m)
-    {
-        height += (16 - h_m);
-    }
-    
     CVPixelBufferRef pixelBuffer;
     CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault,
                                           width,
@@ -272,6 +259,8 @@ static CVPixelBufferRef pb = NULL;
     CGColorSpaceRelease(rgbColorSpace);
     CGContextRelease(context);
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    
+    size_t bpr = CVPixelBufferGetBytesPerRow(pixelBuffer);
     
     return pixelBuffer;
 }
