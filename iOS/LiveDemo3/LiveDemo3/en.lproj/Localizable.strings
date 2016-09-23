@@ -92,7 +92,7 @@
 "优" = "Excelent";
 "良" = "Good";
 "中" = "Medium";
-"差" = "bad";
+"差" = "Bad";
 "重新播放, 流ID:%@" = "Replay, Stream ID:%@";
 
 "Zego Only" = "Zego Only, Others Cannot Use this framework";
@@ -112,3 +112,9 @@
 "混流结果: %d" = "Mix Result:%d";
 "混流rtmp: %@" = "Mix rtmp: %@";
 "混流hls: %@" = "Mix hls: %@";
+
+"请选择直播模式" = "Chose Live Type";
+"无连麦模式" = "Single Anchor";
+"连麦模式" = "More Anchor";
+"混流模式" = "Mix Stream";
+

@@ -29,12 +29,14 @@
     bool is_take_photo_;
 }
 
-- (void)allocateAndStart:(id<ZegoVideoCaptureClientDelegate>) client {
+#pragma mark - ZegoVideoCaptureDevice
+
+- (void)zego_allocateAndStart:(id<ZegoVideoCaptureClientDelegate>) client {
     client_ = client;
     is_take_photo_ = false;
 }
 
-- (void)stopAndDeAllocate {
+- (void)zego_stopAndDeAllocate {
     [client_ destroy];
     client_ = nil;
 }
@@ -42,7 +44,7 @@
 NSTimer *g_fps_timer = nil;
 static CVPixelBufferRef pb = NULL;
 
-- (int)startCapture {
+- (int)zego_startCapture {
     if(m_oState.capture) {
         // * already started
         return 0;
@@ -66,7 +68,7 @@ static CVPixelBufferRef pb = NULL;
     return 0;
 }
 
-- (int)stopCapture {
+- (int)zego_stopCapture {
     if(!m_oState.capture) {
         // * capture is not started
         return 0;
@@ -81,7 +83,7 @@ static CVPixelBufferRef pb = NULL;
     return 0;
 }
 
-- (int)setFrameRate:(int)framerate {
+- (int)zego_setFrameRate:(int)framerate {
     // * no change
     if(m_oSettings.fps == framerate) {
         return 0;
@@ -98,7 +100,7 @@ static CVPixelBufferRef pb = NULL;
     return 0;
 }
 
-- (int)setWidth:(int)width andHeight:(int)height {
+- (int)zego_setWidth:(int)width andHeight:(int)height {
     // * not changed
     // * little trick here: swap heigh and width
     if ((m_oSettings.width == height) && (m_oSettings.height == width)) {
@@ -110,13 +112,7 @@ static CVPixelBufferRef pb = NULL;
     return 0;
 }
 
-- (int)setFrontCam:(int)bFront { return 0; }
-- (int)setView:(UIView*)view { return 0; }
-- (int)setViewMode:(int)mode { return 0; }
-- (int)setViewRotation:(int)rotation { return 0; }
-- (int)setCaptureRotation:(int)rotaion { return 0; }
-
-- (int)startPreview {
+- (int)zego_startPreview {
     if(m_oState.preview) {
         // * preview already started
         return 0;
@@ -124,13 +120,13 @@ static CVPixelBufferRef pb = NULL;
     
     m_oState.preview = true;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self startCapture];
+        [self zego_startCapture];
     });
     
     return 0;
 }
 
-- (int)stopPreview {
+- (int)zego_stopPreview {
     if(!m_oState.preview) {
         // * preview not started
         return 0;
@@ -140,16 +136,14 @@ static CVPixelBufferRef pb = NULL;
     
     if(!m_oState.capture) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self stopCapture];
+            [self zego_stopCapture];
         });
     }
     
     return 0;
 }
 
-- (int)enableTorch:(bool)enable { return 0; }
-- (int)takeSnapshot { return 0; }
-- (int)setPowerlineFreq:(unsigned int)freq { return 0; }
+#pragma mark - Private
 
 - (CGImageRef)CreateBGRAImageFromRGBAImage:(CGImageRef)rgbaImageRef {
     
@@ -259,8 +253,6 @@ static CVPixelBufferRef pb = NULL;
     CGColorSpaceRelease(rgbColorSpace);
     CGContextRelease(context);
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-    
-    size_t bpr = CVPixelBufferGetBytesPerRow(pixelBuffer);
     
     return pixelBuffer;
 }

@@ -165,6 +165,10 @@ public class PublishSettingsPannel extends LinearLayout {
         mSpFilter.setSelection(filter);
     }
 
+    public void setSelectedBeauty(int index){
+        mSpBeauty.setSelection(index);
+    }
+
     public interface PublishSettingsCallback{
         void onEnableCamera(boolean isEnable);
         void onEnableFrontCamera(boolean isEnable);

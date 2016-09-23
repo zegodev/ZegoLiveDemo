@@ -8,13 +8,15 @@
 
 #import "ZegoPublishViewController.h"
 #import "ZegoAnchorViewController.h"
+#import "ZegoMoreAnchorViewController.h"
+#import "ZegoMixStreamAnchorViewController.h"
 #import "ZegoAVKitManager.h"
 #import "ZegoSettings.h"
 #import <AVFoundation/AVFoundation.h>
 
 #define MAX_TITLE_LENGTH    30
 
-@interface ZegoPublishViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UIAlertViewDelegate>
+@interface ZegoPublishViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate>
 
 @property (nonatomic, weak) IBOutlet UISwitch *switchCamera;
 @property (nonatomic, weak) IBOutlet UISwitch *switchTorch;
@@ -339,27 +341,85 @@
     return YES;
 }
 
+- (BOOL)isDeviceiOS7
+{
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0)
+        return YES;
+    
+    return NO;
+}
+
+- (IBAction)onStartPublish:(id)sender
+{
+    if ([self isDeviceiOS7])
+    {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"请选择直播模式", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"取消", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"无连麦模式", nil), NSLocalizedString(@"连麦模式", nil), NSLocalizedString(@"混流模式", nil), nil];
+        actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+        [actionSheet showInView:self.view];
+    }
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:NSLocalizedString(@"请选择直播模式", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"取消", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        
+        UIAlertAction *anchorAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"无连麦模式", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self performSegueWithIdentifier:@"anchorSegueIdentifier" sender:nil];
+        }];
+        
+        UIAlertAction *moreAnchorAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"连麦模式", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self performSegueWithIdentifier:@"moreAnchorSegueIdentifier" sender:nil];
+        }];
+        
+        UIAlertAction *mixStreamAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"混流模式", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self performSegueWithIdentifier:@"mixStreamAnchorSegueIdentifier" sender:nil];
+        }];
+        
+        [alertController addAction:cancelAction];
+        [alertController addAction:anchorAction];
+        [alertController addAction:moreAnchorAction];
+        [alertController addAction:mixStreamAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+#pragma mark ActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+        [self performSegueWithIdentifier:@"anchorSegueIdentifier" sender:nil];
+    else if (buttonIndex == 1)
+        [self performSegueWithIdentifier:@"moreAnchorSegueIdentifier" sender:nil];
+    else if (buttonIndex == 2)
+        [self performSegueWithIdentifier:@"mixStreamAnchorSegueIdentifier" sender:nil];
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if ([segue.destinationViewController isKindOfClass:[ZegoAnchorViewController class]])
+    [self.titleField resignFirstResponder];
+    NSString *liveTitle = nil;
+    if (self.titleField.text.length == 0)
+        liveTitle = [NSString stringWithFormat:@"Hello-%@", [ZegoSettings sharedInstance].userName];
+    else
     {
-        [self.titleField resignFirstResponder];
-        
-        ZegoAnchorViewController *anchorViewController = (ZegoAnchorViewController *)segue.destinationViewController;
-        if (self.titleField.text.length == 0)
-            anchorViewController.liveTitle = [NSString stringWithFormat:@"Hello-%@", [ZegoSettings sharedInstance].userName];
+        if (self.titleField.text.length > MAX_TITLE_LENGTH)
+            liveTitle = [self.titleField.text substringToIndex:MAX_TITLE_LENGTH];
         else
-        {
-            if (self.titleField.text.length > MAX_TITLE_LENGTH)
-                anchorViewController.liveTitle = [self.titleField.text substringToIndex:MAX_TITLE_LENGTH];
-            else
-                anchorViewController.liveTitle = self.titleField.text;
-        }
+            liveTitle = self.titleField.text;
+    }
+
+    
+    if ([segue.identifier isEqualToString:@"anchorSegueIdentifier"])
+    {
+        ZegoAnchorViewController *anchorViewController = (ZegoAnchorViewController *)segue.destinationViewController;
         
+        anchorViewController.liveTitle = liveTitle;
         anchorViewController.useFrontCamera = self.switchCamera.on;
         anchorViewController.enableTorch = self.switchTorch.on;
         anchorViewController.beautifyFeature = [self.beautifyPicker selectedRowInComponent:0];
@@ -368,9 +428,37 @@
         [self.preView removeFromSuperview];
         anchorViewController.publishView = self.preView;
         self.preView = nil;
-        
-        self.titleField.text = nil;
     }
+    else if ([segue.identifier isEqualToString:@"moreAnchorSegueIdentifier"])
+    {
+        ZegoMoreAnchorViewController *anchorViewController = (ZegoMoreAnchorViewController *)segue.destinationViewController;
+        
+        anchorViewController.liveTitle = liveTitle;
+        anchorViewController.useFrontCamera = self.switchCamera.on;
+        anchorViewController.enableTorch = self.switchTorch.on;
+        anchorViewController.beautifyFeature = [self.beautifyPicker selectedRowInComponent:0];
+        anchorViewController.filter = [self.filterPicker selectedRowInComponent:0];
+        
+        [self.preView removeFromSuperview];
+        anchorViewController.publishView = self.preView;
+        self.preView = nil;
+    }
+    else if ([segue.identifier isEqualToString:@"mixStreamAnchorSegueIdentifier"])
+    {
+        ZegoMixStreamAnchorViewController *anchorViewController = (ZegoMixStreamAnchorViewController *)segue.destinationViewController;
+        
+        anchorViewController.liveTitle = liveTitle;
+        anchorViewController.useFrontCamera = self.switchCamera.on;
+        anchorViewController.enableTorch = self.switchTorch.on;
+        anchorViewController.beautifyFeature = [self.beautifyPicker selectedRowInComponent:0];
+        anchorViewController.filter = [self.filterPicker selectedRowInComponent:0];
+        
+        [self.preView removeFromSuperview];
+        anchorViewController.publishView = self.preView;
+        self.preView = nil;
+    }
+    
+    self.titleField.text = nil;
 }
 
 - (void)setRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation

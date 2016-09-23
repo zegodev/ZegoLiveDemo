@@ -76,6 +76,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>live broadcast</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>live broadcast</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>

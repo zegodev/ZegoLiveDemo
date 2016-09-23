@@ -17,6 +17,14 @@
 		EF32D7051D659C6000A764FC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7041D659C5F00A764FC /* SystemConfiguration.framework */; };
 		EF32D7071D659C6A00A764FC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7061D659C6A00A764FC /* CoreGraphics.framework */; };
 		EF32D7091D659C7300A764FC /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7081D659C7300A764FC /* libsqlite3.tbd */; };
+		EF576B851D82A348002D5AED /* ZegoMoreAnchorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B841D82A348002D5AED /* ZegoMoreAnchorViewController.m */; };
+		EF576B861D82A348002D5AED /* ZegoMoreAnchorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B841D82A348002D5AED /* ZegoMoreAnchorViewController.m */; };
+		EF576B891D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B881D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m */; };
+		EF576B8A1D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B881D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m */; };
+		EF576B8E1D82C09B002D5AED /* ZegoMoreAudienceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B8D1D82C09B002D5AED /* ZegoMoreAudienceViewController.m */; };
+		EF576B8F1D82C09B002D5AED /* ZegoMoreAudienceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B8D1D82C09B002D5AED /* ZegoMoreAudienceViewController.m */; };
+		EF576B921D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B911D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.m */; };
+		EF576B931D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B911D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.m */; };
 		EF871D0C1D1A329700C2D08A /* ZegoNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF871D0B1D1A329700C2D08A /* ZegoNavigationViewController.m */; };
 		EF871D0F1D1A32FD00C2D08A /* ZegoTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF871D0E1D1A32FD00C2D08A /* ZegoTabBarViewController.m */; };
 		EF871D1E1D1A33CB00C2D08A /* ZegoRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF871D1D1D1A33CB00C2D08A /* ZegoRoomViewController.m */; };
@@ -114,6 +122,15 @@
 		EF32D7041D659C5F00A764FC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EF32D7061D659C6A00A764FC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		EF32D7081D659C7300A764FC /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		EF576B831D82A348002D5AED /* ZegoMoreAnchorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoMoreAnchorViewController.h; sourceTree = "<group>"; };
+		EF576B841D82A348002D5AED /* ZegoMoreAnchorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoMoreAnchorViewController.m; sourceTree = "<group>"; };
+		EF576B871D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoMixStreamAnchorViewController.h; sourceTree = "<group>"; };
+		EF576B881D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoMixStreamAnchorViewController.m; sourceTree = "<group>"; };
+		EF576B8B1D82BC5A002D5AED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		EF576B8C1D82C09B002D5AED /* ZegoMoreAudienceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoMoreAudienceViewController.h; sourceTree = "<group>"; };
+		EF576B8D1D82C09B002D5AED /* ZegoMoreAudienceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoMoreAudienceViewController.m; sourceTree = "<group>"; };
+		EF576B901D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoMixStreamAudienceViewController.h; sourceTree = "<group>"; };
+		EF576B911D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoMixStreamAudienceViewController.m; sourceTree = "<group>"; };
 		EF871D0A1D1A329700C2D08A /* ZegoNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoNavigationViewController.h; sourceTree = "<group>"; };
 		EF871D0B1D1A329700C2D08A /* ZegoNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoNavigationViewController.m; sourceTree = "<group>"; };
 		EF871D0D1D1A32FD00C2D08A /* ZegoTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoTabBarViewController.h; sourceTree = "<group>"; };
@@ -152,7 +169,6 @@
 		EF9D0F5D1D23D17E00002545 /* ZegoPublishViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoPublishViewController.m; sourceTree = "<group>"; };
 		EF9D0F621D24D0A900002545 /* ZegoAdvancedTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoAdvancedTableViewController.h; sourceTree = "<group>"; };
 		EF9D0F631D24D0A900002545 /* ZegoAdvancedTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoAdvancedTableViewController.m; sourceTree = "<group>"; };
-		EFAC2FCD1D48D81C000A7885 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		EFAC2FCE1D48E0AD000A7885 /* a.pcm */ = {isa = PBXFileReference; lastKnownFileType = file; path = a.pcm; sourceTree = "<group>"; };
 		EFAC2FE41D4B1A72000A7885 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		EFAC2FE51D4B1A72000A7885 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -387,10 +403,18 @@
 				EF871D301D1A644800C2D08A /* ZegoAboutViewController.m */,
 				EF871D321D1A68EC00C2D08A /* ZegoAnchorViewController.h */,
 				EF871D331D1A68EC00C2D08A /* ZegoAnchorViewController.m */,
+				EF576B831D82A348002D5AED /* ZegoMoreAnchorViewController.h */,
+				EF576B841D82A348002D5AED /* ZegoMoreAnchorViewController.m */,
+				EF576B871D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.h */,
+				EF576B881D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m */,
 				EFE0D8F81D1B7F920090F719 /* ZegoAnchorOptionViewController.h */,
 				EFE0D8F91D1B7F920090F719 /* ZegoAnchorOptionViewController.m */,
 				EF9D0F501D20D20900002545 /* ZegoAudienceViewController.h */,
 				EF9D0F511D20D20900002545 /* ZegoAudienceViewController.m */,
+				EF576B8C1D82C09B002D5AED /* ZegoMoreAudienceViewController.h */,
+				EF576B8D1D82C09B002D5AED /* ZegoMoreAudienceViewController.m */,
+				EF576B901D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.h */,
+				EF576B911D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.m */,
 				EF9D0F591D2279F500002545 /* ZegoLiveViewController.h */,
 				EF9D0F5A1D2279F500002545 /* ZegoLiveViewController.m */,
 				EF9D0F5C1D23D17E00002545 /* ZegoPublishViewController.h */,
@@ -507,10 +531,12 @@
 				TargetAttributes = {
 					EFAF4B331D2B6C7800560B00 = {
 						DevelopmentTeam = 3WR2G89LR2;
+						ProvisioningStyle = Automatic;
 					};
 					EFF10EF11D1A297900ECE11E = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 3WR2G89LR2;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -590,6 +616,10 @@
 				EFAF4B411D2B6C7800560B00 /* ZegoLiveViewController.m in Sources */,
 				EFAF4B421D2B6C7800560B00 /* ZegoRoomViewController.m in Sources */,
 				EFAF4B431D2B6C7800560B00 /* ZegoAnchorViewController.m in Sources */,
+				EF576B931D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.m in Sources */,
+				EF576B861D82A348002D5AED /* ZegoMoreAnchorViewController.m in Sources */,
+				EF576B8F1D82C09B002D5AED /* ZegoMoreAudienceViewController.m in Sources */,
+				EF576B8A1D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m in Sources */,
 				EFAF4B441D2B6C7800560B00 /* ZegoLogTableViewController.m in Sources */,
 				EFAF4B451D2B6C7800560B00 /* ZegoVideoCaptureFromImage.m in Sources */,
 				EFAF4B461D2B6C7800560B00 /* ZegoNavigationViewController.m in Sources */,
@@ -618,6 +648,10 @@
 				EF9D0F5B1D2279F500002545 /* ZegoLiveViewController.m in Sources */,
 				EF871D1E1D1A33CB00C2D08A /* ZegoRoomViewController.m in Sources */,
 				EF871D341D1A68EC00C2D08A /* ZegoAnchorViewController.m in Sources */,
+				EF576B921D82C0B6002D5AED /* ZegoMixStreamAudienceViewController.m in Sources */,
+				EF576B851D82A348002D5AED /* ZegoMoreAnchorViewController.m in Sources */,
+				EF576B8E1D82C09B002D5AED /* ZegoMoreAudienceViewController.m in Sources */,
+				EF576B891D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m in Sources */,
 				EF9A37F11D26481000A5E996 /* ZegoLogTableViewController.m in Sources */,
 				EF871D2E1D1A437A00C2D08A /* ZegoVideoCaptureFromImage.m in Sources */,
 				EF871D0C1D1A329700C2D08A /* ZegoNavigationViewController.m in Sources */,
@@ -634,8 +668,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				EFF10F021D1A297900ECE11E /* Base */,
-				EFAC2FCD1D48D81C000A7885 /* en */,
 				EFAC2FE41D4B1A72000A7885 /* zh-Hans */,
+				EF576B8B1D82BC5A002D5AED /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -710,7 +744,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -722,7 +757,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "752b9678-832e-485f-aa7e-2f4123b9d121";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = iOS7Static;
 		};
@@ -731,6 +767,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -744,6 +782,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3;
 				PRODUCT_NAME = LiveDemo3;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = iOS7Static;
 		};
@@ -800,7 +840,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -813,6 +854,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = iOS7StaticDebug;
 		};
@@ -821,6 +863,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
@@ -833,6 +877,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3;
 				PRODUCT_NAME = LiveDemo3;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -841,6 +887,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -854,6 +902,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3;
 				PRODUCT_NAME = LiveDemo3;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = iOS7StaticDebug;
 		};
@@ -862,6 +912,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/libs/libsZegoAVKit2iOS7Static/iOS7Static-iphoneosAndRelease-iphonesimulator",
@@ -874,6 +926,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3;
 				PRODUCT_NAME = LiveDemo3;
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -973,7 +1027,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -986,6 +1041,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -994,7 +1050,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shenzhen Zego Technology Co. Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1006,7 +1063,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "752b9678-832e-485f-aa7e-2f4123b9d121";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

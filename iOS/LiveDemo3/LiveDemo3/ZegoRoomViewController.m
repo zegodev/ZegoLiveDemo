@@ -10,6 +10,8 @@
 #import "ZegoRoomInfo.h"
 #import "ZegoAVKitManager.h"
 #import "ZegoAudienceViewController.h"
+#import "ZegoMoreAudienceViewController.h"
+#import "ZegoMixStreamAudienceViewController.h"
 #import "ZegoStreamInfo.h"
 
 #define ITEM_COUNT_PER_PAGE 20
@@ -201,14 +203,56 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     ZegoRoomInfo *info = [self.roomList objectAtIndex:indexPath.row];
+    NSUInteger liveType = 0;
+    for (ZegoStreamInfo *stream in info.streamList)
+    {
+        if ([stream.userName hasPrefix:@"#d-"])
+        {
+            liveType = 1;
+            break;
+        }
+        else if ([stream.userName hasPrefix:@"#m-"])
+        {
+            liveType = 2;
+            break;
+        }
+        else if ([stream.userName hasPrefix:@"#s-"])
+        {
+            liveType = 3;
+            break;
+        }
+    }
+    
+    //兼容老版本，默认play 连麦模式
+    if (liveType == 0)
+        liveType = 2;
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    ZegoAudienceViewController *audienceViewController = (ZegoAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"audienceID"];
-    audienceViewController.bizToken = info.bizToken;
-    audienceViewController.bizID = info.bizID;
-    audienceViewController.currentStreamList = [NSArray arrayWithArray:info.streamList];
+    if (liveType == 1)
+    {
+        ZegoAudienceViewController *audienceViewController = (ZegoAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"audienceID"];
+        audienceViewController.bizToken = info.bizToken;
+        audienceViewController.bizID = info.bizID;
+        audienceViewController.currentStreamList = [NSArray arrayWithArray:info.streamList];
+        [self presentViewController:audienceViewController animated:YES completion:nil];
+    }
+    else if (liveType == 2)
+    {
+        ZegoMoreAudienceViewController *audienceViewController = (ZegoMoreAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"moreAudienceID"];
+        audienceViewController.bizToken = info.bizToken;
+        audienceViewController.bizID = info.bizID;
+        audienceViewController.currentStreamList = [NSArray arrayWithArray:info.streamList];
+        [self presentViewController:audienceViewController animated:YES completion:nil];
+    }
+    else if (liveType == 3)
+    {
+        ZegoMixStreamAudienceViewController *audienceViewController = (ZegoMixStreamAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"mixStreamAudienceID"];
+        audienceViewController.bizToken = info.bizToken;
+        audienceViewController.bizID = info.bizID;
+        audienceViewController.currentStreamList = [NSArray arrayWithArray:info.streamList];
+        [self presentViewController:audienceViewController animated:YES completion:nil];
+    }
     
-    [self presentViewController:audienceViewController animated:YES completion:nil];
 }
 
 #pragma mark - Navigation

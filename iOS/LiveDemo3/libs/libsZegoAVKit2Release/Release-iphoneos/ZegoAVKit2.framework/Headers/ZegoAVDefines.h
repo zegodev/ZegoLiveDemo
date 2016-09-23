@@ -9,39 +9,46 @@
 #define ZegoAVApiDefines_h
 
 
+#ifdef __cplusplus
+#define ZEGO_EXTERN     extern "C"
+#else
+#define ZEGO_EXTERN     extern
+#endif
+
+ZEGO_EXTERN NSString *const kZegoStreamIDKey;           ///< 流ID，值为 NSString
+ZEGO_EXTERN NSString *const kZegoMixStreamIDKey;        ///< 混流ID，值为 NSString
+ZEGO_EXTERN NSString *const kZegoRtmpUrlListKey;        ///< rtmp 播放 url 列表，值为 NSArray<NSString *>
+ZEGO_EXTERN NSString *const kZegoHlsUrlListKey;         ///< hls 播放 url 列表，值为 NSArray<NSString *>
+ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列表，值为 NSArray<NSString *>
+
 typedef unsigned int	uint32;
 
-typedef enum{
+typedef enum {
     FLAG_RESOLUTION = 0x1,
     FLAG_FPS = 0x2,
     FLAG_BITRATE = 0x4
-}SetConfigReturnType;
+} SetConfigReturnType;
 
-typedef enum{
-    ZegoVideoViewModeScaleAspectFit     = 0,    //等比缩放，可能有黑边
-    ZegoVideoViewModeScaleAspectFill    = 1,    //等比缩放填充整View，可能有部分被裁减
-    ZegoVideoViewModeScaleToFill        = 2,    //填充整个View
-}ZegoVideoViewMode;
+typedef enum {
+    ZegoVideoViewModeScaleAspectFit     = 0,    ///< 等比缩放，可能有黑边
+    ZegoVideoViewModeScaleAspectFill    = 1,    ///< 等比缩放填充整View，可能有部分被裁减
+    ZegoVideoViewModeScaleToFill        = 2,    ///< 填充整个View
+} ZegoVideoViewMode;
 
-typedef enum{
-    CustomDataType_data = 1,    //NSData存的byte数组
-    CustomDataType_file = 2
-}CustomDataType;
 
-typedef enum
-{
+typedef enum {
     CAPTURE_ROTATE_0    = 0,
     CAPTURE_ROTATE_90   = 90,
     CAPTURE_ROTATE_180  = 180,
     CAPTURE_ROTATE_270  = 270
-}CAPTURE_ROTATE;
+} CAPTURE_ROTATE;
 
-typedef enum
-{
+
+typedef enum {
     RemoteViewIndex_First = 0,
     RemoteViewIndex_Second = 1,
     RemoteViewIndex_Third = 2
-}RemoteViewIndex;
+} RemoteViewIndex;
 
 
 typedef enum : NSUInteger {
@@ -72,13 +79,25 @@ typedef enum : NSUInteger {
 } ZegoBeautifyFeature;
 
 
+/// \brief 混流图层信息
 @interface ZegoMixStreamInfo : NSObject
 
-@property (copy) NSString *streamID;
+@property (copy) NSString *streamID;    ///< 混流ID
 @property int top;
 @property int left;
 @property int bottom;
 @property int right;
+
+/**
+ *  原点在左上角，top/bottom/left/right 定义如下：
+ *
+ *  (left, top)-----------------------
+ *  |                                |
+ *  |                                |
+ *  |                                |
+ *  |                                |
+ *  -------------------(right, bottom)
+ */
 
 @end
 

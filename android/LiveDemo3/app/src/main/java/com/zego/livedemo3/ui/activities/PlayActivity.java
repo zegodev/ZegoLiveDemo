@@ -124,8 +124,14 @@ public class PlayActivity extends BaseLiveActivity {
                 recordLog(MY_SELF + ": onStreamCreate(" + streamID + ")");
                 if (!TextUtils.isEmpty(streamID)) {
                     mPublishStreamID = streamID;
+
+                    // 开启全屏美白
+                    mSelectedBeauty = 3;
+
                     // 业务服务器创建流成功, 开始使用zego sdk推流
                     startPublish();
+
+                    mSettingsPannel.setSelectedBeauty(3);
                 }
             }
 
@@ -200,6 +206,7 @@ public class PlayActivity extends BaseLiveActivity {
                         mPublishTitle = PreferenceUtil.getInstance().getUserName() + " is coming";
                         // 连麦请求被通过, 在业务房间创建流
                         BizLivePresenter.getInstance().createStream(mPublishTitle, mPublishStreamID);
+
                     } else {
                         // 打印日志
                         recordLog(getString(R.string.request_of_broadcast_has_been_denied, MY_SELF));

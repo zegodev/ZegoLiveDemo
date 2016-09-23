@@ -76,6 +76,6 @@
 
 - (void)sendRequestPublishRespond:(BOOL)agreed magicNumber:(NSString *)magicNumber requestPublisher:(ZegoUser *)requestUser;
 
-- (void)shareToQQ:(NSString *)hls bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID;
+- (void)shareToQQ:(NSString *)hls rtmp:(NSString *)rtmp bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID;
 
 @end

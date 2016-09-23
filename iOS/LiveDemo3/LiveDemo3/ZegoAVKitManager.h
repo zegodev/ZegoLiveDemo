@@ -11,8 +11,9 @@
 extern "C"{
 #endif
     
-#include <ZegoAVKit2/ZegoLiveApi.h>
-    
+#import <ZegoAVKit2/ZegoLiveApi.h>
+#import <ZegoAVKit2/ZegoLiveApi-advanced.h>
+#import <ZegoAVKit2/ZegoLiveApi-deprecated.h>
     
     ZegoLiveApi * getZegoAV_ShareInstance();
     void releaseZegoAV_ShareInstance();
@@ -30,7 +31,7 @@ extern "C"{
     
     NSString *ZegoGetSDKVersion();
     
-#include <ZegoLiveRoom/BizLiveRoom.h>
+#import <ZegoLiveRoom/BizLiveRoom.h>
     
     BizLiveRoom* getBizRoomInstance();
     void releaseBizRoomInstance();

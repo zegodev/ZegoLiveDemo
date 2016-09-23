@@ -782,10 +782,10 @@
     }
 }
 
-- (void)shareToQQ:(NSString *)hls bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID
+- (void)shareToQQ:(NSString *)hls rtmp:(NSString *)rtmp bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID
 {
 #if !defined(__i386__)
-    NSString *urlString = [NSString stringWithFormat:@"http://www.zego.im/share/index?video=%@&token=%@&id=%@&stream=%@", [hls stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], bizToken, bizID, streamID];
+    NSString *urlString = [NSString stringWithFormat:@"http://www.zego.im/share/index?video=%@&rtmp=%@&token=%@&id=%@&stream=%@", [hls stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], [rtmp stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], bizToken, bizID, streamID];
     NSURL *url = [NSURL URLWithString:urlString];
     UIImage *logoImage = [UIImage imageNamed:@"zego"];
     NSData *previewImageData = UIImagePNGRepresentation(logoImage);

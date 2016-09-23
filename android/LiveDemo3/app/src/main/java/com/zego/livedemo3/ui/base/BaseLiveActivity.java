@@ -158,6 +158,8 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
 
     protected PhoneStateListener mPhoneStateListener;
 
+    protected PublishSettingsPannel mSettingsPannel;
+
     protected abstract void doPublishOrPlay();
 
     protected abstract void initPublishControlText();
@@ -227,9 +229,9 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
      */
     private void initSettingPannel() {
 
-        PublishSettingsPannel settingsPannel = (PublishSettingsPannel) findViewById(R.id.publishSettingsPannel);
-        settingsPannel.initPublishSettings(mEnableCamera, mEnableFrontCam, mEnableMic, mEnableTorch, mEnableBackgroundMusic, mSelectedBeauty, mSelectedFilter);
-        settingsPannel.setPublishSettingsCallback(new PublishSettingsPannel.PublishSettingsCallback() {
+        mSettingsPannel = (PublishSettingsPannel) findViewById(R.id.publishSettingsPannel);
+        mSettingsPannel.initPublishSettings(mEnableCamera, mEnableFrontCam, mEnableMic, mEnableTorch, mEnableBackgroundMusic, mSelectedBeauty, mSelectedFilter);
+        mSettingsPannel.setPublishSettingsCallback(new PublishSettingsPannel.PublishSettingsCallback() {
             @Override
             public void onEnableCamera(boolean isEnable) {
                 mEnableCamera = isEnable;
@@ -288,7 +290,7 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
             }
         });
 
-        mBehavior = BottomSheetBehavior.from(settingsPannel);
+        mBehavior = BottomSheetBehavior.from(mSettingsPannel);
         FrameLayout flytMainContent = (FrameLayout) findViewById(R.id.main_content);
         if (flytMainContent != null) {
             flytMainContent.setOnClickListener(new View.OnClickListener() {
@@ -587,9 +589,11 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
             public void onPublishSucc(String streamID, String liveChannel, HashMap<String, Object> info) {
                 mIsPublishing = true;
                 recordLog(MY_SELF + ": onPublishSucc(" + streamID + ")");
-                mRlytControlHeader.bringToFront();
+
                 initPublishControlText();
                 BizLivePresenter.getInstance().reportStreamState(true, streamID, PreferenceUtil.getInstance().getUserID());
+
+                mRlytControlHeader.bringToFront();
             }
 
             @Override
@@ -600,21 +604,29 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
                 mZegoAVKit.stopPreview();
                 // 释放View
                 releaseTextureViewAndRemoteViewIndex(streamID);
-                mRlytControlHeader.bringToFront();
+
                 initPublishControlText();
                 BizLivePresenter.getInstance().reportStreamState(false, streamID, PreferenceUtil.getInstance().getUserID());
+
+                mRlytControlHeader.bringToFront();
+            }
+
+            @Override
+            public void onMixStreamConfigUpdate(int retCode, String mixStreamID, HashMap<String, Object> info) {
+
             }
 
             @Override
             public void onPlaySucc(String streamID, String liveChannel) {
                 recordLog(MY_SELF + ": onPlaySucc(" + streamID + ")");
-                mRlytControlHeader.bringToFront();
 
                 mPublishNumber++;
                 setPublishEnabled();
 
                 // 记录流ID用于play失败后重新play
                 mMapReplayStreamID.put(streamID, false);
+
+                mRlytControlHeader.bringToFront();
             }
 
             @Override
@@ -622,7 +634,6 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
                 recordLog(MY_SELF + ": onPlayStop(" + streamID + ") --errCode:" + retCode);
                 // 释放View
                 releaseTextureViewAndRemoteViewIndex(streamID);
-                mRlytControlHeader.bringToFront();
 
                 mPublishNumber--;
                 setPublishEnabled();
@@ -634,6 +645,8 @@ public abstract class BaseLiveActivity extends AbsShowActivity {
                         startPlay(streamID, getFreeZegoRemoteViewIndex());
                     }
                 }
+
+                mRlytControlHeader.bringToFront();
             }
 
             @Override
