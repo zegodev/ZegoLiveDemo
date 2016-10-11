@@ -141,6 +141,7 @@
 /// \brief 观看直播流
 /// \param streamID 要观看的流 ID
 /// \param index 视频播放的 view 编号
+/// \note 在setRemoteView方法中绑定view与viewIndex (streamID --> viewIndex <-- view)
 /// \return true 成功，等待异步回调，否则失败
 - (bool)startPlayStream:(NSString *)streamID viewIndex:(RemoteViewIndex)index;
 
@@ -150,7 +151,7 @@
 - (bool)stopPlayStream:(NSString *)streamID;
 
 /// \brief 设置用来观看直播的View
-/// \param index View的序号，目前支持一个聊天室两个主播
+/// \param index View的序号
 /// \param view 展示视频的View
 /// \return true:调用成功；false:调用失败
 #if TARGET_OS_IPHONE
@@ -211,6 +212,10 @@
 /// \param config 配置参数
 /// \return 0表示成功，非0 分别用一位来表示对应的值设置失败，可以与上SetConfigReturnType的各个值来获取设置失败的原因
 - (int)setAVConfig:(ZegoAVConfig*)config;
+
+/// \brief 设置手机姿势，用于校正主播输出视频朝向
+/// \param nOrientation 手机姿势
+- (int)setAppOrientation:(UIInterfaceOrientation)orientation;
 
 /// \brief 设置是否使用前置摄像头
 /// \param bFront 使用前置摄像头

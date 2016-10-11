@@ -7,6 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D5E1CE61D9BB0E000FFE6EB /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D5E1CE51D9BB0E000FFE6EB /* Bugly.framework */; };
+		4D5E1CE71D9BB0E000FFE6EB /* Bugly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D5E1CE51D9BB0E000FFE6EB /* Bugly.framework */; };
+		EF1314371DAB752000FEBACF /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF1314361DAB752000FEBACF /* ReplayKit.framework */; };
+		EF13143E1DAB752000FEBACF /* SampleHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = EF13143D1DAB752000FEBACF /* SampleHandler.m */; };
+		EF1314451DAB752000FEBACF /* ReplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF1314361DAB752000FEBACF /* ReplayKit.framework */; };
+		EF1314471DAB752000FEBACF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF1314461DAB752000FEBACF /* UIKit.framework */; };
+		EF13144B1DAB752000FEBACF /* BroadcastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF13144A1DAB752000FEBACF /* BroadcastViewController.m */; };
+		EF13144E1DAB752000FEBACF /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF13144C1DAB752000FEBACF /* MainInterface.storyboard */; };
+		EF1314521DAB752000FEBACF /* GameLiveUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = EF1314441DAB752000FEBACF /* GameLiveUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EF1314551DAB752000FEBACF /* GameLive.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = EF1314341DAB752000FEBACF /* GameLive.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EF1314631DAB7AA900FEBACF /* ZegoAVKit2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE0D9021D1B92C20090F719 /* ZegoAVKit2.framework */; };
+		EF1314641DAB7AB600FEBACF /* ZegoLiveRoom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF9A38B41D2A543000A5E996 /* ZegoLiveRoom.framework */; };
+		EF1314671DAB7AF800FEBACF /* ZegoAVKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF1314661DAB7AF800FEBACF /* ZegoAVKitManager.m */; };
 		EF32D6F71D6599B700A764FC /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D6F41D6599B700A764FC /* TencentOpenAPI.framework */; };
 		EF32D6F81D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EF32D6F51D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle */; };
 		EF32D6F91D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EF32D6F51D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle */; };
@@ -98,7 +111,36 @@
 		EFFBF7691D38E378002FD7F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EFFBF76B1D38E378002FD7F2 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		EF1314501DAB752000FEBACF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EFF10EEA1D1A297900ECE11E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EF1314431DAB752000FEBACF;
+			remoteInfo = GameLiveUI;
+		};
+		EF1314531DAB752000FEBACF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EFF10EEA1D1A297900ECE11E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EF1314331DAB752000FEBACF;
+			remoteInfo = GameLive;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		EF1314601DAB752000FEBACF /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EF1314551DAB752000FEBACF /* GameLive.appex in Embed App Extensions */,
+				EF1314521DAB752000FEBACF /* GameLiveUI.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EFE0D9271D1BB9170090F719 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -114,6 +156,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4D5E1CE51D9BB0E000FFE6EB /* Bugly.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bugly.framework; sourceTree = "<group>"; };
+		EF1314341DAB752000FEBACF /* GameLive.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GameLive.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF1314361DAB752000FEBACF /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
+		EF13143C1DAB752000FEBACF /* SampleHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleHandler.h; sourceTree = "<group>"; };
+		EF13143D1DAB752000FEBACF /* SampleHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleHandler.m; sourceTree = "<group>"; };
+		EF13143F1DAB752000FEBACF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF1314441DAB752000FEBACF /* GameLiveUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GameLiveUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF1314461DAB752000FEBACF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		EF1314491DAB752000FEBACF /* BroadcastViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BroadcastViewController.h; sourceTree = "<group>"; };
+		EF13144A1DAB752000FEBACF /* BroadcastViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BroadcastViewController.m; sourceTree = "<group>"; };
+		EF13144D1DAB752000FEBACF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		EF13144F1DAB752000FEBACF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF1314611DAB7A7E00FEBACF /* ZegoAVKit2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ZegoAVKit2.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/zegochatroom-dlvhhghawcmxmfenaqoryhfjbeck/Build/Products/iOS7StaticDebug-iphonesimulator/ZegoAVKit2.framework"; sourceTree = "<group>"; };
+		EF1314651DAB7AF800FEBACF /* ZegoAVKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoAVKitManager.h; sourceTree = "<group>"; };
+		EF1314661DAB7AF800FEBACF /* ZegoAVKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoAVKitManager.m; sourceTree = "<group>"; };
+		EF1314681DAB7B8600FEBACF /* LiveDemo3.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LiveDemo3.entitlements; sourceTree = "<group>"; };
+		EF1314691DAB7BEC00FEBACF /* GameLive.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GameLive.entitlements; sourceTree = "<group>"; };
 		EF32D6F41D6599B700A764FC /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
 		EF32D6F51D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
 		EF32D6FD1D659B5700A764FC /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -201,10 +260,30 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		EF1314311DAB752000FEBACF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF1314641DAB7AB600FEBACF /* ZegoLiveRoom.framework in Frameworks */,
+				EF1314631DAB7AA900FEBACF /* ZegoAVKit2.framework in Frameworks */,
+				EF1314371DAB752000FEBACF /* ReplayKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF1314411DAB752000FEBACF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF1314451DAB752000FEBACF /* ReplayKit.framework in Frameworks */,
+				EF1314471DAB752000FEBACF /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EFAF4B4A1D2B6C7800560B00 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D5E1CE71D9BB0E000FFE6EB /* Bugly.framework in Frameworks */,
 				EFAF4B641D2B772C00560B00 /* ZegoLiveRoom.framework in Frameworks */,
 				EF32D6F71D6599B700A764FC /* TencentOpenAPI.framework in Frameworks */,
 				EFAF4B631D2B771F00560B00 /* ZegoAVKit2.framework in Frameworks */,
@@ -221,6 +300,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D5E1CE61D9BB0E000FFE6EB /* Bugly.framework in Frameworks */,
 				EF32D7091D659C7300A764FC /* libsqlite3.tbd in Frameworks */,
 				EF32D7071D659C6A00A764FC /* CoreGraphics.framework in Frameworks */,
 				EF32D7051D659C6000A764FC /* SystemConfiguration.framework in Frameworks */,
@@ -241,9 +321,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EF1314351DAB752000FEBACF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EF1314611DAB7A7E00FEBACF /* ZegoAVKit2.framework */,
+				EF1314361DAB752000FEBACF /* ReplayKit.framework */,
+				EF1314461DAB752000FEBACF /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EF1314381DAB752000FEBACF /* GameLive */ = {
+			isa = PBXGroup;
+			children = (
+				EF1314691DAB7BEC00FEBACF /* GameLive.entitlements */,
+				EF13143C1DAB752000FEBACF /* SampleHandler.h */,
+				EF13143D1DAB752000FEBACF /* SampleHandler.m */,
+				EF1314651DAB7AF800FEBACF /* ZegoAVKitManager.h */,
+				EF1314661DAB7AF800FEBACF /* ZegoAVKitManager.m */,
+				EF13143F1DAB752000FEBACF /* Info.plist */,
+			);
+			path = GameLive;
+			sourceTree = "<group>";
+		};
+		EF1314481DAB752000FEBACF /* GameLiveUI */ = {
+			isa = PBXGroup;
+			children = (
+				EF1314491DAB752000FEBACF /* BroadcastViewController.h */,
+				EF13144A1DAB752000FEBACF /* BroadcastViewController.m */,
+				EF13144C1DAB752000FEBACF /* MainInterface.storyboard */,
+				EF13144F1DAB752000FEBACF /* Info.plist */,
+			);
+			path = GameLiveUI;
+			sourceTree = "<group>";
+		};
 		EF32D6F31D6599B700A764FC /* thirdLib */ = {
 			isa = PBXGroup;
 			children = (
+				4D5E1CE51D9BB0E000FFE6EB /* Bugly.framework */,
 				EF32D6F41D6599B700A764FC /* TencentOpenAPI.framework */,
 				EF32D6F51D6599B700A764FC /* TencentOpenApi_IOS_Bundle.bundle */,
 			);
@@ -370,6 +485,9 @@
 			children = (
 				EFF10F0F1D1A2A6A00ECE11E /* frameworks */,
 				EFF10EF41D1A297900ECE11E /* LiveDemo3 */,
+				EF1314381DAB752000FEBACF /* GameLive */,
+				EF1314481DAB752000FEBACF /* GameLiveUI */,
+				EF1314351DAB752000FEBACF /* Frameworks */,
 				EFF10EF31D1A297900ECE11E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -379,6 +497,8 @@
 			children = (
 				EFF10EF21D1A297900ECE11E /* LiveDemo3.app */,
 				EFAF4B5F1D2B6C7800560B00 /* LiveDemo3.app */,
+				EF1314341DAB752000FEBACF /* GameLive.appex */,
+				EF1314441DAB752000FEBACF /* GameLiveUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -386,6 +506,7 @@
 		EFF10EF41D1A297900ECE11E /* LiveDemo3 */ = {
 			isa = PBXGroup;
 			children = (
+				EF1314681DAB7B8600FEBACF /* LiveDemo3.entitlements */,
 				EF871D281D1A436700C2D08A /* advanced */,
 				EFF10EF81D1A297900ECE11E /* AppDelegate.h */,
 				EFF10EF91D1A297900ECE11E /* AppDelegate.m */,
@@ -485,6 +606,40 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		EF1314331DAB752000FEBACF /* GameLive */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF13145F1DAB752000FEBACF /* Build configuration list for PBXNativeTarget "GameLive" */;
+			buildPhases = (
+				EF1314301DAB752000FEBACF /* Sources */,
+				EF1314311DAB752000FEBACF /* Frameworks */,
+				EF1314321DAB752000FEBACF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GameLive;
+			productName = GameLive;
+			productReference = EF1314341DAB752000FEBACF /* GameLive.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		EF1314431DAB752000FEBACF /* GameLiveUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF13145E1DAB752000FEBACF /* Build configuration list for PBXNativeTarget "GameLiveUI" */;
+			buildPhases = (
+				EF1314401DAB752000FEBACF /* Sources */,
+				EF1314411DAB752000FEBACF /* Frameworks */,
+				EF1314421DAB752000FEBACF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GameLiveUI;
+			productName = GameLiveUI;
+			productReference = EF1314441DAB752000FEBACF /* GameLiveUI.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		EFAF4B331D2B6C7800560B00 /* LiveDemo3iOS7 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EFAF4B5B1D2B6C7800560B00 /* Build configuration list for PBXNativeTarget "LiveDemo3iOS7" */;
@@ -510,10 +665,13 @@
 				EFF10EEF1D1A297900ECE11E /* Frameworks */,
 				EFF10EF01D1A297900ECE11E /* Resources */,
 				EFE0D9271D1BB9170090F719 /* Embed Frameworks */,
+				EF1314601DAB752000FEBACF /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				EF1314511DAB752000FEBACF /* PBXTargetDependency */,
+				EF1314541DAB752000FEBACF /* PBXTargetDependency */,
 			);
 			name = LiveDemo3;
 			productName = LiveDemo3;
@@ -529,6 +687,21 @@
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = ZEGO;
 				TargetAttributes = {
+					EF1314331DAB752000FEBACF = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 3WR2G89LR2;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					EF1314431DAB752000FEBACF = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 3WR2G89LR2;
+						ProvisioningStyle = Automatic;
+					};
 					EFAF4B331D2B6C7800560B00 = {
 						DevelopmentTeam = 3WR2G89LR2;
 						ProvisioningStyle = Automatic;
@@ -538,6 +711,9 @@
 						DevelopmentTeam = 3WR2G89LR2;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
@@ -561,11 +737,28 @@
 			targets = (
 				EFF10EF11D1A297900ECE11E /* LiveDemo3 */,
 				EFAF4B331D2B6C7800560B00 /* LiveDemo3iOS7 */,
+				EF1314331DAB752000FEBACF /* GameLive */,
+				EF1314431DAB752000FEBACF /* GameLiveUI */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		EF1314321DAB752000FEBACF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF1314421DAB752000FEBACF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF13144E1DAB752000FEBACF /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EFAF4B521D2B6C7800560B00 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -597,6 +790,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		EF1314301DAB752000FEBACF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF1314671DAB7AF800FEBACF /* ZegoAVKitManager.m in Sources */,
+				EF13143E1DAB752000FEBACF /* SampleHandler.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF1314401DAB752000FEBACF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF13144B1DAB752000FEBACF /* BroadcastViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EFAF4B341D2B6C7800560B00 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -663,7 +873,28 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		EF1314511DAB752000FEBACF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF1314431DAB752000FEBACF /* GameLiveUI */;
+			targetProxy = EF1314501DAB752000FEBACF /* PBXContainerItemProxy */;
+		};
+		EF1314541DAB752000FEBACF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF1314331DAB752000FEBACF /* GameLive */;
+			targetProxy = EF1314531DAB752000FEBACF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		EF13144C1DAB752000FEBACF /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EF13144D1DAB752000FEBACF /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
 		EFF10F011D1A297900ECE11E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -743,6 +974,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LiveDemo3/LiveDemo3.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
@@ -784,6 +1016,194 @@
 				PRODUCT_NAME = LiveDemo3;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+			};
+			name = iOS7Static;
+		};
+		EF1314561DAB752000FEBACF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_ENTITLEMENTS = GameLive/GameLive.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs/libsZegoAVKit2Release/Release-iphoneos",
+					"$(PROJECT_DIR)/libs/libsZegoLiveRoomRelease/Release-iphoneos",
+				);
+				INFOPLIST_FILE = GameLive/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3.GameLive;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		EF1314571DAB752000FEBACF /* iOS7StaticDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_ENTITLEMENTS = GameLive/GameLive.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs/libsZegoAVKit2Release/Release-iphoneos",
+					"$(PROJECT_DIR)/libs/libsZegoLiveRoomRelease/Release-iphoneos",
+				);
+				INFOPLIST_FILE = GameLive/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3.GameLive;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = iOS7StaticDebug;
+		};
+		EF1314581DAB752000FEBACF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_ENTITLEMENTS = GameLive/GameLive.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs/libsZegoAVKit2Release/Release-iphoneos",
+					"$(PROJECT_DIR)/libs/libsZegoLiveRoomRelease/Release-iphoneos",
+				);
+				INFOPLIST_FILE = GameLive/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3.GameLive;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		EF1314591DAB752000FEBACF /* iOS7Static */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_ENTITLEMENTS = GameLive/GameLive.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libs/libsZegoAVKit2Release/Release-iphoneos",
+					"$(PROJECT_DIR)/libs/libsZegoLiveRoomRelease/Release-iphoneos",
+				);
+				INFOPLIST_FILE = GameLive/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3.GameLive;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = iOS7Static;
+		};
+		EF13145A1DAB752000FEBACF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = GameLiveUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3.GameLiveUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		EF13145B1DAB752000FEBACF /* iOS7StaticDebug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = GameLiveUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3.GameLiveUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = iOS7StaticDebug;
+		};
+		EF13145C1DAB752000FEBACF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = GameLiveUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3.GameLiveUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		EF13145D1DAB752000FEBACF /* iOS7Static */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				INFOPLIST_FILE = GameLiveUI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zego.LiveDemo3.GameLiveUI;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
 			};
 			name = iOS7Static;
 		};
@@ -839,6 +1259,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LiveDemo3/LiveDemo3.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
@@ -1026,6 +1447,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LiveDemo3/LiveDemo3.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
@@ -1049,6 +1471,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LiveDemo3/LiveDemo3.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: jiang ningbo (SQL7DB2NFY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
@@ -1071,6 +1494,28 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EF13145E1DAB752000FEBACF /* Build configuration list for PBXNativeTarget "GameLiveUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF13145A1DAB752000FEBACF /* Debug */,
+				EF13145B1DAB752000FEBACF /* iOS7StaticDebug */,
+				EF13145C1DAB752000FEBACF /* Release */,
+				EF13145D1DAB752000FEBACF /* iOS7Static */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EF13145F1DAB752000FEBACF /* Build configuration list for PBXNativeTarget "GameLive" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF1314561DAB752000FEBACF /* Debug */,
+				EF1314571DAB752000FEBACF /* iOS7StaticDebug */,
+				EF1314581DAB752000FEBACF /* Release */,
+				EF1314591DAB752000FEBACF /* iOS7Static */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EFAF4B5B1D2B6C7800560B00 /* Build configuration list for PBXNativeTarget "LiveDemo3iOS7" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

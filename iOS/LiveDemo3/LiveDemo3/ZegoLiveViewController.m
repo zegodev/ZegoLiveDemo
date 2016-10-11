@@ -18,13 +18,15 @@
 
 @property (assign) UIInterfaceOrientation currentOrientation;
 
+@property (assign) BOOL isTargetOrientationPortrait;    ///< 当次直播是否竖屏
+
 //混流时的数据源
 @property (nonatomic, strong) NSData *auxData;
 @property (nonatomic, assign) void *pPos;
 
 //处理父view及子view弹框
-@property (nonatomic, strong) NSMutableDictionary *requestAlertDict;
-@property (nonatomic, strong) NSMutableDictionary *requestAlertContextDict;
+@property (nonatomic, strong) NSMutableArray *requestAlertList;
+@property (nonatomic, strong) NSMutableArray *requestAlertContextList;
 
 @end
 
@@ -39,6 +41,11 @@
 //    self.beautifyFeature = ZEGO_BEAUTIFY_NONE;
 //    self.filter = ZEGO_FILTER_NONE;
     
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _streamID2SizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    
     self.enableMicrophone = YES;
     self.enablePreview = YES;
     self.viewMode = ZegoVideoViewModeScaleAspectFill;
@@ -49,9 +56,9 @@
     
     self.logArray = [NSMutableArray array];
     if ([self isDeviceiOS7])
-        self.requestAlertContextDict = [NSMutableDictionary dictionary];
+        self.requestAlertContextList = [NSMutableArray array];
     else
-        self.requestAlertDict = [NSMutableDictionary dictionary];
+        self.requestAlertList = [NSMutableArray array];
     
     // 设置当前的手机姿势
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -202,10 +209,57 @@
     }
 }
 
-- (void)setAnchorConfig:(UIView *)publishView
+- (void)setupDeviceOrientation
 {
+    //
+    // * 在开始直播前，确定直播时的手机姿势，二选一：横屏、竖屏
+    //
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    
+    self.isTargetOrientationPortrait = YES;
+    switch (orientation) {
+        case UIInterfaceOrientationLandscapeLeft:
+        case UIInterfaceOrientationLandscapeRight:
+            self.isTargetOrientationPortrait = NO;
+            break;
+            
+        default:
+            break;
+    }
+    
+    CGSize resolution = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
+    
+    //
+    // * 修正最终需要的输出分辨率
+    // * 保证：横屏姿势时，输出横屏视频，竖屏姿势时，输出竖屏视频
+    //
+    if (
+        (
+         self.isTargetOrientationPortrait           // 竖屏
+         && resolution.width > resolution.height    // 但是宽比高大
+        )
+        ||
+        (
+         !self.isTargetOrientationPortrait          // 横屏
+         && resolution.width < resolution.height    // 但是高比宽大
+        )
+       )
+    {
+        CGFloat tmp = resolution.height;
+        resolution.height = resolution.width;
+        resolution.width = tmp;
+        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = resolution;
+    }
+    
     int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
     assert(ret == 0);
+    
+    [self setRotateFromInterfaceOrientation:orientation];
+}
+
+- (void)setAnchorConfig:(UIView *)publishView
+{
+    [self setupDeviceOrientation];
     
     bool b = [getZegoAV_ShareInstance() setFrontCam:self.useFrontCamera];
     assert(b);
@@ -335,6 +389,8 @@
             [self.view layoutIfNeeded];
         }];
     }
+    
+    [self updateRemoteViewRotation];
 }
 
 - (void)updateContainerConstraintsForRemove:(UIView *)removeView containerView:(UIView *)containerView
@@ -453,43 +509,130 @@
     NSString *content = agreed ? kZEGO_CHAT_AGREE_PUBLISH : kZEGO_CHAT_DISAGREE_PUBLISH;
     
     [ZegoChatCommand sendCommand:kZEGO_CHAT_RESPOND_PUBLISH toUsers:userList content:content magicNumber:magicNumber];
-    [self.requestAlertDict removeObjectForKey:magicNumber];
 }
 
 - (void)dismissAlertView:(NSString *)magicNumber
 {
     if ([self isDeviceiOS7])
     {
-        UIAlertView *alertView = self.requestAlertContextDict[magicNumber][@"AlertView"];
+        NSUInteger index = [self getWaitingRequestListIndex:magicNumber];
+        if (index == NSNotFound)
+            return;
+        
+        UIAlertView *alertView = self.requestAlertContextList[index][@"AlertView"];
         if (alertView)
         {
             [alertView dismissWithClickedButtonIndex:-1 animated:YES];
-            [self.requestAlertContextDict removeObjectForKey:magicNumber];
+        }
+        
+        [self.requestAlertContextList removeObjectAtIndex:index];
+    }
+    else
+    {
+        NSUInteger index = [self getWaitingRequestListIndex:magicNumber];
+        if (index == NSNotFound)
+            return;
+        
+        UIAlertController *alertController = self.requestAlertList[index][@"AlertController"];
+        if (alertController == self.presentedViewController)
+        {
+            [alertController dismissViewControllerAnimated:YES completion:nil];
+        }
+        
+        [self.requestAlertList removeObjectAtIndex:index];
+    }
+    
+    [self continueOtherRequest];
+}
+
+- (BOOL)shouldShowPublishAlert
+{
+    return YES;
+}
+
+- (void)continueOtherRequest
+{
+    if ([self isDeviceiOS7])
+    {
+        if (self.requestAlertContextList.count == 0)
+            return;
+        
+        if ([self shouldShowPublishAlert])
+        {
+            NSDictionary *dict = [self.requestAlertContextList firstObject];
+            UIAlertView *alertView = dict[@"AlertView"];
+            [alertView show];
+        }
+        else
+        {
+            for (NSDictionary *dict in self.requestAlertContextList)
+                [self sendRequestPublishRespond:NO magicNumber:dict[@"Magic"] requestPublisher:dict[@"User"]];
+            
+            [self.requestAlertContextList removeAllObjects];
         }
     }
     else
     {
-        UIAlertController *alertController = self.requestAlertDict[magicNumber];
-        if (alertController)
+        if (self.requestAlertList.count == 0)
+            return;
+        
+        if ([self shouldShowPublishAlert])
         {
-            [alertController dismissViewControllerAnimated:YES completion:nil];
-            [self.requestAlertDict removeObjectForKey:magicNumber];
+            NSDictionary *dict = [self.requestAlertList firstObject];
+            UIAlertController *alertController = dict[@"AlertController"];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+        else
+        {
+            for (NSDictionary *dict in self.requestAlertList)
+            {
+                [self sendRequestPublishRespond:NO magicNumber:dict[@"Magic"] requestPublisher:dict[@"User"]];
+            }
+            
+            [self.requestAlertList removeAllObjects];
         }
     }
 }
 
+- (NSUInteger)getWaitingRequestListIndex:(NSString *)magicNumber
+{
+    if ([self isDeviceiOS7])
+    {
+        for (NSDictionary *dict in self.requestAlertContextList)
+        {
+            if ([dict[@"Magic"] isEqualToString:magicNumber])
+                return [self.requestAlertContextList indexOfObject:dict];
+        }
+        
+        return NSNotFound;
+    }
+    else
+    {
+        for (NSDictionary *dict in self.requestAlertList)
+        {
+            if ([dict[@"Magic"] isEqualToString:magicNumber])
+                return [self.requestAlertList indexOfObject:dict];
+        }
+    }
+    
+    return NSNotFound;
+}
+
 - (void)requestPublishAlert:(ZegoUser *)requestUser magicNumber:(NSString *)magicNumber
 {
-    if (self.presentedViewController)
-        [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
-    
+//    if (self.presentedViewController)
+//    {
+//        [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+//    }
+//    
     NSString *message = [NSString stringWithFormat:NSLocalizedString(@"%@ 请求直播，是否允许", nil), requestUser.userName];
     if ([self isDeviceiOS7])
     {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"" message:message delegate:self cancelButtonTitle:NSLocalizedString(@"拒绝", nil) otherButtonTitles:NSLocalizedString(@"允许", nil), nil];
-        NSDictionary *contextDictionary = @{@"User": requestUser, @"AlertView": alertView};
-        self.requestAlertContextDict[magicNumber] = contextDictionary;
-        [alertView show];
+        NSDictionary *contextDictionary = @{@"Magic": magicNumber, @"User": requestUser, @"AlertView": alertView};
+        if (self.requestAlertContextList.count == 0)
+            [alertView show];
+        [self.requestAlertContextList addObject:contextDictionary];
     }
     else
     {
@@ -497,16 +640,33 @@
         
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"拒绝", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [self sendRequestPublishRespond:NO magicNumber:magicNumber requestPublisher:requestUser];
+            
+            NSUInteger index = [self getWaitingRequestListIndex:magicNumber];
+            if (index != NSNotFound)
+                [self.requestAlertList removeObjectAtIndex:index];
+            [self continueOtherRequest];
         }];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"允许", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self sendRequestPublishRespond:YES magicNumber:magicNumber requestPublisher:requestUser];
+            
+            NSUInteger index = [self getWaitingRequestListIndex:magicNumber];
+            if (index != NSNotFound)
+                [self.requestAlertList removeObjectAtIndex:index];
+            [self continueOtherRequest];
         }];
         
         [alertController addAction:cancelAction];
         [alertController addAction:okAction];
         
-        [self presentViewController:alertController animated:YES completion:nil];
-        self.requestAlertDict[magicNumber] = alertController;
+        NSDictionary *contextDictionary = @{@"Magic": magicNumber, @"User": requestUser, @"AlertController": alertController};
+        [self.requestAlertList addObject:contextDictionary];
+        
+        if (![self.presentedViewController isKindOfClass:[UIAlertController class]])
+        {
+            [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
     }
 }
 
@@ -526,6 +686,8 @@
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:message preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+            [self continueOtherRequest];
         }];
         
         [alertController addAction:cancelAction];
@@ -559,26 +721,95 @@
 
 - (void)setRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    switch (fromInterfaceOrientation) {
+    //
+    // * 手机姿势变化时，更新手机朝向配置
+    //
+    [getZegoAV_ShareInstance() setAppOrientation:fromInterfaceOrientation];
+    
+    //
+    // * 保证预览为正的
+    //
+    CAPTURE_ROTATE cr = [self calculatePreviewRotation:fromInterfaceOrientation];
+    [getZegoAV_ShareInstance() setLocalViewRotation:cr];
+    
+    //
+    // * 重新计算铺满 view 的旋转角度
+    //
+    [self updateRemoteViewRotation];
+}
+
+/// \breif 计算预览的旋转角度
+/// \param fromInterfaceOrientation 手机朝向
+/// \return 逆时针旋转角度
+- (CAPTURE_ROTATE)calculatePreviewRotation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    int rotate = CAPTURE_ROTATE_0;
+    
+    switch (fromInterfaceOrientation)
+    {
         case UIInterfaceOrientationPortrait:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_0];
-            break;
-            
         case UIInterfaceOrientationPortraitUpsideDown:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_180];
+            if (!self.isTargetOrientationPortrait)
+            {
+                rotate = self.useFrontCamera ? CAPTURE_ROTATE_270 : CAPTURE_ROTATE_90;
+            }
             break;
             
         case UIInterfaceOrientationLandscapeLeft:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_270];
-            break;
-            
         case UIInterfaceOrientationLandscapeRight:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_90];
+            if (self.isTargetOrientationPortrait)
+            {
+                rotate = self.useFrontCamera ? CAPTURE_ROTATE_270 : CAPTURE_ROTATE_90;
+            }
             break;
             
         default:
             break;
     }
+    
+    return (CAPTURE_ROTATE)rotate;
+}
+
+- (void)updateRemoteViewRotation
+{
+    for (NSString *streamID in self.viewIndexDict.allKeys)
+    {
+        UIView *view = self.viewContainersDict[streamID];
+        NSValue *sizeValue = self.streamID2SizeDict[streamID];
+        if (sizeValue == nil)
+        {
+            continue;
+        }
+        
+        CGSize videoSize = [sizeValue CGSizeValue];
+        int viewIndex = [self.viewIndexDict[streamID] intValue];
+        
+        CAPTURE_ROTATE rotate = CAPTURE_ROTATE_0;
+        
+        if (
+            (
+             view.bounds.size.height > view.bounds.size.width
+              && videoSize.height < videoSize.width
+            )
+            ||
+            (
+             view.bounds.size.height < view.bounds.size.width
+              && videoSize.height > videoSize.width
+            )
+           )
+        {
+            // * 当长宽比不匹配的时候，我们做一个渲染旋转，让视频塞满这个 view
+            rotate = CAPTURE_ROTATE_90;
+        }
+        
+        [getZegoAV_ShareInstance() setRemoteViewRotation:rotate viewIndex:viewIndex];
+    }
+}
+
+- (void)onVideoSizeChanged:(NSString *)streamID width:(uint32)width height:(uint32)height
+{
+    NSLog(@"%s, streamID %@", __func__, streamID);
+    self.streamID2SizeDict[streamID] = [NSValue valueWithCGSize:CGSizeMake(width, height)];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -626,13 +857,14 @@
 {
     NSString *magicNumber = nil;
     ZegoUser *requestUser = nil;
-    for (NSString *key in self.requestAlertContextDict.allKeys)
+    
+    NSUInteger index = NSNotFound;
+    for (NSDictionary *dict in self.requestAlertContextList)
     {
-        NSDictionary *requestInfo = self.requestAlertContextDict[key];
-        if (requestInfo[@"AlertView"] == alertView)
+        if (dict[@"AlertView"] == alertView)
         {
-            magicNumber = key;
-            requestUser = requestInfo[@"User"];
+            magicNumber = dict[@"magic"];
+            requestUser = dict[@"User"];
             
             break;
         }
@@ -651,7 +883,9 @@
         [self sendRequestPublishRespond:YES magicNumber:magicNumber requestPublisher:requestUser];
     }
     
-    [self.requestAlertContextDict removeObjectForKey:magicNumber];
+    [self.requestAlertList removeObjectAtIndex:index];
+    [self continueOtherRequest];
+    
 }
 
 - (void)updateQuality:(int)quality view:(UIView *)playerView

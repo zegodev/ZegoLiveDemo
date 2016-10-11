@@ -33,6 +33,8 @@
 
 @property (nonatomic, strong) UIView *preView;
 
+@property (assign) BOOL isTargetOrientationPortrait;    ///< 当次直播是否竖屏
+
 @end
 
 @implementation ZegoPublishViewController
@@ -241,8 +243,59 @@
     [super viewWillDisappear:animated];
 }
 
+- (BOOL)isTargetOrientationPortrait
+{
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    BOOL isTargetOrientationPortrait = YES;
+    
+    switch (orientation) {
+        case UIInterfaceOrientationLandscapeLeft:
+        case UIInterfaceOrientationLandscapeRight:
+            isTargetOrientationPortrait = NO;
+            break;
+            
+        default:
+            break;
+    }
+    
+    return isTargetOrientationPortrait;
+}
+
+- (void)setupDeviceOrientation
+{
+    CGSize resolution = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
+    
+    // 修正最终需要的输出分辨率
+    if (
+        (
+         self.isTargetOrientationPortrait           // 竖屏
+         && resolution.width > resolution.height    // 但是宽比高大
+         )
+        ||
+        (
+         !self.isTargetOrientationPortrait          // 横屏
+         && resolution.width < resolution.height    // 但是高比宽大
+         )
+        )
+    {
+        CGFloat tmp = resolution.height;
+        resolution.height = resolution.width;
+        resolution.width = tmp;
+        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = resolution;
+    }
+    
+    [getZegoAV_ShareInstance() setLocalViewRotation:CAPTURE_ROTATE_0];
+    int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
+    assert(ret == 0);
+}
+
 - (void)startPreview
 {
+    // 清除之前直播留下的状态
+    [self setupDeviceOrientation];
+    
+    [self setRotateFromInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+    
     int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
     assert(ret == 0);
     
@@ -463,36 +516,21 @@
 
 - (void)setRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    switch (fromInterfaceOrientation) {
-        case UIInterfaceOrientationPortrait:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_0];
-            break;
-            
-        case UIInterfaceOrientationPortraitUpsideDown:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_180];
-            break;
-            
-        case UIInterfaceOrientationLandscapeLeft:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_270];
-            break;
-            
-        case UIInterfaceOrientationLandscapeRight:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_90];
-            break;
-            
-        default:
-            break;
-    }
+    [self setupDeviceOrientation];
+    [getZegoAV_ShareInstance() setAppOrientation:fromInterfaceOrientation];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-        [self setRotateFromInterfaceOrientation:orientation];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        
-    }];
+    if (self.presentedViewController == nil)
+    {
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+            [self setRotateFromInterfaceOrientation:orientation];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            
+        }];
+    }
     
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }

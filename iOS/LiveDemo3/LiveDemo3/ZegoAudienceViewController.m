@@ -28,8 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *fullscreenButton;
 
 @property (nonatomic, strong) NSMutableArray<ZegoStreamInfo *> *streamList;
-@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
-@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
+
 
 @property (nonatomic, assign) BOOL loginChannelSuccess;
 @property (nonatomic, assign) BOOL loginRoomSuccess;
@@ -40,7 +39,7 @@
 
 @property (nonatomic, strong) UIColor *defaultButtonColor;
 
-@property (nonatomic, strong) NSMutableDictionary *videoSizeDict;
+
 
 @end
 
@@ -60,9 +59,7 @@
     self.enableCamera = YES;
     
     _streamList = [[NSMutableArray alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+
     
     _requestingArray = [[NSMutableArray alloc] init];
     
@@ -394,6 +391,8 @@
             if (CGRectEqualToRect(view.frame, self.playViewContainer.bounds))
                 self.fullscreenButton.hidden = NO;
         }
+        
+        self.streamID2SizeDict[streamID] = [NSValue valueWithCGSize:CGSizeMake(width, height)];
     }
 }
 

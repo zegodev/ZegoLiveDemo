@@ -21,8 +21,6 @@ NSString *kZegoDemoVideoBitRateKey      = @"bitrate";
 NSString *kZegoDemoPublishingStreamID   = @"streamID";   ///< 当前直播流 ID
 NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频道 ID
 
-NSString *kZegoDemoMixStreamKey         = @"mixStream";
-
 @implementation ZegoSettings
 {
     NSString *_userID;
@@ -51,8 +49,6 @@ NSString *kZegoDemoMixStreamKey         = @"mixStream";
                                     NSLocalizedString(@"超高质量", nil),
                                     NSLocalizedString(@"自定义", nil)];
         [self loadConfig];
-        
-        self.mixStream = [[NSUserDefaults standardUserDefaults] boolForKey:kZegoDemoMixStreamKey];
     }
     
     return self;
@@ -70,7 +66,8 @@ NSString *kZegoDemoMixStreamKey         = @"mixStream";
 
 - (NSString *)userID {
     if (_userID.length == 0) {
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+//        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSUserDefaults *ud = [[NSUserDefaults alloc] initWithSuiteName:@"group.liveDemo3"];
         NSString *userID = [ud stringForKey:kZegoDemoUserIDKey];
         if (userID.length > 0) {
             _userID = userID;
@@ -92,19 +89,10 @@ NSString *kZegoDemoMixStreamKey         = @"mixStream";
     
     if (userID.length > 0) {
         _userID = userID;
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+//        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSUserDefaults *ud = [[NSUserDefaults alloc] initWithSuiteName:@"group.liveDemo3"];
         [ud setObject:_userID forKey:kZegoDemoUserIDKey];
     }
-}
-
-- (void)setMixStream:(BOOL)mixStream
-{
-    if (_mixStream == mixStream)
-        return;
-    
-    _mixStream = mixStream;
-    
-    [[NSUserDefaults standardUserDefaults] setBool:self.mixStream forKey:kZegoDemoMixStreamKey];
 }
 
 /*
@@ -140,7 +128,8 @@ NSString *kZegoDemoMixStreamKey         = @"mixStream";
 
 - (NSString *)userName {
     if (_userName.length == 0) {
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+//        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSUserDefaults *ud = [[NSUserDefaults alloc] initWithSuiteName:@"group.liveDemo3"];
         NSString *userName = [ud stringForKey:kZegoDemoUserNameKey];
         if (userName.length > 0) {
             _userName = userName;
@@ -166,7 +155,8 @@ NSString *kZegoDemoMixStreamKey         = @"mixStream";
     
     if (userName.length > 0) {
         _userName = userName;
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+//        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+        NSUserDefaults *ud = [[NSUserDefaults alloc] initWithSuiteName:@"group.liveDemo3"];
         [ud setObject:_userName forKey:kZegoDemoUserNameKey];
     }
 }

@@ -33,8 +33,6 @@
 //正在播放的streamList
 @property (nonatomic, strong) NSMutableArray *playStreamList;
 
-@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
-@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
 
 @property (nonatomic, assign) BOOL isPublishing;
 
@@ -57,8 +55,6 @@
     [self setupLiveKit];
     [self loginChatRoom];
     
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     _playStreamList = [[NSMutableArray alloc] init];
     
     self.stopPublishButton.enabled = NO;
@@ -299,6 +295,7 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
+    [self setupDeviceOrientation];
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);
@@ -491,6 +488,14 @@
         //有人已经操作请求上台了，弹框消失
         [self dismissAlertView:receiveInfo[kZEGO_CHAT_MAGIC]];
     }
+}
+
+- (BOOL)shouldShowPublishAlert
+{
+    if (self.viewContainersDict.count < MAX_STREAM_COUNT)
+        return YES;
+    
+    return NO;
 }
 
 #pragma mark stream Add & Delete

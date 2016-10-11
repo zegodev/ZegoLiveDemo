@@ -50,7 +50,7 @@
         bool capture;
     } m_oState;
     
-    id<ZegoVideoCaptureClientDelegate> client_;
+    id<ZegoVideoCaptureClient> client_;
     
     bool is_take_photo_;
 }
@@ -65,7 +65,7 @@
 
 #pragma mark - ZegoVideoCaptureDevice
 
-- (void)zego_allocateAndStart:(id<ZegoVideoCaptureClientDelegate>) client {
+- (void)zego_allocateAndStart:(id<ZegoVideoCaptureClient>) client {
     client_ = client;
     is_take_photo_ = false;
 }
@@ -590,14 +590,14 @@
     VideoCaptureDeviceDemo* g_device_;
 }
 
-- (id<ZegoVideoCaptureDevice>)create:(NSString*)deviceId {
+- (id<ZegoVideoCaptureDevice>)zego_create:(NSString*)deviceId {
     if (g_device_ == nil) {
         g_device_ = [[VideoCaptureDeviceDemo alloc]init];
     }
     return g_device_;
 }
 
-- (void)destroy:(id<ZegoVideoCaptureDevice>)device {
+- (void)zego_destroy:(id<ZegoVideoCaptureDevice>)device {
     
 }
 

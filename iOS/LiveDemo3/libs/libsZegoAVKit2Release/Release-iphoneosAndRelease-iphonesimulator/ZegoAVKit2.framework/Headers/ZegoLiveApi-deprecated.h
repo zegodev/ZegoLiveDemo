@@ -2,7 +2,6 @@
 //  ZegoLiveApi-deprecated.h
 //  zegoavkit
 //
-//  Created by Randy Qiu on 16/9/7.
 //  Copyright © 2016年 Zego. All rights reserved.
 //
 

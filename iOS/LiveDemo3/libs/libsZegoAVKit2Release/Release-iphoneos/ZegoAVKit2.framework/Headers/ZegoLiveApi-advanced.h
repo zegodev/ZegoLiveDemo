@@ -2,7 +2,6 @@
 //  ZegoLiveApi-advanced.h
 //  zegoavkit
 //
-//  Created by Randy Qiu on 16/9/7.
 //  Copyright © 2016年 Zego. All rights reserved.
 //
 
@@ -41,18 +40,18 @@
 - (bool)updateMixStreamConfig:(NSArray<ZegoMixStreamInfo*> *)lstMixStreamInfo;
 
 /// \brief 设置播放渲染朝向
-/// \param rotate 旋转角度
+/// \param rotate 逆时针旋转角度
 /// \param index 播放通道
 /// \return true 成功，false 失败
 - (bool)setRemoteViewRotation:(CAPTURE_ROTATE)rotate viewIndex:(RemoteViewIndex)index;
 
 /// \brief 设置预览渲染朝向
-/// \param rotate 旋转角度
+/// \param rotate 逆时针旋转角度
 /// \return true 成功，false 失败
 - (bool)setLocalViewRotation:(CAPTURE_ROTATE)rotate;
 
 /// \brief 设置采集时摄像头方向,在startPublish前设置有效，startPublish后调用则返回false
-/// \param rotate 方向
+/// \param rotate 顺时针方向
 /// \return true:调用成功；false:调用失败
 - (bool)setCaptureRotation:(CAPTURE_ROTATE)rotate;
 

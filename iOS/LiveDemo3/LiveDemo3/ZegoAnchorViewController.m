@@ -29,8 +29,6 @@
 //创建stream后，server返回的streamID(当前直播的streamID)
 @property (nonatomic, copy) NSString *streamID;
 
-@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
-
 @property (nonatomic, assign) BOOL isPublishing;
 
 @property (nonatomic, strong) UIColor *defaultButtonColor;
@@ -51,8 +49,6 @@
     
     [self setupLiveKit];
     [self loginChatRoom];
-    
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     
     self.stopPublishButton.enabled = NO;
     
@@ -280,6 +276,7 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
+    [self setupDeviceOrientation];
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);

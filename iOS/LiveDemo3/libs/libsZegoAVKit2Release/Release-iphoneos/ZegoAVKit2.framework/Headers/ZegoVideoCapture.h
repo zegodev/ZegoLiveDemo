@@ -13,22 +13,12 @@
 #import <AppKit/AppKit.h>
 #endif
 
-
-@protocol ZegoVideoCaptureClientDelegate <NSObject>
-- (void)destroy;
+@protocol ZegoVideoCaptureDelegate
 - (void)onIncomingCapturedData:(nullable CVImageBufferRef)image withPresentationTimeStamp:(CMTime)time;
-- (void)onError:(nullable NSString*)reason;
 - (void)onTakeSnapshot:(nonnull CGImageRef)image;
 @end
 
-@protocol ZegoVideoCaptureDevice <NSObject>
-
-@required
-- (void)zego_allocateAndStart:(nonnull id<ZegoVideoCaptureClientDelegate>) client;
-- (void)zego_stopAndDeAllocate;
-- (int)zego_startCapture;
-- (int)zego_stopCapture;
-
+@protocol ZegoSupportsVideoCapture
 @optional
 - (int)zego_setFrameRate:(int)framerate;
 - (int)zego_setWidth:(int)width andHeight:(int)height;
@@ -46,14 +36,28 @@
 - (int)zego_enableTorch:(bool)enable;
 - (int)zego_takeSnapshot;
 - (int)zego_setPowerlineFreq:(unsigned int)freq;
+@end
+
+@protocol ZegoVideoCaptureClient <NSObject, ZegoVideoCaptureDelegate>
+- (void)destroy;
+- (void)onError:(nullable NSString*)reason;
+@end
+
+@protocol ZegoVideoCaptureDevice <NSObject, ZegoSupportsVideoCapture>
+
+@required
+- (void)zego_allocateAndStart:(nonnull id<ZegoVideoCaptureClient>) client;
+- (void)zego_stopAndDeAllocate;
+- (int)zego_startCapture;
+- (int)zego_stopCapture;
 
 @end
 
 @protocol ZegoVideoCaptureFactory <NSObject>
 
 @required
-- (nonnull id<ZegoVideoCaptureDevice>)create:(nonnull NSString*)deviceId;
-- (void)destroy:(nonnull id<ZegoVideoCaptureDevice>)device;
+- (nonnull id<ZegoVideoCaptureDevice>)zego_create:(nonnull NSString*)deviceId;
+- (void)zego_destroy:(nonnull id<ZegoVideoCaptureDevice>)device;
 
 @end
 

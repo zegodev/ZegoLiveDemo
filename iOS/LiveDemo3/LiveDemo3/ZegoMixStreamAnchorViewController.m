@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *optionButton;
 @property (weak, nonatomic) IBOutlet UIButton *stopPublishButton;
 @property (weak, nonatomic) IBOutlet UIButton *mutedButton;
+@property (weak, nonatomic) IBOutlet UIButton *mixStreamButton;
 
 //登录房间成功后，拼接出liveChannel
 @property (nonatomic, copy) NSString *liveChannel;
@@ -32,9 +33,6 @@
 
 //正在播放的streamList
 @property (nonatomic, strong) NSMutableArray *playStreamList;
-
-@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
-@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
 
 @property (nonatomic, assign) BOOL isPublishing;
 
@@ -54,6 +52,8 @@
 @property (nonatomic, copy) NSString *bizToken;
 @property (nonatomic, copy) NSString *bizID;
 
+@property (nonatomic, strong) NSArray *mixPlayStreamList;
+
 @end
 
 @implementation ZegoMixStreamAnchorViewController
@@ -65,10 +65,9 @@
     [self setupLiveKit];
     [self loginChatRoom];
     
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     _playStreamList = [[NSMutableArray alloc] init];
     _mixStreamConfig = [[NSMutableArray alloc] init];
+//    _mixPlayStreamList = [[NSMutableArray alloc] init];
     
     self.stopPublishButton.enabled = NO;
     
@@ -80,6 +79,8 @@
     {
         [self updatePublishView:self.publishView];
     }
+    
+    self.mixStreamButton.enabled = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -249,7 +250,7 @@
         self.stopPublishButton.enabled = NO;
     }
 }
-
+/*
 - (IBAction)magic:(id)sender
 {
     if (self.afterMixStreamID.length > 0)
@@ -276,6 +277,53 @@
             [self.playStreamList addObject:streamInfo];
             [self createPlayStream:self.streamID];
         }
+    }
+}
+*/
+
+- (IBAction)onPlayMixStream:(id)sender
+{
+    if (!self.isPublishing)
+        return;
+    
+    if (self.afterMixStreamID.length == 0)
+        return;
+    
+    if ([[self.mixStreamButton currentTitle] isEqualToString:NSLocalizedString(@"播放混流", nil)])
+    {
+        self.mixPlayStreamList = [NSArray arrayWithArray:self.playStreamList];
+        
+        for (ZegoStreamInfo *info in self.playStreamList)
+        {
+            if (![info.streamID isEqualToString:self.streamID])
+            {
+                [getZegoAV_ShareInstance() stopPlayStream:info.streamID];
+                [self removeStreamViewContainer:info.streamID];
+                [self removeStreamInfo:info.streamID];
+            }
+        }
+        
+        ZegoStreamInfo *streamInfo = [ZegoStreamInfo getStreamInfo:@{kRoomStreamIDKey: self.streamID}];
+        [self.playStreamList addObject:streamInfo];
+        [self createPlayStream:self.streamID];
+        
+        [self.mixStreamButton setTitle:NSLocalizedString(@"播放单流", nil) forState:UIControlStateNormal];
+    }
+    else
+    {
+        [getZegoAV_ShareInstance() stopPlayStream:self.streamID];
+        [self removeStreamViewContainer:self.streamID];
+        [self removeStreamInfo:self.streamID];
+        
+        [self.playStreamList addObjectsFromArray:self.mixPlayStreamList];
+        
+        for (ZegoStreamInfo *info in self.playStreamList)
+        {
+            if (![info.streamID isEqualToString:self.streamID])
+                [self createPlayStream:info.streamID];
+        }
+        
+        [self.mixStreamButton setTitle:NSLocalizedString(@"播放混流", nil) forState:UIControlStateNormal];
     }
 }
 
@@ -354,6 +402,7 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
+    [self setupDeviceOrientation];
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);
@@ -554,6 +603,7 @@
             CGSize videoSize = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
             [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:streamID mixStreamID:self.streamID mixVideoSize:videoSize flag:2];
             self.afterMixStreamID = streamID;
+            self.mixStreamButton.enabled = YES;
         }
         else
         {
@@ -606,6 +656,14 @@
 //    }
 }
 
+- (BOOL)shouldShowPublishAlert
+{
+    if (self.viewContainersDict.count < MAX_STREAM_COUNT)
+        return YES;
+    
+    return NO;
+}
+
 #pragma mark request mixstream
 - (void)requestPublishAlert:(ZegoUser *)requestUser magicNumber:(NSString *)magicNumber
 {
@@ -616,6 +674,7 @@
     if (self.presentedViewController)
         [self.presentedViewController dismissViewControllerAnimated:YES completion:nil];
     
+    //在与第二条流混流成功前拒绝其他连麦请求
     if (self.mixMagicNumber != nil)
         [self sendRequestPublishRespond:NO magicNumber:magicNumber requestPublisher:requestUser];
     

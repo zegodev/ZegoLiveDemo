@@ -118,3 +118,5 @@
 "连麦模式" = "More Anchor";
 "混流模式" = "Mix Stream";
 
+"播放混流" = "Mix Stream";
+"播放单流" = "Normal Stream";

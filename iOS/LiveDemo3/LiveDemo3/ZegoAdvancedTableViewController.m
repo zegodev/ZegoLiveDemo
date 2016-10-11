@@ -40,8 +40,6 @@
         [self.appID setText:[NSString stringWithFormat:@"%u", ZegoGetAppID()]];
     }
     
-    self.mixStreamSwitch.on = [ZegoSettings sharedInstance].mixStream;
-    
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onAlphaEnv:)];
     gesture.numberOfTapsRequired = 5;
     [self.tableView addGestureRecognizer:gesture];
@@ -86,12 +84,6 @@
 - (IBAction)toggleHardwareAccelerated:(id)sender {
     UISwitch *s = (UISwitch *)sender;
     ZegoRequireHardwareAccelerated(s.on);
-}
-
-- (IBAction)toggleMixStream:(id)sender
-{
-    UISwitch *s = (UISwitch *)sender;
-    [ZegoSettings sharedInstance].mixStream = s.on;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

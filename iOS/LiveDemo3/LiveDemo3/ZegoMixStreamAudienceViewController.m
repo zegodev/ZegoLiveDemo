@@ -28,8 +28,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *fullscreenButton;
 
 @property (nonatomic, strong) NSMutableArray<ZegoStreamInfo *> *streamList;
-@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
-@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
 
 @property (nonatomic, assign) BOOL loginChannelSuccess;
 @property (nonatomic, assign) BOOL loginRoomSuccess;
@@ -44,7 +42,6 @@
 
 @property (nonatomic, strong) UIColor *defaultButtonColor;
 
-@property (nonatomic, strong) NSMutableDictionary *videoSizeDict;
 
 @end
 
@@ -64,9 +61,6 @@
     self.enableCamera = YES;
     
     _streamList = [[NSMutableArray alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     
     _requestingArray = [[NSMutableArray alloc] init];
     
@@ -505,6 +499,8 @@
             if (CGRectEqualToRect(view.frame, self.playViewContainer.bounds))
                 self.fullscreenButton.hidden = NO;
         }
+        
+        self.streamID2SizeDict[streamID] = [NSValue valueWithCGSize:CGSizeMake(width, height)];
     }
 }
 
@@ -644,20 +640,6 @@
         //自己发出的request请求， 只处理respond
         if ([command isEqualToString:kZEGO_CHAT_RESPOND_PUBLISH])
             [self onReceivePublishRespond:receiveInfo];
-    }
-    else if (self.isPublishing && ![ZegoSettings sharedInstance].mixStream)
-    {
-        if ([command isEqualToString:kZEGO_CHAT_REQUEST_PUBLISH])
-        {
-            //自己作为观众进入room，但是请求上台后，自己也在直播
-            [self onReceivePublishRequest:receiveInfo];
-        }
-        else if ([command isEqualToString:kZEGO_CHAT_RESPOND_PUBLISH])
-        {
-            //自己正在直播，其他用户请求上台->弹框->其他人批准了上台
-            //需要把弹框消失
-            [self dismissAlertView:receiveInfo[kZEGO_CHAT_MAGIC]];
-        }
     }
 }
 
@@ -819,6 +801,9 @@
         
         if ([self isStreamIDExist:streamID])
             continue;
+        
+        if (self.viewContainersDict.count >= MAX_STREAM_COUNT)
+            return;
         
         [self.streamList addObject:[ZegoStreamInfo getStreamInfo:dic]];
         [self addStreamViewContainer:streamID];
