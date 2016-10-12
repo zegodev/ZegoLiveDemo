@@ -7,13 +7,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.zego.biz.BizRoom;
+import com.zego.biz.BizStream;
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.interfaces.OnUpdateRoomListListener;
 import com.zego.livedemo3.presenters.BizLivePresenter;
-import com.zego.livedemo3.ui.activities.PlayActivity;
+import com.zego.livedemo3.ui.activities.mixstream.MixStreamPlayActivity;
+import com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsPlayActivity;
+import com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPlayActivity;
 import com.zego.livedemo3.ui.adapters.ListRoomAdapter;
 import com.zego.livedemo3.ui.adapters.SpaceItemDecoration;
 import com.zego.livedemo3.ui.base.AbsBaseFragment;
+import com.zego.livedemo3.utils.BizLiveRoomUitl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +89,30 @@ public class RoomListFragment extends AbsBaseFragment {
             @Override
             public void OnItemClick(View view, int position) {
                 BizRoom roomInfo = mListRoom.get(position);
-                PlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
+                // 默认为多人连麦模式, 为了兼容老版本
+                int publishType = 2;
+                for(BizStream bizStream : roomInfo.listStream){
+                    if(bizStream.userName.startsWith(BizLiveRoomUitl.USER_NAME_PREFIX_SINGLE_ANCHOR)){
+                        publishType = 1;
+                    }else if(bizStream.userName.startsWith(BizLiveRoomUitl.USER_NAME_PREFIX_MORE_ANCHORS)){
+                        publishType = 2;
+                    }else if(bizStream.userName.startsWith(BizLiveRoomUitl.USER_NAME_PREFIX_MIX_STREAM)){
+                        publishType = 3;
+                    }
+                }
+
+                switch (publishType){
+                    case 1:
+                        SingleAnchorPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
+                        break;
+                    case 2:
+                        MorAnchorsPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
+                        break;
+                    case 3:
+                        MixStreamPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
+                        break;
+                }
+
             }
         });
     }

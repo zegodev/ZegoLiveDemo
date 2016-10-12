@@ -50,7 +50,7 @@
         bool capture;
     } m_oState;
     
-    id<ZegoVideoCaptureClient> client_;
+    id<ZegoVideoCaptureClientDelegate> client_;
     
     bool is_take_photo_;
 }
@@ -65,7 +65,7 @@
 
 #pragma mark - ZegoVideoCaptureDevice
 
-- (void)zego_allocateAndStart:(id<ZegoVideoCaptureClient>) client {
+- (void)zego_allocateAndStart:(id<ZegoVideoCaptureClientDelegate>) client {
     client_ = client;
     is_take_photo_ = false;
 }

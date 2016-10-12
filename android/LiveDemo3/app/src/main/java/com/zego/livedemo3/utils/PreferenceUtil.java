@@ -79,6 +79,16 @@ public class PreferenceUtil {
         return mSharedPreferences.getInt(key, defaultValue);
     }
 
+    public void setLongValue(String key, long value){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putLong(key, value);
+        editor.commit();
+    }
+
+    public long getLongValue(String key, long defaultValue){
+        return mSharedPreferences.getLong(key, defaultValue);
+    }
+
 
     public void setUserID(String userID){
         setStringValue(PREFERENCE_KEY_USER_ID, userID);

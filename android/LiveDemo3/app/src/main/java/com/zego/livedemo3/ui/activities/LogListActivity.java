@@ -7,9 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.zego.livedemo3.R;
+import com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsBaseLiveActivity;
 import com.zego.livedemo3.ui.adapters.LogListAdapter;
 import com.zego.livedemo3.ui.base.AbsBaseActivity;
-import com.zego.livedemo3.ui.base.BaseLiveActivity;
 import com.zego.livedemo3.utils.PreferenceUtil;
 
 import java.util.LinkedList;
@@ -46,7 +46,7 @@ public class LogListActivity extends AbsBaseActivity {
 
     @Override
     protected void initVariables(Bundle savedInstanceState) {
-        mLinkedListData = (LinkedList<String>) PreferenceUtil.getInstance().getObjectFromString(BaseLiveActivity.KEY_LIST_LOG);
+        mLinkedListData = (LinkedList<String>) PreferenceUtil.getInstance().getObjectFromString(MorAnchorsBaseLiveActivity.KEY_LIST_LOG);
         if (mLinkedListData == null) {
             mLinkedListData = new LinkedList<>();
         }

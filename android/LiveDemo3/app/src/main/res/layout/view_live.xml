@@ -40,18 +40,6 @@
                 tools:text="当前质量"/>
 
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tv_to_full_screen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dimen_5"
-            android:textColor="@color/sl_btn"
-            android:textSize="@dimen/text_size_3"
-            android:layout_below="@id/rlyt_quality"
-            android:visibility="gone"
-            />
     </RelativeLayout>
 
 

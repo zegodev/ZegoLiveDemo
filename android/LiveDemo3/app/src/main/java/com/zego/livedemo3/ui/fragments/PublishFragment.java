@@ -3,10 +3,12 @@ package com.zego.livedemo3.ui.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,14 +19,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
 
-import com.zego.livedemo3.ui.activities.PublishActivity;
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.ZegoApiManager;
+import com.zego.livedemo3.ui.activities.mixstream.MixStreamPublishActivity;
+import com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsPublishActivity;
+import com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPublishActivity;
 import com.zego.livedemo3.ui.base.AbsBaseFragment;
+import com.zego.livedemo3.ui.widgets.DialogSelectPublishMode;
 import com.zego.livedemo3.utils.PreferenceUtil;
 import com.zego.livedemo3.utils.ZegoAVKitUtil;
 import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
+import com.zego.zegoavkit2.ZegoAvConfig;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -150,6 +156,8 @@ public class PublishFragment extends AbsBaseFragment {
                 } else {
                     tbEnableTorch.setEnabled(true);
                 }
+
+                setRotateFromInterfaceOrientation(mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
             }
         });
 
@@ -185,14 +193,35 @@ public class PublishFragment extends AbsBaseFragment {
 
     @OnClick(R.id.btn_start_publish)
     public void startPublishing() {
+
         String publishTitle = etPublishTitle.getText().toString();
         if (TextUtils.isEmpty(publishTitle)) {
             publishTitle = PreferenceUtil.getInstance().getUserName();
         }
 
         hideInputWindow();
-        PublishActivity.actionStart(mParentActivity, publishTitle, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter);
 
+        final String publishTitleTemp = publishTitle;
+        final DialogSelectPublishMode dialog = new DialogSelectPublishMode();
+        dialog.setOnSelectPublishModeListener(new DialogSelectPublishMode.OnSelectPublishModeListener() {
+            @Override
+            public void onSingleAnchorSelect() {
+                SingleAnchorPublishActivity.actionStart(mParentActivity, publishTitleTemp, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter);
+
+            }
+
+            @Override
+            public void onMoreAnchorsSelect() {
+                MorAnchorsPublishActivity.actionStart(mParentActivity, publishTitleTemp, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter);
+            }
+
+            @Override
+            public void onMixStreamSelect() {
+                MixStreamPublishActivity.actionStart(mParentActivity, publishTitleTemp, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter);
+            }
+        });
+
+        dialog.show(mParentActivity.getFragmentManager(), "selectPublishModeDialog");
     }
 
     @OnClick(R.id.main_content)
@@ -227,22 +256,84 @@ public class PublishFragment extends AbsBaseFragment {
     }
 
     private void startPreview() {
+
+        mZegoAVKit.setFrontCam(tbEnableFrontCam.isChecked());
+        
+        // 设置手机朝向
+        setRotateFromInterfaceOrientation(mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
+
+
         mZegoAVKit.setLocalView(svPreview);
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
         svPreview.setVisibility(View.VISIBLE);
-        mZegoAVKit.setFrontCam(tbEnableFrontCam.isChecked());
         mZegoAVKit.enableTorch(tbEnableTorch.isChecked());
 
         // 设置美颜
         mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
         // 设置滤镜
         mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
+
+
     }
 
     private void stopPreview() {
         svPreview.setVisibility(View.INVISIBLE);
         mZegoAVKit.stopPreview();
         mZegoAVKit.setLocalView(null);
+    }
+
+    protected boolean isDeviceOrientationPortrait(){
+
+        int orientation = mParentActivity.getWindowManager().getDefaultDisplay().getRotation();
+        // 判断手机是否垂直摆放
+        boolean isDeviceOrientationPortrait = true;
+        switch (orientation){
+            case Surface.ROTATION_90:
+            case Surface.ROTATION_270:
+                isDeviceOrientationPortrait = false;
+                break;
+        }
+
+        return isDeviceOrientationPortrait;
+    }
+
+    /**
+     * 设置设备朝向.
+     */
+    protected void setupDeviceOrientation(){
+
+        //  修正最终需要的输出分辨率, 保证：横屏姿势时，输出横屏视频，竖屏姿势时，输出竖屏视频
+        ZegoAvConfig currentConfig = ZegoApiManager.getInstance().getZegoAvConfig();
+        int width = currentConfig.getVideoEncodeResolutionWidth();
+        int height = currentConfig.getVideoEncodeResolutionHeight();
+
+        if((isDeviceOrientationPortrait() &&  width > height) // 手机竖屏, 但是 宽 > 高
+                || (!isDeviceOrientationPortrait() && width < height)){ // 手机横屏, 但是 宽 < 高
+
+            currentConfig.setVideoEncodeResolution(height, width);
+            ZegoApiManager.getInstance().setZegoConfig(currentConfig);
+        }
+
+
+    }
+
+    protected void setRotateFromInterfaceOrientation(int orientation){
+
+        setupDeviceOrientation();
+
+        // 设置手机朝向
+        mZegoAVKit.setAppOrientation(orientation);
+        mZegoAVKit.setLocalViewRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0);
+    }
+
+
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        setRotateFromInterfaceOrientation(mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
     }
 }

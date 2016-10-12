@@ -12,12 +12,16 @@ import android.widget.TextView;
 
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.utils.ZegoAVKitUtil;
-import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.zego.livedemo3.R.id.textureView;
 
 /**
  * Copyright © 2016 Zego. All rights reserved.
- * des:
+ * des: 直播view.
  */
 public class ViewLive extends RelativeLayout {
 
@@ -49,14 +53,15 @@ public class ViewLive extends RelativeLayout {
      */
     public static final String TAG_VIEW_IS_FREE = USELESS_STREAM_ORDINAL + SEPARATOR + EMPTY_STREAM_ID;
 
-
     private View mRootView;
 
     private TextView mTvQualityColor;
 
     private TextView mTvQuality;
 
-    private TextView mTvToFullScreen;
+    private TextView mTvSwitchToFullScreen;
+
+    private TextView mTvShare;
 
     private TextureView mTextureView;
 
@@ -64,9 +69,11 @@ public class ViewLive extends RelativeLayout {
 
     private int mLiveQuality = 0;
 
+    private ViewLiveCallback mViewLiveCallback;
+
     private ZegoAVKitCommon.ZegoVideoViewMode mZegoVideoViewMode = ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill;
 
-    private boolean mIsShowFullScreen = false;
+    private boolean mNeedToSwitchFullScreen = false;
 
     private int[] mArrColor;
 
@@ -74,7 +81,7 @@ public class ViewLive extends RelativeLayout {
 
     private String mLiveTag;
 
-    private ZegoAVKit mZegoAVKit;
+    private List<String> mListShareUrls = new ArrayList<>();
 
     public static int getStreamOrdinalFromLiveTag(String liveTag) {
         int streamOrdinal = USELESS_STREAM_ORDINAL;
@@ -102,6 +109,19 @@ public class ViewLive extends RelativeLayout {
         return streamID;
     }
 
+    public static boolean isPublishView(int streamOrdinal) {
+        boolean isPublishView = true;
+
+        switch (streamOrdinal) {
+            case 0:
+            case 1:
+            case 2:
+                isPublishView = false;
+                break;
+        }
+        return isPublishView;
+    }
+
     public ViewLive(Context context) {
         super(context);
     }
@@ -114,68 +134,182 @@ public class ViewLive extends RelativeLayout {
         super(context, attrs, defStyleAttr);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ViewLive, defStyleAttr, 0);
-        boolean isFullScreen = a.getBoolean(R.styleable.ViewLive_isFullScreen, false);
+        boolean isFullScreen = a.getBoolean(R.styleable.ViewLive_isBigView, false);
         a.recycle();
 
         initViews(context, isFullScreen);
     }
 
-    private void initViews(Context context, boolean isFullScreen){
+    private void initViews(Context context, boolean isBigView) {
 
         mResources = context.getResources();
 
         mArrColor = new int[4];
-        mArrColor[0]  = R.drawable.circle_green;
-        mArrColor[1]  = R.drawable.circle_yellow;
-        mArrColor[2]  = R.drawable.circle_red;
-        mArrColor[3]  = R.drawable.circle_gray;
+        mArrColor[0] = R.drawable.circle_green;
+        mArrColor[1] = R.drawable.circle_yellow;
+        mArrColor[2] = R.drawable.circle_red;
+        mArrColor[3] = R.drawable.circle_gray;
 
         mArrLiveQuality = mResources.getStringArray(R.array.live_quality);
 
-        if(isFullScreen){
-            mRootView = LayoutInflater.from(context).inflate(R.layout.view_live_full_screen, this);
-        }else {
+        if (isBigView) {
+            mRootView = LayoutInflater.from(context).inflate(R.layout.view_live_big, this);
+
+            mTvSwitchToFullScreen = (TextView) mRootView.findViewById(R.id.tv_switch_full_screen);
+            mTvSwitchToFullScreen.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(mZegoVideoViewMode == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill){
+
+                        setZegoVideoViewMode(mNeedToSwitchFullScreen, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
+                    }else if(mZegoVideoViewMode == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit){
+
+                        setZegoVideoViewMode(mNeedToSwitchFullScreen, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+                    }
+
+                    if(mViewLiveCallback != null){
+                        int streamOrdinal = getStreamOrdinalFromLiveTag(mLiveTag);
+                        if (!isFree() && !isPublishView(streamOrdinal)) {
+                            mViewLiveCallback.setRemoteViewMode(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinal), mZegoVideoViewMode);
+                        }
+                    }
+                }
+            });
+
+            mTvShare = (TextView) mRootView.findViewById(R.id.tv_share);
+            mTvShare.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mViewLiveCallback != null){
+                        mViewLiveCallback.shareToQQ(mListShareUrls);
+                    }
+                }
+            });
+        } else {
             mRootView = LayoutInflater.from(context).inflate(R.layout.view_live, this);
         }
 
-        mTextureView = (TextureView) mRootView.findViewById(R.id.textureView);
+        mTextureView = (TextureView) mRootView.findViewById(textureView);
         mTvQualityColor = (TextView) mRootView.findViewById(R.id.tv_quality_color);
         mTvQuality = (TextView) mRootView.findViewById(R.id.tv_live_quality);
 
         // view默认为空闲
         mLiveTag = TAG_VIEW_IS_FREE;
+    }
 
-        mTvToFullScreen = (TextView) mRootView.findViewById(R.id.tv_to_full_screen);
-        mTvToFullScreen.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 切换模式
-                if(mZegoVideoViewMode == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill){
-                    mZegoVideoViewMode = ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit;
-                    mTvToFullScreen.setText(R.string.full_screen);
-                }else if(mZegoVideoViewMode == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit){
-                    mZegoVideoViewMode = ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill;
-                    mTvToFullScreen.setText(R.string.exit_full_screen);
+    public void setViewLiveCallback(ViewLiveCallback viewLiveCallback) {
+        mViewLiveCallback = viewLiveCallback;
+    }
+
+    public ViewLiveCallback getViewLiveCallback(){
+        return mViewLiveCallback;
+    }
+
+    /**
+     * 返回view是否为"空闲"状态.
+     * @return
+     */
+    public boolean isFree() {
+        return TAG_VIEW_IS_FREE.equals(mLiveTag);
+    }
+
+    /**
+     * 释放view.
+     */
+    public void setFree() {
+        mLiveTag = TAG_VIEW_IS_FREE;
+        mLiveQuality = 0;
+        setVisibility(View.INVISIBLE);
+
+        mZegoVideoViewMode = ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill;
+        mNeedToSwitchFullScreen = false;
+        mListShareUrls = new ArrayList<>();
+
+        if (mTvSwitchToFullScreen != null) {
+            mTvSwitchToFullScreen.setVisibility(View.INVISIBLE);
+        }
+
+        if (mTvShare != null) {
+            mTvShare.setVisibility(View.INVISIBLE);
+        }
+    }
+
+
+    /**
+     * 交换view, 通常是跟大的View交换.
+     *
+     * @param vlBigView
+     */
+    public void toExchangeView(ViewLive vlBigView) {
+
+        String liveTagOfBigView = vlBigView.getLiveTag();
+        String liveTagOfSmallView = mLiveTag;
+
+        // 交换view
+        int streamOrdinalOfBigView = getStreamOrdinalFromLiveTag(liveTagOfBigView);
+        if (!vlBigView.isFree()) {
+            if (isPublishView(streamOrdinalOfBigView)) {
+                if (vlBigView.getViewLiveCallback() != null) {
+                    vlBigView.getViewLiveCallback().setLocalView(mTextureView);
                 }
-
-                int streamOrdinal = getStreamOrdinalFromLiveTag(mLiveTag);
-                switch (streamOrdinal) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        mZegoAVKit.setRemoteViewMode(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinal), mZegoVideoViewMode);
-                        break;
+            } else {
+                if(vlBigView.getViewLiveCallback() != null){
+                    vlBigView.getViewLiveCallback().setRemoteView(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinalOfBigView), mTextureView);
                 }
             }
-        });
+        }
+
+        // 交换view
+        int streamOrdinalOfSmallView = getStreamOrdinalFromLiveTag(liveTagOfSmallView);
+        if(!isFree()){
+            if (isPublishView(streamOrdinalOfSmallView)) {
+                if(vlBigView.getViewLiveCallback() != null){
+                    vlBigView.getViewLiveCallback().setLocalView(vlBigView.getTextureView());
+                }
+            } else {
+                if(vlBigView.getViewLiveCallback() != null){
+                    vlBigView.getViewLiveCallback().setRemoteView(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinalOfSmallView), vlBigView.getTextureView());
+                }
+            }
+        }
+
+        // 交换tag
+        vlBigView.setLiveTag(liveTagOfSmallView);
+        mLiveTag = liveTagOfBigView;
+
+        // 交换quality
+        int liveQualityOfBigView = vlBigView.getLiveQuality();
+        int liveQualityOfSmallView = mLiveQuality;
+        vlBigView.setLiveQuality(liveQualityOfSmallView);
+        setLiveQuality(liveQualityOfBigView);
+
+        // 交换"全屏播放"的标记, 交换view mode
+        boolean needToSwitchFullScreenOfBigView = vlBigView.isNeedToSwitchFullScreen();
+        boolean needToSwitchFullScreenOfSmallView = mNeedToSwitchFullScreen;
+        ZegoAVKitCommon.ZegoVideoViewMode modeOfBigView = vlBigView.getZegoVideoViewMode();
+        ZegoAVKitCommon.ZegoVideoViewMode modeOfSmallView = mZegoVideoViewMode;
+        vlBigView.setZegoVideoViewMode(needToSwitchFullScreenOfSmallView, modeOfSmallView);
+        setZegoVideoViewMode(needToSwitchFullScreenOfBigView, modeOfBigView);
+
+
+        // 交换share urls
+        List<String> listShareUrlsOfBifView = vlBigView.getListShareUrls();
+        List<String> listShareUrlsOfSmallView = mListShareUrls;
+        vlBigView.setListShareUrls(listShareUrlsOfSmallView);
+        setListShareUrls(listShareUrlsOfBifView);
     }
 
-    public void setZegoAVKit(ZegoAVKit zegoAVKit){
-        mZegoAVKit = zegoAVKit;
-    }
-
-    public boolean isFree(){
-        return  TAG_VIEW_IS_FREE.equals(mLiveTag);
+    /**
+     * 设置播放质量.
+     * @param quality
+     */
+    public void setLiveQuality(int quality) {
+        if (quality >= 0 && quality <= 3) {
+            mLiveQuality = quality;
+            mTvQualityColor.setBackgroundResource(mArrColor[quality]);
+            mTvQuality.setText(mResources.getString(R.string.live_quality, mArrLiveQuality[quality]));
+        }
     }
 
     public int getLiveQuality() {
@@ -190,142 +324,109 @@ public class ViewLive extends RelativeLayout {
         return mLiveTag;
     }
 
-    public int getStreamOrdinal(){
+    public int getStreamOrdinal() {
         return getStreamOrdinalFromLiveTag(mLiveTag);
     }
 
-    public String getStreamID(){
+    public String getStreamID() {
         return getStreamIDFromLiveTag(mLiveTag);
     }
 
-    public void toFullScreen(ViewLive vlBigView){
-
-        String liveTagOfBigView = vlBigView.getLiveTag();
-        String liveTagOfSmallView = mLiveTag;
-
-        // 交换view
-        int streamOrdinalOfBigView = getStreamOrdinalFromLiveTag(liveTagOfBigView);
-        switch (streamOrdinalOfBigView) {
-            case 0:
-            case 1:
-            case 2:
-                mZegoAVKit.setRemoteView(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinalOfBigView), mTextureView);
-                break;
-            case PUBLISH_STREAM_ORDINAL:
-                mZegoAVKit.setLocalView(mTextureView);
-                break;
-        }
-
-        int streamOrdinalOfSmallView = getStreamOrdinalFromLiveTag(liveTagOfSmallView);
-        switch (streamOrdinalOfSmallView) {
-            case 0:
-            case 1:
-            case 2:
-                mZegoAVKit.setRemoteView(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinalOfSmallView), vlBigView.getTextureView());
-                break;
-            case PUBLISH_STREAM_ORDINAL:
-                mZegoAVKit.setLocalView(vlBigView.getTextureView());
-                break;
-        }
-        // 交换tag
-        vlBigView.setLiveTag(liveTagOfSmallView);
-        mLiveTag = liveTagOfBigView;
-
-        // 交换quality
-        int liveQualityOfBigView = vlBigView.getLiveQuality();
-        int liveQualityOfSmallView = mLiveQuality;
-        vlBigView.setLiveQuality(liveQualityOfSmallView);
-        mLiveQuality = liveQualityOfBigView;
-
-
-        // 交换view mode
-        ZegoAVKitCommon.ZegoVideoViewMode modeOfBigView = vlBigView.getZegoVideoViewMode();
-        ZegoAVKitCommon.ZegoVideoViewMode modeOfSmallView = mZegoVideoViewMode;
-        vlBigView.setZegoVideoViewMode(modeOfSmallView);
-        mZegoVideoViewMode = modeOfBigView;
-
-
-        // 交换"全屏播放"的标记
-        boolean isShowFullScreenOfBigView = vlBigView.isShowFullScreen();
-        boolean isShowFullScreenOfSmallView = mIsShowFullScreen;
-        vlBigView.setShowFullScreen(isShowFullScreenOfSmallView);
-        mIsShowFullScreen = isShowFullScreenOfBigView;
-
-        if(vlBigView.isShowFullScreen()){
-            vlBigView.getTvToFullScreen().setVisibility(View.VISIBLE);
-            vlBigView.getTvToFullScreen().setText(mTvToFullScreen.getText());
-        }else {
-            vlBigView.getTvToFullScreen().setVisibility(View.GONE);
-        }
-
-        if(mIsShowFullScreen){
-            mTvToFullScreen.setVisibility(View.VISIBLE);
-            mTvToFullScreen.setText(vlBigView.getTvToFullScreen().getText());
-        }else {
-            mTvToFullScreen.setVisibility(View.GONE);
-        }
-
-    }
-
-    public void setLiveQuality(int quality){
-        if(quality >= 0 && quality <= 3){
-            mLiveQuality = quality;
-            mTvQualityColor.setBackgroundResource(mArrColor[quality]);
-            mTvQuality.setText(mResources.getString(R.string.live_quality, mArrLiveQuality[quality]));
-        }
-    }
-
+    /**
+     * 设置tag.
+     *
+     * @param streamOrdinal
+     * @param streamID
+     */
     public void setLiveTag(int streamOrdinal, String streamID) {
         mLiveTag = streamOrdinal + SEPARATOR + streamID;
     }
 
+    /**
+     * 设置tag.
+     *
+     * @param liveTag
+     */
     public void setLiveTag(String liveTag) {
         mLiveTag = liveTag;
     }
 
-    public void setFree(){
-        mLiveTag = TAG_VIEW_IS_FREE;
-        mLiveQuality = 0;
-        setVisibility(View.INVISIBLE);
+    /**
+     * 返回"是否需要切换全屏".
+     *
+     * @return
+     */
+    public boolean isNeedToSwitchFullScreen() {
+        return mNeedToSwitchFullScreen;
     }
 
-    public void setRemoteViewMode(int width, int height){
-        if(width > height){
-            mZegoVideoViewMode = ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit;
-            mIsShowFullScreen = true;
-            mTvToFullScreen.setVisibility(View.VISIBLE);
-            mTvToFullScreen.setText(R.string.full_screen);
-        }else {
-            mZegoVideoViewMode = ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill;
-        }
 
-        int streamOrdinal = getStreamOrdinalFromLiveTag(mLiveTag);
-        switch (streamOrdinal) {
-            case 0:
-            case 1:
-            case 2:
-                mZegoAVKit.setRemoteViewMode(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinal), mZegoVideoViewMode);
-                break;
-        }
-    }
-
-    public void setZegoVideoViewMode(ZegoAVKitCommon.ZegoVideoViewMode mode){
+    /**
+     * 设置mode.
+     *
+     * @param mode
+     */
+    public void setZegoVideoViewMode(boolean needToSwitchFullScreen, ZegoAVKitCommon.ZegoVideoViewMode mode) {
+        mNeedToSwitchFullScreen = needToSwitchFullScreen;
         mZegoVideoViewMode = mode;
+
+        if(mTvSwitchToFullScreen != null){
+            if (mNeedToSwitchFullScreen) {
+                mTvSwitchToFullScreen.setVisibility(View.VISIBLE);
+
+                if (mode == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill) {
+                    // 退出全屏
+                    mTvSwitchToFullScreen.setText(R.string.exit_full_screen);
+
+                } else if (mode == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit) {
+                    // 全屏显示
+                    mTvSwitchToFullScreen.setText(R.string.full_screen);
+                }
+            } else {
+                mTvSwitchToFullScreen.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
-    public ZegoAVKitCommon.ZegoVideoViewMode getZegoVideoViewMode(){
+    /**
+     * 返回mode.
+     *
+     * @return
+     */
+    public ZegoAVKitCommon.ZegoVideoViewMode getZegoVideoViewMode() {
         return mZegoVideoViewMode;
     }
 
-    public boolean isShowFullScreen(){
-        return mIsShowFullScreen;
+    /**
+     * 设置分享url列表.
+     *
+     * @param listShareUrls
+     */
+    public void setListShareUrls(List<String> listShareUrls) {
+        mListShareUrls = listShareUrls;
+
+        if(mTvShare != null){
+            if (listShareUrls != null && listShareUrls.size() > 0) {
+                mTvShare.setVisibility(View.VISIBLE);
+            } else {
+                mTvShare.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
-    public void setShowFullScreen(boolean showFullScreen){
-        mIsShowFullScreen = showFullScreen;
+
+    public List<String> getListShareUrls() {
+        return mListShareUrls;
     }
 
-    public TextView getTvToFullScreen(){
-        return mTvToFullScreen;
+
+    public interface ViewLiveCallback {
+        void setLocalView(TextureView textureView);
+
+        void setRemoteView(ZegoAVKitCommon.ZegoRemoteViewIndex index, TextureView textureView);
+
+        void setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex index, ZegoAVKitCommon.ZegoVideoViewMode mode);
+
+        void shareToQQ(List<String> listShareUrls);
     }
 }

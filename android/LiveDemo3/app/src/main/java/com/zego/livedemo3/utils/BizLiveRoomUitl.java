@@ -40,7 +40,11 @@ public class BizLiveRoomUitl {
 
     public static final String DISAGREE_PUBLISH = "NO";
 
+    public static final String USER_NAME_PREFIX_SINGLE_ANCHOR = "#d-";
 
+    public static final String USER_NAME_PREFIX_MORE_ANCHORS = "#m-";
+
+    public static final String USER_NAME_PREFIX_MIX_STREAM = "#s-";
 
     public static String getChannel(long roomKey, long serverKey){
        return "0x" + Long.toHexString(roomKey) + "-0x" + Long.toHexString(serverKey);

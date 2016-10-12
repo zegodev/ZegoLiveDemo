@@ -202,6 +202,13 @@
 
 - (IBAction)onClosePublish:(id)sender
 {
+    
+    if (self.afterMixStreamID.length > 0)
+    {
+        // 正在混流，退出时关闭
+        [getZegoAV_ShareInstance() updateMixStreamConfig:nil];
+    }
+    
     [self closeAllStream];
     
     [getZegoAV_ShareInstance() logoutChannel];

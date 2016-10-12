@@ -341,17 +341,15 @@ public class BizLivePresenter {
      * @param roomKey
      * @param serverKey
      */
-    public void loginExistedRoom(long roomKey, long serverKey){
-        mBizLiveRoom.getInExistedRoom(roomKey, serverKey, PreferenceUtil.getInstance().getUserID(),
-                PreferenceUtil.getInstance().getUserName(), true);
+    public void loginExistedRoom(long roomKey, long serverKey, String userID, String userName){
+        mBizLiveRoom.getInExistedRoom(roomKey, serverKey, userID, userName, true);
     }
 
     /**
      * 创建新的房间并登陆.
      */
-    public void createAndLoginRoom(){
-        mBizLiveRoom.createRoomAndGetIn(PreferenceUtil.getInstance().getUserID(),
-                PreferenceUtil.getInstance().getUserName(), true);
+    public void createAndLoginRoom(String userID, String userName){
+        mBizLiveRoom.createRoomAndGetIn(userID, userName, true);
     }
 
     /**

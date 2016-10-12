@@ -17,6 +17,6 @@
     </declare-styleable>
 
     <declare-styleable name="ViewLive">
-        <attr name="isFullScreen" format="boolean" />
+        <attr name="isBigView" format="boolean" />
     </declare-styleable>
 </resources>
