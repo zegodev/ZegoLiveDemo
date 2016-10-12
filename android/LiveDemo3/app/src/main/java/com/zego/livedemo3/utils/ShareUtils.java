@@ -2,6 +2,7 @@ package com.zego.livedemo3.utils;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.tencent.connect.share.QQShare;
 import com.tencent.tauth.IUiListener;
@@ -47,7 +48,7 @@ public class ShareUtils {
      * @param listShareUrls
      */
     public void shareToQQ(Activity activity, List<String> listShareUrls, long roomKey, long serverKey, String streamID) {
-        if (listShareUrls != null && listShareUrls.size() > 0 && activity != null) {
+        if (listShareUrls != null && listShareUrls.size() >=2 && activity != null) {
 
             String url = "http://www.zego.im/share/index?video=" + listShareUrls.get(0) + "&rtmp=" + listShareUrls.get(1) + "&token=" + serverKey
                     + "&id=" + roomKey + "stream=" + streamID;
@@ -91,6 +92,8 @@ public class ShareUtils {
                 public void onCancel() {
                 }
             });
+        }else {
+            Toast.makeText(activity, "分享失败!", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -738,8 +738,16 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
                 if(viewLivePublish != null){
                     List<String> listUrls = new ArrayList<>();
                     if(info != null){
-                        listUrls.add(((String [])info.get("hlsList"))[0]);
-                        listUrls.add(((String [])info.get("rtmpList"))[0]);
+
+                        String [] hlsList = (String [])info.get("hlsList");
+                        if(hlsList != null && hlsList.length > 0){
+                            listUrls.add(hlsList[0]);
+                        }
+
+                        String [] rtmpList = (String [])info.get("rtmpList");
+                        if(rtmpList != null && rtmpList.length > 0){
+                            listUrls.add(rtmpList[0]);
+                        }
                     }
                     viewLivePublish.setListShareUrls(listUrls);
                 }
@@ -769,16 +777,34 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
 
             @Override
             public void onMixStreamConfigUpdate(int retCode, String mixStreamID, HashMap<String, Object> info) {
-                recordLog("混流地址:" + ((String[])info.get(ZegoConstants.KEY_RTMP_URL_LIST))[0]);
+                if(retCode == 0){
+                    ViewLive viewLivePublish = getViewLiveByStreamID(mPublishStreamID);
+                    if(viewLivePublish != null){
+                        List<String> listUrls = new ArrayList<>();
+                        if(info != null){
 
-                ViewLive viewLivePublish = getViewLiveByStreamID(mPublishStreamID);
-                if(viewLivePublish != null){
-                    List<String> listUrls = new ArrayList<>();
-                    if(info != null){
-                        listUrls.add(((String [])info.get("hlsList"))[0]);
-                        listUrls.add(((String [])info.get("rtmpList"))[0]);
+                            String [] hlsList = (String [])info.get("hlsList");
+                            if(hlsList != null && hlsList.length > 0){
+                                listUrls.add(hlsList[0]);
+                            }else {
+                                recordLog("混流失败, 没有hls地址...retCode:" + retCode);
+                            }
+
+                            String [] rtmpList = (String [])info.get("rtmpList");
+                            if(rtmpList != null && rtmpList.length > 0){
+                                recordLog("混流地址:" + rtmpList[0]);
+                                listUrls.add(rtmpList[0]);
+                            }else {
+                                recordLog("混流失败, 没有rtmp地址...retCode:" + retCode);
+                            }
+
+                            viewLivePublish.setListShareUrls(listUrls);
+                        }else {
+                            recordLog("混流失败, 混流信息为空...retCode:" + retCode);
+                        }
                     }
-                    viewLivePublish.setListShareUrls(listUrls);
+                }else {
+                    recordLog("混流失败...retCode:" + retCode);
                 }
 
                 mRlytControlHeader.bringToFront();

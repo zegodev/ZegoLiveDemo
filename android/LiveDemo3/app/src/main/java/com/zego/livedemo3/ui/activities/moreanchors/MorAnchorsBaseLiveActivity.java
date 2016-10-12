@@ -725,8 +725,16 @@ public abstract class MorAnchorsBaseLiveActivity extends AbsShowActivity {
                 if(viewLivePublish != null){
                     List<String> listUrls = new ArrayList<>();
                     if(info != null){
-                        listUrls.add(((String [])info.get("hlsList"))[0]);
-                        listUrls.add(((String [])info.get("rtmpList"))[0]);
+
+                        String [] hlsList = (String [])info.get("hlsList");
+                        if(hlsList != null && hlsList.length > 0){
+                            listUrls.add(hlsList[0]);
+                        }
+
+                        String [] rtmpList = (String [])info.get("rtmpList");
+                        if(rtmpList != null && rtmpList.length > 0){
+                            listUrls.add(rtmpList[0]);
+                        }
                     }
                     viewLivePublish.setListShareUrls(listUrls);
                 }
