@@ -59,7 +59,7 @@ android {
 
 
 def getDemoVersion(){
-    File sdk_version_file = file("../../../../bugly_demo_veriosn.txt")
+    File sdk_version_file = file("../bugly_demo_version.txt")
     return sdk_version_file.readLines()[0]
 }
 
