@@ -10,6 +10,7 @@
 #import "ZegoAnchorOptionViewController.h"
 #import "ZegoSettings.h"
 #import "ZegoChatCommand.h"
+#import "ZegoInstrument.h"
 
 #import <TencentOpenAPI/QQApiInterface.h>
 #import <TencentOpenAPI/QQApiInterfaceObject.h>
@@ -27,6 +28,9 @@
 //处理父view及子view弹框
 @property (nonatomic, strong) NSMutableArray *requestAlertList;
 @property (nonatomic, strong) NSMutableArray *requestAlertContextList;
+
+@property (nonatomic, strong) NSTimer *usageTimer;
+@property (nonatomic, strong) NSString *usageFilePath;
 
 @end
 
@@ -67,6 +71,64 @@
     
     // 监听电话事件
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSessionWasInterrupted:) name:AVAudioSessionInterruptionNotification object:nil];
+    
+    self.usageTimer = [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onUsage) userInfo:nil repeats:YES];
+    
+    self.usageFilePath = [self getLogFileName];
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [[NSFileManager defaultManager] removeItemAtPath:self.usageFilePath error:nil];
+    });
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.usageFilePath])
+    {
+        [[NSFileManager defaultManager] createFileAtPath:self.usageFilePath contents:nil attributes:nil];
+    }
+    
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.usageFilePath];
+    [fileHandle seekToEndOfFile];
+    NSString *content = [NSString stringWithFormat:@"%@\n", NSStringFromClass([self class])];
+    [fileHandle writeData:[content dataUsingEncoding:NSUTF8StringEncoding]];
+    [fileHandle closeFile];
+}
+
+- (NSString *)getLogFileName
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    if (paths.count == 0)
+    {
+        NSLog(@"Error! Cannot Get Caches Dir.");
+        return nil;
+    }
+    
+    NSString *cachesDir = [paths objectAtIndex:0];
+    NSString *logName = [cachesDir stringByAppendingPathComponent:@"usage.log"];
+    
+    return logName;
+}
+
+- (NSString *)getCurrentLogTime
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"[yyyy-dd-MM HH:mm:ss]";
+    
+    return [formatter stringFromDate:[NSDate date]];
+}
+
+- (void)onUsage
+{
+    float cpu = [[ZegoInstrument shareInstance] getCPUUsage];
+    float memory = [[ZegoInstrument shareInstance] getMemoryUsage];
+    float battery = [[ZegoInstrument shareInstance] getBatteryLevel];
+//    printf("cpu %f, memory %f, battery %f\n", cpu, memory, battery);
+    NSString *usage = [NSString stringWithFormat:@"cpu %.3f, memory %.3f, battery %.2f\n", cpu, memory, battery];
+    NSString *content = [NSString stringWithFormat:@"%@ %@", [self getCurrentLogTime], usage];
+    
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.usageFilePath];
+    [fileHandle seekToEndOfFile];
+    [fileHandle writeData:[content dataUsingEncoding:NSUTF8StringEncoding]];
+    [fileHandle closeFile];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,7 +141,11 @@
     [super viewWillDisappear:animated];
     
     if (self.isBeingDismissed)
+    {
         [[NSNotificationCenter defaultCenter] removeObserver:self];
+        [self.usageTimer invalidate];
+        self.usageTimer = nil;
+    }
 }
 
 //由子类来处理不同的业务逻辑

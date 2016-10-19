@@ -19,6 +19,8 @@
 		EF32D7051D659C6000A764FC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7041D659C5F00A764FC /* SystemConfiguration.framework */; };
 		EF32D7071D659C6A00A764FC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7061D659C6A00A764FC /* CoreGraphics.framework */; };
 		EF32D7091D659C7300A764FC /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EF32D7081D659C7300A764FC /* libsqlite3.tbd */; };
+		EF3AA9671DAF7C3A00AF960C /* ZegoInstrument.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3AA9661DAF7C3A00AF960C /* ZegoInstrument.m */; };
+		EF3AA9681DAF7C3A00AF960C /* ZegoInstrument.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3AA9661DAF7C3A00AF960C /* ZegoInstrument.m */; };
 		EF576B851D82A348002D5AED /* ZegoMoreAnchorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B841D82A348002D5AED /* ZegoMoreAnchorViewController.m */; };
 		EF576B861D82A348002D5AED /* ZegoMoreAnchorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B841D82A348002D5AED /* ZegoMoreAnchorViewController.m */; };
 		EF576B891D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF576B881D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.m */; };
@@ -125,6 +127,8 @@
 		EF32D7041D659C5F00A764FC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EF32D7061D659C6A00A764FC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		EF32D7081D659C7300A764FC /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		EF3AA9651DAF7C3A00AF960C /* ZegoInstrument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoInstrument.h; sourceTree = "<group>"; };
+		EF3AA9661DAF7C3A00AF960C /* ZegoInstrument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoInstrument.m; sourceTree = "<group>"; };
 		EF576B831D82A348002D5AED /* ZegoMoreAnchorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoMoreAnchorViewController.h; sourceTree = "<group>"; };
 		EF576B841D82A348002D5AED /* ZegoMoreAnchorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZegoMoreAnchorViewController.m; sourceTree = "<group>"; };
 		EF576B871D82AAF5002D5AED /* ZegoMixStreamAnchorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZegoMixStreamAnchorViewController.h; sourceTree = "<group>"; };
@@ -395,6 +399,8 @@
 				EF871D281D1A436700C2D08A /* advanced */,
 				EFF10EF81D1A297900ECE11E /* AppDelegate.h */,
 				EFF10EF91D1A297900ECE11E /* AppDelegate.m */,
+				EF3AA9651DAF7C3A00AF960C /* ZegoInstrument.h */,
+				EF3AA9661DAF7C3A00AF960C /* ZegoInstrument.m */,
 				EF871D0A1D1A329700C2D08A /* ZegoNavigationViewController.h */,
 				EF871D0B1D1A329700C2D08A /* ZegoNavigationViewController.m */,
 				EF871D0D1D1A32FD00C2D08A /* ZegoTabBarViewController.h */,
@@ -610,6 +616,7 @@
 				EFAF4B351D2B6C7800560B00 /* video_capture_external_demo.m in Sources */,
 				EFAF4B361D2B6C7800560B00 /* AppDelegate.m in Sources */,
 				EFAF4B371D2B6C7800560B00 /* ZegoAnchorOptionViewController.m in Sources */,
+				EF3AA9681DAF7C3A00AF960C /* ZegoInstrument.m in Sources */,
 				EFAF4B381D2B6C7800560B00 /* ZegoTabBarViewController.m in Sources */,
 				EFAF4B391D2B6C7800560B00 /* ZegoPublishViewController.m in Sources */,
 				EFAF4B3A1D2B6C7800560B00 /* main.m in Sources */,
@@ -642,6 +649,7 @@
 				EF871D2D1D1A437A00C2D08A /* video_capture_external_demo.m in Sources */,
 				EFF10EFA1D1A297900ECE11E /* AppDelegate.m in Sources */,
 				EFE0D8FA1D1B7F920090F719 /* ZegoAnchorOptionViewController.m in Sources */,
+				EF3AA9671DAF7C3A00AF960C /* ZegoInstrument.m in Sources */,
 				EF871D0F1D1A32FD00C2D08A /* ZegoTabBarViewController.m in Sources */,
 				EF9D0F5E1D23D17E00002545 /* ZegoPublishViewController.m in Sources */,
 				EFF10EF71D1A297900ECE11E /* main.m in Sources */,
