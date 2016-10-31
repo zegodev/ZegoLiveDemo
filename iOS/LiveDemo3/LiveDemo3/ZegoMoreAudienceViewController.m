@@ -495,18 +495,24 @@
     }
 }
 
-- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID
+- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID videoFPS:(double)fps videoBitrate:(double)kbs
 {
     UIView *view = self.viewContainersDict[streamID];
     if (view)
         [self updateQuality:quality view:view];
+    
+    self.lastPublishFPS = fps;
+    self.lastPublishKBS = kbs;
 }
 
-- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID
+- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID videoFPS:(double)fps videoBitrate:(double)kbs
 {
     UIView *view = self.viewContainersDict[streamID];
     if (view)
         [self updateQuality:quality view:view];
+    
+    self.lastPlayFPS = fps;
+    self.lastPlayKBS = kbs;
 }
 
 #pragma mark BizRoomStreamDelegate

@@ -877,7 +877,7 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
             }
 
             @Override
-            public void onPlayQualityUpdate(String streamID, int quality) {
+            public void onPlayQualityUpdate(String streamID, int quality, double videoFPS, double videoBitrate) {
                 ViewLive viewLive = getViewLiveByStreamID(streamID);
                 if(viewLive != null){
                     viewLive.setLiveQuality(quality);
@@ -886,7 +886,7 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
             }
 
             @Override
-            public void onPublishQulityUpdate(String streamID, int quality) {
+            public void onPublishQulityUpdate(String streamID, int quality, double videoFPS, double videoBitrate) {
                 ViewLive viewLive = getViewLiveByStreamID(streamID);
                 if(viewLive != null){
                     viewLive.setLiveQuality(quality);

@@ -48,6 +48,13 @@
             android:name="com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPlayActivity"
             android:configChanges="orientation|screenSize"
             >
+            </activity>
+
+        <activity
+            android:name="com.zego.livedemo3.ui.activities.externalrender.ExternalRenderPlayActivity"
+            android:configChanges="orientation|screenSize"
+            >
+
 
         </activity>
 

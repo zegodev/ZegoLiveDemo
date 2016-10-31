@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.zego.biz.BizRoom;
 import com.zego.biz.BizStream;
 import com.zego.livedemo3.R;
+import com.zego.livedemo3.ZegoApiManager;
 import com.zego.livedemo3.interfaces.OnUpdateRoomListListener;
 import com.zego.livedemo3.presenters.BizLivePresenter;
 import com.zego.livedemo3.ui.activities.mixstream.MixStreamPlayActivity;
@@ -17,6 +18,7 @@ import com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPlayActivity;
 import com.zego.livedemo3.ui.adapters.ListRoomAdapter;
 import com.zego.livedemo3.ui.adapters.SpaceItemDecoration;
 import com.zego.livedemo3.ui.base.AbsBaseFragment;
+import com.zego.livedemo3.ui.activities.externalrender.ExternalRenderPlayActivity;
 import com.zego.livedemo3.utils.BizLiveRoomUitl;
 
 import java.util.ArrayList;
@@ -103,7 +105,12 @@ public class RoomListFragment extends AbsBaseFragment {
 
                 switch (publishType){
                     case 1:
-                        SingleAnchorPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
+                        if(ZegoApiManager.getInstance().getUseExternalRender()){
+                            ExternalRenderPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
+
+                        }else {
+                            SingleAnchorPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
+                        }
                         break;
                     case 2:
                         MorAnchorsPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);

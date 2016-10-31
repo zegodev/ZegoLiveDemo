@@ -82,7 +82,7 @@ typedef enum : NSUInteger {
 /// \brief 混流图层信息
 @interface ZegoMixStreamInfo : NSObject
 
-@property (copy) NSString *streamID;    ///< 混流ID
+@property (copy) NSString *streamID;    ///< 要混流的单流ID
 @property int top;
 @property int left;
 @property int bottom;

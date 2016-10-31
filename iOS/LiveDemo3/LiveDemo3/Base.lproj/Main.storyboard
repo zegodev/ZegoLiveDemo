@@ -1051,7 +1051,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vp4-7o-n4A" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2424" y="-518"/>
+            <point key="canvasLocation" x="3156" y="-519"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="KOu-dK-U3l">
@@ -1067,7 +1067,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YAw-Wa-5Fh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1601" y="-518"/>
+            <point key="canvasLocation" x="1718" y="-566"/>
         </scene>
         <!--Zego Anchor Option View Controller-->
         <scene sceneID="AoC-ia-hTk">
@@ -1087,11 +1087,11 @@
                                     <constraint firstAttribute="height" constant="516" id="E7f-sj-JEw"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionSwitchCell" id="JfJ-0K-GNu" customClass="ZegoAnchorOptionSwitchCell">
-                                        <rect key="frame" x="0.0" y="56" width="303" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionSwitchCell" id="JfJ-0K-GNu" customClass="ZegoAnchorOptionSwitchCell">
+                                        <rect key="frame" x="0.0" y="55.5" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JfJ-0K-GNu" id="ZZJ-m7-ymP">
-                                            <frame key="frameInset" width="303" height="43"/>
+                                            <frame key="frameInset" width="1000" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lWC-Ck-7ns">
@@ -1114,11 +1114,11 @@
                                             <outlet property="titleLabel" destination="lWC-Ck-7ns" id="S9E-np-gDX"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionPickerCell" rowHeight="132" id="MzW-kB-uSh" customClass="ZegoAnchorOptionPickerCell">
-                                        <rect key="frame" x="0.0" y="100" width="303" height="132"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OptionPickerCell" rowHeight="132" id="MzW-kB-uSh" customClass="ZegoAnchorOptionPickerCell">
+                                        <rect key="frame" x="0.0" y="99.5" width="1000" height="132"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MzW-kB-uSh" id="4hV-Vu-FAQ">
-                                            <frame key="frameInset" width="303" height="131"/>
+                                            <frame key="frameInset" width="1000" height="131"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G7A-yK-wdI"/>
@@ -1586,6 +1586,91 @@
             </objects>
             <point key="canvasLocation" x="802" y="1630"/>
         </scene>
+        <!--Zego Render Audience View Controller-->
+        <scene sceneID="iHP-WD-Lcz">
+            <objects>
+                <viewController storyboardIdentifier="glAudienceID" id="rBB-fr-237" customClass="ZegoRenderAudienceViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zUa-js-s2c"/>
+                        <viewControllerLayoutGuide type="bottom" id="RmJ-aw-wxU"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0dh-vt-eh2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="udS-X6-fUb">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kNk-Bp-fsZ">
+                                <state key="normal" title="关闭"/>
+                                <connections>
+                                    <action selector="onCloseAudience:" destination="rBB-fr-237" eventType="touchUpInside" id="vn9-KL-6rT"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5n-JE-eq4">
+                                <state key="normal" title="请求连麦"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wKp-89-kzw">
+                                <state key="normal" title="直播设置"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aef-QN-Jeo">
+                                <state key="normal" title="静音"/>
+                                <connections>
+                                    <action selector="onMutedButton:" destination="rBB-fr-237" eventType="touchUpInside" id="5YQ-tt-7mQ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CQL-Rq-DX4">
+                                <state key="normal" title="日志"/>
+                                <connections>
+                                    <segue destination="leD-kB-IhU" kind="presentation" identifier="logSegueIdentifier" id="mC0-0H-urA"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="udS-X6-fUb" firstAttribute="top" secondItem="0dh-vt-eh2" secondAttribute="top" id="9Pj-mJ-tZa"/>
+                            <constraint firstItem="kNk-Bp-fsZ" firstAttribute="top" secondItem="zUa-js-s2c" secondAttribute="bottom" constant="24" id="CPV-d7-y68"/>
+                            <constraint firstItem="CQL-Rq-DX4" firstAttribute="centerY" secondItem="wKp-89-kzw" secondAttribute="centerY" id="IEA-0c-buh"/>
+                            <constraint firstItem="aef-QN-Jeo" firstAttribute="centerY" secondItem="wKp-89-kzw" secondAttribute="centerY" id="IbA-OB-goq"/>
+                            <constraint firstItem="wKp-89-kzw" firstAttribute="leading" secondItem="aef-QN-Jeo" secondAttribute="trailing" constant="24" id="J82-Kh-hKX"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="kNk-Bp-fsZ" secondAttribute="trailing" constant="5" id="O2b-zx-NLQ"/>
+                            <constraint firstItem="aef-QN-Jeo" firstAttribute="leading" secondItem="CQL-Rq-DX4" secondAttribute="trailing" constant="24" id="Qjy-j8-cpe"/>
+                            <constraint firstItem="kNk-Bp-fsZ" firstAttribute="leading" secondItem="g5n-JE-eq4" secondAttribute="trailing" constant="20" id="en5-4Z-8Ib"/>
+                            <constraint firstItem="RmJ-aw-wxU" firstAttribute="top" secondItem="udS-X6-fUb" secondAttribute="bottom" id="gTG-K5-cnB"/>
+                            <constraint firstItem="udS-X6-fUb" firstAttribute="leading" secondItem="0dh-vt-eh2" secondAttribute="leading" id="gXC-pk-GIZ"/>
+                            <constraint firstItem="g5n-JE-eq4" firstAttribute="centerY" secondItem="kNk-Bp-fsZ" secondAttribute="centerY" id="iuI-ic-EFX"/>
+                            <constraint firstItem="wKp-89-kzw" firstAttribute="centerY" secondItem="g5n-JE-eq4" secondAttribute="centerY" id="mZC-Wf-pKl"/>
+                            <constraint firstItem="g5n-JE-eq4" firstAttribute="leading" secondItem="wKp-89-kzw" secondAttribute="trailing" constant="20" id="n7A-g4-tfS"/>
+                            <constraint firstAttribute="trailing" secondItem="udS-X6-fUb" secondAttribute="trailing" id="tzv-de-Edu"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="closeButton" destination="kNk-Bp-fsZ" id="fmH-2w-IH6"/>
+                        <outlet property="logButton" destination="CQL-Rq-DX4" id="LFS-1C-7bO"/>
+                        <outlet property="mutedButton" destination="aef-QN-Jeo" id="t04-Mj-jH3"/>
+                        <outlet property="optionButton" destination="wKp-89-kzw" id="Ulv-Sj-ahT"/>
+                        <outlet property="playViewContainer" destination="udS-X6-fUb" id="6qt-g0-CPu"/>
+                        <outlet property="publishButton" destination="g5n-JE-eq4" id="jyo-mv-R6m"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V99-Tz-TuG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2022" y="331"/>
+        </scene>
+        <!--Zego Render View Controller-->
+        <scene sceneID="ktU-42-8Fl">
+            <objects>
+                <viewController storyboardIdentifier="renderStoryboardID" id="s1R-oC-biM" customClass="ZegoRenderViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R0K-um-fR1" customClass="GLKView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aps-au-ykp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2022" y="1123"/>
+        </scene>
     </scenes>
     <resources>
         <image name="btn_home_normal" width="27" height="27"/>
@@ -1593,6 +1678,6 @@
         <image name="btn_user_normal" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="h4Z-NC-hzs"/>
+        <segue reference="mC0-0H-urA"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -288,7 +288,6 @@
 - (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel streamInfo:(NSDictionary *)info
 {
     NSLog(@"%s, stream: %@", __func__, streamID);
-    
     self.isPublishing = YES;
     self.stopPublishButton.enabled = YES;
     [self.stopPublishButton setTitle:NSLocalizedString(@"停止直播", nil) forState:UIControlStateNormal];
@@ -329,11 +328,14 @@
     self.publishView = nil;
 }
 
-- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID
+- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID videoFPS:(double)fps videoBitrate:(double)kbs
 {
     UIView *view = self.viewContainersDict[streamID];
     if (view)
         [self updateQuality:quality view:view];
+    
+    self.lastPublishFPS = fps;
+    self.lastPublishKBS = kbs;
 }
 
 - (void)onAuxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount

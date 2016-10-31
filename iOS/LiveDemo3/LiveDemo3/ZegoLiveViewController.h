@@ -39,6 +39,14 @@
 //日志记录
 @property (nonatomic, strong) NSMutableArray *logArray;
 
+//最近一次推流帧率
+@property (nonatomic, assign) double lastPublishFPS;
+//最近一次推流码率
+@property (nonatomic, assign) double lastPublishKBS;
+//最近一次拉流码率
+@property (nonatomic, assign) double lastPlayFPS;
+//最近一次拉流帧率
+@property (nonatomic, assign) double lastPlayKBS;
 
 - (void)setAnchorConfig:(UIView *)publishView;
 

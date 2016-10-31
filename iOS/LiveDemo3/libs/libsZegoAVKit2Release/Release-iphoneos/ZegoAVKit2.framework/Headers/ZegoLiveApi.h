@@ -17,7 +17,6 @@
 #import "ZegoAVConfig.h"
 #import "ZegoAVDefines.h"
 
-
 @protocol ZegoVideoCaptureFactory;
 
 /// \brief 回调协议
@@ -70,12 +69,16 @@
 /// \brief 发布质量更新
 /// \param quality: 0 ~ 3 分别对应优良中差
 /// \param streamID 发布流ID
-- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID;
+/// \param fps 帧率(frame rate)
+/// \param kbs 码率(bit rate) kb/s
+- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID videoFPS:(double)fps videoBitrate:(double)kbs;
 
 /// \brief 观看质量更新
 /// \param quality: 0 ~ 3 分别对应优良中差
 /// \param streamID 观看流ID
-- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID;
+/// \param fps 帧率(frame rate)
+/// \param kbs 码率(bit rate) kb/s
+- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID videoFPS:(double)fps videoBitrate:(double)kbs;
 
 /// \brief 视频的宽度和高度变化通知,startPlay后，如果视频宽度或者高度发生变化(首次的值也会)，则收到该通知
 /// \param streamID 流的唯一标识
@@ -114,7 +117,6 @@
 - (void)onMixStreamConfigUpdate:(int)errorCode mixStream:(NSString *)mixStreamID streamInfo:(NSDictionary *)info;
 
 @end
-
 
 @interface ZegoLiveApi : NSObject
 

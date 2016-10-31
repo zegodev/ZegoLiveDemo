@@ -7,7 +7,7 @@
 //
 
 #import "ZegoSettings.h"
-
+#import <sys/utsname.h>
 #include <string>
 
 NSString *kZegoDemoUserIDKey            = @"userid";
@@ -132,11 +132,20 @@ NSString *kZegoDemoPublishingLiveID     = @"liveID";        ///< 当前直播频
             _userName = userName;
         } else {
             srand((unsigned)time(0));
-#if TARGET_OS_SIMULATOR
-            _userName = [NSString stringWithFormat:@"simulator-%u", (unsigned)rand()];
-#else
-            _userName = [NSString stringWithFormat:@"iphone-%u", (unsigned)rand()];
+            
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+            NSString *systemVerion = nil;
+            auto d = [UIDevice currentDevice];
+            struct utsname systemInfo;
+            uname(&systemInfo);
+            NSString* code = [NSString stringWithCString:systemInfo.machine
+                                                encoding:NSUTF8StringEncoding];
+            code = [code stringByReplacingOccurrencesOfString:@"," withString:@"."];
+            systemVerion = [NSString stringWithFormat:@"%@_%@_%@", d.model, code, d.systemVersion];
 #endif
+            
+            _userName = [NSString stringWithFormat:@"%@-%u", systemVerion, (unsigned)rand()];
+            
             [ud setObject:_userName forKey:kZegoDemoUserNameKey];
         }
     }

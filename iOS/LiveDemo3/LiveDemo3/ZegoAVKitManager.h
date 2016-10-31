@@ -31,6 +31,8 @@ extern "C"{
     
     NSString *ZegoGetSDKVersion();
     
+    BOOL isUsingExternalRender();
+    
 #import <ZegoLiveRoom/BizLiveRoom.h>
     
     BizLiveRoom* getBizRoomInstance();

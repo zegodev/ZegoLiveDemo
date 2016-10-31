@@ -13,6 +13,7 @@
 #import "ZegoMoreAudienceViewController.h"
 #import "ZegoMixStreamAudienceViewController.h"
 #import "ZegoStreamInfo.h"
+#import "ZegoRenderAudienceViewController.h"
 
 #define ITEM_COUNT_PER_PAGE 20
 
@@ -230,11 +231,22 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     if (liveType == 1)
     {
-        ZegoAudienceViewController *audienceViewController = (ZegoAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"audienceID"];
-        audienceViewController.bizToken = info.bizToken;
-        audienceViewController.bizID = info.bizID;
-        audienceViewController.currentStreamList = [NSArray arrayWithArray:info.streamList];
-        [self presentViewController:audienceViewController animated:YES completion:nil];
+        if (isUsingExternalRender())
+        {
+            ZegoRenderAudienceViewController *audienceViewController = (ZegoRenderAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"glAudienceID"];
+            audienceViewController.bizToken = info.bizToken;
+            audienceViewController.bizID = info.bizID;
+            audienceViewController.currentStreamList = [NSArray arrayWithArray:info.streamList];
+            [self presentViewController:audienceViewController animated:YES completion:nil];
+        }
+        else
+        {
+            ZegoAudienceViewController *audienceViewController = (ZegoAudienceViewController *)[storyboard instantiateViewControllerWithIdentifier:@"audienceID"];
+            audienceViewController.bizToken = info.bizToken;
+            audienceViewController.bizID = info.bizID;
+            audienceViewController.currentStreamList = [NSArray arrayWithArray:info.streamList];
+            [self presentViewController:audienceViewController animated:YES completion:nil];
+        }
     }
     else if (liveType == 2)
     {

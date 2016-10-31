@@ -19,6 +19,8 @@ public class ZegoApiManager {
 
     private ZegoAvConfig mZegoAvConfig;
 
+    private boolean mUseExternalRender = false;
+
     private ZegoApiManager() {
         mZegoAVKit = new ZegoAVKit();
     }
@@ -58,6 +60,11 @@ public class ZegoApiManager {
         };
         int appID = 1;
 
+        // 开启外部渲染, 少数企业的需求
+        if(mUseExternalRender){
+            mZegoAVKit.setExternalRender(true);
+        }
+
         // 初始化sdk
         mZegoAVKit.init(appID, signKey, context);
 
@@ -89,5 +96,9 @@ public class ZegoApiManager {
 
     public ZegoAvConfig getZegoAvConfig(){
         return  mZegoAvConfig;
+    }
+
+    public boolean getUseExternalRender(){
+        return mUseExternalRender;
     }
 }

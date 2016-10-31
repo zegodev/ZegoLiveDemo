@@ -15,7 +15,7 @@
 #import <TencentOpenAPI/QQApiInterface.h>
 #import <TencentOpenAPI/QQApiInterfaceObject.h>
 
-@interface ZegoLiveViewController () <UIAlertViewDelegate>
+@interface ZegoLiveViewController () <UIAlertViewDelegate, ZegoLiveApiAudioRecordDelegate>
 
 @property (assign) UIInterfaceOrientation currentOrientation;
 
@@ -31,6 +31,8 @@
 
 @property (nonatomic, strong) NSTimer *usageTimer;
 @property (nonatomic, strong) NSString *usageFilePath;
+
+@property (strong) NSMutableData *recordedAudio;
 
 @end
 
@@ -122,8 +124,16 @@
     float memory = [[ZegoInstrument shareInstance] getMemoryUsage];
     float battery = [[ZegoInstrument shareInstance] getBatteryLevel];
 //    printf("cpu %f, memory %f, battery %f\n", cpu, memory, battery);
-    NSString *usage = [NSString stringWithFormat:@"cpu %.3f, memory %.3f, battery %.2f\n", cpu, memory, battery];
+    NSString *videoInfo = nil;
+    if ([NSStringFromClass([self class]) containsString:@"Anchor"])
+        videoInfo = [NSString stringWithFormat:@"fps %.3f, kbs %.3f", self.lastPublishFPS, self.lastPublishKBS];
+    else if ([NSStringFromClass([self class]) containsString:@"Audience"])
+        videoInfo = [NSString stringWithFormat:@"fps %.3f, kbs %.3f", self.lastPlayFPS, self.lastPlayKBS];
+    
+    NSString *usage = [NSString stringWithFormat:@"cpu %.3f, memory %.3f, battery %.2f %@\n", cpu, memory, battery, videoInfo];
     NSString *content = [NSString stringWithFormat:@"%@ %@", [self getCurrentLogTime], usage];
+    
+    NSLog(@"onUsage %@", content);
     
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.usageFilePath];
     [fileHandle seekToEndOfFile];
@@ -1113,5 +1123,44 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
+#pragma mark - ZegoLiveApiAudioRecordDelegate
+
+- (void)onAudioRecord:(NSData *)audioData sampleRate:(int)sampleRate numOfChannels:(int)numOfChannels bitDepth:(int)bitDepth
+{
+    if (!self.recordedAudio)
+    {
+        self.recordedAudio = [NSMutableData data];
+    }
+    
+    [self.recordedAudio appendData:audioData];
+}
+
+- (void)enableAudioRecord:(BOOL)enable
+{
+    //
+    // * test audio record
+    //
+    [getZegoAV_ShareInstance() enableAudioRecord:enable];
+    if (enable)
+    {
+        [getZegoAV_ShareInstance() setAudioRecordDelegate:self];
+    }
+    else
+    {
+        [getZegoAV_ShareInstance() setAudioRecordDelegate:nil];
+        
+        if (self.recordedAudio)
+        {
+            NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+            NSString *cachesDir = [paths objectAtIndex:0];
+            NSString *auidoFilePathname = [cachesDir stringByAppendingPathComponent:@"recored_audio"];
+            
+            [self.recordedAudio writeToFile:auidoFilePathname atomically:YES];
+            self.recordedAudio = nil;
+        }
+    }
+}
 
 @end
