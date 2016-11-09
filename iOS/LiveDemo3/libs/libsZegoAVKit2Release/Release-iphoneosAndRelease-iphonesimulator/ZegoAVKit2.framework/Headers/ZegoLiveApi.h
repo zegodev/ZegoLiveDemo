@@ -23,6 +23,8 @@
 /// \note 所有回调调用都会发生在主线程
 @protocol ZegoLiveApiDelegate <NSObject>
 
+@optional
+
 /// \brief 获取流信息结果
 /// \param err 0 成功，进一步等待流信息更新，否则出错
 - (void)onLoginChannel:(NSString *)channel error:(uint32)err;
@@ -30,7 +32,7 @@
 /// \brief 发布直播成功
 /// \param streamID 发布流ID
 /// \param channel 所在 channel
-/// \param playUrl 主播流的播放 url
+/// \param info 主播流信息
 - (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel streamInfo:(NSDictionary *)info;
 
 /// \brief 发布直播失败
@@ -67,14 +69,14 @@
 - (void)onPlayStop:(uint32)err streamID:(NSString *)streamID channel:(NSString *)channel;
 
 /// \brief 发布质量更新
-/// \param quality: 0 ~ 3 分别对应优良中差
+/// \param quality 0 ~ 3 分别对应优良中差
 /// \param streamID 发布流ID
 /// \param fps 帧率(frame rate)
 /// \param kbs 码率(bit rate) kb/s
 - (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID videoFPS:(double)fps videoBitrate:(double)kbs;
 
 /// \brief 观看质量更新
-/// \param quality: 0 ~ 3 分别对应优良中差
+/// \param quality 0 ~ 3 分别对应优良中差
 /// \param streamID 观看流ID
 /// \param fps 帧率(frame rate)
 /// \param kbs 码率(bit rate) kb/s
@@ -103,7 +105,7 @@
 /// \param pData 数据缓存起始地址
 /// \param pDataLen [in] 缓冲区长度；[out]实际填充长度，必须为 0 或是缓冲区长度，代表有无混音数据
 /// \param pSampleRate 混音数据采样率
-/// \param pNumChannels 混音数据声道数
+/// \param pChannelCount 混音数据声道数
 /// \note 混音数据 bit depth 必须为 16
 - (void)onAuxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount;
 
@@ -169,7 +171,7 @@
 - (bool)setRemoteViewMode:(RemoteViewIndex)index mode:(ZegoVideoViewMode)mode;
 
 /// \brief 手机内置扬声器开关
-/// \param bEnable true打开，false关闭
+/// \param bOn true打开，false关闭
 /// \return true：成功；false:失败
 - (bool)setBuiltInSpeakerOn:(bool)bOn;
 
@@ -201,7 +203,7 @@
 - (bool)stopPreview;
 
 /// \brief 作为主播开始直播
-/// \brief 直播标题
+/// \brief title 直播标题
 /// \param streamID 流 ID
 /// \return true 成功，等待异步结果回调，否则失败
 - (bool)startPublishingWithTitle:(NSString *)title streamID:(NSString *)streamID;
@@ -216,7 +218,7 @@
 - (int)setAVConfig:(ZegoAVConfig*)config;
 
 /// \brief 设置手机姿势，用于校正主播输出视频朝向
-/// \param nOrientation 手机姿势
+/// \param orientation 手机姿势
 - (int)setAppOrientation:(UIInterfaceOrientation)orientation;
 
 /// \brief 设置是否使用前置摄像头
@@ -240,7 +242,7 @@
 - (bool)enableTorch:(bool) bEnable;
 
 /// \brief 主播方开启美颜功能
-/// \param bEnable true 打开，false 关闭
+/// \param feature 美颜特性
 /// \return true: 成功；false: 失败
 - (bool)enableBeautifying:(ZegoBeautifyFeature)feature;
 

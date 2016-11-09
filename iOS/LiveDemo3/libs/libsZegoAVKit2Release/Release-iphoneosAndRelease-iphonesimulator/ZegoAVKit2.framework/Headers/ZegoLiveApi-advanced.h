@@ -119,10 +119,10 @@ typedef enum : NSUInteger {
 - (void)setLoopbackVolume:(int)volume;
 
 /// \brief 获取 SDK 版本1
-- (NSString *)version;
++ (NSString *)version;
 
 /// \brief 获取 SDK 版本2
-- (NSString *)version2;
++ (NSString *)version2;
 
 /// \brief 混音开关
 /// \param bEable true 启用混音输入；false 关闭混音输入

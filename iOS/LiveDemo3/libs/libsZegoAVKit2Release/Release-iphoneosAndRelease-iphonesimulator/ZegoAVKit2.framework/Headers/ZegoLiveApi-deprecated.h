@@ -20,6 +20,14 @@
 /// \note 已废弃，请使用 setRemoteViewRotation、setLocalViewRotattion 和 setCaptureRotation
 - (bool)setDisplayRotation:(CAPTURE_ROTATE)rotate;
 
+/// \brief 获取 SDK 版本1
+/// \note 已废弃，请使用 +version
+- (NSString *)version;
+
+/// \brief 获取 SDK 版本2
+/// \note 已废弃，请使用 +version2
+- (NSString *)version2;
+
 @end
 
 

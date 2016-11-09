@@ -14,15 +14,15 @@
 		</data>
 		<key>Headers/ZegoLiveApi-advanced.h</key>
 		<data>
-		xSe16kF77yybhz3dXLRl7w5I8M4=
+		7vzoQFLqFMV4L8qsBjJYamsZfEQ=
 		</data>
 		<key>Headers/ZegoLiveApi-deprecated.h</key>
 		<data>
-		JH8h8kSsmJpZPwgHQh7Pdz5IbwY=
+		F469k105AKxm33Zehygx/dOFQ/s=
 		</data>
 		<key>Headers/ZegoLiveApi.h</key>
 		<data>
-		KSEktRaklRO5Aij3pecpqCk5+P0=
+		BAuJtG8FFnpbnuwsK6qxYavuZV0=
 		</data>
 		<key>Headers/ZegoUser.h</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		PTlC2bAvjIdSTeqAkQakXq56/Pc=
+		6kxF+f0C6DykO87T/HvXyNaXS9Q=
 		</data>
 		<key>ZegoAVKit2-Info.plist</key>
 		<data>
@@ -69,33 +69,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xSe16kF77yybhz3dXLRl7w5I8M4=
+			7vzoQFLqFMV4L8qsBjJYamsZfEQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			TqH6I33nD59KCUbifraxHixy3R3Zi3ZJg6QW2uOBbKk=
+			r7j9ajE6QMKeSxVZIYck696UU1d+nln7h9Xy0jUNkhs=
 			</data>
 		</dict>
 		<key>Headers/ZegoLiveApi-deprecated.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			JH8h8kSsmJpZPwgHQh7Pdz5IbwY=
+			F469k105AKxm33Zehygx/dOFQ/s=
 			</data>
 			<key>hash2</key>
 			<data>
-			IYjBMiLUcyQoPILte11mWtS3dXaOGzDKhsBNSAx9ams=
+			1h2SZDecfZUDS+jH2mCo8lgs8uqzasdO7Zd+xE8QieU=
 			</data>
 		</dict>
 		<key>Headers/ZegoLiveApi.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			KSEktRaklRO5Aij3pecpqCk5+P0=
+			BAuJtG8FFnpbnuwsK6qxYavuZV0=
 			</data>
 			<key>hash2</key>
 			<data>
-			Ukma6fc9Lwy5I3roh3S6+j0s8ciuVVH//xTGcNHDdA8=
+			yIHjk96/ODR8B85f+dVPQYiYlJLDTR0Xeii4ucWG0sI=
 			</data>
 		</dict>
 		<key>Headers/ZegoUser.h</key>
