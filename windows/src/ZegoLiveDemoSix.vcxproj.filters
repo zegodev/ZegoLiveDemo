@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{cb9a31c9-3140-4761-af5f-9284546b4a81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="chatroomsdk">
+      <UniqueIdentifier>{63c088be-c008-4fcc-a5b8-1d82796dea64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="avkitsdk">
+      <UniqueIdentifier>{5336f0ef-c593-456c-a609-a4a09ef55340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{2c34d48a-4abc-488c-8bc4-8ca5fe27e9d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model">
+      <UniqueIdentifier>{924a9ba5-2205-4ab8-805b-69fa8571a4a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{2d80dccf-751a-48f8-a4a3-8b5ecfed09ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\settings">
+      <UniqueIdentifier>{2bdfe955-e7a6-49ef-abe7-52de02414d56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\liveroom">
+      <UniqueIdentifier>{1169fd7a-4a7c-4e15-bccd-0169239f763c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\entry">
+      <UniqueIdentifier>{fb58b707-0225-48d8-b232-a5a5acc61a65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="signal">
+      <UniqueIdentifier>{abce828a-4c36-42b6-a02c-a2f11d002ba8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui\CGridListCtrlEx">
+      <UniqueIdentifier>{97ba5d83-4ef0-4f53-ba95-87f6c6b59d8a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ZegoLiveDemo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\ZegoBase.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ZegoRoomModel.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ZegoStreamModel.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\ZegoUtility.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="Model\ZegoUserModel.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\entry\ZegoEntryDlg.h">
+      <Filter>ui\entry</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\liveroom\TransparentStatic.h">
+      <Filter>ui\liveroom</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\liveroom\ZegoAVView.h">
+      <Filter>ui\liveroom</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\liveroom\ZegoRoomDlg.h">
+      <Filter>ui\liveroom</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\settings\ZegoSettingsDlg.h">
+      <Filter>ui\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\settings\ZegoSettingsModel.h">
+      <Filter>ui\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\sigslot.h">
+      <Filter>signal</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\ZegoSDKSignal.h">
+      <Filter>signal</Filter>
+    </ClInclude>
+    <ClInclude Include="signal\ZegoSigslotDefine.h">
+      <Filter>signal</Filter>
+    </ClInclude>
+    <ClInclude Include="config\SimpleIni.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="config\ZegoUserConfig.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ChatRoomSdk\include\ZegoAPIDefines.h">
+      <Filter>chatroomsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ChatRoomSdk\include\ZegoChatRoom.h">
+      <Filter>chatroomsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ChatRoomSdk\include\ZegoChatRoomCallback.h">
+      <Filter>chatroomsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\kernel\include\ZegoAVApi.h">
+      <Filter>avkitsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\kernel\include\ZegoAVCallback.h">
+      <Filter>avkitsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\kernel\include\ZegoAVDefines.h">
+      <Filter>avkitsdk</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTrait.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTraitButton.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTraitImage.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTraitText.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTraitVisitor.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridListCtrlEx.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridRowTrait.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridRowTraitText.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\CGridRowTraitVisitor.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\CGridListCtrlX\ViewConfigSection.h">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ZegoLiveDemo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\ZegoBase.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ZegoRoomModel.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ZegoStreamModel.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="Model\ZegoUserModel.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\entry\ZegoEntryDlg.cpp">
+      <Filter>ui\entry</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\liveroom\TransparentStatic.cpp">
+      <Filter>ui\liveroom</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\liveroom\ZegoAVView.cpp">
+      <Filter>ui\liveroom</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\liveroom\ZegoRoomDlg.cpp">
+      <Filter>ui\liveroom</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\settings\ZegoSettingsDlg.cpp">
+      <Filter>ui\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\settings\ZegoSettingsModel.cpp">
+      <Filter>ui\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="signal\ZegoSDKSignal.cpp">
+      <Filter>signal</Filter>
+    </ClCompile>
+    <ClCompile Include="config\ZegoUserConfig.cpp">
+      <Filter>config</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\CGridListCtrlX\CGridColumnTraitButton.cpp">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\CGridListCtrlX\CGridColumnTraitImage.cpp">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\CGridListCtrlX\CGridColumnTraitText.cpp">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\CGridListCtrlX\CGridListCtrlEx.cpp">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\CGridListCtrlX\CGridRowTraitText.cpp">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\CGridListCtrlX\ViewConfigSection.cpp">
+      <Filter>ui\CGridListCtrlEx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ZegoLiveDemo.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ZegoLiveDemo.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\a.pcm">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ZegoLiveDemo.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

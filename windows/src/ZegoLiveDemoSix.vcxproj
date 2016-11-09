@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DBED0546-F7C1-4353-A477-300B9613BC36}</ProjectGuid>
+    <RootNamespace>ZegoLiveDemoSix</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(ProjectDir)..\libs\Debug;$(WindowsSdk_71A_LibraryPath_x86)</LibraryPath>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;;$(WindowsSdk_71A_LibraryPath_x86)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);ZEGOAVKIT_IMPORT</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>rapidjson\;..\include\kernel\include;$(ProjectDir);..\include\ChatRoomSdk\include;model\;base\;signal\;ui\settings\;ui\entry\;ui\liveroom\;ui\;config\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessToFile>false</PreprocessToFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>zegoavkit.lib;ChatRoomSdk.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OutputFile>$(ProjectDir)\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <PreBuildEvent>
+      <Command>if Exist   "$(ProjectDir)..\..\..\..\kernel\include" (echo D | xcopy  /Y   "$(ProjectDir)..\..\..\..\kernel\include"   "$(ProjectDir)..\include\kernel\include")
+if Exist   "$(ProjectDir)..\..\ChatRoomSdk\include" (echo D | xcopy  /Y   "$(ProjectDir)..\..\ChatRoomSdk\include"   "$(ProjectDir)..\include\ChatRoomSdk\include")
+
+if Exist   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.lib" (echo F | xcopy  /Y   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.lib"  "$(ProjectDir)..\lib\$(Configuration)\zegoavkit.lib")
+if Exist   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.lib" (echo F | xcopy  /Y   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.lib"   "$(ProjectDir)..\lib\$(Configuration)\ChatRoomSdk.lib")
+
+if Exist   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.dll" (echo F | xcopy  /Y   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.dll"  "$(ProjectDir)..\bin\$(Configuration)\zegoavkit.dll")
+if Exist   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.dll" (echo F | xcopy  /Y   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.dll"  "$(ProjectDir)\$(Configuration)\zegoavkit.dll")
+if Exist   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.dll" (echo F | xcopy  /Y   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.dll"   "$(ProjectDir)..\bin\$(Configuration)\ChatRoomSdk.dll")
+if Exist   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.dll" (echo F | xcopy  /Y   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.dll"   "$(ProjectDir)\$(Configuration)\ChatRoomSdk.dll")
+
+if Exist   "$(ProjectDir)res\a.pcm" (echo F | xcopy  /Y   "$(ProjectDir)res\a.pcm"  "$(ProjectDir)..\bin\$(Configuration)\a.pcm")</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>if Exist  "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" (echo F | xcopy  /Y  "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)..\bin\$(Configuration)\$(TargetName)$(TargetExt)")
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions);ZEGOAVKIT_IMPORT</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>rapidjson\;..\include\kernel\include;$(ProjectDir);..\include\ChatRoomSdk\include;model\;base\;signal\;ui\settings\;ui\entry\;ui\liveroom\;ui\;config\</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>zegoavkit.lib;ChatRoomSdk.lib</AdditionalDependencies>
+      <OutputFile>$(ProjectDir)\$(Configuration)\$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\lib\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PreBuildEvent>
+      <Command>if Exist   "$(ProjectDir)..\..\..\..\kernel\include" (echo D | xcopy  /Y   "$(ProjectDir)..\..\..\..\kernel\include"   "$(ProjectDir)..\include\kernel\include")
+if Exist   "$(ProjectDir)..\..\ChatRoomSdk\include" (echo D | xcopy  /Y   "$(ProjectDir)..\..\ChatRoomSdk\include"   "$(ProjectDir)..\include\ChatRoomSdk\include")
+
+if Exist   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.lib" (echo F | xcopy  /Y   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.lib"  "$(ProjectDir)..\lib\$(Configuration)\zegoavkit.lib")
+if Exist   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.lib" (echo F | xcopy  /Y   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.lib"   "$(ProjectDir)..\lib\$(Configuration)\ChatRoomSdk.lib")
+
+if Exist   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.dll" (echo F | xcopy  /Y   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.dll"  "$(ProjectDir)..\bin\$(Configuration)\zegoavkit.dll")
+if Exist   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.dll" (echo F | xcopy  /Y   "$(ProjectDir)..\..\zegoavkit\$(Configuration)\zegoavkit.dll"  "$(ProjectDir)\$(Configuration)\zegoavkit.dll")
+if Exist   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.dll" (echo F | xcopy  /Y   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.dll"   "$(ProjectDir)..\bin\$(Configuration)\ChatRoomSdk.dll")
+if Exist   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.dll" (echo F | xcopy  /Y   "$(ProjectDir)..\..\ChatRoomSdk\libs\vs2015\$(Configuration)\ChatRoomSdk.dll"   "$(ProjectDir)\$(Configuration)\ChatRoomSdk.dll")
+
+if Exist   "$(ProjectDir)res\a.pcm" (echo F | xcopy  /Y   "$(ProjectDir)res\a.pcm"  "$(ProjectDir)..\bin\$(Configuration)\a.pcm")</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>if Exist  "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" (echo F | xcopy  /Y  "$(ProjectDir)$(Configuration)\$(TargetName)$(TargetExt)" "$(ProjectDir)..\bin\$(Configuration)\$(TargetName)$(TargetExt)")
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\ChatRoomSdk\include\ZegoAPIDefines.h" />
+    <ClInclude Include="..\include\ChatRoomSdk\include\ZegoChatRoom.h" />
+    <ClInclude Include="..\include\ChatRoomSdk\include\ZegoChatRoomCallback.h" />
+    <ClInclude Include="..\include\kernel\include\ZegoAVApi.h" />
+    <ClInclude Include="..\include\kernel\include\ZegoAVCallback.h" />
+    <ClInclude Include="..\include\kernel\include\ZegoAVDefines.h" />
+    <ClInclude Include="Base\ZegoUtility.h" />
+    <ClInclude Include="Base\ZegoBase.h" />
+    <ClInclude Include="config\SimpleIni.h" />
+    <ClInclude Include="config\ZegoUserConfig.h" />
+    <ClInclude Include="Model\ZegoRoomModel.h" />
+    <ClInclude Include="Model\ZegoStreamModel.h" />
+    <ClInclude Include="Model\ZegoUserModel.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="signal\sigslot.h" />
+    <ClInclude Include="signal\ZegoSDKSignal.h" />
+    <ClInclude Include="signal\ZegoSigslotDefine.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTrait.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTraitButton.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTraitImage.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTraitText.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridColumnTraitVisitor.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridListCtrlEx.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridRowTrait.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridRowTraitText.h" />
+    <ClInclude Include="ui\CGridListCtrlX\CGridRowTraitVisitor.h" />
+    <ClInclude Include="ui\CGridListCtrlX\ViewConfigSection.h" />
+    <ClInclude Include="ui\entry\ZegoEntryDlg.h" />
+    <ClInclude Include="ui\liveroom\TransparentStatic.h" />
+    <ClInclude Include="ui\liveroom\ZegoAVView.h" />
+    <ClInclude Include="ui\liveroom\ZegoRoomDlg.h" />
+    <ClInclude Include="ui\settings\ZegoSettingsDlg.h" />
+    <ClInclude Include="ui\settings\ZegoSettingsModel.h" />
+    <ClInclude Include="ZegoLiveDemo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Base\ZegoBase.cpp" />
+    <ClCompile Include="config\ZegoUserConfig.cpp" />
+    <ClCompile Include="Model\ZegoRoomModel.cpp" />
+    <ClCompile Include="Model\ZegoStreamModel.cpp" />
+    <ClCompile Include="Model\ZegoUserModel.cpp" />
+    <ClCompile Include="signal\ZegoSDKSignal.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ui\CGridListCtrlX\CGridColumnTraitButton.cpp" />
+    <ClCompile Include="ui\CGridListCtrlX\CGridColumnTraitImage.cpp" />
+    <ClCompile Include="ui\CGridListCtrlX\CGridColumnTraitText.cpp" />
+    <ClCompile Include="ui\CGridListCtrlX\CGridListCtrlEx.cpp" />
+    <ClCompile Include="ui\CGridListCtrlX\CGridRowTraitText.cpp" />
+    <ClCompile Include="ui\CGridListCtrlX\ViewConfigSection.cpp" />
+    <ClCompile Include="ui\entry\ZegoEntryDlg.cpp" />
+    <ClCompile Include="ui\liveroom\TransparentStatic.cpp" />
+    <ClCompile Include="ui\liveroom\ZegoAVView.cpp" />
+    <ClCompile Include="ui\liveroom\ZegoRoomDlg.cpp" />
+    <ClCompile Include="ui\settings\ZegoSettingsDlg.cpp" />
+    <ClCompile Include="ui\settings\ZegoSettingsModel.cpp" />
+    <ClCompile Include="ZegoLiveDemo.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ZegoLiveDemo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\a.pcm" />
+    <None Include="res\ZegoLiveDemo.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\ZegoLiveDemo.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="ZegoLiveDemo.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
