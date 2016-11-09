@@ -72,7 +72,7 @@ NSString *const kZEGO_CHAT_DISAGREE_PUBLISH = @"NO";
         return;
     }
     
-    [getBizRoomInstance() sendBroadcastCustomMsgInChatRoom:data];
+    [getBizRoomInstance() sendBroadcastCustomMsgInChatRoom:data isPublicRoom:YES];
 }
 
 + (NSDictionary *)getRequestPublishRsp:(NSData *)data

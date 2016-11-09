@@ -19,6 +19,7 @@
 #-keep class com.zego.zegoavkit2.**{*;}
 #-keep class com.zego.ve.**{*;}
 -keep class com.zego.**{*;}
+-keep class com.google.**{*;}
 
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
@@ -31,3 +32,6 @@
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
 }
+
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}

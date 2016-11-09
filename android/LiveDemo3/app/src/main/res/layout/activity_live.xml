@@ -3,7 +3,6 @@
     android:id="@+id/coordinatorLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,14 +17,15 @@
             android:background="@color/bg_black"
             android:orientation="vertical">
 
-            <com.zego.livedemo3.widgets.ViewLive
+            <com.zego.livedemo3.ui.widgets.ViewLive
                 android:id="@+id/vl_big_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:isBigView="true"
                 />
 
 
-            <com.zego.livedemo3.widgets.ViewLive
+            <com.zego.livedemo3.ui.widgets.ViewLive
                 android:id="@+id/vl_small_view1"
                 android:layout_width="@dimen/local_view_width"
                 android:layout_height="@dimen/local_view_height"
@@ -34,14 +34,15 @@
                 android:layout_marginBottom="@dimen/dimen_10"
                 android:visibility="invisible"/>
 
-            <com.zego.livedemo3.widgets.ViewLive
+            <com.zego.livedemo3.ui.widgets.ViewLive
                 android:id="@+id/vl_small_view2"
                 android:layout_width="@dimen/local_view_width"
                 android:layout_height="@dimen/local_view_height"
                 android:layout_alignBottom="@id/vl_small_view1"
                 android:layout_marginRight="@dimen/dimen_5"
                 android:layout_toLeftOf="@id/vl_small_view1"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                />
         </RelativeLayout>
 
         <RelativeLayout
@@ -111,7 +112,7 @@
         </RelativeLayout>
     </FrameLayout>
 
-    <com.zego.livedemo3.widgets.PublishSettingsPannel
+    <com.zego.livedemo3.ui.widgets.PublishSettingsPannel
         android:id="@+id/publishSettingsPannel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -122,7 +123,7 @@
         app:layout_behavior="@string/bottom_sheet_behavior"
         >
 
-    </com.zego.livedemo3.widgets.PublishSettingsPannel>
+    </com.zego.livedemo3.ui.widgets.PublishSettingsPannel>
 
 </android.support.design.widget.CoordinatorLayout>
 

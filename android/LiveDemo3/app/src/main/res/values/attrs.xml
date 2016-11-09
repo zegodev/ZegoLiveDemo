@@ -15,4 +15,8 @@
         <attr name="progressColor" format="color" />
         <attr name="progressBackgroundColor" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="ViewLive">
+        <attr name="isBigView" format="boolean" />
+    </declare-styleable>
 </resources>

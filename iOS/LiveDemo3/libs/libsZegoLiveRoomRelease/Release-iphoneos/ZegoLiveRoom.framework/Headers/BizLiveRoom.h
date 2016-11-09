@@ -42,17 +42,17 @@ BIZ_EXTERN NSString *const kUserInfoUserNameKey;
 
 @protocol BizRoomStreamDelegate <NSObject>
 
-- (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken;
-- (void)onLeaveRoom:(int)err;
-- (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken;
+- (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken isPublicRoom:(bool)isPublicRoom;
+- (void)onLeaveRoom:(int)err isPublicRoom:(bool)isPublicRoom;
+- (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken isPublicRoom:(bool)isPublicRoom;
 
-- (void)onStreamUpdate:(NSArray<NSDictionary *>*)streamList flag:(int)flag;
-- (void)onStreamCreate:(NSString *)streamID url:(NSString *)url;
+- (void)onStreamUpdate:(NSArray<NSDictionary *>*)streamList flag:(int)flag isPublicRoom:(bool)isPublicRoom;
+- (void)onStreamCreate:(NSString *)streamID url:(NSString *)url isPublicRoom:(bool)isPublicRoom;
 
-- (void)onSendMessage:(int)nErrorCode content:(NSData *)content messageType:(int)type;
-- (void)onReceiveMessage:(NSData *)content messageType:(int)type;
+- (void)onSendMessage:(int)nErrorCode content:(NSData *)content messageType:(int)type isPublicRoom:(bool)isPublicRoom;
+- (void)onReceiveMessage:(NSData *)content messageType:(int)type isPublicRoom:(bool)isPublicRoom;
 
-- (void)onRoomUserUpdate:(NSArray<NSDictionary *> *)userInfoList flag:(int)flag;
+- (void)onRoomUserUpdate:(NSArray<NSDictionary *> *)userInfoList flag:(int)flag isPublicRoom:(bool)isPublicRoom;
 
 @end
 
@@ -71,16 +71,16 @@ BIZ_EXTERN NSString *const kUserInfoUserNameKey;
 - (bool)setNetType:(int)netType;
 
 ///带聊天室功能的直播接口，都带有ChatRoom结尾的
-- (bool)loginLiveRoom:(NSString *)userID userName:(NSString *)userName bizToken:(unsigned int)bizToken bizID:(unsigned int)bizID;
+- (bool)loginLiveRoom:(NSString *)userID userName:(NSString *)userName bizToken:(unsigned int)bizToken bizID:(unsigned int)bizID isPublicRoom:(BOOL)isPublicRoom;
 
 /// \brief 在聊天室里广播文本消息
-- (bool)sendBroadcastTextMsgInChatRoom:(NSString*)msg;
+- (bool)sendBroadcastTextMsgInChatRoom:(NSString*)msg isPublicRoom:(BOOL)isPublicRoom;
 
-- (bool)sendBroadcastCustomMsgInChatRoom:(NSData *)data;
+- (bool)sendBroadcastCustomMsgInChatRoom:(NSData *)data isPublicRoom:(BOOL)isPublicRoom;
 
 /// \brief 退出聊天室
 /// \return true：退出成功；false:退出失败
-- (bool) leaveLiveRoom;
+- (bool)leaveLiveRoom:(BOOL)isPublicRoom;
 
 /// \brief 获取直播列表
 - (bool) getShowList:(unsigned int)indexBegin count:(unsigned int)count;
@@ -96,14 +96,14 @@ BIZ_EXTERN NSString *const kUserInfoUserNameKey;
  *
  *  @return result
  */
-- (bool)cteateStreamInRoom:(NSString *)streamTitle preferredStreamID:(NSString *)preferredStreamID;
+- (bool)cteateStreamInRoom:(NSString *)streamTitle preferredStreamID:(NSString *)preferredStreamID isPublicRoom:(BOOL)isPublicRoom;
 
 /**
  *  获取当前进入房间中正在直播的流列表，通过onStreamUpdate回调获取结果
  *
  *  @return result
  */
-- (bool)getStreamList;
+- (bool)getStreamList:(BOOL)isPublicRoom;
 
 /**
  *  上报stream 行为
@@ -114,6 +114,6 @@ BIZ_EXTERN NSString *const kUserInfoUserNameKey;
  *
  *  @return result
  */
-- (bool)reportStreamAction:(int)actionType streamID:(NSString *)streamID userID:(NSString *)userID;
+- (bool)reportStreamAction:(int)actionType streamID:(NSString *)streamID userID:(NSString *)userID isPublicRoom:(BOOL)isPublicRoom;
 
 @end

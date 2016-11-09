@@ -35,8 +35,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden"
+            android:configChanges="orientation|screenSize"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -45,21 +45,56 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.zego.livedemo3.PublishActivity"
+            android:name="com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPlayActivity"
+            android:configChanges="orientation|screenSize"
+            >
+            </activity>
+
+        <activity
+            android:name="com.zego.livedemo3.ui.activities.externalrender.ExternalRenderPlayActivity"
+            android:configChanges="orientation|screenSize"
+            >
+
+
+        </activity>
+
+        <activity
+            android:name="com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPublishActivity"
             android:configChanges="orientation|screenSize"
             >
 
         </activity>
 
         <activity
-            android:name="com.zego.livedemo3.PlayActivity"
+            android:name="com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsPublishActivity"
             android:configChanges="orientation|screenSize"
             >
 
         </activity>
 
         <activity
-            android:name="com.zego.livedemo3.AboutZegoActivity"
+            android:name="com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsPlayActivity"
+            android:configChanges="orientation|screenSize"
+            >
+
+        </activity>
+
+        <activity
+            android:name="com.zego.livedemo3.ui.activities.mixstream.MixStreamPlayActivity"
+            android:configChanges="orientation|screenSize"
+            >
+
+        </activity>
+
+        <activity
+            android:name="com.zego.livedemo3.ui.activities.mixstream.MixStreamPublishActivity"
+            android:configChanges="orientation|screenSize"
+            >
+
+        </activity>
+
+        <activity
+            android:name="com.zego.livedemo3.ui.activities.AboutZegoActivity"
             android:screenOrientation="portrait"
             >
 
@@ -67,8 +102,25 @@
 
 
         <activity
-            android:name=".LogListActivity"
+            android:name=".ui.activities.LogListActivity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:noHistory="true"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="tencent1105633775" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.tencent.connect.common.AssistActivity"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                  android:configChanges="orientation|keyboardHidden|screenSize"
+            />
 
     </application>
 

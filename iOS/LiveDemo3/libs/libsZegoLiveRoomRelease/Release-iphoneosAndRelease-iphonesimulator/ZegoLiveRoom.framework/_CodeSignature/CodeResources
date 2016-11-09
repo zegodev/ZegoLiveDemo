@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/BizLiveRoom.h</key>
 		<data>
-		ojSrIyOvmjX3GIbWdw7FaySVjAI=
+		1AY95hPdjsR7CzG6PK5S1LBENvw=
 		</data>
 		<key>Headers/ZegoAPIDefines.h</key>
 		<data>
@@ -14,7 +14,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		mrf7F/6U6Me4OO/eL9LRqyhd/bY=
+		P6hpLDMeGfZDgQEBBCtx7lG+2k8=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -23,11 +23,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ojSrIyOvmjX3GIbWdw7FaySVjAI=
+			1AY95hPdjsR7CzG6PK5S1LBENvw=
 			</data>
 			<key>hash2</key>
 			<data>
-			Rqxlpm7gPbD5ZKEKnmDxwKEydV0bhTpUiedWFVOxEgU=
+			b8WelmFv3qrXwbXprG4dUQYM28QxwiPNJzgPBbttxYY=
 			</data>
 		</dict>
 		<key>Headers/ZegoAPIDefines.h</key>
@@ -59,6 +59,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^version.plist$</key>
 		<true/>
@@ -104,6 +109,11 @@
 			<true/>
 			<key>weight</key>
 			<real>1100</real>
+		</dict>
+		<key>^Base\.lproj/</key>
+		<dict>
+			<key>weight</key>
+			<real>1010</real>
 		</dict>
 		<key>^Info\.plist$</key>
 		<dict>

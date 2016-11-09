@@ -7,13 +7,10 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 
 import com.zego.zegoavkit2.ZegoVideoCaptureDevice;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
@@ -39,7 +36,6 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
 
     private TextureView mView = null;
     private SurfaceTexture mTexture = null;
-    private SurfaceHolder mHolder = null;
 
     // Arbitrary queue depth.  Higher number means more memory allocated & held,
     // lower number means more sensitivity to processing time in the client (and
@@ -150,6 +146,10 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
     }
 
     protected int setViewMode(int nMode) {
+        return 0;
+    }
+
+    protected int setViewRotation(int nRotation) {
         return 0;
     }
 
@@ -383,8 +383,7 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
         }
 
         try {
-            //mCam.setPreviewTexture(mTexture);
-            mCam.setPreviewDisplay(mHolder);
+            mCam.setPreviewTexture(mTexture);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -477,6 +476,8 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
         VideoCaptureFormat format = new ZegoVideoCaptureDevice.VideoCaptureFormat();
         format.width = mWidth;
         format.height = mHeight;
+        format.strides[0] = mWidth;
+        format.strides[1] = mWidth;
         format.pixel_format = PIXEL_FORMAT_NV21;
         mClient.onByteBufferFrameCaptured(data, mFrameSize, format, System.currentTimeMillis(), 1000);
 

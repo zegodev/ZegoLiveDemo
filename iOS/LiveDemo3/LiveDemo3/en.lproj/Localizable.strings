@@ -21,7 +21,7 @@
 "直播结束,流ID：%@, error:%d" = "Live Stoped, Stream ID:%@, error:%d";
 "开始登录房间" = "Login Room";
 "创建流" = "Create a Stream";
-"登录房间成功. token %d, id %d" = "Login Room Succeed. token %d, id %d";
+"登录房间成功. token %d, id %d" = "Login Room Succeed. token 0x%x, id 0x%x";
 "登录房间失败. error: %d" = "Login Room Failed. error: %d";
 "连接失败, error: %d" = "Disconnect, error: %d";
 "退出房间, error: %d" = "Leave the Room, error: %d";
@@ -92,5 +92,31 @@
 "优" = "Excelent";
 "良" = "Good";
 "中" = "Medium";
-"差" = "bad";
+"差" = "Bad";
 "重新播放, 流ID:%@" = "Replay, Stream ID:%@";
+
+"Zego Only" = "Zego Only, Others Cannot Use this framework";
+"取消" = "Cancel";
+"需要访问相机" = "Camera Authorization";
+"需要访问麦克风" = "Microphone Authorization";
+"直播视频,访问相机" = "To broadcast, LiveDemo needs permission to access camera. Click the Settings Button,then toggle on the permissions swith for camera";
+"直播视频,访问麦克风" = "To broadcast, LiveDemo needs permission to access microphone. Click the settings Button, the toggle on the permissions swith for microphone";
+"设置权限" = "Setting";
+
+"没有安装QQ" = "You don't Install QQ";
+"联系我们" = "QQ:84328558\nWeChat:84328558";
+
+"进入全屏" = "FullScreen";
+"退出全屏" = "Exit";
+
+"混流结果: %d" = "Mix Result:%d";
+"混流rtmp: %@" = "Mix rtmp: %@";
+"混流hls: %@" = "Mix hls: %@";
+
+"请选择直播模式" = "Chose Live Type";
+"无连麦模式" = "Single Anchor";
+"连麦模式" = "More Anchor";
+"混流模式" = "Mix Stream";
+
+"播放混流" = "Mix Stream";
+"播放单流" = "Normal Stream";

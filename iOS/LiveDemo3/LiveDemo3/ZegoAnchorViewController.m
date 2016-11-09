@@ -29,24 +29,15 @@
 //创建stream后，server返回的streamID(当前直播的streamID)
 @property (nonatomic, copy) NSString *streamID;
 
-//正在观看房间里的其他直播
-@property (nonatomic, assign) BOOL isPlaying;
-
-//正在播放的streamList
-@property (nonatomic, strong) NSMutableArray *playStreamList;
-
-@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
-@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
-
 @property (nonatomic, assign) BOOL isPublishing;
 
 @property (nonatomic, strong) UIColor *defaultButtonColor;
 @property (nonatomic, strong) UIColor *disableButtonColor;
 
-//@property (nonatomic, strong) UIView *publishView;
-@property (nonatomic, strong) NSMutableArray *retryStreamList;
-
-
+@property (nonatomic, copy) NSString *sharedHls;
+@property (nonatomic, copy) NSString *sharedRtmp;
+@property (nonatomic, copy) NSString *bizToken;
+@property (nonatomic, copy) NSString *bizID;
 
 @end
 
@@ -58,11 +49,6 @@
     
     [self setupLiveKit];
     [self loginChatRoom];
-    
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _playStreamList = [[NSMutableArray alloc] init];
-    _retryStreamList = [[NSMutableArray alloc] init];
     
     self.stopPublishButton.enabled = NO;
     
@@ -114,6 +100,7 @@
     }
 }
 
+#pragma mark ZegoAVKit
 - (void)loginChannel
 {
     ZegoUser *user = [[ZegoSettings sharedInstance] getZegoUser];
@@ -126,33 +113,22 @@
     [self addLogString:logString];
 }
 
-- (void)closeAllStream
+#pragma mark ZegoChatRoom Kit
+- (void)loginChatRoom
 {
-    [getZegoAV_ShareInstance() stopPreview];
-    [getZegoAV_ShareInstance() setLocalView:nil];
-    [getZegoAV_ShareInstance() stopPublishing];
-    [self reportStreamAction:NO streamID:self.streamID];
-    [self removeStreamViewContainer:self.streamID];
-    self.publishView = nil;
+    ZegoUser *user = [[ZegoSettings sharedInstance] getZegoUser];
+    NSString *userName = [NSString stringWithFormat:@"#d-%@", user.userName];
+    [getBizRoomInstance() loginLiveRoom:user.userID userName:userName bizToken:0 bizID:0 isPublicRoom:YES];
     
-    if (self.isPlaying)
-    {
-        for (ZegoStreamInfo *info in self.playStreamList)
-        {
-            [getZegoAV_ShareInstance() stopPlayStream:info.streamID];
-            [self removeStreamViewContainer:info.streamID];
-        }
-    }
+    [self addLogString:[NSString stringWithFormat:NSLocalizedString(@"开始登录房间", nil)]];
+}
+
+- (void)createStream:(NSString *)preferredStreamID
+{
+    [getBizRoomInstance() cteateStreamInRoom:self.liveTitle preferredStreamID:preferredStreamID isPublicRoom:YES];
     
-    //    self.streamID = nil;
-    //    [self.playStreamList removeAllObjects];
-    
-    [self.viewContainersDict removeAllObjects];
-    [self.viewIndexDict removeAllObjects];
-    [self.retryStreamList removeAllObjects];
-    
-    self.isPublishing = NO;
-    self.isPlaying = NO;
+    NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"创建流", nil)];
+    [self addLogString:logString];
 }
 
 #pragma mark ZegoAV interface
@@ -163,13 +139,27 @@
 }
 
 #pragma mark close publish
+
+- (void)closeAllStream
+{
+    [getZegoAV_ShareInstance() stopPreview];
+    [getZegoAV_ShareInstance() setLocalView:nil];
+    [getZegoAV_ShareInstance() stopPublishing];
+    [self reportStreamAction:NO streamID:self.streamID];
+    [self removeStreamViewContainer:self.streamID];
+    [self.viewContainersDict removeAllObjects];
+    
+    self.publishView = nil;
+    self.isPublishing = NO;
+}
+
 - (IBAction)onClosePublish:(id)sender
 {
     [self closeAllStream];
     
     [getZegoAV_ShareInstance() logoutChannel];
     
-    [getBizRoomInstance() leaveLiveRoom];
+    [getBizRoomInstance() leaveLiveRoom:YES];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -195,6 +185,7 @@
     [self showPublishOption];
 }
 
+#pragma mark stop publish
 - (IBAction)onStopPublish:(id)sender
 {
     if (self.isPublishing)
@@ -213,6 +204,16 @@
     }
 }
 
+- (IBAction)onShare:(id)sender
+{
+    if (self.sharedHls.length == 0)
+        return;
+    
+    [self shareToQQ:self.sharedHls rtmp:self.sharedRtmp bizToken:self.bizToken bizID:self.bizID streamID:self.streamID];
+}
+
+#pragma mark PublishView create
+
 - (BOOL)updatePublishView:(UIView *)publishView
 {
     publishView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -221,7 +222,7 @@
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapView:)];
     [publishView addGestureRecognizer:tapGesture];
     
-    BOOL bResult = [self setContainerConstraints:publishView containerView:self.playViewContainer viewCount:0];
+    BOOL bResult = [self setContainerConstraints:publishView containerView:self.playViewContainer viewCount:self.playViewContainer.subviews.count - 1];
     if (bResult == NO)
     {
         [publishView removeFromSuperview];
@@ -275,38 +276,26 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
+    [self setupDeviceOrientation];
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);
     
     [self addLogString:[NSString stringWithFormat:NSLocalizedString(@"开始直播，流ID:%@", nil), self.streamID]];
-    
-    if (self.playStreamList.count != 0)
-    {
-        for (ZegoStreamInfo *info in self.playStreamList)
-        {
-            NSString *streamID = info.streamID;
-            if (self.viewContainersDict[streamID] != nil)
-                continue;
-            
-            [self createPlayStream:streamID];
-            
-            NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"继续播放之前的流, 流ID:%@", nil), streamID];
-            [self addLogString:logString];
-        }
-    }
 }
 
 /// \brief 发布直播成功
 - (void)onPublishSucc:(NSString *)streamID channel:(NSString *)channel streamInfo:(NSDictionary *)info
 {
     NSLog(@"%s, stream: %@", __func__, streamID);
-    
     self.isPublishing = YES;
     self.stopPublishButton.enabled = YES;
     [self.stopPublishButton setTitle:NSLocalizedString(@"停止直播", nil) forState:UIControlStateNormal];
     
     [self reportStreamAction:YES streamID:self.streamID];
+    
+    self.sharedHls = [info[kZegoHlsUrlListKey] firstObject];
+    self.sharedRtmp = [info[kZegoRtmpUrlListKey] firstObject];
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"发布直播成功,流ID:%@", nil), streamID];
     [self addLogString:logString];
@@ -334,25 +323,19 @@
         [self addLogString:logString];
     }
     
-    [self reportStreamAction:NO streamID:self.streamID];
+    [self reportStreamAction:NO streamID:streamID];
     [self removeStreamViewContainer:streamID];
     self.publishView = nil;
+}
+
+- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID videoFPS:(double)fps videoBitrate:(double)kbs
+{
+    UIView *view = self.viewContainersDict[streamID];
+    if (view)
+        [self updateQuality:quality view:view];
     
-//    self.streamID = nil;
-}
-
-- (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID
-{
-    UIView *view = self.viewContainersDict[streamID];
-    if (view)
-        [self updateQuality:quality view:view];
-}
-
-- (void)onPlayQualityUpdate:(int)quality stream:(NSString *)streamID
-{
-    UIView *view = self.viewContainersDict[streamID];
-    if (view)
-        [self updateQuality:quality view:view];
+    self.lastPublishFPS = fps;
+    self.lastPublishKBS = kbs;
 }
 
 - (void)onAuxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount
@@ -360,25 +343,8 @@
     [self auxCallback:pData dataLen:pDataLen sampleRate:pSampleRate channelCount:pChannelCount];
 }
 
-#pragma mark ZegoChatRoom Kit
-- (void)loginChatRoom
-{
-    ZegoUser *user = [[ZegoSettings sharedInstance] getZegoUser];    
-    [getBizRoomInstance() loginLiveRoom:user.userID userName:user.userName bizToken:0 bizID:0];
-    
-    [self addLogString:[NSString stringWithFormat:NSLocalizedString(@"开始登录房间", nil)]];
-}
-
-- (void)createStream:(NSString *)preferredStreamID
-{
-    [getBizRoomInstance() cteateStreamInRoom:self.liveTitle preferredStreamID:preferredStreamID];
-    
-    NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"创建流", nil)];
-    [self addLogString:logString];
-}
-
 #pragma mark ZeogStreamRoom delegate
-- (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken
+- (void)onLoginRoom:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken isPublicRoom:(bool)isPublicRoom
 {
     NSLog(@"%s, error: %d", __func__, err);
     if (err == 0)
@@ -388,6 +354,8 @@
         
         self.liveChannel = [[ZegoSettings sharedInstance] getChannelID:bizToken bizID:bizID];
         [self createStream:nil];
+        self.bizID = [NSString stringWithFormat:@"%u", bizID];
+        self.bizToken = [NSString stringWithFormat:@"%u", bizToken];
     }
     else
     {
@@ -396,15 +364,15 @@
     }
 }
 
-- (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken
+- (void)onDisconnected:(int)err bizID:(unsigned int)bizID bizToken:(unsigned int)bizToken isPublicRoom:(bool)isPublicRoom
 {
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"连接失败, error: %d", nil), err];
     [self addLogString:logString];
     
-    [self onClosePublish:nil];
+//    [self onClosePublish:nil];
 }
 
-- (void)onLeaveRoom:(int)err
+- (void)onLeaveRoom:(int)err isPublicRoom:(bool)isPublicRoom
 {
     NSLog(@"%s, error: %d", __func__, err);
     
@@ -412,7 +380,7 @@
     [self addLogString:logString];
 }
 
-- (void)onStreamCreate:(NSString *)streamID url:(NSString *)url
+- (void)onStreamCreate:(NSString *)streamID url:(NSString *)url isPublicRoom:(bool)isPublicRoom
 {
     if (streamID.length != 0)
     {
@@ -427,217 +395,6 @@
         NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"创建流失败", nil)];
         [self addLogString:logString];
     }
-}
-
-- (void)onReceiveMessage:(NSData *)content messageType:(int)type
-{
-    //text
-    if (type != 2)
-        return;
-    
-    NSDictionary *receiveInfo = [ZegoChatCommand getRequestPublishRsp:content];
-    if (receiveInfo == nil)
-        return;
-    
-    NSString *command = receiveInfo[kZEGO_CHAT_CMD];
-    if ([command isEqualToString:kZEGO_CHAT_REQUEST_PUBLISH])
-    {
-        [self onReceivePublishRequest:receiveInfo];
-        
-        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"有用户请求连麦", nil)];
-        [self addLogString:logString];
-    }
-    else if ([command isEqualToString:kZEGO_CHAT_RESPOND_PUBLISH])
-    {
-        //有人已经操作请求上台了，弹框消失
-        [self dismissAlertView:receiveInfo[kZEGO_CHAT_MAGIC]];
-    }
-}
-
-- (BOOL)isStreamIDExist:(NSString *)streamID
-{
-    if ([self.streamID isEqualToString:streamID])
-        return YES;
-    
-    for (ZegoStreamInfo *info in self.playStreamList)
-    {
-        if ([info.streamID isEqualToString:streamID])
-            return YES;
-    }
-    
-    return NO;
-}
-
-- (void)removeStreamInfo:(NSString *)streamID
-{
-    NSInteger index = NSNotFound;
-    for (ZegoStreamInfo *info in self.playStreamList)
-    {
-        if ([info.streamID isEqualToString:streamID])
-        {
-            index = [self.playStreamList indexOfObject:info];
-            break;
-        }
-    }
-    
-    if (index != NSNotFound)
-        [self.playStreamList removeObjectAtIndex:index];
-}
-
-- (void)onStreamUpdateForAdd:(NSArray<NSDictionary *> *)streamList
-{
-    for (NSDictionary *dic in streamList)
-    {
-        NSString *streamID = dic[kRoomStreamIDKey];
-        if (streamID.length == 0)
-            continue;
-        
-        if ([self isStreamIDExist:streamID])
-        {
-            continue;
-        }
-        
-        ZegoStreamInfo *streamInfo = [ZegoStreamInfo getStreamInfo:dic];
-        [self.playStreamList addObject:streamInfo];
-        [self createPlayStream:streamID];
-        
-        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"新增一条流, 流ID:%@", nil), streamID];
-        [self addLogString:logString];
-    }
-    
-    self.mutedButton.enabled = YES;
-}
-
-- (void)onStreamUpdateForDelete:(NSArray<NSDictionary *> *)streamList
-{
-    for (NSDictionary *dic in streamList)
-    {
-        NSString *streamID = dic[kRoomStreamIDKey];
-        if (![self isStreamIDExist:streamID])
-            continue;
-        
-        [self removeStreamViewContainer:streamID];
-        [self removeStreamInfo:streamID];
-        
-        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"删除一条流, 流ID:%@", nil), streamID];
-        [self addLogString:logString];
-    }
-    
-    if (self.playStreamList.count == 0)
-    {
-        self.mutedButton.enabled = NO;
-        [self.mutedButton setTitleColor:self.disableButtonColor forState:UIControlStateDisabled];
-    }
-}
-
-- (void)onStreamUpdate:(NSArray<NSDictionary *> *)streamList flag:(int)flag
-{
-    if (streamList.count == 0)
-    {
-//        NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"流列表有变化，但是流列表为空！", nil)];
-//        [self addLogString:logString];
-        return;
-    }
-    
-    if (flag == 0)
-        [self onStreamUpdateForAdd:streamList];
-    else if (flag == 1)
-        [self onStreamUpdateForDelete:streamList];
-}
-
-- (int)getRemoteViewIndex
-{
-    int index = 0;
-    for (; index < MAX_STREAM_COUNT; index++)
-    {
-        if ([self.viewIndexDict allKeysForObject:@(index)].count == 0)
-            return index;
-    }
-    
-    if (index == MAX_STREAM_COUNT)
-        NSLog(@"cannot find indx to add view");
-    
-    return index;
-}
-
-- (void)createPlayStream:(NSString *)streamID
-{
-    if (self.viewContainersDict[streamID] != nil)
-        return;
-    
-    UIView *playView = [self createPlayView:streamID];
-    
-    RemoteViewIndex index = (RemoteViewIndex)[self getRemoteViewIndex];
-    self.viewIndexDict[streamID] = @(index);
-    
-    [getZegoAV_ShareInstance() setRemoteView:index view:playView];
-    [getZegoAV_ShareInstance() setRemoteViewMode:index mode:ZegoVideoViewModeScaleAspectFill];
-    bool ret = [getZegoAV_ShareInstance() startPlayStream:streamID viewIndex:index];
-    assert(ret);
-}
-
-- (BOOL)isRetryStreamStop:(NSString *)streamID
-{
-    for (NSString *stream in self.retryStreamList)
-    {
-        if ([streamID isEqualToString:stream])
-            return YES;
-    }
-    
-    return NO;
-}
-
-- (void)onPlaySucc:(NSString *)streamID channel:(NSString *)channel
-{
-    NSLog(@"%s, streamID:%@", __func__, streamID);
-    
-    NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流成功, 流ID:%@", nil), streamID];
-    [self addLogString:logString];
-}
-
-- (void)onPlayStop:(uint32)err streamID:(NSString *)streamID channel:(NSString *)channel
-{
-    NSLog(@"%s, streamID:%@", __func__, streamID);
-    
-    NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流失败, 流ID:%@,  error:%d", nil), streamID, err];
-    [self addLogString:logString];
-    
-    if (err == 2 && streamID.length != 0)
-    {
-        if (![self isRetryStreamStop:streamID] && [self.viewIndexDict objectForKey:streamID] != nil)
-        {
-            NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"重新播放, 流ID:%@", nil), streamID];
-            [self addLogString:logString];
-            
-            [self.retryStreamList addObject:streamID];
-            //尝试重新play
-            RemoteViewIndex index = [self.viewIndexDict[streamID] unsignedIntValue];
-            [getZegoAV_ShareInstance() startPlayStream:streamID viewIndex:index];
-        }
-    }
-}
-
-- (UIView *)createPlayView:(NSString *)streamID
-{
-    UIView *playView = [[UIView alloc] init];
-    playView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.playViewContainer addSubview:playView];
-    
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapView:)];
-    [playView addGestureRecognizer:tapGesture];
-    
-    BOOL bResult = [self setContainerConstraints:playView containerView:self.playViewContainer viewCount:self.viewContainersDict.count];
-    if (bResult == NO)
-    {
-        [playView removeFromSuperview];
-        return nil;
-    }
-        
-    self.viewContainersDict[streamID] = playView;
-    [self.playViewContainer bringSubviewToFront:playView];
-    
-    return playView;
-    
 }
 
 - (void)onTapView:(UIGestureRecognizer *)gestureRecognizer
@@ -658,7 +415,6 @@
     [self updateContainerConstraintsForRemove:view containerView:self.playViewContainer];
     
     [self.viewContainersDict removeObjectForKey:streamID];
-    [self.viewIndexDict removeObjectForKey:streamID];
 }
 
 #pragma mark - Navigation

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/bg_gray"
+              android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_40"
+        android:background="@drawable/sl_item"
+        android:gravity="center"
+        android:text="选择直播模式"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/text_size_4"
+        />
+
+    <View style="@style/HorizontalDivider"/>
+
+    <TextView
+        android:id="@+id/tv_select_single_anchor"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@drawable/sl_item"
+        android:gravity="center"
+        android:text="@string/single_anchor_mode"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_5"/>
+
+    <View style="@style/HorizontalDivider"/>
+
+    <TextView
+        android:id="@+id/tv_select_more_anchors"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@drawable/sl_item"
+        android:gravity="center"
+        android:text="@string/more_anchors_mode"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_5"/>
+
+    <View style="@style/HorizontalDivider"/>
+
+    <TextView
+        android:id="@+id/tv_select_mix_stream"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@drawable/sl_item"
+        android:gravity="center"
+        android:text="@string/mix_stream_mode"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_5"/>
+
+    <View style="@style/HorizontalDivider"/>
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:background="@drawable/sl_item"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_4"/>
+
+</LinearLayout>

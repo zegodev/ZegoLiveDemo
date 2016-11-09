@@ -8,6 +8,24 @@ import com.zego.zegoavkit2.ZegoAVKitCommon;
  */
 public class ZegoAVKitUtil {
 
+    public static ZegoAVKitCommon.ZegoRemoteViewIndex getZegoRemoteViewIndexByOrdinal(int playStreamOrdinal) {
+        ZegoAVKitCommon.ZegoRemoteViewIndex index = null;
+
+        switch (playStreamOrdinal) {
+            case 0:
+                index = ZegoAVKitCommon.ZegoRemoteViewIndex.First;
+                break;
+            case 1:
+                index = ZegoAVKitCommon.ZegoRemoteViewIndex.Second;
+                break;
+            case 2:
+                index = ZegoAVKitCommon.ZegoRemoteViewIndex.Third;
+                break;
+        }
+
+        return index;
+    }
+
     public static int getZegoBeauty(int index){
 
         int beauty = 0;

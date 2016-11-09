@@ -126,7 +126,7 @@
                 android:textSize="@dimen/text_size_4"
                 tools:text="分辨率   1920 X 1080"/>
 
-            <com.zego.livedemo3.widgets.CustomSeekBar
+            <com.zego.livedemo3.ui.widgets.CustomSeekBar
                 android:id="@+id/sb_resolution"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_30"/>
@@ -148,7 +148,7 @@
                 android:textSize="@dimen/text_size_4"
                 tools:text="帧率   30"/>
 
-            <com.zego.livedemo3.widgets.CustomSeekBar
+            <com.zego.livedemo3.ui.widgets.CustomSeekBar
                 android:id="@+id/sb_fps"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_30"/>
@@ -170,7 +170,7 @@
                 android:textSize="@dimen/text_size_4"
                 tools:text="码率   30"/>
 
-            <com.zego.livedemo3.widgets.CustomSeekBar
+            <com.zego.livedemo3.ui.widgets.CustomSeekBar
                 android:id="@+id/sb_bitrate"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_30"/>

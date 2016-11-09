@@ -24,7 +24,7 @@ public class PreferenceUtil {
     public static PreferenceUtil sInstance;
 
 
-    public static final String SHARE_PREFERENCE_NAME = "Zego_live_demo2";
+    public static final String SHARE_PREFERENCE_NAME = "ZEGO_LIVE_DEMO3";
 
     public static final String PREFERENCE_KEY_USER_ID = "PREFERENCE_KEY_USER_ID";
 
@@ -77,6 +77,16 @@ public class PreferenceUtil {
 
     public int getIntValue(String key, int defaultValue){
         return mSharedPreferences.getInt(key, defaultValue);
+    }
+
+    public void setLongValue(String key, long value){
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putLong(key, value);
+        editor.commit();
+    }
+
+    public long getLongValue(String key, long defaultValue){
+        return mSharedPreferences.getLong(key, defaultValue);
     }
 
 

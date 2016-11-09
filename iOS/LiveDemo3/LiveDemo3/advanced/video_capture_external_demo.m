@@ -63,12 +63,14 @@
     return self;  
 }
 
-- (void)allocateAndStart:(id<ZegoVideoCaptureClientDelegate>) client {
+#pragma mark - ZegoVideoCaptureDevice
+
+- (void)zego_allocateAndStart:(id<ZegoVideoCaptureClientDelegate>) client {
     client_ = client;
     is_take_photo_ = false;
 }
 
-- (void)stopAndDeAllocate {
+- (void)zego_stopAndDeAllocate {
     [client_ destroy];
     client_ = nil;
     
@@ -77,7 +79,7 @@
     });
 }
 
-- (int)startCapture {
+- (int)zego_startCapture {
     if(m_oState.capture) {
         // * already started
         return 0;
@@ -94,7 +96,7 @@
     return 0;
 }
 
-- (int)stopCapture {
+- (int)zego_stopCapture {
     if(!m_oState.capture) {
         // * capture is not started
         return 0;
@@ -112,7 +114,7 @@
     return 0;
 }
 
-- (int)setFrameRate:(int)framerate {
+- (int)zego_setFrameRate:(int)framerate {
     // * no change
     if(m_oSettings.fps == framerate) {
         return 0;
@@ -129,7 +131,7 @@
     return 0;
 }
 
-- (int)setWidth:(int)width andHeight:(int)height {
+- (int)zego_setWidth:(int)width andHeight:(int)height {
     // * not changed
     if ((m_oSettings.width == width) && (m_oSettings.height == height)) {
         return 0;
@@ -148,7 +150,7 @@
     return 0;
 }
 
-- (int)setFrontCam:(int)bFront {
+- (int)zego_setFrontCam:(int)bFront {
     if(m_oSettings.front == bFront) {
         return 0;
     }
@@ -166,7 +168,7 @@
     return 0;
 }
 
-- (int)setView:(UIView*)view {
+- (int)zego_setView:(UIView*)view {
     dispatch_async(m_oQueue, ^{
         // * restart cam
         [self restart];
@@ -175,15 +177,15 @@
     return 0;
 }
 
-- (int)setViewMode:(int)mode {
+- (int)zego_setViewMode:(int)mode {
     return 0;
 }
 
-- (int)setViewRotation:(int)rotation {
+- (int)zego_setViewRotation:(int)rotation {
     return 0;
 }
 
-- (int)setCaptureRotation:(int)rotaion {
+- (int)zego_setCaptureRotation:(int)rotaion {
     if(m_oSettings.rotation == rotaion) {
         return 0;
     }
@@ -199,7 +201,7 @@
     return 0;
 }
 
-- (int)startPreview {
+- (int)zego_startPreview {
     if(m_oState.preview) {
         // * preview already started
         return 0;
@@ -217,7 +219,7 @@
     return 0;
 }
 
-- (int)stopPreview {
+- (int)zego_stopPreview {
     if(!m_oState.preview) {
         // * preview not started
         return 0;
@@ -234,7 +236,7 @@
     return 0;
 }
 
-- (int)enableTorch:(bool)enable {
+- (int)zego_enableTorch:(bool)enable {
     if (m_oSettings.torch == enable) {
         return 0;
     } else {
@@ -250,15 +252,17 @@
     return 0;
 }
 
-- (int)takeSnapshot {
+- (int)zego_takeSnapshot {
     is_take_photo_ = true;
     return 0;
 }
 
-- (int)setPowerlineFreq:(unsigned int)freq {
+- (int)zego_setPowerlineFreq:(unsigned int)freq {
     return 0;
 }
 
+
+#pragma mark - Private
 
 - (int)createCam {
     [self findDevice];
@@ -286,7 +290,7 @@
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithDouble:dWidth], (id)kCVPixelBufferWidthKey,
                                    [NSNumber numberWithDouble:dHeight], (id)kCVPixelBufferHeightKey,
-                                   [NSNumber numberWithInt:kCVPixelFormatType_32BGRA], (id)kCVPixelBufferPixelFormatTypeKey,
+                                   [NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange], (id)kCVPixelBufferPixelFormatTypeKey,
                                    nil
                                    ];
     
@@ -427,7 +431,7 @@
     NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                                    [NSNumber numberWithDouble:dWidth], (id)kCVPixelBufferWidthKey,
                                    [NSNumber numberWithDouble:dHeight], (id)kCVPixelBufferHeightKey,
-                                   [NSNumber numberWithInt:kCVPixelFormatType_32BGRA], (id)kCVPixelBufferPixelFormatTypeKey,
+                                   [NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange], (id)kCVPixelBufferPixelFormatTypeKey,
                                    nil
                                    ];
     
@@ -586,14 +590,14 @@
     VideoCaptureDeviceDemo* g_device_;
 }
 
-- (id<ZegoVideoCaptureDevice>)create:(NSString*)deviceId {
+- (id<ZegoVideoCaptureDevice>)zego_create:(NSString*)deviceId {
     if (g_device_ == nil) {
         g_device_ = [[VideoCaptureDeviceDemo alloc]init];
     }
     return g_device_;
 }
 
-- (void)destroy:(id<ZegoVideoCaptureDevice>)device {
+- (void)zego_destroy:(id<ZegoVideoCaptureDevice>)device {
     
 }
 

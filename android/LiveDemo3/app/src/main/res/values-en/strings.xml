@@ -14,6 +14,7 @@
     <string name="quality_options">Quality Options:</string>
     <string name="sdk_version">SDK:</string>
     <string name="upload_log">Upload Log</string>
+    <string name="contact_us">Contact Us</string>
     <string name="about">About</string>
     <string name="demo_version">Version:&#160;</string>
     <string name="upload_log_successfully">Log has been uploaded successfully</string>
@@ -44,6 +45,7 @@
     <string name="front_camera">Front Camera</string>
     <string name="camera">Camera</string>
     <string name="speaker">Speaker</string>
+    <string name="background_music">Backgroud Music</string>
     <string name="mic">Microphone</string>
     <string name="flashlight">Flashlight</string>
     <string name="beauty">Beauty</string>
@@ -70,4 +72,14 @@
     <string name="please_wait">Wait...</string>
 
     <string name="live_quality">Quality:&#160;<xliff:g id="value">%1$s</xliff:g></string>
+    <string name="full_screen">FullScreen</string>
+    <string name="exit_full_screen">Exit</string>
+
+    <string name="allow_camera_permission">Please allow the camera permission</string>
+    <string name="open_recorder_permission">Please allow the record audio permission</string>
+    <string name="share">Share</string>
+    <string name="cancel">Cancel</string>
+    <string name="mix_stream_mode">Mix Streams</string>
+    <string name="more_anchors_mode">More Anchors</string>
+    <string name="single_anchor_mode">Single Anchor</string>
 </resources>

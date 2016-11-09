@@ -94,7 +94,7 @@
     <dimen name="actionbar_height">@dimen/dimen_50</dimen>
 
     <dimen name="local_view_width">@dimen/dimen_120</dimen>
-    <dimen name="local_view_height">@dimen/dimen_150</dimen>
+    <dimen name="local_view_height">@dimen/dimen_180</dimen>
 
     <dimen name="avatar_width">@dimen/dimen_60</dimen>
     <dimen name="avatar_height">@dimen/dimen_60</dimen>

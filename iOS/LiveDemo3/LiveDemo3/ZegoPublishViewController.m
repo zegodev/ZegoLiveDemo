@@ -8,12 +8,15 @@
 
 #import "ZegoPublishViewController.h"
 #import "ZegoAnchorViewController.h"
+#import "ZegoMoreAnchorViewController.h"
+#import "ZegoMixStreamAnchorViewController.h"
 #import "ZegoAVKitManager.h"
 #import "ZegoSettings.h"
+#import <AVFoundation/AVFoundation.h>
 
 #define MAX_TITLE_LENGTH    30
 
-@interface ZegoPublishViewController () <UIPickerViewDelegate, UIPickerViewDataSource>
+@interface ZegoPublishViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate>
 
 @property (nonatomic, weak) IBOutlet UISwitch *switchCamera;
 @property (nonatomic, weak) IBOutlet UISwitch *switchTorch;
@@ -29,6 +32,8 @@
 @property (readonly) NSArray *filterList;
 
 @property (nonatomic, strong) UIView *preView;
+
+@property (assign) BOOL isTargetOrientationPortrait;    ///< 当次直播是否竖屏
 
 @end
 
@@ -78,7 +83,84 @@
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
     [self setRotateFromInterfaceOrientation:orientation];
     
+    [self.beautifyPicker selectRow:3 inComponent:0 animated:NO];
+    
     [self addPreview];
+    
+}
+
+- (void)showAuthorizationAlert:(NSString *)message title:(NSString *)title
+{
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0)
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:NSLocalizedString(@"取消", nil) otherButtonTitles:NSLocalizedString(@"设置权限", nil), nil];
+        [alertView show];
+    }
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"取消", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            self.publishButton.enabled = NO;
+        }];
+        UIAlertAction *settingAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"设置权限", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self openSetting];
+        }];
+        
+        [alertController addAction:settingAction];
+        [alertController addAction:cancelAction];
+        
+        alertController.preferredAction = settingAction;
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+#pragma mark alert view delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+        self.publishButton.enabled = NO;
+    else
+        [self openSetting];
+}
+
+- (void)openSetting
+{
+    NSURL *settingURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([[UIApplication sharedApplication] canOpenURL:settingURL])
+        [[UIApplication sharedApplication] openURL:settingURL];
+}
+
+//检查相机权限
+- (BOOL)checkVideoAuthorization
+{
+    AVAuthorizationStatus videoAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if (videoAuthStatus == AVAuthorizationStatusDenied || videoAuthStatus == AVAuthorizationStatusRestricted)
+        return NO;
+    if (videoAuthStatus == AVAuthorizationStatusNotDetermined)
+    {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if (granted == NO)
+                self.publishButton.enabled = NO;
+        }];
+    }
+    return YES;
+}
+
+- (BOOL)checkAudioAuthorization
+{
+    AVAuthorizationStatus audioAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
+    if (audioAuthStatus == AVAuthorizationStatusDenied || audioAuthStatus == AVAuthorizationStatusRestricted)
+        return NO;
+    if (audioAuthStatus == AVAuthorizationStatusNotDetermined)
+    {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+            if (granted == NO)
+                self.publishButton.enabled = NO;
+        }];
+    }
+    
+    return YES;
 }
 
 - (void)addPreview
@@ -107,7 +189,7 @@
 
 - (void)onApplicationActive:(NSNotification *)notification
 {
-    if (self.tabBarController.selectedIndex == 1 && self.presentedViewController == nil)
+    if (self.tabBarController.selectedIndex == 1 && self.presentedViewController == nil && self.preView != nil)
     {
         [self stopPreview];
         [self startPreview];
@@ -135,7 +217,21 @@
     if (self.preView == nil)
         [self addPreview];
     
-    [self startPreview];
+    BOOL videoAuthorization = [self checkVideoAuthorization];
+    BOOL audioAuthorization = [self checkAudioAuthorization];
+    
+    if (videoAuthorization == YES)
+    {
+        [self startPreview];
+        if (audioAuthorization == NO)
+        {
+            [self showAuthorizationAlert:NSLocalizedString(@"直播视频,访问麦克风", nil) title:NSLocalizedString(@"需要访问麦克风", nil)];
+        }
+    }
+    else
+    {
+        [self showAuthorizationAlert:NSLocalizedString(@"直播视频,访问相机", nil) title:NSLocalizedString(@"需要访问相机", nil)];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -147,8 +243,59 @@
     [super viewWillDisappear:animated];
 }
 
+- (BOOL)isTargetOrientationPortrait
+{
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    BOOL isTargetOrientationPortrait = YES;
+    
+    switch (orientation) {
+        case UIInterfaceOrientationLandscapeLeft:
+        case UIInterfaceOrientationLandscapeRight:
+            isTargetOrientationPortrait = NO;
+            break;
+            
+        default:
+            break;
+    }
+    
+    return isTargetOrientationPortrait;
+}
+
+- (void)setupDeviceOrientation
+{
+    CGSize resolution = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
+    
+    // 修正最终需要的输出分辨率
+    if (
+        (
+         self.isTargetOrientationPortrait           // 竖屏
+         && resolution.width > resolution.height    // 但是宽比高大
+         )
+        ||
+        (
+         !self.isTargetOrientationPortrait          // 横屏
+         && resolution.width < resolution.height    // 但是高比宽大
+         )
+        )
+    {
+        CGFloat tmp = resolution.height;
+        resolution.height = resolution.width;
+        resolution.width = tmp;
+        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = resolution;
+    }
+    
+    [getZegoAV_ShareInstance() setLocalViewRotation:CAPTURE_ROTATE_0];
+    int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
+    assert(ret == 0);
+}
+
 - (void)startPreview
 {
+    // 清除之前直播留下的状态
+    [self setupDeviceOrientation];
+    
+    [self setRotateFromInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+    
     int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
     assert(ret == 0);
     
@@ -247,27 +394,85 @@
     return YES;
 }
 
+- (BOOL)isDeviceiOS7
+{
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0)
+        return YES;
+    
+    return NO;
+}
+
+- (IBAction)onStartPublish:(id)sender
+{
+    if ([self isDeviceiOS7])
+    {
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"请选择直播模式", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"取消", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"无连麦模式", nil), NSLocalizedString(@"连麦模式", nil), NSLocalizedString(@"混流模式", nil), nil];
+        actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+        [actionSheet showInView:self.view];
+    }
+    else
+    {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:NSLocalizedString(@"请选择直播模式", nil) preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"取消", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        
+        UIAlertAction *anchorAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"无连麦模式", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self performSegueWithIdentifier:@"anchorSegueIdentifier" sender:nil];
+        }];
+        
+        UIAlertAction *moreAnchorAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"连麦模式", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self performSegueWithIdentifier:@"moreAnchorSegueIdentifier" sender:nil];
+        }];
+        
+        UIAlertAction *mixStreamAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"混流模式", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self performSegueWithIdentifier:@"mixStreamAnchorSegueIdentifier" sender:nil];
+        }];
+        
+        [alertController addAction:cancelAction];
+        [alertController addAction:anchorAction];
+        [alertController addAction:moreAnchorAction];
+        [alertController addAction:mixStreamAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+#pragma mark ActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+        [self performSegueWithIdentifier:@"anchorSegueIdentifier" sender:nil];
+    else if (buttonIndex == 1)
+        [self performSegueWithIdentifier:@"moreAnchorSegueIdentifier" sender:nil];
+    else if (buttonIndex == 2)
+        [self performSegueWithIdentifier:@"mixStreamAnchorSegueIdentifier" sender:nil];
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if ([segue.destinationViewController isKindOfClass:[ZegoAnchorViewController class]])
+    [self.titleField resignFirstResponder];
+    NSString *liveTitle = nil;
+    if (self.titleField.text.length == 0)
+        liveTitle = [NSString stringWithFormat:@"Hello-%@", [ZegoSettings sharedInstance].userName];
+    else
     {
-        [self.titleField resignFirstResponder];
-        
-        ZegoAnchorViewController *anchorViewController = (ZegoAnchorViewController *)segue.destinationViewController;
-        if (self.titleField.text.length == 0)
-            anchorViewController.liveTitle = [NSString stringWithFormat:@"Hello-%@", [ZegoSettings sharedInstance].userName];
+        if (self.titleField.text.length > MAX_TITLE_LENGTH)
+            liveTitle = [self.titleField.text substringToIndex:MAX_TITLE_LENGTH];
         else
-        {
-            if (self.titleField.text.length > MAX_TITLE_LENGTH)
-                anchorViewController.liveTitle = [self.titleField.text substringToIndex:MAX_TITLE_LENGTH];
-            else
-                anchorViewController.liveTitle = self.titleField.text;
-        }
+            liveTitle = self.titleField.text;
+    }
+
+    
+    if ([segue.identifier isEqualToString:@"anchorSegueIdentifier"])
+    {
+        ZegoAnchorViewController *anchorViewController = (ZegoAnchorViewController *)segue.destinationViewController;
         
+        anchorViewController.liveTitle = liveTitle;
         anchorViewController.useFrontCamera = self.switchCamera.on;
         anchorViewController.enableTorch = self.switchTorch.on;
         anchorViewController.beautifyFeature = [self.beautifyPicker selectedRowInComponent:0];
@@ -276,43 +481,56 @@
         [self.preView removeFromSuperview];
         anchorViewController.publishView = self.preView;
         self.preView = nil;
-        
-        self.titleField.text = nil;
     }
+    else if ([segue.identifier isEqualToString:@"moreAnchorSegueIdentifier"])
+    {
+        ZegoMoreAnchorViewController *anchorViewController = (ZegoMoreAnchorViewController *)segue.destinationViewController;
+        
+        anchorViewController.liveTitle = liveTitle;
+        anchorViewController.useFrontCamera = self.switchCamera.on;
+        anchorViewController.enableTorch = self.switchTorch.on;
+        anchorViewController.beautifyFeature = [self.beautifyPicker selectedRowInComponent:0];
+        anchorViewController.filter = [self.filterPicker selectedRowInComponent:0];
+        
+        [self.preView removeFromSuperview];
+        anchorViewController.publishView = self.preView;
+        self.preView = nil;
+    }
+    else if ([segue.identifier isEqualToString:@"mixStreamAnchorSegueIdentifier"])
+    {
+        ZegoMixStreamAnchorViewController *anchorViewController = (ZegoMixStreamAnchorViewController *)segue.destinationViewController;
+        
+        anchorViewController.liveTitle = liveTitle;
+        anchorViewController.useFrontCamera = self.switchCamera.on;
+        anchorViewController.enableTorch = self.switchTorch.on;
+        anchorViewController.beautifyFeature = [self.beautifyPicker selectedRowInComponent:0];
+        anchorViewController.filter = [self.filterPicker selectedRowInComponent:0];
+        
+        [self.preView removeFromSuperview];
+        anchorViewController.publishView = self.preView;
+        self.preView = nil;
+    }
+    
+    self.titleField.text = nil;
 }
 
 - (void)setRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    switch (fromInterfaceOrientation) {
-        case UIInterfaceOrientationPortrait:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_0];
-            break;
-            
-        case UIInterfaceOrientationPortraitUpsideDown:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_180];
-            break;
-            
-        case UIInterfaceOrientationLandscapeLeft:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_270];
-            break;
-            
-        case UIInterfaceOrientationLandscapeRight:
-            [getZegoAV_ShareInstance() setDisplayRotation:CAPTURE_ROTATE_90];
-            break;
-            
-        default:
-            break;
-    }
+    [self setupDeviceOrientation];
+    [getZegoAV_ShareInstance() setAppOrientation:fromInterfaceOrientation];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-        [self setRotateFromInterfaceOrientation:orientation];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        
-    }];
+    if (self.presentedViewController == nil)
+    {
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+            [self setRotateFromInterfaceOrientation:orientation];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            
+        }];
+    }
     
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }

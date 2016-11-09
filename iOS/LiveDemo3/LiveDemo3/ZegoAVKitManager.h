@@ -11,8 +11,9 @@
 extern "C"{
 #endif
     
-#include <ZegoAVKit2/ZegoLiveApi.h>
-    
+#import <ZegoAVKit2/ZegoLiveApi.h>
+#import <ZegoAVKit2/ZegoLiveApi-advanced.h>
+#import <ZegoAVKit2/ZegoLiveApi-deprecated.h>
     
     ZegoLiveApi * getZegoAV_ShareInstance();
     void releaseZegoAV_ShareInstance();
@@ -22,12 +23,17 @@ extern "C"{
     BOOL isUseingTestEnv();
     uint32 ZegoGetAppID();
     
+    void setUseAlphaEnv(BOOL alphaEnv);
+    BOOL isUsingAlphaEnv();
+    
     void ZegoRequireHardwareAccelerated(bool hardwareAccelerated);
     BOOL ZegoIsRequireHardwareAccelerated();
     
     NSString *ZegoGetSDKVersion();
     
-#include <ZegoLiveRoom/BizLiveRoom.h>
+    BOOL isUsingExternalRender();
+    
+#import <ZegoLiveRoom/BizLiveRoom.h>
     
     BizLiveRoom* getBizRoomInstance();
     void releaseBizRoomInstance();

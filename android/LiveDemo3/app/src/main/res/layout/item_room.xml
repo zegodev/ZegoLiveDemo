@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/sl_btn">
 
-            <com.zego.livedemo3.widgets.CirImageView
+            <com.zego.livedemo3.ui.widgets.CirImageView
                 android:id="@+id/civ_avatar"
                 android:layout_width="@dimen/dimen_35"
                 android:layout_height="@dimen/dimen_35"

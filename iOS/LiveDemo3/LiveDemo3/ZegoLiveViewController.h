@@ -39,7 +39,19 @@
 //日志记录
 @property (nonatomic, strong) NSMutableArray *logArray;
 
+//最近一次推流帧率
+@property (nonatomic, assign) double lastPublishFPS;
+//最近一次推流码率
+@property (nonatomic, assign) double lastPublishKBS;
+//最近一次拉流码率
+@property (nonatomic, assign) double lastPlayFPS;
+//最近一次拉流帧率
+@property (nonatomic, assign) double lastPlayKBS;
+
 - (void)setAnchorConfig:(UIView *)publishView;
+
+/// \brief 设置当次直播的手机姿势，之后保持该姿势为正姿势
+- (void)setupDeviceOrientation;
 
 - (BOOL)isDeviceiOS7;
 
@@ -56,6 +68,8 @@
 //被主播拒绝后的提示
 - (void)requestPublishResultAlert:(NSString *)fromUserName;
 
+- (BOOL)shouldShowPublishAlert;
+
 - (void)onReceivePublishRequest:(NSDictionary *)receiveInfo;
 
 - (void)setIdelTimerDisable:(BOOL)disable;
@@ -71,4 +85,28 @@
 //混流时的回调实现
 - (void)auxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount;
 
+//获取第一个view
+- (UIView *)getFirstViewInContainer:(UIView *)containerView;
+
+- (void)sendRequestPublishRespond:(BOOL)agreed magicNumber:(NSString *)magicNumber requestPublisher:(ZegoUser *)requestUser;
+
+- (void)shareToQQ:(NSString *)hls rtmp:(NSString *)rtmp bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID;
+
+
+/// \brief 保存视频分辨率
+/// \param size 视频分辨率
+/// \param streamID 流ID
+- (void)saveVideoSize:(CGSize)size ofStream:(NSString *)streamID;
+
+/// \brief 根据视频横竖，适配 view 展示
+- (void)updateRemoteViewRotation;
+
+@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
+@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
+@property (nonatomic, strong) NSMutableDictionary *streamID2SizeDict;
+@property (nonatomic, strong) NSMutableDictionary *videoSizeDict;
+
+
 @end
+
+
