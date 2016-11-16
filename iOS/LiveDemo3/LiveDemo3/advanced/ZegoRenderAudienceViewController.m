@@ -38,6 +38,10 @@
 @property (nonatomic, strong) UIColor *defaultButtonColor;
 
 @property (nonatomic, strong) NSMutableDictionary *subViewControllers;
+@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
+@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
+@property (nonatomic, strong) NSMutableDictionary *streamID2SizeDict;
+@property (nonatomic, strong) NSMutableDictionary *videoSizeDict;
 
 @end
 
@@ -57,6 +61,10 @@
     self.enableCamera = YES;
     
     _streamList = [[NSMutableArray alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _streamID2SizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     
     self.subViewControllers = [NSMutableDictionary dictionary];
     _requestingArray = [[NSMutableArray alloc] init];

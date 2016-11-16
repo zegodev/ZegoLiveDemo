@@ -39,7 +39,10 @@
 
 @property (nonatomic, strong) UIColor *defaultButtonColor;
 
-
+@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
+@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
+@property (nonatomic, strong) NSMutableDictionary *streamID2SizeDict;
+@property (nonatomic, strong) NSMutableDictionary *videoSizeDict;
 
 @end
 
@@ -59,7 +62,10 @@
     self.enableCamera = YES;
     
     _streamList = [[NSMutableArray alloc] initWithCapacity:MAX_STREAM_COUNT];
-
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _streamID2SizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     
     _requestingArray = [[NSMutableArray alloc] init];
     
@@ -264,31 +270,76 @@
     self.videoSizeDict[streamID] = @(YES);
 }
 
+- (void)setRotateFromInterfaceOrientation:(UIInterfaceOrientation)orientation
+{
+    for (NSString *streamID in self.viewIndexDict.allKeys)
+    {
+        int viewIndex = [self.viewIndexDict[streamID] intValue];
+        
+        switch (orientation) {
+            case UIInterfaceOrientationPortrait:
+                [getZegoAV_ShareInstance() setRemoteViewRotation:CAPTURE_ROTATE_0 viewIndex:viewIndex];
+                break;
+                
+            case UIInterfaceOrientationPortraitUpsideDown:
+                [getZegoAV_ShareInstance() setRemoteViewRotation:CAPTURE_ROTATE_180 viewIndex:viewIndex];
+                break;
+                
+            case UIInterfaceOrientationLandscapeLeft:
+                [getZegoAV_ShareInstance() setRemoteViewRotation:CAPTURE_ROTATE_270 viewIndex:viewIndex];
+                break;
+                
+            case UIInterfaceOrientationLandscapeRight:
+                [getZegoAV_ShareInstance() setRemoteViewRotation:CAPTURE_ROTATE_90 viewIndex:viewIndex];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+- (void)changeFirstViewContent
+{
+    UIView *view = [self getFirstViewInContainer:self.playViewContainer];
+    NSString *streamID = [self getStreamIDFromView:view];
+    if (streamID == nil)
+        return;
+    
+    id info = self.videoSizeDict[streamID];
+    if (info == nil)
+        return;
+    
+    BOOL isfull = [info boolValue];
+    int index = [self.viewIndexDict[streamID] intValue];
+    if (isfull)
+    {
+        [self exitFullScreen:streamID viewIndex:index];
+        [self onFullScreenButton:nil];
+    }
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        UIView *view = [self getFirstViewInContainer:self.playViewContainer];
-        NSString *streamID = [self getStreamIDFromView:view];
-        if (streamID == nil)
-            return;
         
-        id info = self.videoSizeDict[streamID];
-        if (info == nil)
-            return;
-        
-        BOOL isfull = [info boolValue];
-        int index = [self.viewIndexDict[streamID] intValue];
-        if (isfull)
-        {
-            [self exitFullScreen:streamID viewIndex:index];
-            [self onFullScreenButton:nil];
-        }
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        [self setRotateFromInterfaceOrientation:orientation];
+        [self changeFirstViewContent];
         
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         
     }];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    
+    [self setRotateFromInterfaceOrientation:toInterfaceOrientation];
+    [self changeFirstViewContent];
 }
 
 - (IBAction)onFullScreenButton:(id)sender
@@ -382,7 +433,7 @@
     if ([self isStreamIDExist:streamID] && view)
     {
         int index = [self.viewIndexDict[streamID] intValue];
-        if (width > height)
+        if (width > height && view.frame.size.width < view.frame.size.height)
         {
             [getZegoAV_ShareInstance() setRemoteViewMode:index mode:ZegoVideoViewModeScaleAspectFit];
             

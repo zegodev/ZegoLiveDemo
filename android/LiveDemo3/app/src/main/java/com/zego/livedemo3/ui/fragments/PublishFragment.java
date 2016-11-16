@@ -2,6 +2,7 @@ package com.zego.livedemo3.ui.fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -156,8 +157,6 @@ public class PublishFragment extends AbsBaseFragment {
                 } else {
                     tbEnableTorch.setEnabled(true);
                 }
-
-                setRotateFromInterfaceOrientation(mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
             }
         });
 
@@ -212,7 +211,7 @@ public class PublishFragment extends AbsBaseFragment {
 
             @Override
             public void onMoreAnchorsSelect() {
-                MorAnchorsPublishActivity.actionStart(mParentActivity, publishTitleTemp, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter);
+                MorAnchorsPublishActivity.actionStart(mParentActivity, publishTitleTemp, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter, mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
             }
 
             @Override
@@ -257,15 +256,26 @@ public class PublishFragment extends AbsBaseFragment {
 
     private void startPreview() {
 
-        mZegoAVKit.setFrontCam(tbEnableFrontCam.isChecked());
-        
-        // 设置手机朝向
-        setRotateFromInterfaceOrientation(mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
+        // 设置app朝向
+        int currentOrientation = mParentActivity.getWindowManager().getDefaultDisplay().getRotation();
+        mZegoAVKit.setAppOrientation(currentOrientation);
+
+        // 设置推流配置
+        ZegoAvConfig currentConfig = ZegoApiManager.getInstance().getZegoAvConfig();
+        int videoWidth = currentConfig.getVideoEncodeResolutionWidth();
+        int videoHeight = currentConfig.getVideoEncodeResolutionHeight();
+        if(((currentOrientation == Surface.ROTATION_0 || currentOrientation == Surface.ROTATION_180) && videoWidth  > videoHeight) ||
+                ((currentOrientation == Surface.ROTATION_90 || currentOrientation == Surface.ROTATION_270) && videoHeight  > videoWidth)){
+            currentConfig.setVideoEncodeResolution(videoHeight, videoWidth);
+            currentConfig.setVideoCaptureResolution(videoHeight, videoWidth);
+        }
+        ZegoApiManager.getInstance().setZegoConfig(currentConfig);
 
 
         mZegoAVKit.setLocalView(svPreview);
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
+        mZegoAVKit.setFrontCam(tbEnableFrontCam.isChecked());
         svPreview.setVisibility(View.VISIBLE);
         mZegoAVKit.enableTorch(tbEnableTorch.isChecked());
 
@@ -273,8 +283,6 @@ public class PublishFragment extends AbsBaseFragment {
         mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
         // 设置滤镜
         mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
-
-
     }
 
     private void stopPreview() {
@@ -283,57 +291,10 @@ public class PublishFragment extends AbsBaseFragment {
         mZegoAVKit.setLocalView(null);
     }
 
-    protected boolean isDeviceOrientationPortrait(){
-
-        int orientation = mParentActivity.getWindowManager().getDefaultDisplay().getRotation();
-        // 判断手机是否垂直摆放
-        boolean isDeviceOrientationPortrait = true;
-        switch (orientation){
-            case Surface.ROTATION_90:
-            case Surface.ROTATION_270:
-                isDeviceOrientationPortrait = false;
-                break;
-        }
-
-        return isDeviceOrientationPortrait;
-    }
-
-    /**
-     * 设置设备朝向.
-     */
-    protected void setupDeviceOrientation(){
-
-        //  修正最终需要的输出分辨率, 保证：横屏姿势时，输出横屏视频，竖屏姿势时，输出竖屏视频
-        ZegoAvConfig currentConfig = ZegoApiManager.getInstance().getZegoAvConfig();
-        int width = currentConfig.getVideoEncodeResolutionWidth();
-        int height = currentConfig.getVideoEncodeResolutionHeight();
-
-        if((isDeviceOrientationPortrait() &&  width > height) // 手机竖屏, 但是 宽 > 高
-                || (!isDeviceOrientationPortrait() && width < height)){ // 手机横屏, 但是 宽 < 高
-
-            currentConfig.setVideoEncodeResolution(height, width);
-            ZegoApiManager.getInstance().setZegoConfig(currentConfig);
-        }
-
-
-    }
-
-    protected void setRotateFromInterfaceOrientation(int orientation){
-
-        setupDeviceOrientation();
-
-        // 设置手机朝向
-        mZegoAVKit.setAppOrientation(orientation);
-        mZegoAVKit.setLocalViewRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0);
-    }
-
-
-
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
-        setRotateFromInterfaceOrientation(mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
+        stopPreview();
+        startPreview();
     }
 }

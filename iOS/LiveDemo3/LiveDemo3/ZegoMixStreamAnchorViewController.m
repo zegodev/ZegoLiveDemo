@@ -34,6 +34,9 @@
 //正在播放的streamList
 @property (nonatomic, strong) NSMutableArray *playStreamList;
 
+@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
+@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
+
 @property (nonatomic, assign) BOOL isPublishing;
 
 @property (nonatomic, strong) UIColor *defaultButtonColor;
@@ -52,6 +55,8 @@
 @property (nonatomic, copy) NSString *bizToken;
 @property (nonatomic, copy) NSString *bizID;
 
+@property (nonatomic, assign) UIInterfaceOrientation orientation;
+
 @property (nonatomic, strong) NSArray *mixPlayStreamList;
 
 @end
@@ -65,6 +70,8 @@
     [self setupLiveKit];
     [self loginChatRoom];
     
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
     _playStreamList = [[NSMutableArray alloc] init];
     _mixStreamConfig = [[NSMutableArray alloc] init];
 //    _mixPlayStreamList = [[NSMutableArray alloc] init];
@@ -74,6 +81,8 @@
     self.mutedButton.enabled = NO;
     self.defaultButtonColor = [self.mutedButton titleColorForState:UIControlStateNormal];
     self.disableButtonColor = [self.mutedButton titleColorForState:UIControlStateDisabled];
+    
+    self.orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (self.publishView)
     {
@@ -98,6 +107,23 @@
 {
     [self setIdelTimerDisable:NO];
     [super viewWillDisappear:animated];
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if (self.orientation == UIInterfaceOrientationPortrait)
+        return UIInterfaceOrientationMaskPortrait;
+    else if (self.orientation == UIInterfaceOrientationLandscapeLeft)
+        return UIInterfaceOrientationMaskLandscapeLeft;
+    else if (self.orientation == UIInterfaceOrientationLandscapeRight)
+        return UIInterfaceOrientationMaskLandscapeRight;
+    
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 #pragma mark ZegoAVKit
@@ -409,7 +435,6 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
-    [self setupDeviceOrientation];
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);
@@ -538,6 +563,22 @@
 - (void)onAuxCallback:(void *)pData dataLen:(int *)pDataLen sampleRate:(int *)pSampleRate channelCount:(int *)pChannelCount
 {
     [self auxCallback:pData dataLen:pDataLen sampleRate:pSampleRate channelCount:pChannelCount];
+}
+
+- (void)onVideoSizeChanged:(NSString *)streamID width:(uint32)width height:(uint32)height
+{
+    if (![self isStreamIDExist:streamID])
+        return;
+    
+    int index = [self.viewIndexDict[streamID] intValue];
+    UIView *view = self.viewContainersDict[streamID];
+    if (view == nil)
+        return;
+    
+    if (width > height && view.frame.size.width < view.frame.size.height)
+    {
+        [getZegoAV_ShareInstance() setRemoteViewMode:index mode:ZegoVideoViewModeScaleAspectFit];
+    }
 }
 
 - (void)onMixStreamConfigUpdate:(int)errorCode mixStream:(NSString *)mixStreamID streamInfo:(NSDictionary *)info

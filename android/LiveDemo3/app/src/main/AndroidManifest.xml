@@ -68,6 +68,7 @@
         <activity
             android:name="com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsPublishActivity"
             android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
             >
 
         </activity>

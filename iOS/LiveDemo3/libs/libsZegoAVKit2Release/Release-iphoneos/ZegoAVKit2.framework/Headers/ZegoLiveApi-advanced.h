@@ -90,15 +90,10 @@ typedef enum : NSUInteger {
 /// \return true 成功，false 失败
 - (bool)setRemoteViewRotation:(CAPTURE_ROTATE)rotate viewIndex:(RemoteViewIndex)index;
 
-/// \brief 设置预览渲染朝向
-/// \param rotate 逆时针旋转角度
+/// \brief 设置App的朝向，确定进行横竖屏采集
+/// \param orientation app orientation
 /// \return true 成功，false 失败
-- (bool)setLocalViewRotation:(CAPTURE_ROTATE)rotate;
-
-/// \brief 设置采集时摄像头方向,在startPublish前设置有效，startPublish后调用则返回false
-/// \param rotate 顺时针方向
-/// \return true:调用成功；false:调用失败
-- (bool)setCaptureRotation:(CAPTURE_ROTATE)rotate;
+- (bool)setAppOrientation:(UIInterfaceOrientation)orientation;
 
 /// \brief 开启采集监听
 /// \param bEnable true打开，false关闭
@@ -144,6 +139,20 @@ typedef enum : NSUInteger {
 /// \brief 设置美颜美白的亮度修正参数
 /// \param factor 取值范围[0,1]， 参数越大亮度越暗
 - (bool)setWhitenFactor:(float)factor;
+
+/// \brief 设置锐化参数
+/// \param factor 取值范围[0,2]，参数边缘越明显
+- (bool)setSharpenFactor:(float)factor;
+
+/// \brief 是否启用前摄像头预览镜像
+/// \param enable true 启用，false 不启用
+/// \return true 成功，否则失败
+- (bool)enablePreviewMirror:(bool)enable;
+
+/// \brief 是否启用摄像头采集结果镜像
+/// \param enable true 启用，false 不启用
+/// \return true 成功，否则失败
+- (bool)enableCaptureMirror:(bool)enable;
 
 /// \brief 混音输入播放静音开关
 /// \param bMute true: aux 输入播放静音；false: 不静音

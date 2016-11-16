@@ -24,4 +24,6 @@ public class IntentExtra {
 
     public static final String LIST_STREAM = "LIST_STREAM";
 
+    public static final String APP_ORIENTATION = "APP_ORIENTATION";
+
 }

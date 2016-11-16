@@ -29,6 +29,8 @@
 //创建stream后，server返回的streamID(当前直播的streamID)
 @property (nonatomic, copy) NSString *streamID;
 
+@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
+
 @property (nonatomic, assign) BOOL isPublishing;
 
 @property (nonatomic, strong) UIColor *defaultButtonColor;
@@ -38,6 +40,8 @@
 @property (nonatomic, copy) NSString *sharedRtmp;
 @property (nonatomic, copy) NSString *bizToken;
 @property (nonatomic, copy) NSString *bizID;
+
+@property (nonatomic, assign) UIInterfaceOrientation orientation;
 
 @end
 
@@ -50,11 +54,15 @@
     [self setupLiveKit];
     [self loginChatRoom];
     
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    
     self.stopPublishButton.enabled = NO;
     
     self.mutedButton.enabled = NO;
     self.defaultButtonColor = [self.mutedButton titleColorForState:UIControlStateNormal];
     self.disableButtonColor = [self.mutedButton titleColorForState:UIControlStateDisabled];
+    
+    self.orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     if (self.publishView)
     {
@@ -77,6 +85,23 @@
 {
     [self setIdelTimerDisable:NO];
     [super viewWillDisappear:animated];
+}
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+{
+    if (self.orientation == UIInterfaceOrientationPortrait)
+        return UIInterfaceOrientationMaskPortrait;
+    else if (self.orientation == UIInterfaceOrientationLandscapeLeft)
+        return UIInterfaceOrientationMaskLandscapeLeft;
+    else if (self.orientation == UIInterfaceOrientationLandscapeRight)
+        return UIInterfaceOrientationMaskLandscapeRight;
+    
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (void)audioSessionWasInterrupted:(NSNotification *)notification
@@ -276,7 +301,6 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
-    [self setupDeviceOrientation];
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);

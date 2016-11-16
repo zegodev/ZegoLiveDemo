@@ -2,17 +2,24 @@ package com.zego.livedemo3.ui.activities.singleanchor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Surface;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.zego.biz.BizStream;
 import com.zego.livedemo3.R;
+import com.zego.livedemo3.ZegoApiManager;
 import com.zego.livedemo3.constants.IntentExtra;
 import com.zego.livedemo3.interfaces.OnLiveRoomListener;
 import com.zego.livedemo3.presenters.BizLivePresenter;
+import com.zego.livedemo3.ui.widgets.ViewLive;
 import com.zego.livedemo3.utils.BizLiveRoomUitl;
 import com.zego.livedemo3.utils.PreferenceUtil;
+import com.zego.livedemo3.utils.ZegoAVKitUtil;
+import com.zego.zegoavkit2.ZegoAVKitCommon;
+import com.zego.zegoavkit2.ZegoAvConfig;
 
 import java.util.ArrayList;
 
@@ -170,5 +177,42 @@ public class SingleAnchorPlayActivity extends SingleAnchorBaseLiveActivity {
 
         // 清空回调, 避免内存泄漏
         BizLivePresenter.getInstance().setLiveRoomListener(null, null);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        ZegoAVKitCommon.ZegoCameraCaptureRotation rotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0;
+        switch (getWindowManager().getDefaultDisplay().getRotation()) {
+            case Surface.ROTATION_0:
+                rotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0;
+                break;
+            case Surface.ROTATION_90:
+                rotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90;
+                break;
+            case Surface.ROTATION_180:
+                rotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_180;
+                break;
+            case Surface.ROTATION_270:
+                rotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270;
+                break;
+        }
+
+        for (ViewLive viewLive : mListViewLive) {
+            int streamOrdinal = viewLive.getStreamOrdinal();
+            if (!ViewLive.isPublishView(streamOrdinal)) {
+                if (viewLive.isNeedToSwitchFullScreen() && viewLive.getZegoVideoViewMode() == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill) {
+                    int currentOrientation = getWindowManager().getDefaultDisplay().getRotation();
+                    if (currentOrientation == Surface.ROTATION_90 || currentOrientation == Surface.ROTATION_270) {
+                        mZegoAVKit.setRemoteViewRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0, ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinal));
+                    } else {
+                        mZegoAVKit.setRemoteViewRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90, ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinal));
+                    }
+                }else {
+                    mZegoAVKit.setRemoteViewRotation(rotation, ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinal));
+                }
+            }
+        }
     }
 }

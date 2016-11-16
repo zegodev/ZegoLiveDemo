@@ -33,7 +33,7 @@
 
 @property (nonatomic, strong) UIView *preView;
 
-@property (assign) BOOL isTargetOrientationPortrait;    ///< 当次直播是否竖屏
+@property (nonatomic, assign) CGSize videoSize;
 
 @end
 
@@ -80,8 +80,10 @@
     UITapGestureRecognizer *boxTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapView:)];
     [self.boxView addGestureRecognizer:boxTapGesture];
     
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    [self setRotateFromInterfaceOrientation:orientation];
+    self.videoSize = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
+    
+//    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+//    [self setRotateFromInterfaceOrientation:orientation];
     
     [self.beautifyPicker selectRow:3 inComponent:0 animated:NO];
     
@@ -223,6 +225,8 @@
     if (videoAuthorization == YES)
     {
         [self startPreview];
+        [getZegoAV_ShareInstance() setAppOrientation:[UIApplication sharedApplication].statusBarOrientation];
+        
         if (audioAuthorization == NO)
         {
             [self showAuthorizationAlert:NSLocalizedString(@"直播视频,访问麦克风", nil) title:NSLocalizedString(@"需要访问麦克风", nil)];
@@ -243,58 +247,16 @@
     [super viewWillDisappear:animated];
 }
 
-- (BOOL)isTargetOrientationPortrait
-{
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    BOOL isTargetOrientationPortrait = YES;
-    
-    switch (orientation) {
-        case UIInterfaceOrientationLandscapeLeft:
-        case UIInterfaceOrientationLandscapeRight:
-            isTargetOrientationPortrait = NO;
-            break;
-            
-        default:
-            break;
-    }
-    
-    return isTargetOrientationPortrait;
-}
-
-- (void)setupDeviceOrientation
-{
-    CGSize resolution = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
-    
-    // 修正最终需要的输出分辨率
-    if (
-        (
-         self.isTargetOrientationPortrait           // 竖屏
-         && resolution.width > resolution.height    // 但是宽比高大
-         )
-        ||
-        (
-         !self.isTargetOrientationPortrait          // 横屏
-         && resolution.width < resolution.height    // 但是高比宽大
-         )
-        )
-    {
-        CGFloat tmp = resolution.height;
-        resolution.height = resolution.width;
-        resolution.width = tmp;
-        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = resolution;
-    }
-    
-    [getZegoAV_ShareInstance() setLocalViewRotation:CAPTURE_ROTATE_0];
-    int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
-    assert(ret == 0);
-}
-
 - (void)startPreview
 {
-    // 清除之前直播留下的状态
-    [self setupDeviceOrientation];
-    
-    [self setRotateFromInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+    if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation))
+    {
+        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = CGSizeMake(self.videoSize.height, self.videoSize.width);
+    }
+    else
+    {
+        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = self.videoSize;
+    }
     
     int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
     assert(ret == 0);
@@ -516,13 +478,14 @@
 
 - (void)setRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-    [self setupDeviceOrientation];
+    [self stopPreview];
     [getZegoAV_ShareInstance() setAppOrientation:fromInterfaceOrientation];
+    [self startPreview];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    if (self.presentedViewController == nil)
+    if (self.presentedViewController == nil && self.isViewLoaded && self.tabBarController.selectedIndex == 1)
     {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
             UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];

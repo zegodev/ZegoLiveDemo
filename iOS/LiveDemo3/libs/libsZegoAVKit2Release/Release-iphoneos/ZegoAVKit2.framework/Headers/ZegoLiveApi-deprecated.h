@@ -17,8 +17,19 @@
 /// \brief 设置手机姿势
 /// \param rotate 逆时针旋转角度
 /// \return true:调用成功；false:调用失败
-/// \note 已废弃，请使用 setRemoteViewRotation、setLocalViewRotattion 和 setCaptureRotation
+/// \note 已废弃，请使用 setRemoteViewRotation、setLocalViewRotattion
 - (bool)setDisplayRotation:(CAPTURE_ROTATE)rotate;
+
+/// \brief 设置采集时摄像头方向,在startPublish前设置有效，startPublish后调用则返回false
+/// \param rotate 方向
+/// \return true:调用成功；false:调用失败
+- (bool)setCaptureRotation:(CAPTURE_ROTATE)rotate;
+
+/// \brief 设置预览渲染朝向
+/// \param rotate 旋转角度
+/// \return true 成功，false 失败
+/// \note 使用setAppOrientation 替代
+- (bool)setLocalViewRotation:(CAPTURE_ROTATE)rotate;
 
 /// \brief 获取 SDK 版本1
 /// \note 已废弃，请使用 +version

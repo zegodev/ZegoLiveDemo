@@ -103,12 +103,12 @@ static CVPixelBufferRef pb = NULL;
 - (int)zego_setWidth:(int)width andHeight:(int)height {
     // * not changed
     // * little trick here: swap heigh and width
-    if ((m_oSettings.width == height) && (m_oSettings.height == width)) {
+    if ((m_oSettings.height == height) && (m_oSettings.width == width)) {
         return 0;
     }
     
-    m_oSettings.width = height;
-    m_oSettings.height = width;
+    m_oSettings.width = width;
+    m_oSettings.height = height;
     return 0;
 }
 

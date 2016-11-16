@@ -50,9 +50,6 @@
 
 - (void)setAnchorConfig:(UIView *)publishView;
 
-/// \brief 设置当次直播的手机姿势，之后保持该姿势为正姿势
-- (void)setupDeviceOrientation;
-
 - (BOOL)isDeviceiOS7;
 
 - (BOOL)setContainerConstraints:(UIView *)view containerView:(UIView *)containerView viewCount:(NSUInteger)viewCount;
@@ -91,21 +88,6 @@
 - (void)sendRequestPublishRespond:(BOOL)agreed magicNumber:(NSString *)magicNumber requestPublisher:(ZegoUser *)requestUser;
 
 - (void)shareToQQ:(NSString *)hls rtmp:(NSString *)rtmp bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID;
-
-
-/// \brief 保存视频分辨率
-/// \param size 视频分辨率
-/// \param streamID 流ID
-- (void)saveVideoSize:(CGSize)size ofStream:(NSString *)streamID;
-
-/// \brief 根据视频横竖，适配 view 展示
-- (void)updateRemoteViewRotation;
-
-@property (nonatomic, strong) NSMutableDictionary *viewContainersDict;
-@property (nonatomic, strong) NSMutableDictionary *viewIndexDict;
-@property (nonatomic, strong) NSMutableDictionary *streamID2SizeDict;
-@property (nonatomic, strong) NSMutableDictionary *videoSizeDict;
-
 
 @end
 

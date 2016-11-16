@@ -157,15 +157,6 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
 
     protected boolean mHostHasBeenCalled = false;
 
-
-    protected boolean mIsDeviceOrientationPortrait = false;
-
-    protected Map<String, Object> mMapStreamWidthAndHeight = new HashMap<>();
-
-    protected int mCurrentOrientation = -1;
-
-    protected DisplayManager.DisplayListener mDisplayListener;
-
     protected PhoneStateListener mPhoneStateListener;
 
     protected PublishSettingsPannel mSettingsPannel;
@@ -233,137 +224,6 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
         initCallback();
         // 初始化电话监听器
         initPhoneCallingListener();
-
-
-//          // 初始化手机朝向
-//        mCurrentOrientation = getWindowManager().getDefaultDisplay().getRotation();
-//        setRotateFromInterfaceOrientation(mCurrentOrientation);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            mDisplayListener = new DisplayManager.DisplayListener() {
-                @Override
-                public void onDisplayAdded(int displayId) {
-                }
-
-                @Override
-                public void onDisplayChanged(int displayId) {
-                    mCurrentOrientation =  getWindowManager().getDefaultDisplay().getRotation();
-                    setRotateFromInterfaceOrientation(mCurrentOrientation);
-                }
-
-                @Override
-                public void onDisplayRemoved(int displayId) {
-                }
-            };
-
-            DisplayManager displayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
-            displayManager.registerDisplayListener(mDisplayListener, mHandler);
-        }
-    }
-
-    /**
-     * 设置设备朝向.
-     */
-    protected void setupDeviceOrientation(){
-
-        // 判断手机是否垂直摆放
-        int orientation = getWindowManager().getDefaultDisplay().getRotation();
-        mCurrentOrientation = orientation;
-        mIsDeviceOrientationPortrait = true;
-        switch (orientation){
-            case Surface.ROTATION_90:
-            case Surface.ROTATION_270:
-                mIsDeviceOrientationPortrait = false;
-                break;
-        }
-
-        //  修正最终需要的输出分辨率, 保证：横屏姿势时，输出横屏视频，竖屏姿势时，输出竖屏视频
-        ZegoAvConfig currentConfig = ZegoApiManager.getInstance().getZegoAvConfig();
-
-        int width = currentConfig.getVideoEncodeResolutionWidth();
-        int height = currentConfig.getVideoEncodeResolutionHeight();
-
-        if((mIsDeviceOrientationPortrait &&  width > height) // 手机竖屏, 但是 宽 > 高
-                || (!mIsDeviceOrientationPortrait && width < height)){ // 手机横屏, 但是 宽 < 高
-
-            currentConfig.setVideoEncodeResolution(height, width);
-            ZegoApiManager.getInstance().setZegoConfig(currentConfig);
-        }
-
-
-        setRotateFromInterfaceOrientation(orientation);
-    }
-
-    protected void setRotateFromInterfaceOrientation(int orientation){
-
-        // 设置手机朝向
-        mZegoAVKit.setAppOrientation(orientation);
-
-        mZegoAVKit.setLocalViewRotation(calculatePreviewRotation(orientation));
-
-        updateRemoteViewRotation();
-    }
-
-    protected ZegoAVKitCommon.ZegoCameraCaptureRotation calculatePreviewRotation(int orientation){
-
-        ZegoAVKitCommon.ZegoCameraCaptureRotation zegoCameraCaptureRotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0;
-
-        switch (orientation) {
-            case Surface.ROTATION_0:
-            case Surface.ROTATION_180:
-                if(!mIsDeviceOrientationPortrait){
-                    zegoCameraCaptureRotation = mEnableFrontCam ? ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270 : ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90;
-                }
-                break;
-            case Surface.ROTATION_90:
-            case Surface.ROTATION_270:
-                if(mIsDeviceOrientationPortrait){
-                    zegoCameraCaptureRotation = mEnableFrontCam ? ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_270 : ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90;
-                }
-                break;
-        }
-
-        return zegoCameraCaptureRotation;
-    }
-
-    protected void updateRemoteViewRotation(){
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                for(int i = 0; i < mListViewLive.size(); i++){
-                    ViewLive viewLive = mListViewLive.get(i);
-                    int streamOrdinal = viewLive.getStreamOrdinal();
-                    switch (streamOrdinal){
-                        case 0:
-                        case 1:
-                        case 2:
-                            String streamID = viewLive.getStreamID();
-                            int arr[] = (int[]) mMapStreamWidthAndHeight.get(streamID);
-                            if(arr != null){
-                                ZegoAVKitCommon.ZegoCameraCaptureRotation rotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0;
-
-                                int width = viewLive.getTextureView().getWidth();
-                                int height = viewLive.getTextureView().getHeight();
-
-                                if((width < height && arr[0] > arr[1])
-                                        || (width > height && arr[0] < arr[1])){
-
-                                    rotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90;
-                                }
-
-                                if(i > 0 && (mCurrentOrientation == Surface.ROTATION_90 || mCurrentOrientation == Surface.ROTATION_270)){
-                                    rotation = ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90;
-                                }
-
-                                mZegoAVKit.setRemoteViewRotation(rotation, ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(streamOrdinal));
-                            }
-                            break;
-                    }
-                }
-            }
-        }, 500);
-
     }
 
     /**
@@ -384,8 +244,6 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
             public void onEnableFrontCamera(boolean isEnable) {
                 mEnableFrontCam = isEnable;
                 mZegoAVKit.setFrontCam(isEnable);
-
-                setRotateFromInterfaceOrientation(mCurrentOrientation);
             }
 
             @Override
@@ -474,6 +332,22 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
             @Override
             public void setRemoteViewMode(ZegoAVKitCommon.ZegoRemoteViewIndex index, ZegoAVKitCommon.ZegoVideoViewMode mode) {
                 mZegoAVKit.setRemoteViewMode(index, mode);
+
+                int currentOrientation = getWindowManager().getDefaultDisplay().getRotation();
+                if(mode == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit){
+                    if(currentOrientation == Surface.ROTATION_90 || currentOrientation == Surface.ROTATION_270){
+                        mZegoAVKit.setRemoteViewRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90, index);
+                    }else {
+                        mZegoAVKit.setRemoteViewRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0, index);
+                    }
+                }else if(mode == ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill){
+                    if(currentOrientation == Surface.ROTATION_90 || currentOrientation == Surface.ROTATION_270){
+                        mZegoAVKit.setRemoteViewRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_0, index);
+                    }else {
+                        mZegoAVKit.setRemoteViewRotation(ZegoAVKitCommon.ZegoCameraCaptureRotation.Rotate_90, index);
+                    }
+
+                }
             }
 
             @Override
@@ -733,21 +607,22 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
             public void onVideoSizeChanged(String streamID, int width, int height) {
                 hidePlayBackground();
 
-                if(width > height){
+                ViewLive viewLivePlayCurrentStream = getViewLiveByStreamID(streamID);
+                if(viewLivePlayCurrentStream == null)
+                    return;
+
+                if(width > height) {
                     ViewLive viewLivePlay = getViewLiveByStreamID(streamID);
-                    if(viewLivePlay != null){
-                        viewLivePlay.setZegoVideoViewMode(true, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
-                        mZegoAVKit.setRemoteViewMode(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(viewLivePlay.getStreamOrdinal()), ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
+                    if (viewLivePlay != null) {
+                        if(viewLivePlayCurrentStream.getWidth() < viewLivePlayCurrentStream.getHeight()){
+                            viewLivePlay.setZegoVideoViewMode(true, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
+                            mZegoAVKit.setRemoteViewMode(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(viewLivePlay.getStreamOrdinal()), ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFit);
+                        }else {
+                            viewLivePlay.setZegoVideoViewMode(true, ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+                            mZegoAVKit.setRemoteViewMode(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(viewLivePlay.getStreamOrdinal()), ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
+                        }
                     }
                 }
-
-
-                int arr[] = new int[2];
-                arr[0] = width;
-                arr[1] = height;
-                mMapStreamWidthAndHeight.put(streamID, arr);
-
-                updateRemoteViewRotation();
 
                 mRlytControlHeader.bringToFront();
             }
@@ -892,9 +767,6 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
 
     protected void publishStream(){
 
-        mZegoAVKit.setFrontCam(mEnableFrontCam);
-        setupDeviceOrientation();
-
         ViewLive freeViewLive = getFreeViewLive();
         if (freeViewLive == null) {
             return;
@@ -915,7 +787,7 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
-
+        mZegoAVKit.setFrontCam(mEnableFrontCam);
         mZegoAVKit.enableTorch(mEnableTorch);
         mZegoAVKit.enableMic(mEnableMic);
     }
@@ -1092,11 +964,6 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
 
     @Override
     protected void onDestroy() {
-        // 注销屏幕监听
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            DisplayManager displayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
-            displayManager.unregisterDisplayListener(mDisplayListener);
-        }
 
         // 注销电话监听
         TelephonyManager tm = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);

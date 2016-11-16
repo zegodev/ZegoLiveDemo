@@ -19,8 +19,6 @@
 
 @property (assign) UIInterfaceOrientation currentOrientation;
 
-@property (assign) BOOL isTargetOrientationPortrait;    ///< 当次直播是否竖屏
-
 //混流时的数据源
 @property (nonatomic, strong) NSData *auxData;
 @property (nonatomic, assign) void *pPos;
@@ -29,6 +27,7 @@
 @property (nonatomic, strong) NSMutableArray *requestAlertList;
 @property (nonatomic, strong) NSMutableArray *requestAlertContextList;
 
+@property (nonatomic, assign) CGSize videoSize;
 @property (nonatomic, strong) NSTimer *usageTimer;
 @property (nonatomic, strong) NSString *usageFilePath;
 
@@ -46,12 +45,7 @@
 //    self.enableTorch = NO;
 //    self.beautifyFeature = ZEGO_BEAUTIFY_NONE;
 //    self.filter = ZEGO_FILTER_NONE;
-    
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _streamID2SizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    
+
     self.enableMicrophone = YES;
     self.enablePreview = YES;
     self.viewMode = ZegoVideoViewModeScaleAspectFill;
@@ -67,9 +61,11 @@
         self.requestAlertList = [NSMutableArray array];
     
     // 设置当前的手机姿势
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    self.currentOrientation = orientation;
-    [self setRotateFromInterfaceOrientation:orientation];
+//    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+//    self.currentOrientation = orientation;
+//    [self setRotateFromInterfaceOrientation:orientation];
+    
+    self.videoSize = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
     
     // 监听电话事件
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioSessionWasInterrupted:) name:AVAudioSessionInterruptionNotification object:nil];
@@ -231,7 +227,7 @@
     
     _useFrontCamera = useFrontCamera;
     [getZegoAV_ShareInstance() setFrontCam:useFrontCamera];
-    [self setRotateFromInterfaceOrientation:self.currentOrientation];
+//    [self setRotateFromInterfaceOrientation:self.currentOrientation];
 }
 
 - (void)setEnableMicrophone:(BOOL)enableMicrophone
@@ -285,57 +281,21 @@
     }
 }
 
-- (void)setupDeviceOrientation
+- (void)setAnchorConfig:(UIView *)publishView
 {
-    //
-    // * 在开始直播前，确定直播时的手机姿势，二选一：横屏、竖屏
-    //
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    [getZegoAV_ShareInstance() setAppOrientation:[UIApplication sharedApplication].statusBarOrientation];
     
-    self.isTargetOrientationPortrait = YES;
-    switch (orientation) {
-        case UIInterfaceOrientationLandscapeLeft:
-        case UIInterfaceOrientationLandscapeRight:
-            self.isTargetOrientationPortrait = NO;
-            break;
-            
-        default:
-            break;
-    }
-    
-    CGSize resolution = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
-    
-    //
-    // * 修正最终需要的输出分辨率
-    // * 保证：横屏姿势时，输出横屏视频，竖屏姿势时，输出竖屏视频
-    //
-    if (
-        (
-         self.isTargetOrientationPortrait           // 竖屏
-         && resolution.width > resolution.height    // 但是宽比高大
-        )
-        ||
-        (
-         !self.isTargetOrientationPortrait          // 横屏
-         && resolution.width < resolution.height    // 但是高比宽大
-        )
-       )
+    if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation))
     {
-        CGFloat tmp = resolution.height;
-        resolution.height = resolution.width;
-        resolution.width = tmp;
-        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = resolution;
+        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = CGSizeMake(self.videoSize.height, self.videoSize.width);
+    }
+    else
+    {
+        [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution = self.videoSize;
     }
     
     int ret = [getZegoAV_ShareInstance() setAVConfig:[ZegoSettings sharedInstance].currentConfig];
     assert(ret == 0);
-    
-    [self setRotateFromInterfaceOrientation:orientation];
-}
-
-- (void)setAnchorConfig:(UIView *)publishView
-{
-    [self setupDeviceOrientation];
     
     bool b = [getZegoAV_ShareInstance() setFrontCam:self.useFrontCamera];
     assert(b);
@@ -466,7 +426,6 @@
         }];
     }
     
-    [self updateRemoteViewRotation];
 }
 
 - (void)updateContainerConstraintsForRemove:(UIView *)removeView containerView:(UIView *)containerView
@@ -793,120 +752,6 @@
 - (void)setIdelTimerDisable:(BOOL)disable
 {
     [[UIApplication sharedApplication] setIdleTimerDisabled:disable];
-}
-
-- (void)setRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    //
-    // * 手机姿势变化时，更新手机朝向配置
-    //
-    [getZegoAV_ShareInstance() setAppOrientation:fromInterfaceOrientation];
-    
-    //
-    // * 保证预览为正的
-    //
-    CAPTURE_ROTATE cr = [self calculatePreviewRotation:fromInterfaceOrientation];
-    [getZegoAV_ShareInstance() setLocalViewRotation:cr];
-    
-    //
-    // * 重新计算铺满 view 的旋转角度
-    //
-    [self updateRemoteViewRotation];
-}
-
-/// \breif 计算预览的旋转角度
-/// \param fromInterfaceOrientation 手机朝向
-/// \return 逆时针旋转角度
-- (CAPTURE_ROTATE)calculatePreviewRotation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    int rotate = CAPTURE_ROTATE_0;
-    
-    switch (fromInterfaceOrientation)
-    {
-        case UIInterfaceOrientationPortrait:
-        case UIInterfaceOrientationPortraitUpsideDown:
-            if (!self.isTargetOrientationPortrait)
-            {
-                rotate = self.useFrontCamera ? CAPTURE_ROTATE_270 : CAPTURE_ROTATE_90;
-            }
-            break;
-            
-        case UIInterfaceOrientationLandscapeLeft:
-        case UIInterfaceOrientationLandscapeRight:
-            if (self.isTargetOrientationPortrait)
-            {
-                rotate = self.useFrontCamera ? CAPTURE_ROTATE_270 : CAPTURE_ROTATE_90;
-            }
-            break;
-            
-        default:
-            break;
-    }
-    
-    return (CAPTURE_ROTATE)rotate;
-}
-
-- (void)updateRemoteViewRotation
-{
-    for (NSString *streamID in self.viewIndexDict.allKeys)
-    {
-        UIView *view = self.viewContainersDict[streamID];
-        NSValue *sizeValue = self.streamID2SizeDict[streamID];
-        if (sizeValue == nil)
-        {
-            continue;
-        }
-        
-        CGSize videoSize = [sizeValue CGSizeValue];
-        int viewIndex = [self.viewIndexDict[streamID] intValue];
-        
-        CAPTURE_ROTATE rotate = CAPTURE_ROTATE_0;
-        
-        if (
-            (
-             view.bounds.size.height > view.bounds.size.width
-              && videoSize.height < videoSize.width
-            )
-            ||
-            (
-             view.bounds.size.height < view.bounds.size.width
-              && videoSize.height > videoSize.width
-            )
-           )
-        {
-            // * 当长宽比不匹配的时候，我们做一个渲染旋转，让视频塞满这个 view
-            rotate = CAPTURE_ROTATE_90;
-        }
-        
-        [getZegoAV_ShareInstance() setRemoteViewRotation:rotate viewIndex:viewIndex];
-    }
-}
-
-- (void)onVideoSizeChanged:(NSString *)streamID width:(uint32)width height:(uint32)height
-{
-    NSLog(@"%s, streamID %@", __func__, streamID);
-    self.streamID2SizeDict[streamID] = [NSValue valueWithCGSize:CGSizeMake(width, height)];
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-        self.currentOrientation = orientation;
-        [self setRotateFromInterfaceOrientation:orientation];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        
-    }];
-    
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-}
-
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    [self setRotateFromInterfaceOrientation:toInterfaceOrientation];
-    self.currentOrientation = toInterfaceOrientation;
-    
-    [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 - (NSString *)getCurrentTime
