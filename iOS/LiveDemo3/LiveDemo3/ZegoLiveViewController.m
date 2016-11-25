@@ -33,6 +33,9 @@
 
 @property (strong) NSMutableData *recordedAudio;
 
+@property (nonatomic, strong) NSTimer *captureTimer;
+@property (nonatomic, strong) NSMutableDictionary *playTimerDictionary;
+
 @end
 
 @implementation ZegoLiveViewController
@@ -89,6 +92,8 @@
     NSString *content = [NSString stringWithFormat:@"%@\n", NSStringFromClass([self class])];
     [fileHandle writeData:[content dataUsingEncoding:NSUTF8StringEncoding]];
     [fileHandle closeFile];
+    
+    self.playTimerDictionary = [NSMutableDictionary dictionaryWithCapacity:MAX_STREAM_COUNT];
 }
 
 - (NSString *)getLogFileName
@@ -151,6 +156,12 @@
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         [self.usageTimer invalidate];
         self.usageTimer = nil;
+        
+        [self stopCaptureAudioLevel];
+        for (NSNumber *number in self.playTimerDictionary.allKeys)
+        {
+            [self stopPlayAudioLevel:[number intValue]];
+        }
     }
 }
 
@@ -307,6 +318,10 @@
     assert(b);
     
     b = [getZegoAV_ShareInstance() setFilter:self.filter];
+    assert(b);
+    
+    b = [getZegoAV_ShareInstance() enableRateControl:YES];
+    [getZegoAV_ShareInstance() requireHardwareAccelerated:NO];
     assert(b);
     
     [self enablePreview:self.enablePreview LocalView:publishView];
@@ -1005,6 +1020,94 @@
             [self.recordedAudio writeToFile:auidoFilePathname atomically:YES];
             self.recordedAudio = nil;
         }
+    }
+}
+
+- (void)updateAudioLevel:(float)level view:(UIView *)view isPlayView:(BOOL)isPlayView
+{
+    if (![view viewWithTag:10002])
+    {
+        UIProgressView *progressView = [UIProgressView new];
+        progressView.progress = 0;
+        if (isPlayView)
+            progressView.progressTintColor = [UIColor greenColor];
+        progressView.tag = 10002;
+        progressView.translatesAutoresizingMaskIntoConstraints = NO;
+        [view addSubview:progressView];
+        
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(10)-[progressView(==100)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(progressView)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[progressView(==5)]-(20)-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(progressView)]];
+    }
+
+    if (level < 0)
+        level = 0;
+    
+    UIProgressView *progressView = (UIProgressView *)[view viewWithTag:10002];
+    [progressView setProgress:level/ 100.0 animated:YES];
+}
+
+- (void)getCaptureAudioLevel:(NSTimer *)timer
+{
+    NSDictionary *userInfo = timer.userInfo;
+    if (userInfo == nil)
+        return;
+    
+    UIView *publishView = userInfo[@"view"];
+    if (publishView == nil)
+        return;
+    
+    float level = [getZegoAV_ShareInstance() getCaptureSoundLevel];
+    [self updateAudioLevel:level view:publishView isPlayView:NO];
+}
+
+- (void)startCaptureAudioLevel:(UIView *)publishView
+{
+    [self stopCaptureAudioLevel];
+    
+    self.captureTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(getCaptureAudioLevel:) userInfo:@{@"view":publishView} repeats:YES];
+}
+
+- (void)stopCaptureAudioLevel
+{
+    if (self.captureTimer)
+    {
+        [self.captureTimer invalidate];
+        self.captureTimer = nil;
+    }
+}
+
+- (void)getPlayAudioLevel:(NSTimer *)timer
+{
+    NSDictionary *userInfo = timer.userInfo;
+    if (userInfo == nil)
+        return;
+    
+    UIView *playView = userInfo[@"view"];
+    int index = [userInfo[@"index"] intValue];
+    if (playView == nil)
+        return;
+    
+    CGFloat level = [getZegoAV_ShareInstance() getRemoteSoundLevel:index];
+    [self updateAudioLevel:level view:playView isPlayView:YES];
+}
+
+- (void)startPlayAudioLevel:(UIView *)playView index:(int)index
+{
+    [self stopPlayAudioLevel:index];
+    
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(getPlayAudioLevel:) userInfo:@{@"view":playView, @"index":@(index)} repeats:YES];
+    
+    [self.playTimerDictionary setObject:timer forKey:@(index)];
+}
+
+- (void)stopPlayAudioLevel:(int)index
+{
+    NSTimer *timer = self.playTimerDictionary[@(index)];
+    if (timer)
+    {
+        [self.playTimerDictionary removeObjectForKey:@(index)];
+        [timer invalidate];
+        timer = nil;
     }
 }
 

@@ -593,6 +593,9 @@ public abstract class MorAnchorsBaseLiveActivity extends AbsShowActivity {
 
                 ViewLive viewLivePublish = getViewLiveByStreamID(streamID);
                 if(viewLivePublish != null){
+                    // 显示声音大小
+                    viewLivePublish.showSoundLevel(mZegoAVKit, mHandler);
+
                     List<String> listUrls = new ArrayList<>();
                     if(info != null){
 
@@ -638,6 +641,12 @@ public abstract class MorAnchorsBaseLiveActivity extends AbsShowActivity {
 
                 mPublishNumber++;
                 setPublishEnabled();
+
+                // 显示声音大小
+                ViewLive viewLivePlay = getViewLiveByStreamID(streamID);
+                if(viewLivePlay != null){
+                    viewLivePlay.showSoundLevel(mZegoAVKit, mHandler);
+                }
 
                 // 记录流ID用于play失败后重新play
                 mMapReplayStreamID.put(streamID, false);
@@ -849,6 +858,10 @@ public abstract class MorAnchorsBaseLiveActivity extends AbsShowActivity {
         mZegoAVKit.setLocalView(freeViewLive.getTextureView());
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
+
+        // 开启码率自动调整
+        mZegoAVKit.enableRateControl(true);
+
         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
         mZegoAVKit.enableTorch(mEnableTorch);
         mZegoAVKit.enableMic(mEnableMic);
@@ -974,6 +987,9 @@ public abstract class MorAnchorsBaseLiveActivity extends AbsShowActivity {
             }else {
                 stopPlay(mListViewLive.get(i).getStreamID());
             }
+
+            // 释放view
+            mListViewLive.get(i).setFree();
         }
 
         mZegoAVKit.logoutChannel();
@@ -1037,15 +1053,15 @@ public abstract class MorAnchorsBaseLiveActivity extends AbsShowActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
 
         // 注销电话监听
         TelephonyManager tm = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);
-        tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        tm.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        mPhoneStateListener = null;
 
         // 注销回调, 避免内存泄漏
         mZegoAVKit.setZegoLiveCallback(null);
-
-        super.onDestroy();
     }
 
     protected void loginChannel(){

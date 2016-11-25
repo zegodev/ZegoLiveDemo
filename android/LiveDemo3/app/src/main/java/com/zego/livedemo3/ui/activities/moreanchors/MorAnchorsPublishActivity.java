@@ -80,7 +80,7 @@ public class MorAnchorsPublishActivity extends MorAnchorsBaseLiveActivity {
         // 提前预览, 提升用户体验
         ViewLive freeViewLive = getFreeViewLive();
         if (freeViewLive != null) {
-
+            // 根据推流方向, 设置publish界面的横、竖朝向
             if(mAppOrientation == Surface.ROTATION_90 || mAppOrientation == Surface.ROTATION_270){
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }else {

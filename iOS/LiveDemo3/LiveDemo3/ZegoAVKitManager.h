@@ -29,8 +29,6 @@ extern "C"{
     void ZegoRequireHardwareAccelerated(bool hardwareAccelerated);
     BOOL ZegoIsRequireHardwareAccelerated();
     
-    NSString *ZegoGetSDKVersion();
-    
     BOOL isUsingExternalRender();
     
 #import <ZegoLiveRoom/BizLiveRoom.h>

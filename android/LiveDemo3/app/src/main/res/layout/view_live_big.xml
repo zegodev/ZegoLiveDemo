@@ -70,5 +70,13 @@
     </RelativeLayout>
 
 
-
+<ProgressBar
+    android:id="@+id/pb_sound_level"
+    android:layout_width="@dimen/dimen_100"
+    android:layout_height="@dimen/dimen_8"
+    android:max="100"
+    android:progressTint="@color/bg_orangered"
+    android:progressBackgroundTint="@color/bg_black"
+    style="@android:style/Widget.ProgressBar.Horizontal"
+    android:layout_alignParentBottom="true"/>
 </RelativeLayout>

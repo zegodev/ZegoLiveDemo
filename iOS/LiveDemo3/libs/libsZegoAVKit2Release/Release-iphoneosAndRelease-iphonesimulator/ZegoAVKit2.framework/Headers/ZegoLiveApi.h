@@ -217,9 +217,11 @@
 /// \return 0表示成功，非0 分别用一位来表示对应的值设置失败，可以与上SetConfigReturnType的各个值来获取设置失败的原因
 - (int)setAVConfig:(ZegoAVConfig*)config;
 
+#if TARGET_OS_IPHONE
 /// \brief 设置手机姿势，用于校正主播输出视频朝向
 /// \param orientation 手机姿势
 - (int)setAppOrientation:(UIInterfaceOrientation)orientation;
+#endif
 
 /// \brief 设置是否使用前置摄像头
 /// \param bFront 使用前置摄像头

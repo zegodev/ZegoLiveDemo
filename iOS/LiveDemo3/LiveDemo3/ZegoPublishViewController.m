@@ -275,7 +275,7 @@
     
     b = [getZegoAV_ShareInstance() setFilter:[self.filterPicker selectedRowInComponent:0]];
     assert(b);
-    
+
     [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];
     
     [getZegoAV_ShareInstance() setLocalView:self.preView];

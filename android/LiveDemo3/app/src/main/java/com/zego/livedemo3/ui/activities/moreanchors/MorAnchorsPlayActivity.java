@@ -43,13 +43,6 @@ public class MorAnchorsPlayActivity extends MorAnchorsBaseLiveActivity {
 
     protected AlertDialog mDialogHandleRequestPublish = null;
 
-
-    /**
-     * app朝向, Surface.ROTATION_0或者Surface.ROTATION_180表示竖屏推流,
-     * Surface.ROTATION_90或者Surface.ROTATION_270表示横屏推流.
-     */
-    protected int mAppOrientation;
-
     /**
      * 启动入口.
      *
@@ -79,7 +72,6 @@ public class MorAnchorsPlayActivity extends MorAnchorsBaseLiveActivity {
             if (mListStream == null) {
                 mListStream = new ArrayList<>();
             }
-            mAppOrientation = intent.getIntExtra(IntentExtra.APP_ORIENTATION, Surface.ROTATION_0);
         }
         super.initExtraData(savedInstanceState);
     }

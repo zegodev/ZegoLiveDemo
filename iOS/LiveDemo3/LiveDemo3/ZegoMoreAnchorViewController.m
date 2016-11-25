@@ -320,6 +320,8 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
+    [getZegoAV_ShareInstance() enableRateControl:YES];
+    [getZegoAV_ShareInstance() requireHardwareAccelerated:NO];
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);
@@ -358,6 +360,9 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"发布直播成功,流ID:%@", nil), streamID];
     [self addLogString:logString];
+    
+    //开始监听声音大小
+    [self startCaptureAudioLevel:self.publishView];
 }
 
 /// \brief 发布直播失败
@@ -385,6 +390,8 @@
     [self reportStreamAction:NO streamID:streamID];
     [self removeStreamViewContainer:streamID];
     self.publishView = nil;
+    
+    [self stopCaptureAudioLevel];
 }
 
 - (void)onPlaySucc:(NSString *)streamID channel:(NSString *)channel
@@ -393,6 +400,13 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流成功, 流ID:%@", nil), streamID];
     [self addLogString:logString];
+    
+    UIView *playView = self.viewContainersDict[streamID];
+    int index = [self.viewIndexDict[streamID] intValue];
+    if (playView)
+    {
+        [self startPlayAudioLevel:playView index:index];
+    }
 }
 
 - (void)onPlayStop:(uint32)err streamID:(NSString *)streamID channel:(NSString *)channel
@@ -401,6 +415,13 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流失败, 流ID:%@,  error:%d", nil), streamID, err];
     [self addLogString:logString];
+    
+    UIView *playView = self.viewContainersDict[streamID];
+    int index = [self.viewIndexDict[streamID] intValue];
+    if (playView)
+    {
+        [self stopPlayAudioLevel:index];
+    }
 }
 
 - (void)onPublishQualityUpdate:(int)quality stream:(NSString *)streamID videoFPS:(double)fps videoBitrate:(double)kbs

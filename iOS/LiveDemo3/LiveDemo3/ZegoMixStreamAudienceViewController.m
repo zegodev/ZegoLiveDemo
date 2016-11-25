@@ -459,6 +459,13 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流成功, 流ID:%@", nil), streamID];
     [self addLogString:logString];
+    
+    UIView *playView = self.viewContainersDict[streamID];
+    int index = [self.viewIndexDict[streamID] intValue];
+    if (playView)
+    {
+        [self startPlayAudioLevel:playView index:index];
+    }
 }
 
 - (void)onPlayStop:(uint32)err streamID:(NSString *)streamID channel:(NSString *)channel
@@ -467,6 +474,13 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流失败, 流ID:%@,  error:%d", nil), streamID, err];
     [self addLogString:logString];
+    
+    UIView *playView = self.viewContainersDict[streamID];
+    int index = [self.viewIndexDict[streamID] intValue];
+    if (playView)
+    {
+        [self stopPlayAudioLevel:index];
+    }
 }
 
 /// \brief 发布直播成功
@@ -488,6 +502,12 @@
     //    [ZegoSettings sharedInstance].publishingLiveChannel = self.liveChannel;
     
     [self reportStreamAction:YES streamID:streamID];
+    
+    UIView *publishView = self.viewContainersDict[streamID];
+    if (publishView)
+    {
+        [self startCaptureAudioLevel:publishView];
+    }
 }
 
 /// \brief 发布直播失败
@@ -513,6 +533,12 @@
     self.optionButton.enabled = NO;
     
     [self reportStreamAction:NO streamID:streamID];
+    
+    UIView *publishView = self.viewContainersDict[streamID];
+    if (publishView)
+    {
+        [self stopCaptureAudioLevel];
+    }
     
     //删除publish的view
     [self removeStreamViewContainer:streamID];

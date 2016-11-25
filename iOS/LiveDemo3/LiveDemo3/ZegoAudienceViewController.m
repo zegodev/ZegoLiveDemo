@@ -409,6 +409,13 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流成功, 流ID:%@", nil), streamID];
     [self addLogString:logString];
+    
+    UIView *playView = self.viewContainersDict[streamID];
+    int index = [self.viewIndexDict[streamID] intValue];
+    if (playView)
+    {
+        [self startPlayAudioLevel:playView index:index];
+    }
 }
 
 - (void)onPlayStop:(uint32)err streamID:(NSString *)streamID channel:(NSString *)channel
@@ -417,6 +424,13 @@
     
     NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"播放流失败, 流ID:%@,  error:%d", nil), streamID, err];
     [self addLogString:logString];
+    
+    UIView *playView = self.viewContainersDict[streamID];
+    int index = [self.viewIndexDict[streamID] intValue];
+    if (playView)
+    {
+        [self stopPlayAudioLevel:index];
+    }
 }
 
 - (void)onVideoSizeChanged:(NSString *)streamID width:(uint32)width height:(uint32)height

@@ -3,15 +3,18 @@ package com.zego.livedemo3.ui.widgets;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.utils.ZegoAVKitUtil;
+import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
 
 import java.util.ArrayList;
@@ -53,74 +56,76 @@ public class ViewLive extends RelativeLayout {
      */
     public static final String TAG_VIEW_IS_FREE = USELESS_STREAM_ORDINAL + SEPARATOR + EMPTY_STREAM_ID;
 
-    private View mRootView;
-
-    private TextView mTvQualityColor;
-
-    private TextView mTvQuality;
-
-    private TextView mTvSwitchToFullScreen;
-
-    private TextView mTvShare;
-
-    private TextureView mTextureView;
-
-    private Resources mResources;
-
-    private int mLiveQuality = 0;
-
-    private ViewLiveCallback mViewLiveCallback;
-
-    private ZegoAVKitCommon.ZegoVideoViewMode mZegoVideoViewMode = ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill;
-
-    private boolean mNeedToSwitchFullScreen = false;
-
     private int[] mArrColor;
 
     private String[] mArrLiveQuality;
 
+    private Resources mResources;
+
+    private ViewLiveCallback mViewLiveCallback;
+
+    private View mRootView;
+
+    /**
+     * 推拉流颜色.
+     */
+    private TextView mTvQualityColor;
+
+    /**
+     * 推拉流质量.
+     */
+    private TextView mTvQuality;
+
+    /**
+     * 全屏.
+     */
+    private TextView mTvSwitchToFullScreen;
+
+    /**
+     * 分享.
+     */
+    private TextView mTvShare;
+
+    /**
+     * 用于渲染视频.
+     */
+    private TextureView mTextureView;
+
+    /**
+     * 声音大小.
+     */
+    private ProgressBar mPbSoundLevel;
+
+    /**
+     * 推拉流质量.
+     */
+    private int mLiveQuality = 0;
+
+    /**
+     * 视频显示模式.
+     */
+    private ZegoAVKitCommon.ZegoVideoViewMode mZegoVideoViewMode = ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill;
+
+    /**
+     * tag.
+     */
     private String mLiveTag;
 
+    /**
+     * 分享地址.
+     */
     private List<String> mListShareUrls = new ArrayList<>();
 
-    public static int getStreamOrdinalFromLiveTag(String liveTag) {
-        int streamOrdinal = USELESS_STREAM_ORDINAL;
+    /**
+     * "切换全屏" 标记.
+     */
+    private boolean mNeedToSwitchFullScreen = false;
 
-        if (liveTag != null) {
-            String[] arr = liveTag.split(SEPARATOR);
-            if (arr != null) {
-                streamOrdinal = Integer.valueOf(arr[0]);
-            }
-        }
+    /**
+     * 显示声音大小标记.
+     */
+    private boolean mIsShowingSoundLevel = false;
 
-        return streamOrdinal;
-    }
-
-    public static String getStreamIDFromLiveTag(String liveTag) {
-        String streamID = EMPTY_STREAM_ID;
-
-        if (liveTag != null) {
-            String[] arr = liveTag.split(SEPARATOR);
-            if (arr != null) {
-                streamID = arr[1];
-            }
-        }
-
-        return streamID;
-    }
-
-    public static boolean isPublishView(int streamOrdinal) {
-        boolean isPublishView = true;
-
-        switch (streamOrdinal) {
-            case 0:
-            case 1:
-            case 2:
-                isPublishView = false;
-                break;
-        }
-        return isPublishView;
-    }
 
     public ViewLive(Context context) {
         super(context);
@@ -134,10 +139,10 @@ public class ViewLive extends RelativeLayout {
         super(context, attrs, defStyleAttr);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ViewLive, defStyleAttr, 0);
-        boolean isFullScreen = a.getBoolean(R.styleable.ViewLive_isBigView, false);
+        boolean isBigView = a.getBoolean(R.styleable.ViewLive_isBigView, false);
         a.recycle();
 
-        initViews(context, isFullScreen);
+        initViews(context, isBigView);
     }
 
     private void initViews(Context context, boolean isBigView) {
@@ -196,6 +201,9 @@ public class ViewLive extends RelativeLayout {
 
         // view默认为空闲
         mLiveTag = TAG_VIEW_IS_FREE;
+
+
+        mPbSoundLevel = (ProgressBar)mRootView.findViewById(R.id.pb_sound_level);
     }
 
     public void setViewLiveCallback(ViewLiveCallback viewLiveCallback) {
@@ -208,7 +216,6 @@ public class ViewLive extends RelativeLayout {
 
     /**
      * 返回view是否为"空闲"状态.
-     * @return
      */
     public boolean isFree() {
         return TAG_VIEW_IS_FREE.equals(mLiveTag);
@@ -233,13 +240,13 @@ public class ViewLive extends RelativeLayout {
         if (mTvShare != null) {
             mTvShare.setVisibility(View.INVISIBLE);
         }
+
+        mIsShowingSoundLevel = false;
     }
 
 
     /**
      * 交换view, 通常是跟大的View交换.
-     *
-     * @param vlBigView
      */
     public void toExchangeView(ViewLive vlBigView) {
 
@@ -298,11 +305,12 @@ public class ViewLive extends RelativeLayout {
         List<String> listShareUrlsOfSmallView = mListShareUrls;
         vlBigView.setListShareUrls(listShareUrlsOfSmallView);
         setListShareUrls(listShareUrlsOfBifView);
+
+
     }
 
     /**
      * 设置播放质量.
-     * @param quality
      */
     public void setLiveQuality(int quality) {
         if (quality >= 0 && quality <= 3) {
@@ -312,31 +320,9 @@ public class ViewLive extends RelativeLayout {
         }
     }
 
-    public int getLiveQuality() {
-        return mLiveQuality;
-    }
-
-    public TextureView getTextureView() {
-        return mTextureView;
-    }
-
-    public String getLiveTag() {
-        return mLiveTag;
-    }
-
-    public int getStreamOrdinal() {
-        return getStreamOrdinalFromLiveTag(mLiveTag);
-    }
-
-    public String getStreamID() {
-        return getStreamIDFromLiveTag(mLiveTag);
-    }
 
     /**
      * 设置tag.
-     *
-     * @param streamOrdinal
-     * @param streamID
      */
     public void setLiveTag(int streamOrdinal, String streamID) {
         mLiveTag = streamOrdinal + SEPARATOR + streamID;
@@ -344,27 +330,13 @@ public class ViewLive extends RelativeLayout {
 
     /**
      * 设置tag.
-     *
-     * @param liveTag
      */
     public void setLiveTag(String liveTag) {
         mLiveTag = liveTag;
     }
 
     /**
-     * 返回"是否需要切换全屏".
-     *
-     * @return
-     */
-    public boolean isNeedToSwitchFullScreen() {
-        return mNeedToSwitchFullScreen;
-    }
-
-
-    /**
      * 设置mode.
-     *
-     * @param mode
      */
     public void setZegoVideoViewMode(boolean needToSwitchFullScreen, ZegoAVKitCommon.ZegoVideoViewMode mode) {
         mNeedToSwitchFullScreen = needToSwitchFullScreen;
@@ -389,18 +361,7 @@ public class ViewLive extends RelativeLayout {
     }
 
     /**
-     * 返回mode.
-     *
-     * @return
-     */
-    public ZegoAVKitCommon.ZegoVideoViewMode getZegoVideoViewMode() {
-        return mZegoVideoViewMode;
-    }
-
-    /**
      * 设置分享url列表.
-     *
-     * @param listShareUrls
      */
     public void setListShareUrls(List<String> listShareUrls) {
         mListShareUrls = listShareUrls;
@@ -414,9 +375,116 @@ public class ViewLive extends RelativeLayout {
         }
     }
 
+    /**
+     * 显示声音大小.
+     */
+    public void showSoundLevel(final ZegoAVKit zegoAVKit, final Handler handler){
+        if(!mIsShowingSoundLevel){
+            mIsShowingSoundLevel = true;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (mIsShowingSoundLevel){
+                        int soundLevel;
+                        try {
+                            if(isPublishView(getStreamOrdinal())){
+                                soundLevel = (int) zegoAVKit.getCaptureSoundLevel();
+                            }else {
+                                soundLevel = (int) zegoAVKit.getRemoteSoundLevel(ZegoAVKitUtil.getZegoRemoteViewIndexByOrdinal(getStreamOrdinal()));
+                            }
+
+                            final int finalSoundLevel = soundLevel;
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mPbSoundLevel.setProgress(finalSoundLevel);
+                                }
+                            });
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+
+    public int getLiveQuality() {
+        return mLiveQuality;
+    }
+
+    public TextureView getTextureView() {
+        return mTextureView;
+    }
+
+    public String getLiveTag() {
+        return mLiveTag;
+    }
+
+    public int getStreamOrdinal() {
+        return getStreamOrdinalFromLiveTag(mLiveTag);
+    }
+
+    public String getStreamID() {
+        return getStreamIDFromLiveTag(mLiveTag);
+    }
+
+    public boolean isNeedToSwitchFullScreen() {
+        return mNeedToSwitchFullScreen;
+    }
+
+
+    public ZegoAVKitCommon.ZegoVideoViewMode getZegoVideoViewMode() {
+        return mZegoVideoViewMode;
+    }
+
 
     public List<String> getListShareUrls() {
         return mListShareUrls;
+    }
+
+
+
+
+
+    public static int getStreamOrdinalFromLiveTag(String liveTag) {
+        int streamOrdinal = USELESS_STREAM_ORDINAL;
+
+        if (liveTag != null) {
+            String[] arr = liveTag.split(SEPARATOR);
+            if (arr != null) {
+                streamOrdinal = Integer.valueOf(arr[0]);
+            }
+        }
+
+        return streamOrdinal;
+    }
+
+    public static String getStreamIDFromLiveTag(String liveTag) {
+        String streamID = EMPTY_STREAM_ID;
+
+        if (liveTag != null) {
+            String[] arr = liveTag.split(SEPARATOR);
+            if (arr != null) {
+                streamID = arr[1];
+            }
+        }
+
+        return streamID;
+    }
+
+    public static boolean isPublishView(int streamOrdinal) {
+        boolean isPublishView = true;
+
+        switch (streamOrdinal) {
+            case 0:
+            case 1:
+            case 2:
+                isPublishView = false;
+                break;
+        }
+        return isPublishView;
     }
 
 

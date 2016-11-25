@@ -3,9 +3,11 @@ package com.zego.livedemo3.ui.activities.mixstream;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Surface;
 
 import com.zego.biz.BizStream;
 import com.zego.biz.BizUser;
@@ -36,19 +38,27 @@ public class MixStreamPublishActivity extends MixstreamBaseLiveActivity {
     protected AlertDialog mDialogHandleRequestPublish = null;
 
     protected List<MixStreamInfo> mixStreamInfos = new ArrayList<>();
+
+    /**
+     *   app朝向, Surface.ROTATION_0或者Surface.ROTATION_180表示竖屏推流,
+     *   Surface.ROTATION_90或者Surface.ROTATION_270表示横屏推流.
+     */
+    protected int mAppOrientation;
+
     /**
      * 启动入口.
      *
      * @param activity     源activity
      * @param publishTitle 视频标题
      */
-    public static void actionStart(Activity activity, String publishTitle, boolean enableFrontCam, boolean enableTorch, int selectedBeauty, int selectedFilter) {
+    public static void actionStart(Activity activity, String publishTitle, boolean enableFrontCam, boolean enableTorch, int selectedBeauty, int selectedFilter,  int appOrientation) {
         Intent intent = new Intent(activity, MixStreamPublishActivity.class);
         intent.putExtra(IntentExtra.PUBLISH_TITLE, publishTitle);
         intent.putExtra(IntentExtra.ENABLE_FRONT_CAM, enableFrontCam);
         intent.putExtra(IntentExtra.ENABLE_TORCH, enableTorch);
         intent.putExtra(IntentExtra.SELECTED_BEAUTY, selectedBeauty);
         intent.putExtra(IntentExtra.SELECTED_FILTER, selectedFilter);
+        intent.putExtra(IntentExtra.APP_ORIENTATION, appOrientation);
         activity.startActivity(intent);
     }
 
@@ -62,6 +72,7 @@ public class MixStreamPublishActivity extends MixstreamBaseLiveActivity {
             mEnableTorch = intent.getBooleanExtra(IntentExtra.ENABLE_TORCH, false);
             mSelectedBeauty = intent.getIntExtra(IntentExtra.SELECTED_BEAUTY, 0);
             mSelectedFilter = intent.getIntExtra(IntentExtra.SELECTED_FILTER, 0);
+            mAppOrientation = intent.getIntExtra(IntentExtra.APP_ORIENTATION, Surface.ROTATION_0);
         }
 
         super.initExtraData(savedInstanceState);
@@ -74,6 +85,13 @@ public class MixStreamPublishActivity extends MixstreamBaseLiveActivity {
         // 提前预览, 提升用户体验
         ViewLive freeViewLive = getFreeViewLive();
         if (freeViewLive != null) {
+            // 根据推流方向, 设置publish界面的横、竖朝向
+            if(mAppOrientation == Surface.ROTATION_90 || mAppOrientation == Surface.ROTATION_270){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }else {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+
             mZegoAVKit.setLocalView(freeViewLive.getTextureView());
             mZegoAVKit.startPreview();
             mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);

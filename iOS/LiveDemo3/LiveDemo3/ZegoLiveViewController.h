@@ -89,6 +89,14 @@
 
 - (void)shareToQQ:(NSString *)hls rtmp:(NSString *)rtmp bizToken:(NSString *)bizToken bizID:(NSString *)bizID streamID:(NSString *)streamID;
 
+- (void)startCaptureAudioLevel:(UIView *)publishView;
+- (void)stopCaptureAudioLevel;
+
+- (void)updateAudioLevel:(float)level view:(UIView *)view isPlayView:(BOOL)isPlayView;
+
+- (void)startPlayAudioLevel:(UIView *)playView index:(int)index;
+- (void)stopPlayAudioLevel:(int)index;
+
 @end
 
 

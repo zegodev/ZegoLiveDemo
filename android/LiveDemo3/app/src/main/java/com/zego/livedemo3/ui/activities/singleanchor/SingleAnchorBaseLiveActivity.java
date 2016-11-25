@@ -3,13 +3,11 @@ package com.zego.livedemo3.ui.activities.singleanchor;
 
 import android.Manifest;
 import android.app.Service;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.hardware.display.DisplayManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,7 +33,6 @@ import com.zego.livedemo3.R;
 import com.zego.livedemo3.ZegoApiManager;
 import com.zego.livedemo3.presenters.BizLivePresenter;
 import com.zego.livedemo3.ui.activities.LogListActivity;
-import com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsBaseLiveActivity;
 import com.zego.livedemo3.ui.base.AbsShowActivity;
 import com.zego.livedemo3.ui.widgets.PublishSettingsPannel;
 import com.zego.livedemo3.ui.widgets.ViewLive;
@@ -45,7 +42,6 @@ import com.zego.livedemo3.utils.ZegoAVKitUtil;
 import com.zego.zegoavkit2.AuxData;
 import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
-import com.zego.zegoavkit2.ZegoAvConfig;
 import com.zego.zegoavkit2.callback.ZegoLiveCallback;
 import com.zego.zegoavkit2.entity.ZegoUser;
 
@@ -537,6 +533,10 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
 
                 ViewLive viewLivePublish = getViewLiveByStreamID(streamID);
                 if(viewLivePublish != null){
+
+                    // 显示声音大小
+                    viewLivePublish.showSoundLevel(mZegoAVKit, mHandler);
+
                     List<String> listUrls = new ArrayList<>();
                     if(info != null){
 
@@ -579,6 +579,12 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
             @Override
             public void onPlaySucc(String streamID, String liveChannel) {
                 recordLog(MY_SELF + ": onPlaySucc(" + streamID + ")");
+
+                // 显示声音大小
+                ViewLive viewLivePlay = getViewLiveByStreamID(streamID);
+                if(viewLivePlay != null){
+                    viewLivePlay.showSoundLevel(mZegoAVKit, mHandler);
+                }
 
                 // 记录流ID用于play失败后重新play
                 mMapReplayStreamID.put(streamID, false);
@@ -786,6 +792,10 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
         mZegoAVKit.setLocalView(freeViewLive.getTextureView());
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
+
+        // 开启码率自动调整
+        mZegoAVKit.enableRateControl(true);
+
         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
         mZegoAVKit.setFrontCam(mEnableFrontCam);
         mZegoAVKit.enableTorch(mEnableTorch);
@@ -911,6 +921,8 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
             }else {
                 stopPlay(mListViewLive.get(i).getStreamID());
             }
+
+            mListViewLive.get(i).setFree();
         }
 
         mZegoAVKit.logoutChannel();
@@ -964,6 +976,7 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
 
         // 注销电话监听
         TelephonyManager tm = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);
@@ -972,7 +985,6 @@ public abstract class SingleAnchorBaseLiveActivity extends AbsShowActivity {
         // 注销回调, 避免内存泄漏
         mZegoAVKit.setZegoLiveCallback(null);
 
-        super.onDestroy();
     }
 
     protected void loginChannel(){

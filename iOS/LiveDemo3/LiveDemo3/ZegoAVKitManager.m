@@ -28,6 +28,10 @@ void setCustomAppIDAndSign(uint32 appid, NSData* data)
     g_signKey = data;
 }
 
+static uint32 GetTestZegoAVKitAppID();
+static NSData * GetTestZegoAVKitAppSign();
+static uint32 GetTestBizAppID();
+static NSData * GetTestBizAppSign();
 
 NSData * zegoAppSignFromServer()
 {
@@ -107,11 +111,9 @@ BizLiveRoom *getBizRoomInstance()
     {
         [BizLiveRoom setLogLevel:4];
         
-        if (g_appID != 0 && g_signKey != nil)
+        if (GetTestZegoAVKitAppID() != 0 && GetTestZegoAVKitAppSign() != nil)
         {
-            Byte signKey[] = {0xf9,0xe4,0x7b,0x67,0xa,0x8f,0x46,0x14,0x3e,0xdb,0xfb,0xc0,0x66,0x2a,0xc4,0xfe,0x88,0xde,0xb6,0x3f,0x79,0xad,0xc5,0xc4,0xe3,0xa6,0x18,0x1b,0x7d,0xe3,0x1e,0x91};
-            NSData *appSign = [NSData dataWithBytes:signKey length:32];
-            g_bizRoom = [[BizLiveRoom alloc] initWithBizID:308895348 bizSignature:appSign];
+            g_bizRoom = [[BizLiveRoom alloc] initWithBizID:GetTestBizAppID() bizSignature:GetTestBizAppSign()];
         }
         else
         {
@@ -129,9 +131,6 @@ BizLiveRoom *getBizRoomInstance()
             
             assert(g_bizRoom != nil);
         }
-        
-        
-//        [g_bizRoom setTestEnvironment:g_useTestEnv];
     }
     
     return g_bizRoom;
@@ -171,7 +170,6 @@ NSData* ConvertStringToSign(NSString* strSign)
         NSLog(@"%x,", szSign[i]);
     }
     
-    //    NSData *sign = [[NSData alloc]initWithBytes:szSign length:32];
     NSData *sign = [NSData dataWithBytes:szSign length:32];
     return sign;
 }
@@ -208,23 +206,6 @@ BOOL isUseingTestEnv()
     return g_useTestEnv;
 }
 
-void setUseAlphaEnv(BOOL alphaEnv)
-{
-    if ([ZegoLiveApi respondsToSelector:@selector(setUseAlphaEnv:)])
-    {
-        if (g_useAlphaEnv != alphaEnv)
-            releaseZegoAV_ShareInstance();
-        
-        g_useAlphaEnv = alphaEnv;
-        
-        [ZegoLiveApi performSelector:@selector(setUseAlphaEnv:) withObject:@(alphaEnv)];
-    }
-}
-
-BOOL isUsingAlphaEnv()
-{
-    return g_useAlphaEnv;
-}
 
 uint32 ZegoGetAppID()
 {
@@ -242,7 +223,52 @@ BOOL ZegoIsRequireHardwareAccelerated()
     return g_requireHardwareAccelerated;
 }
 
-NSString *ZegoGetSDKVersion()
+
+#pragma mark - helper
+
+static uint32 GetTestZegoAVKitAppID()
 {
-    return [getZegoAV_ShareInstance() version];
+    return g_appID;
+}
+
+static NSData * GetTestZegoAVKitAppSign()
+{
+    return g_signKey;
+}
+
+static uint32 GetTestBizAppID()
+{
+    return 308895348;
+}
+
+static NSData * GetTestBizAppSign()
+{
+    Byte signKey[] = {0xf9,0xe4,0x7b,0x67,0xa,0x8f,0x46,0x14,0x3e,0xdb,0xfb,0xc0,0x66,0x2a,0xc4,0xfe,0x88,0xde,0xb6,0x3f,0x79,0xad,0xc5,0xc4,0xe3,0xa6,0x18,0x1b,0x7d,0xe3,0x1e,0x91};
+    return [NSData dataWithBytes:signKey length:32];
+}
+
+
+#pragma mark - alpha support
+
+@interface NSObject()
+// * suppress warning
++ (void)setUseAlphaEnv:(id)useAlphaEnv;
+@end
+
+void setUseAlphaEnv(BOOL alphaEnv)
+{
+    if ([ZegoLiveApi respondsToSelector:@selector(setUseAlphaEnv:)])
+    {
+        if (g_useAlphaEnv != alphaEnv)
+            releaseZegoAV_ShareInstance();
+        
+        g_useAlphaEnv = alphaEnv;
+        
+        [ZegoLiveApi performSelector:@selector(setUseAlphaEnv:) withObject:@(alphaEnv)];
+    }
+}
+
+BOOL isUsingAlphaEnv()
+{
+    return g_useAlphaEnv;
 }

@@ -513,11 +513,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EFAF4B5B1D2B6C7800560B00 /* Build configuration list for PBXNativeTarget "LiveDemo3iOS7" */;
 			buildPhases = (
-				4D6398EE1DB8B42D00FA04E5 /* ShellScript */,
 				EFAF4B341D2B6C7800560B00 /* Sources */,
 				EFAF4B4A1D2B6C7800560B00 /* Frameworks */,
 				EFAF4B521D2B6C7800560B00 /* Resources */,
-				4D6398EF1DB8B44B00FA04E5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -532,12 +530,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EFF10F0C1D1A297900ECE11E /* Build configuration list for PBXNativeTarget "LiveDemo3" */;
 			buildPhases = (
-				4D2972341DB7121C00A7585D /* ShellScript */,
 				EFF10EEE1D1A297900ECE11E /* Sources */,
 				EFF10EEF1D1A297900ECE11E /* Frameworks */,
 				EFF10EF01D1A297900ECE11E /* Resources */,
 				EFE0D9271D1BB9170090F719 /* Embed Frameworks */,
-				4D2972351DB71E4200A7585D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -623,61 +619,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		4D2972341DB7121C00A7585D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"set bugly demo version\"\n/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" LiveDemo3/Info.plist > ./old_demo_version.txt\n\nbugly_demo_version=`cat ./bugly_demo_version.txt`\necho \"bugly_demo_version:\"$bugly_demo_version\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${bugly_demo_version}\" LiveDemo3/Info.plist";
-		};
-		4D2972351DB71E4200A7585D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"set old demo version\"\nold_demo_version=`cat ./old_demo_version.txt`\necho \"old_demo_version:\"$old_demo_version\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${old_demo_version}\" LiveDemo3/Info.plist";
-		};
-		4D6398EE1DB8B42D00FA04E5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"set bugly demo version\"\n/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" LiveDemo3/Info.plist > ./old_demo_version.txt\n\nbugly_demo_version=`cat ./bugly_demo_version.txt`\necho \"bugly_demo_version:\"$bugly_demo_version\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${bugly_demo_version}\" LiveDemo3/Info.plist";
-		};
-		4D6398EF1DB8B44B00FA04E5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"set old demo version\"\nold_demo_version=`cat ./old_demo_version.txt`\necho \"old_demo_version:\"$old_demo_version\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString ${old_demo_version}\" LiveDemo3/Info.plist";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EFAF4B341D2B6C7800560B00 /* Sources */ = {

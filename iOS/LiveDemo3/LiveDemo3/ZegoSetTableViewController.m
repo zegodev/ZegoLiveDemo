@@ -100,7 +100,7 @@
 }
 
 - (void)loadVideoSettings {
-    self.version.text = ZegoGetSDKVersion();
+    self.version.text = [ZegoLiveApi version];
     [self.presetPicker selectRow:[ZegoSettings sharedInstance].presetIndex inComponent:0 animated:YES];
     [self updateViedoSettingUI];
 }

@@ -154,6 +154,11 @@ typedef enum : NSUInteger {
 /// \return true 成功，否则失败
 - (bool)enableCaptureMirror:(bool)enable;
 
+/// \brief 是否开启码率控制（在带宽不足的情况下码率自动适应当前带宽)
+/// \param enable true 启用，false 不启用
+/// \return true 成功，否则失败
+- (bool)enableRateControl:(bool)enable;
+
 /// \brief 混音输入播放静音开关
 /// \param bMute true: aux 输入播放静音；false: 不静音
 - (bool)muteAux:(bool)bMute;
@@ -177,6 +182,15 @@ typedef enum : NSUInteger {
 /// \brief 直播事件通知回调
 /// \param liveEventDelegate 直播事件通知回调协议
 - (void)setLiveEventDelegate:(id<ZegoLiveEventDelegate>)liveEventDelegate;
+
+/// \brief 获取当前采集的音量
+/// \return 当前采集音量大小
+- (float)getCaptureSoundLevel;
+
+/// \brief 获取当前播放视频的音量
+/// \param[in] channelIndex 播放通道
+/// \return channelIndex对应视频的音量
+- (float)getRemoteSoundLevel:(int)channelIndex;
 
 @end
 

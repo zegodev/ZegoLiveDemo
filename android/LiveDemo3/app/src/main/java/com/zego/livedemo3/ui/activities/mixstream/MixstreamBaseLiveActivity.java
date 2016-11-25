@@ -605,6 +605,10 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
 
                 ViewLive viewLivePublish = getViewLiveByStreamID(streamID);
                 if(viewLivePublish != null){
+
+                    // 显示声音大小
+                    viewLivePublish.showSoundLevel(mZegoAVKit, mHandler);
+
                     List<String> listUrls = new ArrayList<>();
                     if(info != null){
 
@@ -682,13 +686,19 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
             @Override
             public void onPlaySucc(String streamID, String liveChannel) {
                 recordLog(MY_SELF + ": onPlaySucc(" + streamID + ")");
-                mRlytControlHeader.bringToFront();
 
                 mPublishNumber++;
                 setPublishEnabled();
 
+                // 显示声音大小
+                ViewLive viewLivePlay = getViewLiveByStreamID(streamID);
+                if(viewLivePlay != null){
+                    viewLivePlay.showSoundLevel(mZegoAVKit, mHandler);
+                }
+
                 // 记录流ID用于play失败后重新play
                 mMapReplayStreamID.put(streamID, false);
+                mRlytControlHeader.bringToFront();
             }
 
             @Override
@@ -894,7 +904,11 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
         mZegoAVKit.setLocalView(freeViewLive.getTextureView());
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
+
+        // 开启码率自动调整
+        mZegoAVKit.enableRateControl(true);
         mZegoAVKit.startPublish(mPublishTitle, mPublishStreamID);
+
         mZegoAVKit.setFrontCam(mEnableFrontCam);
         mZegoAVKit.enableTorch(mEnableTorch);
         mZegoAVKit.enableMic(mEnableMic);
@@ -913,6 +927,7 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
         // 输出发布状态
         recordLog(MY_SELF + ": start publish " + mPublishStreamID);
 
+
         // 设置美颜 滤镜
         mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
         mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
@@ -922,8 +937,10 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
 
-        ZegoAvConfig zegoAvConfig  = ZegoApiManager.getInstance().getZegoAvConfig();
+        // 开启码率自动调整
+        mZegoAVKit.enableRateControl(true);
 
+        ZegoAvConfig zegoAvConfig  = ZegoApiManager.getInstance().getZegoAvConfig();
         int width = zegoAvConfig.getVideoEncodeResolutionWidth();
         int height = zegoAvConfig.getVideoEncodeResolutionHeight();
         mZegoAVKit.startPublishMixStream(mPublishTitle, mPublishStreamID, mMixStreamID, width, height, 2);
@@ -1052,6 +1069,8 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
             }else {
                 stopPlay(mListViewLive.get(i).getStreamID());
             }
+
+            mListViewLive.get(i).setFree();
         }
 
         mZegoAVKit.logoutChannel();
@@ -1115,6 +1134,7 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
 
         // 注销电话监听
         TelephonyManager tm = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);
@@ -1122,8 +1142,6 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
 
         // 注销回调, 避免内存泄漏
         mZegoAVKit.setZegoLiveCallback(null);
-
-        super.onDestroy();
     }
 
     protected void setMixStreamMode(boolean isMixStreamMode){
