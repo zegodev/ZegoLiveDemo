@@ -21,6 +21,10 @@ ZEGO_EXTERN NSString *const kZegoRtmpUrlListKey;        ///< rtmp 播放 url 列
 ZEGO_EXTERN NSString *const kZegoHlsUrlListKey;         ///< hls 播放 url 列表，值为 NSArray<NSString *>
 ZEGO_EXTERN NSString *const kZegoFlvUrlListKey;         ///< flv 播放 url 列表，值为 NSArray<NSString *>
 
+ZEGO_EXTERN NSString *const kZegoDeviceCameraName;      ///< 摄像头设备
+ZEGO_EXTERN NSString *const kZegoDeviceMicrophoneName;  ///< 麦克风设备
+
+
 typedef unsigned int	uint32;
 
 typedef enum {

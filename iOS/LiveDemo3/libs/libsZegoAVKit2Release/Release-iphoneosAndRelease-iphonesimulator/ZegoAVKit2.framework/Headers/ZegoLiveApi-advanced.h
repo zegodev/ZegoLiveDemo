@@ -34,6 +34,8 @@
 @end
 
 
+
+
 typedef enum : NSUInteger {
     Play_BeginRetry = 1,
     Play_RetrySuccess = 2,
@@ -45,6 +47,13 @@ typedef enum : NSUInteger {
 @protocol ZegoLiveEventDelegate <NSObject>
 
 - (void)zego_onLiveEvent:(ZegoLiveEvent)event info:(NSDictionary<NSString*, NSString*>*)info;
+
+@end
+
+
+@protocol ZegoDeviceEventDelegate <NSObject>
+
+- (void)zego_onDevice:(NSString *)deviceName error:(int)errorCode;
 
 @end
 
@@ -182,6 +191,10 @@ typedef enum : NSUInteger {
 /// \brief 直播事件通知回调
 /// \param liveEventDelegate 直播事件通知回调协议
 - (void)setLiveEventDelegate:(id<ZegoLiveEventDelegate>)liveEventDelegate;
+
+/// \brief 音视频设备错误通知回调
+/// \param deviceEventDelegate 直播事件通知回调协议
+- (void)setDeviceEventDelegate:(id<ZegoDeviceEventDelegate>)deviceEventDelegate;
 
 /// \brief 获取当前采集的音量
 /// \return 当前采集音量大小

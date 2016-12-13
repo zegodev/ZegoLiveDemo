@@ -39,6 +39,11 @@
 /// \note 已废弃，请使用 +version2
 - (NSString *)version2;
 
+/// \brief 开关硬件编解码
+/// \param bRequire 开关
+/// \note 请用 requireHardwareEncoder/requireHardwareDecoder
+- (bool)requireHardwareAccelerated:(bool)bRequire;
+
 @end
 
 

@@ -261,10 +261,15 @@
 /// \note 通过回调 onTakeLocalViewSnapshot: 返回结果
 - (bool)takeLocalViewSnapshot;
 
-/// \brief 开关硬件编解码
+/// \brief 开关硬件编码
 /// \param bRequire 开关
 /// \note ！！！打开硬编硬解开关需后台可控，避免碰到版本升级或者硬件升级时出现硬编硬解失败的问题
-- (bool)requireHardwareAccelerated:(bool)bRequire;
+- (bool)requireHardwareEncoder:(bool)bRequire;
+
+/// \brief 开关硬件解码
+/// \param bRequire 开关
+/// \note ！！！打开硬编硬解开关需后台可控，避免碰到版本升级或者硬件升级时出现硬编硬解失败的问题
+- (bool)requireHardwareDecoder:(bool)bRequire;
 
 /// \brief 主动出发日志上报
 - (void)uploadLog;
