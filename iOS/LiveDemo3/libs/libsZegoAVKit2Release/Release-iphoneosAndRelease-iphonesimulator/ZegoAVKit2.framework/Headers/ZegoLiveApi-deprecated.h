@@ -2,7 +2,6 @@
 //  ZegoLiveApi-deprecated.h
 //  zegoavkit
 //
-//  Created by Randy Qiu on 16/9/7.
 //  Copyright © 2016年 Zego. All rights reserved.
 //
 
@@ -38,6 +37,16 @@
 /// \brief 获取 SDK 版本2
 /// \note 已废弃，请使用 +version2
 - (NSString *)version2;
+
+/// \brief 开关硬件编码
+/// \param bRequire 开关
+/// \note 已废弃，请使用 +requireHardwareEncoder
+- (bool)requireHardwareEncoder:(bool)bRequire;
+
+/// \brief 开关硬件解码
+/// \param bRequire 开关
+/// \note 已废弃，请使用 +requireHardwareDecoder
+- (bool)requireHardwareDecoder:(bool)bRequire;
 
 /// \brief 开关硬件编解码
 /// \param bRequire 开关

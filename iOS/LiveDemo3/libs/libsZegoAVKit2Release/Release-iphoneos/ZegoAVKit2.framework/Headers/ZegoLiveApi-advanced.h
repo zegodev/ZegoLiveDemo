@@ -2,7 +2,6 @@
 //  ZegoLiveApi-advanced.h
 //  zegoavkit
 //
-//  Created by Randy Qiu on 16/9/7.
 //  Copyright © 2016年 Zego. All rights reserved.
 //
 
@@ -10,6 +9,12 @@
 #define ZegoLiveApi_advanced_h
 
 #import "ZegoLiveApi.h"
+#import "ZegoAVDefines.h"
+#if TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#elif TARGET_OS_MAC
+#import <AppKit/AppKit.h>
+#endif
 
 @protocol ZegoLiveApiRenderDelegate <NSObject>
 
@@ -32,8 +37,6 @@
 - (void)onAudioRecord:(NSData *)audioData sampleRate:(int)sampleRate numOfChannels:(int)numOfChannels bitDepth:(int)bitDepth;
 
 @end
-
-
 
 
 typedef enum : NSUInteger {
@@ -99,10 +102,12 @@ typedef enum : NSUInteger {
 /// \return true 成功，false 失败
 - (bool)setRemoteViewRotation:(CAPTURE_ROTATE)rotate viewIndex:(RemoteViewIndex)index;
 
+#if TARGET_OS_IPHONE
 /// \brief 设置App的朝向，确定进行横竖屏采集
 /// \param orientation app orientation
 /// \return true 成功，false 失败
 - (bool)setAppOrientation:(UIInterfaceOrientation)orientation;
+#endif
 
 /// \brief 开启采集监听
 /// \param bEnable true打开，false关闭
@@ -204,6 +209,16 @@ typedef enum : NSUInteger {
 /// \param[in] channelIndex 播放通道
 /// \return channelIndex对应视频的音量
 - (float)getRemoteSoundLevel:(int)channelIndex;
+
+/// \brief 设置编码器码率控制策略
+/// \param strategy 策略配置，参考 ZegoAPIVideoEncoderRateControlStrategy
+/// \param encoderCRF 当策略为恒定质量（ZEGOAPI_RC_VBR/ZEGOAPI_RC_CRF）有效，取值范围 [0~51]，越小质量越好，建议取值范围 [18, 28]
++ (void)setVideoEncoderRateControlStrategy:(int)strategy encoderCRF:(int)crf;
+
+/// \brief 设置拉流质量监控周期
+/// \param timeInMS 时间周期，单位为毫秒，取值范围：(500, 60000)
+/// \return true 设置成功，否则失败
++ (void)setPlayQualityMoniterCycle:(unsigned int)timeInMS;
 
 @end
 

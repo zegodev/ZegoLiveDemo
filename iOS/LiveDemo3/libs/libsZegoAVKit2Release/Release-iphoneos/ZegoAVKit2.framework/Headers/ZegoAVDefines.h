@@ -72,8 +72,6 @@ typedef enum : NSUInteger {
     ZEGO_FILTER_DARK        = 13    ///< 夜色
 } ZegoFilter;
 
-
-
 /// \brief 美白特性，
 typedef enum : NSUInteger {
     ZEGO_BEAUTIFY_NONE          = 0,        ///< 无美颜
@@ -105,5 +103,20 @@ typedef enum : NSUInteger {
  */
 
 @end
+
+enum ZegoAPIVideoEncoderRateControlStrategy
+{
+    ZEGOAPI_RC_ABR,    ///< 恒定码率
+    ZEGOAPI_RC_CBR,    ///< 恒定码率
+    ZEGOAPI_RC_VBR,    ///< 恒定质量
+    ZEGOAPI_RC_CRF,    ///< 恒定质量
+};
+
+enum ZegoAPIPublishFlag
+{
+    ZEGOAPI_JOIN_PUBLISH   = 1 << 0,
+    ZEGOAPI_MIX_STREAM     = 1 << 1,
+    ZEGOAPI_SINGLE_ANCHOR  = 1 << 2,
+};
 
 #endif /* ZegoAVApiDefines_h */

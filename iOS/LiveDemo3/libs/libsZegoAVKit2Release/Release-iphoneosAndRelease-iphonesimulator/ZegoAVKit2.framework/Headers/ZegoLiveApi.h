@@ -220,7 +220,7 @@
 #if TARGET_OS_IPHONE
 /// \brief 设置手机姿势，用于校正主播输出视频朝向
 /// \param orientation 手机姿势
-- (int)setAppOrientation:(UIInterfaceOrientation)orientation;
+- (bool)setAppOrientation:(UIInterfaceOrientation)orientation;
 #endif
 
 /// \brief 设置是否使用前置摄像头
@@ -264,12 +264,12 @@
 /// \brief 开关硬件编码
 /// \param bRequire 开关
 /// \note ！！！打开硬编硬解开关需后台可控，避免碰到版本升级或者硬件升级时出现硬编硬解失败的问题
-- (bool)requireHardwareEncoder:(bool)bRequire;
++ (bool)requireHardwareEncoder:(bool)bRequire;
 
 /// \brief 开关硬件解码
 /// \param bRequire 开关
 /// \note ！！！打开硬编硬解开关需后台可控，避免碰到版本升级或者硬件升级时出现硬编硬解失败的问题
-- (bool)requireHardwareDecoder:(bool)bRequire;
++ (bool)requireHardwareDecoder:(bool)bRequire;
 
 /// \brief 主动出发日志上报
 - (void)uploadLog;
