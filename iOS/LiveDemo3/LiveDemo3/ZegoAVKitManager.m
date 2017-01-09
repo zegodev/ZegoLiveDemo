@@ -20,6 +20,8 @@ BOOL g_requireHardwareAccelerated = NO;
 BOOL g_requireHardwareAccelerated = YES;
 #endif
 
+BOOL g_enableVideoRateControl = NO;
+
 BizLiveRoom *g_bizRoom = nil;
 
 void setCustomAppIDAndSign(uint32 appid, NSData* data)
@@ -74,6 +76,28 @@ BOOL isUsingExternalRender()
     return NO;
 }
 
+static void SetupHardwareAcceleratedAndRateControl_()
+{
+    if (g_requireHardwareAccelerated)
+    {
+        [ZegoLiveApi requireHardwareDecoder:true];
+        if (g_enableVideoRateControl)
+        {
+            [g_zegoAV enableRateControl:true];
+        }
+        else
+        {
+            [ZegoLiveApi requireHardwareEncoder:true];
+        }
+    }
+    else
+    {
+        [ZegoLiveApi requireHardwareDecoder:false];
+        [ZegoLiveApi requireHardwareEncoder:false];
+        [g_zegoAV enableRateControl:g_enableVideoRateControl];
+    }
+}
+
 ZegoLiveApi * getZegoAV_ShareInstance()
 {
     if (g_zegoAV == nil) {
@@ -94,7 +118,7 @@ ZegoLiveApi * getZegoAV_ShareInstance()
             g_zegoAV = [[ZegoLiveApi alloc] initWithAppID:1 appSignature:appSign];
         }
         
-        [g_zegoAV requireHardwareAccelerated:g_requireHardwareAccelerated];
+        SetupHardwareAcceleratedAndRateControl_();
     }
     return g_zegoAV;
 }
@@ -215,7 +239,7 @@ uint32 ZegoGetAppID()
 void ZegoRequireHardwareAccelerated(bool hardwareAccelerated)
 {
     g_requireHardwareAccelerated = hardwareAccelerated;
-    [g_zegoAV requireHardwareAccelerated:hardwareAccelerated];
+    SetupHardwareAcceleratedAndRateControl_();
 }
 
 BOOL ZegoIsRequireHardwareAccelerated()

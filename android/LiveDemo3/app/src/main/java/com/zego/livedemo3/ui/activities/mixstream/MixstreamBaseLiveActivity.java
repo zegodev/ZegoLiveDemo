@@ -127,6 +127,8 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
 
     public RelativeLayout mRlytControlHeader;
 
+    public TextView mTvPlayMixstream;
+
     protected String mPublishTitle;
 
     protected String mPublishStreamID;
@@ -177,7 +179,7 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
 
     @Override
     protected int getContentViewLayout() {
-        return R.layout.activity_live;
+        return R.layout.activity_live_mixstream;
     }
 
 
@@ -386,6 +388,15 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
 
         mZegoAVKit.enableSpeaker(mEnableSpeaker);
         tvSpeaker.setSelected(!mEnableSpeaker);
+
+        mTvPlayMixstream = (TextView) findViewById(R.id.tv_play_mixstream);
+        mTvPlayMixstream.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTvPlayMixstream.setEnabled(false);
+               startPlay(mMixStreamID, getFreeZegoRemoteViewIndex());
+            }
+        });
     }
 
     @Override
@@ -599,6 +610,9 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
                   //  setMixStreamMode(false);
                     mMixStreamRequestUser = null;
                     mMixStreamMagic = null;
+
+                    // 显示播放混流按钮
+                    mTvPlayMixstream.setVisibility(View.VISIBLE);
                 }
 
                 initPublishControlText();

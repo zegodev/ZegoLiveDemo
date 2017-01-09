@@ -53,6 +53,8 @@ typedef enum : NSUInteger {
 
 @end
 
+@protocol ZegoVideoFilterFactory;
+
 
 @protocol ZegoDeviceEventDelegate <NSObject>
 
@@ -80,15 +82,22 @@ typedef enum : NSUInteger {
 
 /// \brief 设置音频前处理函数
 /// \param prep 前处理函数指针
+/// \note 必须在InitSDK前调用，并且不能置空
 + (void)setAudioPrep:(void(*)(const short* inData, int inSamples, int sampleRate, short *outData))prep;
 
 /// \brief 作为主播开始直播
-/// \brief 直播标题
+/// \param title 直播标题
 /// \param streamID 流 ID
 /// \param mixStreamID 混流ID
-/// \param flag 推流标记(按位取值)
+/// \param flag 推流标记(按位取值)，参考 ZegoAPIPublishFlag
 /// \return true 成功，等待异步结果回调，否则失败
 - (bool)startPublishingWithTitle:(NSString *)title streamID:(NSString *)streamID mixStreamID:(NSString *)mixStreamID mixVideoSize:(CGSize)videoSize flag:(int)flag;
+
+/// \brief 停止直播
+/// \param flag 保留字段
+/// \param msg 自定义信息，server对接流结束回调包含此字段内容
+/// \return true 成功，否则失败
+- (bool)stopPublishingWithFlag:(int)flag msg:(NSString *)msg;
 
 /// \brief 更新混流配置
 /// \param lstMixStreamInfo 混流配置列表，按列表顺序叠加涂层
@@ -134,7 +143,8 @@ typedef enum : NSUInteger {
 + (NSString *)version2;
 
 /// \brief 混音开关
-/// \param bEable true 启用混音输入；false 关闭混音输入
+/// \param enable true 启用混音输入；false 关闭混音输入
+/// \return true 成功，否则失败
 - (bool)enableAux:(BOOL)enable;
 
 /// \brief 音频录制回调开关
@@ -143,11 +153,12 @@ typedef enum : NSUInteger {
 - (bool)enableAudioRecord:(BOOL)enable;
 
 /// \brief 设置美颜磨皮的采样步长
-/// \param 采样半径 取值范围[1,16]
+/// \param step 采样半径 取值范围[1,16]
 - (bool)setPolishStep:(float)step;
 
 /// \brief 设置美颜采样颜色阈值
-/// \brief factor 取值范围[0,16]
+/// \param factor 取值范围[0,16]
+/// \return true 成功，否则失败
 - (bool)setPolishFactor:(float)factor;
 
 /// \brief 设置美颜美白的亮度修正参数
@@ -182,7 +193,6 @@ typedef enum : NSUInteger {
 
 /// \brief 调试信息开关
 /// \desc 建议在调试阶段打开此开关，方便调试。默认关闭
-/// \return true：成功；false:失败
 + (void)setVerbose:(bool)bOnVerbose;
 
 /// \brief 外部渲染回调
@@ -190,7 +200,7 @@ typedef enum : NSUInteger {
 - (void)setRenderDelegate:(id<ZegoLiveApiRenderDelegate>)renderDelegate;
 
 /// \brief 音频录制回调
-/// \param renderDelegate 音频录制回调协议
+/// \param audioRecordDelegate 音频录制回调协议
 - (void)setAudioRecordDelegate:(id<ZegoLiveApiAudioRecordDelegate>)audioRecordDelegate;
 
 /// \brief 直播事件通知回调
@@ -210,15 +220,28 @@ typedef enum : NSUInteger {
 /// \return channelIndex对应视频的音量
 - (float)getRemoteSoundLevel:(int)channelIndex;
 
+/// \brief 设置外部滤镜模块
+/// \param factory 工厂对象
+/// \note 必须在 Init 前调用，并且不能置空
++ (void)setVideoFilterFactory:(id<ZegoVideoFilterFactory>)factory;
+
 /// \brief 设置编码器码率控制策略
 /// \param strategy 策略配置，参考 ZegoAPIVideoEncoderRateControlStrategy
-/// \param encoderCRF 当策略为恒定质量（ZEGOAPI_RC_VBR/ZEGOAPI_RC_CRF）有效，取值范围 [0~51]，越小质量越好，建议取值范围 [18, 28]
+/// \param crf 当策略为恒定质量（ZEGOAPI_RC_VBR/ZEGOAPI_RC_CRF）有效，取值范围 [0~51]，越小质量越好，建议取值范围 [18, 28]
 + (void)setVideoEncoderRateControlStrategy:(int)strategy encoderCRF:(int)crf;
 
 /// \brief 设置拉流质量监控周期
 /// \param timeInMS 时间周期，单位为毫秒，取值范围：(500, 60000)
-/// \return true 设置成功，否则失败
 + (void)setPlayQualityMoniterCycle:(unsigned int)timeInMS;
+
+/// \brief 暂停模块
+/// \param moduleType 模块类型，参考 ZegoAPIModuleType
+- (void)pauseModule:(int)moduleType;
+
+/// \brief 恢复模块
+/// \param moduleType 模块类型，参考 ZegoAPIModuleType
+- (void)resumeModule:(int)moduleType;
+
 
 @end
 

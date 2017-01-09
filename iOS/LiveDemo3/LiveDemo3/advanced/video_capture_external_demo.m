@@ -71,12 +71,12 @@
 }
 
 - (void)zego_stopAndDeAllocate {
-    [client_ destroy];
-    client_ = nil;
-    
     dispatch_sync(m_oQueue, ^ {
         return ;
     });
+    
+    [client_ destroy];
+    client_ = nil;
 }
 
 - (int)zego_startCapture {

@@ -38,6 +38,7 @@
 - (int)zego_setPowerlineFreq:(unsigned int)freq;
 @end
 
+
 @protocol ZegoVideoCaptureClientDelegate <NSObject, ZegoVideoCaptureDelegate>
 - (void)destroy;
 - (void)onError:(nullable NSString*)reason;
@@ -61,3 +62,37 @@
 
 @end
 
+typedef NS_ENUM(NSInteger, ZegoVideoBufferType) {
+    ZegoVideoBufferTypeUnknown = 0,
+    ZegoVideoBufferTypeAsyncPixelBuffer = 1 << 1,
+    ZegoVideoBufferTypeSyncPixelBuffer = 1 << 2,
+};
+
+@protocol ZegoVideoBufferPool <NSObject>
+- (nullable CVPixelBufferRef)dequeueInputBuffer:(int)width height:(int)height stride:(int)stride;
+- (void)queueInputBuffer:(nonnull CVPixelBufferRef)pixel_buffer timestamp:(unsigned long long)timestamp_100n;
+@end
+
+@protocol ZegoVideoFilterDelegate <NSObject>
+- (void)onProcess:(nonnull CVPixelBufferRef)pixel_buffer withTimeStatmp:(unsigned long long)timestamp_100;
+@end
+
+@protocol ZegoVideoFilterClient <NSObject>
+- (void)destroy;
+@end
+
+@protocol ZegoVideoFilter
+
+@required
+- (void)zego_allocateAndStart:(nonnull id<ZegoVideoFilterClient>) client;
+- (void)zego_stopAndDeAllocate;
+- (ZegoVideoBufferType)supportBufferType;
+@end
+
+@protocol ZegoVideoFilterFactory <NSObject>
+
+@required
+- (nonnull id<ZegoVideoFilter>)zego_create;
+- (void)zego_destroy:(nonnull id<ZegoVideoFilter>)filter;
+
+@end

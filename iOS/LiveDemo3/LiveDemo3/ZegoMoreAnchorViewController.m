@@ -320,8 +320,7 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
-    [getZegoAV_ShareInstance() enableRateControl:YES];
-    [getZegoAV_ShareInstance() requireHardwareAccelerated:NO];
+
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);

@@ -2,6 +2,7 @@ package com.zego.livedemo3;
 
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.zego.livedemo3.advanced.VideoCaptureFactoryDemo;
 import com.zego.zegoavkit2.ZegoAVKit;
@@ -58,7 +59,7 @@ public class ZegoApiManager {
                 (byte)0x41, (byte)0xd4, (byte)0xad, (byte)0x83, (byte)0x78, (byte)0xf2, (byte)0x59, (byte)0x90,
                 (byte)0xe0, (byte)0xa4, (byte)0x0c, (byte)0x7f, (byte)0xf4, (byte)0x28, (byte)0x41, (byte)0xf7
         };
-        int appID = 1;
+        long appID = 1;
 
         // 开启外部渲染, 少数企业的需求
         if(mUseExternalRender){
@@ -66,7 +67,11 @@ public class ZegoApiManager {
         }
 
         // 初始化sdk
-        mZegoAVKit.init(appID, signKey, context);
+        boolean ret = mZegoAVKit.init(appID, signKey, context);
+        if(!ret){
+            // sdk初始化失败
+            Toast.makeText(ZegoApplication.sApplicationContext, "Zego SDK初始化失败!", Toast.LENGTH_LONG).show();
+        }
 
         mZegoAvConfig = new ZegoAvConfig(ZegoAvConfig.Level.High);
 

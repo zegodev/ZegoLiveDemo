@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.tencent.bugly.crashreport.CrashReport;
 import com.zego.livedemo3.presenters.BizLivePresenter;
+import com.zego.livedemo3.utils.PreferenceUtil;
 
 
 /**
@@ -24,6 +25,8 @@ public class ZegoApplication extends Application{
         ZegoApiManager.getInstance().initSDK(this);
 
         CrashReport.initCrashReport(getApplicationContext(), "e40f06d75c", false);
+        // bugly初始化用户id
+        CrashReport.setUserId(PreferenceUtil.getInstance().getUserID());
     }
 
     public Context getApplicationContext(){

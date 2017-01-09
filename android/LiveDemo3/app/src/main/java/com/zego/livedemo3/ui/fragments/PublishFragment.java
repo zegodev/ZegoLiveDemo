@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
@@ -28,10 +29,12 @@ import com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPublishActivity
 import com.zego.livedemo3.ui.base.AbsBaseFragment;
 import com.zego.livedemo3.ui.widgets.DialogSelectPublishMode;
 import com.zego.livedemo3.utils.PreferenceUtil;
+import com.zego.livedemo3.utils.SystemUtil;
 import com.zego.livedemo3.utils.ZegoAVKitUtil;
 import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAVKitCommon;
 import com.zego.zegoavkit2.ZegoAvConfig;
+import com.zego.zegoavkit2.callback.ZegoDeviceEventCallback;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -170,6 +173,12 @@ public class PublishFragment extends AbsBaseFragment {
 
     @Override
     protected void loadData() {
+        mZegoAVKit.setZegoDeviceEventCallback(new ZegoDeviceEventCallback() {
+            @Override
+            public void onDeviceError(String s, int i) {
+                Log.e("PublishFragment", "device name: " + s + ", error: " + i);
+            }
+        });
     }
 
     @Override
@@ -186,8 +195,15 @@ public class PublishFragment extends AbsBaseFragment {
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         super.onPause();
+        if(SystemUtil.isAppBackground()){
+            Log.i("Foreground", "Foreground");
+        }else {
+            Log.i("Foreground", "Background");
+            // app进入后台, 停止预览
+            stopPreview();
+        }
     }
 
     @OnClick(R.id.btn_start_publish)

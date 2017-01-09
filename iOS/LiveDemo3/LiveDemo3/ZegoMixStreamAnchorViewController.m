@@ -435,9 +435,7 @@
     }
     
     self.viewContainersDict[self.streamID] = self.publishView;
-    
-    [getZegoAV_ShareInstance() enableRateControl:YES];
-    [getZegoAV_ShareInstance() requireHardwareAccelerated:NO];
+
     bool b = [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:self.streamID];
     assert(b);
     NSLog(@"%s, ret: %d", __func__, b);
@@ -676,9 +674,8 @@
             
             self.viewContainersDict[streamID] = self.publishView;
             CGSize videoSize = [ZegoSettings sharedInstance].currentConfig.videoEncodeResolution;
-            [getZegoAV_ShareInstance() enableRateControl:YES];
-            [getZegoAV_ShareInstance() requireHardwareAccelerated:NO];
-            [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:streamID mixStreamID:self.streamID mixVideoSize:videoSize flag:2];
+
+            [getZegoAV_ShareInstance() startPublishingWithTitle:self.liveTitle streamID:streamID mixStreamID:self.streamID mixVideoSize:videoSize flag:ZEGOAPI_MIX_STREAM];
             self.afterMixStreamID = streamID;
             self.mixStreamButton.enabled = YES;
         }

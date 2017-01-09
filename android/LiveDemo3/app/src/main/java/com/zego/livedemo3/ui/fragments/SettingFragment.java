@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.zego.livedemo3.ui.activities.AboutZegoActivity;
 import com.zego.livedemo3.presenters.BizLivePresenter;
 import com.zego.livedemo3.MainActivity;
@@ -266,6 +267,9 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
 
         PreferenceUtil.getInstance().setUserID(etUserAccount.getText().toString().trim());
         PreferenceUtil.getInstance().setUserName(etUserName.getText().toString().trim());
+
+        // bugly初始化用户id
+        CrashReport.setUserId(etUserAccount.getText().toString().trim());
 
         ZegoAvConfig zegoAvConfig = null;
         switch (spinnerResolutions.getSelectedItemPosition()) {

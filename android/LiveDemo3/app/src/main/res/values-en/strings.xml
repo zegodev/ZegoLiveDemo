@@ -82,4 +82,5 @@
     <string name="mix_stream_mode">Mix Streams</string>
     <string name="more_anchors_mode">More Anchors</string>
     <string name="single_anchor_mode">Single Anchor</string>
+    <string name="play_mixstream">Play MixStream</string>
 </resources>

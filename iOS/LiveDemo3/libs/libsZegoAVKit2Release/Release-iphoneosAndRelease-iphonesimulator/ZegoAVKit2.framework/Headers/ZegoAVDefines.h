@@ -119,4 +119,9 @@ enum ZegoAPIPublishFlag
     ZEGOAPI_SINGLE_ANCHOR  = 1 << 2,
 };
 
+enum ZegoAPIModuleType
+{
+    ZEGOAPI_MODULE_AUDIO            = 0x4 | 0x8,    ///< 音频采集播放设备
+};
+
 #endif /* ZegoAVApiDefines_h */

@@ -320,10 +320,6 @@
     b = [getZegoAV_ShareInstance() setFilter:self.filter];
     assert(b);
     
-    b = [getZegoAV_ShareInstance() enableRateControl:YES];
-    [getZegoAV_ShareInstance() requireHardwareAccelerated:NO];
-    assert(b);
-    
     [self enablePreview:self.enablePreview LocalView:publishView];
     [getZegoAV_ShareInstance() setLocalViewMode:self.viewMode];
 }

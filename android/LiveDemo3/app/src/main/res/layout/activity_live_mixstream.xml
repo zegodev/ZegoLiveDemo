@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_black"
+            android:orientation="vertical">
+
+            <com.zego.livedemo3.ui.widgets.ViewLive
+                android:id="@+id/vl_big_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:isBigView="true"
+                />
+
+
+            <com.zego.livedemo3.ui.widgets.ViewLive
+                android:id="@+id/vl_small_view1"
+                android:layout_width="@dimen/local_view_width"
+                android:layout_height="@dimen/local_view_height"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_10"
+                android:visibility="invisible"/>
+
+            <com.zego.livedemo3.ui.widgets.ViewLive
+                android:id="@+id/vl_small_view2"
+                android:layout_width="@dimen/local_view_width"
+                android:layout_height="@dimen/local_view_height"
+                android:layout_alignBottom="@id/vl_small_view1"
+                android:layout_marginRight="@dimen/dimen_5"
+                android:layout_toLeftOf="@id/vl_small_view1"
+                android:visibility="invisible"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rlyt_control_header"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50"
+                android:layout_marginLeft="@dimen/dimen_20"
+                android:layout_marginRight="@dimen/dimen_10"
+                android:background="@android:color/transparent">
+
+
+                <TextView
+                    android:id="@+id/tv_log_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/log"
+                    android:textColor="@color/sl_btn"
+                    android:textSize="@dimen/text_size_5"/>
+
+                <TextView
+                    android:id="@+id/tv_speaker"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/mute"
+                    android:textColor="@color/sl_btn"
+                    android:textSize="@dimen/text_size_5"/>
+
+                <TextView
+                    android:id="@+id/tv_publish_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/publish_setting"
+                    android:textColor="@color/sl_btn"
+                    android:textSize="@dimen/text_size_5"/>
+
+                <TextView
+                    android:id="@+id/tv_publish_control"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/sl_btn"
+                    android:textSize="@dimen/text_size_5"/>
+
+                <TextView
+                    android:id="@+id/tv_close"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/close"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_5"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_play_mixstream"
+                android:layout_marginTop="@dimen/dimen_100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:textSize="@dimen/text_size_5"
+                android:textColor="@color/sl_btn"
+                android:text="@string/play_mixstream"
+                android:visibility="invisible"
+                />
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <com.zego.livedemo3.ui.widgets.PublishSettingsPannel
+        android:id="@+id/publishSettingsPannel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#60ffffff"
+        android:minHeight="100dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="1dp"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        >
+
+    </com.zego.livedemo3.ui.widgets.PublishSettingsPannel>
+
+</android.support.design.widget.CoordinatorLayout>
+
+

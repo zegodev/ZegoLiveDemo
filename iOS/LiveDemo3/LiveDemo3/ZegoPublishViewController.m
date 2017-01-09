@@ -16,7 +16,7 @@
 
 #define MAX_TITLE_LENGTH    30
 
-@interface ZegoPublishViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate>
+@interface ZegoPublishViewController () <UIPickerViewDelegate, UIPickerViewDataSource, UIActionSheetDelegate, ZegoDeviceEventDelegate>
 
 @property (nonatomic, weak) IBOutlet UISwitch *switchCamera;
 @property (nonatomic, weak) IBOutlet UISwitch *switchTorch;
@@ -273,12 +273,20 @@
     b = [getZegoAV_ShareInstance() enableBeautifying:[self.beautifyPicker selectedRowInComponent:0]];
     assert(b);
     
+    
+    [getZegoAV_ShareInstance() setPolishFactor:4.0];
+    [getZegoAV_ShareInstance() setPolishStep:4.0];
+    [getZegoAV_ShareInstance() setWhitenFactor:0.6];
+    
+    
     b = [getZegoAV_ShareInstance() setFilter:[self.filterPicker selectedRowInComponent:0]];
     assert(b);
+    
 
     [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];
     
     [getZegoAV_ShareInstance() setLocalView:self.preView];
+    [getZegoAV_ShareInstance() setDeviceEventDelegate:self];
     [getZegoAV_ShareInstance() startPreview];
 }
 
@@ -503,6 +511,13 @@
     [self setRotateFromInterfaceOrientation:toInterfaceOrientation];
     
     [super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+#pragma mark - ZegoDeviceEventDelegate
+
+- (void)zego_onDevice:(NSString *)deviceName error:(int)errorCode
+{
+    NSLog(@"device name: %@, error code: %d", deviceName, errorCode);
 }
 
 @end
