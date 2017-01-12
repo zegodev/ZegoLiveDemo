@@ -63,10 +63,11 @@ public:
 	std::string GetMircophoneId(void);
 	void SetMicrophoneId(const std::string& microphoneId);
 
+    void InitDeviceId(void);
+
 private:
 	void InitByIndex(void);
-	void InitDeviceId(void);
-	
+
 	IndexSet m_index;
 	SIZE m_sizeResolution;
 	int m_nBitrate;

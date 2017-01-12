@@ -12,17 +12,19 @@ namespace AVE {
     };
   
     struct VideoCaptureFormat {
-        VideoCaptureFormat() : width(0), height(0), pixel_format(PIXEL_FORMAT_UNKNOWN) {
+        VideoCaptureFormat() : width(0), height(0), pixel_format(PIXEL_FORMAT_UNKNOWN), rotation(0) {
             strides[0] = strides[1] = strides[2] = strides[3] = 0;
         }
         
         VideoCaptureFormat(int width, int height, VideoPixelFormat pixel_format)
-            : width(width), height(height), pixel_format(pixel_format) {
+            : width(width), height(height), pixel_format(pixel_format), rotation(0) {
+            strides[0] = strides[1] = strides[2] = strides[3] = 0;
         }
                 
         int width;
         int height;
         int strides[4];
+        int rotation;
         VideoPixelFormat pixel_format;
     };
     
@@ -172,6 +174,50 @@ namespace AVE {
 		/// \note SDK LogoutChannel时同步调用
 		/// \note 一定要实现
         virtual void Destroy(VideoCaptureDevice *vc) = 0;
+    };
+    
+    enum VideoBufferType {
+        BUFFER_TYPE_UNKNOWN = 0,
+        BUFFER_TYPE_MEM = 1 << 0,
+        BUFFER_TYPE_ASYNC_PIXEL_BUFFER = 1 << 1,
+        BUFFER_TYPE_SYNC_PIXEL_BUFFER = 1 << 2,
+        BUFFER_TYPE_SURFACE_TEXTURE = 1 << 3,
+    };
+
+    class VideoBufferPool {
+    public:
+        virtual int DequeueInputBuffer(int width, int height, int stride) = 0;
+        virtual void* GetInputBuffer(int index) = 0;
+        virtual void QueueInputBuffer(int index, int width, int height, int stride, unsigned long long timestamp_100n) = 0;
+    };
+    
+    class VideoFilterCallback {
+    public:
+        virtual void OnProcess(void* buffer, int size, int width, int height, int stride, unsigned long long timestamp_100n) = 0;
+    };
+    
+    class VideoFilter {
+    public:
+        class Client {
+        public:
+            virtual ~Client() {}
+            virtual void Destroy() = 0;
+            virtual void* GetInterface() = 0;
+        };
+        
+    public:
+        virtual void AllocateAndStart(Client* client) = 0;
+        virtual void StopAndDeAllocate() = 0;
+        virtual VideoBufferType SupportBufferType() = 0;
+        virtual void* GetInterface() = 0;
+    };
+    
+    class VideoFilterFactory {
+    public:
+        virtual ~VideoFilterFactory() {}
+        
+        virtual VideoFilter* Create() = 0;
+        virtual void Destroy(VideoFilter *vf) = 0;
     };
 }
 #endif /* ZEGOVideoCapture_h */

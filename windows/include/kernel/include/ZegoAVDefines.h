@@ -62,6 +62,12 @@ namespace ZEGO
             char szDeviceName[ZEGO_MAX_COMMON_LEN];
         };
 
+        enum DeviceState
+        {
+            Device_Added = 0,
+            Device_Deleted,
+        };
+
         struct ZegoUser
         {
             char szId[ZEGO_MAX_COMMON_LEN];
@@ -103,6 +109,9 @@ namespace ZEGO
             DNSResolveError = 8,            ///< DNS 解释失败
             
             NotLoginError = 9,              ///< 未登陆
+            LogicServerNetWrokError = 10,   ///< 逻辑服务器网络错误
+            
+            PublishBadNameError = 105,
         };
 
         enum ZEGONetType
@@ -119,7 +128,8 @@ namespace ZEGO
         enum ZegoPublishFlag
         {
             ZEGO_JOIN_PUBLISH   = 1 << 0,
-            ZEGO_MIX_STREAM     = 1 << 1
+            ZEGO_MIX_STREAM     = 1 << 1,
+            ZEGO_SINGLE_ANCHOR  = 1 << 2,
         };
         
         /// \brief 混流图层信息
@@ -162,14 +172,14 @@ namespace ZEGO
 			void* wnd;
 		};
         
-        
+        /// \brief SDK 事件通知
         enum EventType
         {
-            Play_BeginRetry = 1,
-            Play_RetrySuccess = 2,
+            Play_BeginRetry = 1,        ///< 开始从事拉流
+            Play_RetrySuccess = 2,      ///< 重试拉流成功
             
-            Publish_BeginRetry = 3,
-            Publish_RetrySuccess = 4,
+            Publish_BeginRetry = 3,     ///< 开始重试推流
+            Publish_RetrySuccess = 4,   ///< 重试推流成功
         };
         
         struct EventInfo
@@ -179,6 +189,16 @@ namespace ZEGO
             char* arrValues[ZEGO_MAX_EVENT_INFO_COUNT];
         };
         
+        ZEGOAVKIT_API extern const char* kZegoDeviceCamera;
+        ZEGOAVKIT_API extern const char* kZegoDeviceMicrophone;
+        
+        enum ZegoVideoEncoderRateControlStrategy
+        {
+            ZEGO_RC_ABR,    ///< 恒定码率
+            ZEGO_RC_CBR,    ///< 恒定码率
+            ZEGO_RC_VBR,    ///< 恒定质量
+            ZEGO_RC_CRF,    ///< 恒定质量
+        };
     }
 }
 
