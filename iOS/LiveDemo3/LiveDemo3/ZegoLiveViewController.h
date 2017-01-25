@@ -11,7 +11,6 @@
 #import "ZegoAnchorOptionViewController.h"
 #import <AVFoundation/AVAudioSession.h>
 
-#define MAX_STREAM_COUNT    3
 
 @interface ZegoLiveViewController : UIViewController <ZegoAnchorOptionDelegate>
 
@@ -47,6 +46,8 @@
 @property (nonatomic, assign) double lastPlayFPS;
 //最近一次拉流帧率
 @property (nonatomic, assign) double lastPlayKBS;
+
+@property (nonatomic, assign, readonly) NSUInteger maxStreamCount;
 
 - (void)setAnchorConfig:(UIView *)publishView;
 

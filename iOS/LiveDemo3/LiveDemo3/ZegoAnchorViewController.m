@@ -54,7 +54,7 @@
     [self setupLiveKit];
     [self loginChatRoom];
     
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
     
     self.stopPublishButton.enabled = NO;
     
@@ -208,6 +208,7 @@
 - (IBAction)onShowMoreInfo:(id)sender
 {
     [self showPublishOption];
+
 }
 
 #pragma mark stop publish

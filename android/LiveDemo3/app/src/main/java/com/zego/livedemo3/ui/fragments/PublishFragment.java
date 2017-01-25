@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -287,6 +288,14 @@ public class PublishFragment extends AbsBaseFragment {
         }
         ZegoApiManager.getInstance().setZegoConfig(currentConfig);
 
+        // 设置水印
+        ZegoAVKit.setWaterMarkImagePath("asset:watermark.png");
+        Rect rect = new Rect();
+        rect.left = 30;
+        rect.top = 10;
+        rect.right = 180;
+        rect.bottom = 160;
+        ZegoAVKit.setPreviewWaterMarkRect(rect);
 
         mZegoAVKit.setLocalView(svPreview);
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
@@ -299,6 +308,7 @@ public class PublishFragment extends AbsBaseFragment {
         mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
         // 设置滤镜
         mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
+
     }
 
     private void stopPreview() {

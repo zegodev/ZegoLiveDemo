@@ -60,11 +60,11 @@
     self.viewMode = ZegoVideoViewModeScaleAspectFill;
     self.enableCamera = YES;
     
-    _streamList = [[NSMutableArray alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _streamID2SizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _streamList = [[NSMutableArray alloc] initWithCapacity:self.maxStreamCount];
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
+    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
+    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
+    _streamID2SizeDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
     
     self.subViewControllers = [NSMutableDictionary dictionary];
     _requestingArray = [[NSMutableArray alloc] init];
@@ -405,13 +405,13 @@
 - (int)getRemoteViewIndex
 {
     int index = 0;
-    for (; index < MAX_STREAM_COUNT; index++)
+    for (; index < self.maxStreamCount; index++)
     {
         if ([self.viewIndexDict allKeysForObject:@(index)].count == 0)
             return index;
     }
     
-    if (index == MAX_STREAM_COUNT)
+    if (index == self.maxStreamCount)
         NSLog(@"cannot find indx to add view");
     
     return index;

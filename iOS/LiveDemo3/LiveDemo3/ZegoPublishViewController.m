@@ -283,6 +283,13 @@
     assert(b);
     
 
+    {
+        [getZegoAV_ShareInstance() setWaterMarkImagePath:@"asset:watermark"];
+        
+        [getZegoAV_ShareInstance() setPreviewWaterMarkRect:CGRectMake(10, 40, 100, 100)];
+        [getZegoAV_ShareInstance() setPublishWaterMarkRect:CGRectMake(10, 40, 50, 50)];
+    }
+    
     [getZegoAV_ShareInstance() setLocalViewMode:ZegoVideoViewModeScaleAspectFill];
     
     [getZegoAV_ShareInstance() setLocalView:self.preView];

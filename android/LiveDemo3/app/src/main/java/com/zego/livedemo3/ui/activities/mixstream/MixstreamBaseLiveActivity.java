@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -910,6 +911,16 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
         // 输出发布状态
         recordLog(MY_SELF + ": start publish " + mPublishStreamID);
 
+        // 设置水印
+        ZegoAVKit.setWaterMarkImagePath("watermark.png");
+        Rect rect = new Rect();
+        rect.left = 50;
+        rect.top = 20;
+        rect.right = 200;
+        rect.bottom = 170;
+        ZegoAVKit.setPreviewWaterMarkRect(rect);
+        ZegoAVKit.setPublishWaterMarkRect(rect);
+
         // 设置美颜 滤镜
         mZegoAVKit.enableBeautifying(ZegoAVKitUtil.getZegoBeauty(mSelectedBeauty));
         mZegoAVKit.setFilter(ZegoAVKitUtil.getZegoFilter(mSelectedFilter));
@@ -940,6 +951,16 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
 
         // 输出发布状态
         recordLog(MY_SELF + ": start publish " + mPublishStreamID);
+
+        // 设置水印
+        ZegoAVKit.setWaterMarkImagePath("asset:watermark.png");
+        Rect rect = new Rect();
+        rect.left = 50;
+        rect.top = 20;
+        rect.right = 200;
+        rect.bottom = 170;
+        ZegoAVKit.setPreviewWaterMarkRect(rect);
+        ZegoAVKit.setPublishWaterMarkRect(rect);
 
 
         // 设置美颜 滤镜

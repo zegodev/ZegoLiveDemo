@@ -59,8 +59,8 @@
     [self setupLiveKit];
     [self loginChatRoom];
     
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
+    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
     _playStreamList = [[NSMutableArray alloc] init];
     
     self.stopPublishButton.enabled = NO;
@@ -558,7 +558,7 @@
 
 - (BOOL)shouldShowPublishAlert
 {
-    if (self.viewContainersDict.count < MAX_STREAM_COUNT)
+    if (self.viewContainersDict.count < self.maxStreamCount)
         return YES;
     
     return NO;
@@ -645,13 +645,13 @@
 - (int)getRemoteViewIndex
 {
     int index = 0;
-    for (; index < MAX_STREAM_COUNT; index++)
+    for (; index < self.maxStreamCount; index++)
     {
         if ([self.viewIndexDict allKeysForObject:@(index)].count == 0)
             return index;
     }
     
-    if (index == MAX_STREAM_COUNT)
+    if (index == self.maxStreamCount)
         NSLog(@"cannot find indx to add view");
     
     return index;

@@ -88,7 +88,7 @@
 "加载中" = "Loading...";
 "主播已退出" = "No Live Stream";
 "继续播放之前的流, 流ID:%@" = "Play Live Stream, Stream ID:%@";
-"当前质量:" = "Quality:";
+"当前质量:" = " ";
 "优" = "Excelent";
 "良" = "Good";
 "中" = "Medium";

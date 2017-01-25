@@ -64,11 +64,11 @@
     self.viewMode = ZegoVideoViewModeScaleAspectFill;
     self.enableCamera = YES;
     
-    _streamList = [[NSMutableArray alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
-    _streamID2SizeDict = [[NSMutableDictionary alloc] initWithCapacity:MAX_STREAM_COUNT];
+    _streamList = [[NSMutableArray alloc] initWithCapacity:self.maxStreamCount];
+    _viewContainersDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
+    _viewIndexDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
+    _videoSizeDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
+    _streamID2SizeDict = [[NSMutableDictionary alloc] initWithCapacity:self.maxStreamCount];
     
     _requestingArray = [[NSMutableArray alloc] init];
     
@@ -614,7 +614,7 @@
         
         self.loginRoomSuccess = YES;
         
-        if (self.viewContainersDict.count < MAX_STREAM_COUNT)
+        if (self.viewContainersDict.count < self.maxStreamCount)
             self.publishButton.enabled = YES;
         
         [self getStreamList];
@@ -772,13 +772,13 @@
 - (int)getRemoteViewIndex
 {
     int index = 0;
-    for (; index < MAX_STREAM_COUNT; index++)
+    for (; index < self.maxStreamCount; index++)
     {
         if ([self.viewIndexDict allKeysForObject:@(index)].count == 0)
             return index;
     }
     
-    if (index == MAX_STREAM_COUNT)
+    if (index == self.maxStreamCount)
         NSLog(@"cannot find indx to add view");
     
     return index;
@@ -887,7 +887,7 @@
         if ([self isStreamIDExist:streamID])
             continue;
         
-        if (self.viewContainersDict.count >= MAX_STREAM_COUNT)
+        if (self.viewContainersDict.count >= self.maxStreamCount)
             return;
         
         [self.streamList addObject:[ZegoStreamInfo getStreamInfo:dic]];
@@ -896,7 +896,7 @@
         NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"新增一条流, 流ID:%@", nil), streamID];
         [self addLogString:logString];
         
-        if (self.viewContainersDict.count >= MAX_STREAM_COUNT)
+        if (self.viewContainersDict.count >= self.maxStreamCount)
         {
             if (!self.isPublishing)
                 self.publishButton.enabled = NO;
@@ -925,7 +925,7 @@
         NSString *logString = [NSString stringWithFormat:NSLocalizedString(@"删除一条流, 流ID:%@", nil), streamID];
         [self addLogString:logString];
         
-        if (self.viewContainersDict.count < MAX_STREAM_COUNT)
+        if (self.viewContainersDict.count < self.maxStreamCount)
             self.publishButton.enabled = YES;
         else
         {

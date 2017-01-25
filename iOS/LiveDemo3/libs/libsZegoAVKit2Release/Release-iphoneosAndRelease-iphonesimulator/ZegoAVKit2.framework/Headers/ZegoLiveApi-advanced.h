@@ -65,6 +65,10 @@ typedef enum : NSUInteger {
 
 @interface ZegoLiveApi (Advanced)
 
+/// \brief 获取 SDK 支持的最大同时播放流数
+/// \return 最大支持播放流数
++ (int)getMaxPlayChannelCount;
+
 /// \brief 设置业务类型
 /// \param type 业务类型，默认为 0
 /// \note 确保在创建接口对象前调用
@@ -233,6 +237,18 @@ typedef enum : NSUInteger {
 /// \brief 设置拉流质量监控周期
 /// \param timeInMS 时间周期，单位为毫秒，取值范围：(500, 60000)
 + (void)setPlayQualityMoniterCycle:(unsigned int)timeInMS;
+
+/// \brief 设置水印的图片路径
+/// \param filepath 图片路径。如果是完整路径则添加 file: 前缀，如：@"file:/var/image.png"；资产则添加 asset: 前缀，如：@"asset:watermark"
+- (void)setWaterMarkImagePath:(NSString *)filePath;
+
+/// \brief 设置水印在采集video中的位置
+/// \note  左上角为坐标系原点,区域不能超过编码分辨率设置的大小
+- (void)setPublishWaterMarkRect:(CGRect)waterMarkRect;
+
+/// \brief 设置水印在预览video中的位置
+/// \note 左上角为坐标系原点,区域不能超过preview的大小
+- (void)setPreviewWaterMarkRect:(CGRect)waterMarkRect;
 
 /// \brief 暂停模块
 /// \param moduleType 模块类型，参考 ZegoAPIModuleType

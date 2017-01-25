@@ -50,7 +50,7 @@
 
 /// \brief 开关硬件编解码
 /// \param bRequire 开关
-/// \note 请用 requireHardwareEncoder/requireHardwareDecoder
+/// \note 请用 +requireHardwareEncoder/+requireHardwareDecoder
 - (bool)requireHardwareAccelerated:(bool)bRequire;
 
 @end

@@ -36,6 +36,11 @@
 @property (nonatomic, strong) NSTimer *captureTimer;
 @property (nonatomic, strong) NSMutableDictionary *playTimerDictionary;
 
+@property (nonatomic, assign) NSUInteger subViewSpace;
+@property (nonatomic, assign) NSUInteger subViewWidth;
+@property (nonatomic, assign) NSUInteger subViewHeight;
+@property (nonatomic, assign) NSUInteger subViewPerRow;
+
 @end
 
 @implementation ZegoLiveViewController
@@ -49,6 +54,21 @@
 //    self.beautifyFeature = ZEGO_BEAUTIFY_NONE;
 //    self.filter = ZEGO_FILTER_NONE;
 
+    _maxStreamCount = [ZegoLiveApi getMaxPlayChannelCount];
+    self.subViewSpace = 10;
+    if (self.maxStreamCount <= 3)
+    {
+        self.subViewWidth = 140;
+        self.subViewHeight = 210;
+        self.subViewPerRow = 2;
+    }
+    else
+    {
+        self.subViewWidth = 90;
+        self.subViewHeight = 135;
+        self.subViewPerRow = 3;
+    }
+    
     self.enableMicrophone = YES;
     self.enablePreview = YES;
     self.viewMode = ZegoVideoViewModeScaleAspectFill;
@@ -93,7 +113,7 @@
     [fileHandle writeData:[content dataUsingEncoding:NSUTF8StringEncoding]];
     [fileHandle closeFile];
     
-    self.playTimerDictionary = [NSMutableDictionary dictionaryWithCapacity:MAX_STREAM_COUNT];
+    self.playTimerDictionary = [NSMutableDictionary dictionaryWithCapacity:self.maxStreamCount];
 }
 
 - (NSString *)getLogFileName
@@ -338,23 +358,21 @@
     }
 }
 
+- (void)reportStreamAction:(BOOL)success streamID:(NSString *)streamID
+{
+    ZegoUser *user = [[ZegoSettings sharedInstance] getZegoUser];
+    if (success)
+        [getBizRoomInstance() reportStreamAction:1 streamID:streamID userID:user.userID isPublicRoom:YES];
+    else
+        [getBizRoomInstance() reportStreamAction:2 streamID:streamID userID:user.userID isPublicRoom:YES];
+}
+
 - (void)addFirstPlayViewConstraints:(UIView *)firstView containerView:(UIView *)containerView
 {
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[firstView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(firstView)]];
     [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[firstView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(firstView)]];
 }
 
-- (void)addSecondPlayViewConstraints:(UIView *)secondView containerView:(UIView *)containerView
-{
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[secondView(==210)]-(10)-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(secondView)]];
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[secondView(==140)]-(10)-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(secondView)]];
-}
-
-- (void)addThirdPlayViewConstraints:(UIView *)thirdView secondView:(UIView *)secondView containerView:(UIView *)containerView
-{
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[thirdView(==210)]-(10)-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(thirdView)]];
-    [containerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[thirdView(==140)]-(10)-[secondView]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(thirdView, secondView)]];
-}
 
 - (UIView *)getFirstViewInContainer:(UIView *)containerView
 {
@@ -367,35 +385,42 @@
     return nil;
 }
 
-- (UIView *)getSecondViewInContainer:(UIView *)containerView
+- (void)addPlayViewConstraints:(UIView *)view containerView:(UIView *)containerView viewIndex:(NSUInteger)viewIndex
 {
-    for (UIView *subView in containerView.subviews)
-    {
-        if (CGRectGetMaxX(subView.frame) + 10 == CGRectGetMaxX(containerView.frame))
-            return subView;
-    }
-    
-    return nil;
-}
-
-- (UIView *)getThirdViewInContainer:(UIView *)containerView
-{
-    for (UIView *subview in containerView.subviews)
-    {
-        if (CGRectGetMaxX(subview.frame) + CGRectGetWidth(subview.frame) + 20 == CGRectGetMaxX(containerView.frame))
-            return subview;
-    }
-    
-    return nil;
-}
-
-- (void)reportStreamAction:(BOOL)success streamID:(NSString *)streamID
-{
-    ZegoUser *user = [[ZegoSettings sharedInstance] getZegoUser];
-    if (success)
-        [getBizRoomInstance() reportStreamAction:1 streamID:streamID userID:user.userID isPublicRoom:YES];
+    if (viewIndex == 0)
+        [self addFirstPlayViewConstraints:view containerView:containerView];
     else
-        [getBizRoomInstance() reportStreamAction:2 streamID:streamID userID:user.userID isPublicRoom:YES];
+    {
+        NSUInteger xIndex = (viewIndex - 1) % self.subViewPerRow;
+        NSUInteger yIndex = (viewIndex - 1) / self.subViewPerRow;
+        
+        CGFloat xToLeftConstraints = xIndex * (self.subViewSpace + self.subViewWidth) + self.subViewSpace;
+        CGFloat yToTobottomConstraints = yIndex * (self.subViewSpace + self.subViewHeight) + self.subViewSpace;
+        
+        NSLayoutConstraint *widthConstraints = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:self.subViewWidth];
+        NSLayoutConstraint *heightConstraints = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:self.subViewHeight];
+        NSLayoutConstraint *leftConstraints = [NSLayoutConstraint constraintWithItem:containerView attribute:NSLayoutAttributeTrailing relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeTrailing multiplier:1.0 constant:xToLeftConstraints];
+        NSLayoutConstraint *bottomConstraints = [NSLayoutConstraint constraintWithItem:containerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:yToTobottomConstraints];
+        
+        [containerView addConstraints:@[widthConstraints, heightConstraints, leftConstraints, bottomConstraints]];
+    }
+}
+
+- (NSUInteger)getViewIndex:(UIView *)view containerView:(UIView *)containerView
+{
+    if (CGRectGetWidth(view.frame) == CGRectGetWidth(containerView.frame) &&
+        CGRectGetHeight(view.frame) == CGRectGetHeight(containerView.frame))
+        return 0;
+    else
+    {
+        CGFloat deltaHeight = CGRectGetHeight(containerView.frame) - CGRectGetMaxY(view.frame) - self.subViewSpace;
+        CGFloat deltaWidth = CGRectGetWidth(containerView.frame) - CGRectGetMaxX(view.frame) - self.subViewSpace;
+        
+        NSUInteger xIndex = deltaWidth / (self.subViewSpace + self.subViewWidth);
+        NSUInteger yIndex = deltaHeight / (self.subViewSpace + self.subViewHeight);
+        
+        return yIndex * self.subViewPerRow + xIndex + 1;
+    }
 }
 
 - (void)updateContainerConstraintsForTap:(UIView *)tapView containerView:(UIView *)containerView
@@ -404,38 +429,19 @@
     if (bigView == tapView || tapView == nil)
         return;
     
-    UIView *thirdView = [self getThirdViewInContainer:containerView];
-    UIView *secondView = [self getSecondViewInContainer:containerView];
-    
+    NSUInteger tapIndex = [self getViewIndex:tapView containerView:containerView];
     [containerView removeConstraints:containerView.constraints];
+    [containerView exchangeSubviewAtIndex:0 withSubviewAtIndex:tapIndex];
     
-    if (secondView == tapView)
+    for (int i = 0; i < containerView.subviews.count; i++)
     {
-        //第二个和第一个view交换constraints
-        [self addFirstPlayViewConstraints:tapView containerView:containerView];
-        [self addSecondPlayViewConstraints:bigView containerView:containerView];
-        if (thirdView)
-            [self addThirdPlayViewConstraints:thirdView secondView:bigView containerView:containerView];
-        
-        [containerView sendSubviewToBack:tapView];
-        
-        [UIView animateWithDuration:0.1 animations:^{
-            [self.view layoutIfNeeded];
-        }];
+        UIView *view = containerView.subviews[i];
+        [self addPlayViewConstraints:view containerView:containerView viewIndex:i];
     }
-    else if (tapView == thirdView)
-    {
-        //第三个view和第一个view交换constraints
-        [self addFirstPlayViewConstraints:thirdView containerView:containerView];
-        [self addSecondPlayViewConstraints:secondView containerView:containerView];
-        [self addThirdPlayViewConstraints:bigView secondView:secondView containerView:containerView];
-        
-        [containerView sendSubviewToBack:tapView];
-        
-        [UIView animateWithDuration:0.1 animations:^{
-            [self.view layoutIfNeeded];
-        }];
-    }
+    
+    [UIView animateWithDuration:0.1 animations:^{
+        [self.view layoutIfNeeded];
+    }];
     
 }
 
@@ -444,32 +450,18 @@
     if (removeView == nil)
         return;
     
-    UIView *bigView = [self getFirstViewInContainer:containerView];
-    UIView *secondeView = [self getSecondViewInContainer:containerView];
-    UIView *thirdView = [self getThirdViewInContainer:containerView];
-    
+    NSUInteger removeIndex = [self getViewIndex:removeView containerView:containerView];
     [containerView removeConstraints:containerView.constraints];
-    if (removeView == bigView)
+    
+    for (UIView *view in containerView.subviews)
     {
-        //删除大图时，更新第二个view为大图
-        if (secondeView)
-            [self addFirstPlayViewConstraints:secondeView containerView:containerView];
-        if (thirdView)
-            [self addSecondPlayViewConstraints:thirdView containerView:containerView];
-        [containerView sendSubviewToBack:secondeView];
-    }
-    else if (removeView == secondeView)
-    {
-        [self addFirstPlayViewConstraints:bigView containerView:containerView];
-        if (thirdView)
-            [self addSecondPlayViewConstraints:thirdView containerView:containerView];
-        [containerView sendSubviewToBack:bigView];
-    }
-    else if (removeView == thirdView)
-    {
-        [self addFirstPlayViewConstraints:bigView containerView:containerView];
-        [self addSecondPlayViewConstraints:secondeView containerView:containerView];
-        [containerView sendSubviewToBack:bigView];
+        NSUInteger viewIndex = [self getViewIndex:view containerView:containerView];
+        if (viewIndex == 0 && removeIndex != 0)
+            [self addFirstPlayViewConstraints:view containerView:containerView];
+        else if (viewIndex > removeIndex)
+            [self addPlayViewConstraints:view containerView:containerView viewIndex:viewIndex - 1];
+        else if (viewIndex < removeIndex)
+            [self addPlayViewConstraints:view containerView:containerView viewIndex:viewIndex];
     }
     
     [removeView removeFromSuperview];
@@ -480,31 +472,7 @@
 
 - (BOOL)setContainerConstraints:(UIView *)view containerView:(UIView *)containerView viewCount:(NSUInteger)viewCount
 {
-    if (viewCount == 0)
-    {
-        [self addFirstPlayViewConstraints:view containerView:containerView];
-    }
-    else if (viewCount == 1)
-    {
-        [self addSecondPlayViewConstraints:view containerView:containerView];
-    }
-    else if (viewCount == 2)
-    {
-        UIView *secondView = [self getSecondViewInContainer:containerView];
-        if (secondView)
-        {
-            [self addThirdPlayViewConstraints:view secondView:secondView containerView:containerView];
-        }
-        else
-        {
-            assert(secondView);
-            return NO;
-        }
-    }
-    else
-    {
-        return NO;
-    }
+    [self addPlayViewConstraints:view containerView:containerView viewIndex:viewCount];
     
     [UIView animateWithDuration:0.1 animations:^{
         [self.view layoutIfNeeded];
@@ -853,16 +821,16 @@
             return;
     }
     
-    UIFont *textFont = [UIFont systemFontOfSize:13];
+    UIFont *textFont = [UIFont systemFontOfSize:10];
     
     if (qualityLayer == nil)
     {
         qualityLayer = [CALayer layer];
         qualityLayer.name = @"quality";
         [playerView.layer addSublayer:qualityLayer];
-        qualityLayer.frame = CGRectMake(22, 22, 12, 12);
+        qualityLayer.frame = CGRectMake(12, 22, 10, 10);
         qualityLayer.contentsScale = [UIScreen mainScreen].scale;
-        qualityLayer.cornerRadius = 6.0f;
+        qualityLayer.cornerRadius = 5.0f;
     }
     
     if (textLayer == nil)
@@ -1031,8 +999,8 @@
         progressView.translatesAutoresizingMaskIntoConstraints = NO;
         [view addSubview:progressView];
         
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(10)-[progressView(==100)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(progressView)]];
-        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[progressView(==5)]-(20)-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(progressView)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(10)-[progressView(==50)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(progressView)]];
+        [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[progressView(==2)]-(20)-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(progressView)]];
     }
 
     if (level < 0)
