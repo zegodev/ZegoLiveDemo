@@ -3,7 +3,6 @@
 
 #include "./ZegoAVDefines.h"
 #include "./ZegoAVCallback.h"
-#include "./video_capture.h"
 #include "./ZegoAVApi-advanced.h"
 #include "./ZegoAVApi-deprecated.h"
 
@@ -34,7 +33,11 @@ namespace ZEGO
         /// \return true: 调用成功; false: 调用失败
         ZEGOAVKIT_API bool SetCallback(IZegoLiveCallback* pCallback);
 
-		/// \brief 获取直播流列表
+        /// \brief 设置音频视频设备变化的回调
+        /// \param[in] pCallback 回调对象指针
+        ZEGOAVKIT_API void SetDeviceStateCallback(IZegoDeviceStateCallback *pCallback);
+
+        /// \brief 获取直播流列表
 		/// \param userID 用户 ID，每个用户唯一
 		/// \param userName 用户名
 		/// \param liveID 频道 ID
@@ -108,8 +111,10 @@ namespace ZEGO
         ZEGOAVKIT_API bool StartPublish(const char*  pszTitle, const char* pszStreamID, const char* pszMixStreamID = 0, int nMixVideoWidth = 0, int nMixVideoHeight = 0, int flag = 0);
         
         /// \brief 停止直播
+        /// \param flag 保留字段
+        /// \param pszMsg 自定义信息，server对接流结束回调包含此字段内容
         /// \return true: 调用成功; false: 调用失败
-        ZEGOAVKIT_API bool StopPublish(int flag = 0);
+        ZEGOAVKIT_API bool StopPublish(int flag = 0, const char* pszMsg = 0);
         
         /// \brief 设置视频码率
         /// \param[in] nBitrate 码率

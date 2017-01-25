@@ -18,6 +18,12 @@
 #include "writer.h"
 #include "error/en.h"
 
+#include "ZegoAVDefines.h"
+using namespace ZEGO::AV;
+
+
+#define VOLUME_TIMER_ID   1002
+
 static int g_AVViews[] =
 {
 	IDC_AVVIEW_PRIMARY,
@@ -71,6 +77,8 @@ CZegoRoomDlg::CZegoRoomDlg(SettingsPtr curSettings, CWnd* pParent /*=NULL*/):
 	GetAVSignal().OnAuxInput().connect(this, &CZegoRoomDlg::OnAVAuxInput);
 	GetAVSignal().OnDisconnected().connect(this, &CZegoRoomDlg::OnAVDisconnected);
 	GetAVSignal().OnReconnected().connect(this, &CZegoRoomDlg::OnAVReconnected);
+    GetAVSignal().OnAudioDeviceChanged().connect(this, &CZegoRoomDlg::OnAudioDeviceChanged);
+    GetAVSignal().OnVideoDeviceChanged().connect(this, &CZegoRoomDlg::OnVideoDeviceChanged);
 
 	m_bLoginChannel = false;
 	m_pAuxData = NULL;
@@ -107,20 +115,24 @@ CZegoRoomDlg::~CZegoRoomDlg()
 
 void CZegoRoomDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_VISITOR_LIST, m_listVisitors);
-	DDX_Control(pDX, IDC_AVVIEW_PRIMARY, m_primaryAVView);
-	DDX_Control(pDX, IDC_AVVIEW_STUDENT1, m_student1AVView);
-	DDX_Control(pDX, IDC_AVVIEW_STUDENT2, m_student2AVView);
-	DDX_Control(pDX, IDC_AVVIEW_STUDENT3, m_student3AVView);
-	DDX_Control(pDX, IDC_AVVIEW_STUDENT4, m_studeng4AVView);
-	DDX_Control(pDX, IDC_AVVIEW_STUDENT5, m_student5AVView);
-	DDX_Control(pDX, IDC_AVVIEW_STUDENT6, m_student6AVView);
-	DDX_Control(pDX, IDC_EDIT_MESSAGE, m_edMessage);
-	DDX_Control(pDX, IDC_LISTBOX_CHAT, m_lbChatContent);
-	DDX_Check(pDX, IDC_CHECK_MICROPHONE, m_bCKEnableMic);
-	DDX_Control(pDX, IDC_EDIT_STREAMURL, m_edStreamUrl);
-	DDX_Control(pDX, IDC_BUTTON_AUX, m_btnAux);
+    CDialogEx::DoDataExchange(pDX);
+    DDX_Control(pDX, IDC_VISITOR_LIST, m_listVisitors);
+    DDX_Control(pDX, IDC_AVVIEW_PRIMARY, m_primaryAVView);
+    DDX_Control(pDX, IDC_AVVIEW_STUDENT1, m_student1AVView);
+    DDX_Control(pDX, IDC_AVVIEW_STUDENT2, m_student2AVView);
+    DDX_Control(pDX, IDC_AVVIEW_STUDENT3, m_student3AVView);
+    DDX_Control(pDX, IDC_AVVIEW_STUDENT4, m_studeng4AVView);
+    DDX_Control(pDX, IDC_AVVIEW_STUDENT5, m_student5AVView);
+    DDX_Control(pDX, IDC_AVVIEW_STUDENT6, m_student6AVView);
+    DDX_Control(pDX, IDC_EDIT_MESSAGE, m_edMessage);
+    DDX_Control(pDX, IDC_LISTBOX_CHAT, m_lbChatContent);
+    DDX_Check(pDX, IDC_CHECK_MICROPHONE, m_bCKEnableMic);
+    DDX_Control(pDX, IDC_EDIT_STREAMURL, m_edStreamUrl);
+    DDX_Control(pDX, IDC_BUTTON_AUX, m_btnAux);
+    DDX_Control(pDX, IDC_COMBO_CURAUDIO, m_cbCurrentAudio);
+    DDX_Control(pDX, IDC_COMBO_CURVIDEO, m_cbCurrentVideo);
+    DDX_Control(pDX, IDC_BUTTON_CAPTURE, m_btnCapture);
+    DDX_Control(pDX, IDC_CAPTURE_VOLUME_PROG, m_captureVolumeProg);
 }
 
 BOOL CZegoRoomDlg::OnInitDialog()
@@ -168,6 +180,7 @@ BOOL CZegoRoomDlg::OnInitDialog()
 	m_listVisitors.InsertColumnTrait(2, L"昵称", LVCFMT_LEFT, rtList.Width()-80-4, 2, NULL);
 
 	m_btnAux.EnableWindow(FALSE);
+    m_btnCapture.EnableWindow(FALSE);
 
 	RefreshVisitorList();
 
@@ -190,7 +203,46 @@ BOOL CZegoRoomDlg::OnInitDialog()
 
 	AV::EnableMic((bool)m_bCKEnableMic);
 
+    EnumVideoAndAudioDevice();
+
+    m_captureVolumeProg.SetRange(0, 100);
+    m_captureVolumeProg.SetPos(0);
+
 	return TRUE;
+}
+
+void CZegoRoomDlg::EnumVideoAndAudioDevice()
+{
+    int nCBCurSel(0);
+
+    int nDeviceCount = 0;
+    DeviceInfo* pDeviceList(NULL);
+
+    nCBCurSel = 0;
+    pDeviceList = ZEGO::AV::GetAudioDeviceList(AudioDevice_Input, nDeviceCount);
+    for (int i = 0; i < nDeviceCount; ++i)
+    {
+        m_cbCurrentAudio.AddString(UTF8ToWString(pDeviceList[i].szDeviceName).c_str());
+        m_vecAudioDeviceIDs.push_back(pDeviceList[i].szDeviceId);
+        if (m_pAVSettings->GetMircophoneId() == std::string(pDeviceList[i].szDeviceId))
+            nCBCurSel = i;
+    }
+    m_cbCurrentAudio.SetCurSel(nCBCurSel);
+    ZEGO::AV::FreeDeviceList(pDeviceList);
+    pDeviceList = NULL;
+
+    nCBCurSel = 0;
+    pDeviceList = ZEGO::AV::GetVideoDeviceList(nDeviceCount);
+    for (int i = 0; i < nDeviceCount; ++i)
+    {
+        m_cbCurrentVideo.AddString(UTF8ToWString(pDeviceList[i].szDeviceName).c_str());
+        m_vecVideoDeviceIDs.push_back(pDeviceList[i].szDeviceId);
+        if (m_pAVSettings->GetCameraId() == std::string(pDeviceList[i].szDeviceId))
+            nCBCurSel = i;
+    }
+    m_cbCurrentVideo.SetCurSel(nCBCurSel);
+    ZEGO::AV::FreeDeviceList(pDeviceList);
+    pDeviceList = NULL;
 }
 
 void CZegoRoomDlg::SetRoom(RoomPtr roomModel)
@@ -203,11 +255,15 @@ BEGIN_MESSAGE_MAP(CZegoRoomDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_GETMINMAXINFO()
 	ON_WM_SIZE()
+    ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_BUTTON_SEND, &CZegoRoomDlg::OnBnClickedButtonSend)
 	ON_BN_CLICKED(IDC_BUTTON_BACK, &CZegoRoomDlg::OnBnClickedButtonBack)
 	ON_COMMAND(IDOK, &CZegoRoomDlg::OnIdok)
 	ON_BN_CLICKED(IDC_CHECK_MICROPHONE, &CZegoRoomDlg::OnBnClickedCheckMicrophone)
 	ON_BN_CLICKED(IDC_BUTTON_AUX, &CZegoRoomDlg::OnBnClickedButtonAux)
+    ON_CBN_SELCHANGE(IDC_COMBO_CURVIDEO, &CZegoRoomDlg::OnCbnSelchangeComboCurvideo)
+    ON_CBN_SELCHANGE(IDC_COMBO_CURAUDIO, &CZegoRoomDlg::OnCbnSelchangeComboCuraudio)
+    ON_BN_CLICKED(IDC_BUTTON_CAPTURE, &CZegoRoomDlg::OnBnClickedButtonCapture)
 END_MESSAGE_MAP()
 
 
@@ -248,6 +304,17 @@ void CZegoRoomDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	{
 		CDialogEx::OnSysCommand(nID, lParam);
 	}
+}
+
+void CZegoRoomDlg::OnTimer(UINT_PTR id)
+{
+    CDialogEx::OnTimer(id);
+
+    if (id == VOLUME_TIMER_ID)
+    {
+        float fCaptureLevel = AV::GetCaptureSoundLevel();
+        m_captureVolumeProg.SetPos(fCaptureLevel);
+    }
 }
 
 void CZegoRoomDlg::OnBnClickedButtonBack()
@@ -594,6 +661,8 @@ void CZegoRoomDlg::OnAVPublishState(std::string userId, std::string channelId, A
 		CHATROOM::ReportStreamAction(1, streamId.c_str(), userId.c_str(), true);
 
 		m_btnAux.EnableWindow(TRUE);
+        m_btnCapture.EnableWindow(TRUE);
+        SetTimer(VOLUME_TIMER_ID, 100, NULL);
 
 		if (stream != nullptr)
 		{
@@ -635,6 +704,8 @@ void CZegoRoomDlg::OnAVPublishState(std::string userId, std::string channelId, A
 
 		EndAux();
 		m_btnAux.EnableWindow(FALSE);
+        m_btnCapture.EnableWindow(FALSE);
+        KillTimer(VOLUME_TIMER_ID);
 
 		ShutdownPlayingStream(streamId);
 
@@ -696,6 +767,11 @@ void CZegoRoomDlg::OnAVPlayQuality(std::string streamId, int quality)
 	{
 		pAVView->ShowQuailtyTips(quality);
 	}
+
+    //float fRemoteLevel = AV::GetRemoteSoundLevel(nIndex);
+    //TCHAR buffer[MAX_PATH] = { 0 };
+    //_stprintf(buffer, _T("current remote index %d level %f"), nIndex, fRemoteLevel);
+    //OutputDebugString(buffer);
 }
 
 void CZegoRoomDlg::OnAVAuxInput(unsigned char *pData, int *pDataLen, int *pSampleRate, int *pNumChannels)
@@ -738,6 +814,79 @@ void CZegoRoomDlg::OnAVReconnected(std::string userId, std::string channelId)
 
 }
 
+void CZegoRoomDlg::OnAudioDeviceChanged(AudioDeviceType deviceType, std::string strDeviceId, std::string strDeviceName, DeviceState state)
+{
+    if (deviceType == AudioDevice_Output)
+        return;
+
+    if (state == Device_Added)
+    {
+        m_cbCurrentAudio.AddString(UTF8ToWString(strDeviceName.c_str()).c_str());
+        m_vecAudioDeviceIDs.push_back(strDeviceId);
+    }
+    else if (state == Device_Deleted)
+    {
+        for (int i = 0; i < m_vecAudioDeviceIDs.size(); i++)
+        {
+            if (m_vecAudioDeviceIDs[i] != strDeviceId)
+                continue;
+
+            m_vecAudioDeviceIDs.erase(m_vecAudioDeviceIDs.begin() + i);
+
+            int currentCurl = m_cbCurrentAudio.GetCurSel();
+            if (currentCurl == i)
+            {
+                //MessageBox(L"当前音频采集设备被移除", L"提示", MB_OK);
+
+                //默认采集第一个音频设备
+                if (m_vecAudioDeviceIDs.size() > 0)
+                {
+                    AV::SetAudioDevice(AV::AudioDevice_Input, m_vecAudioDeviceIDs[0].c_str());
+                    m_pAVSettings->SetMicrophoneId(m_vecAudioDeviceIDs[0]);
+                }
+            }
+
+            m_cbCurrentAudio.DeleteString(i);
+            m_cbCurrentAudio.SetCurSel(0);
+            break;
+        }
+    }
+}
+
+void CZegoRoomDlg::OnVideoDeviceChanged(std::string strDeviceId, std::string strDeviceName, DeviceState state)
+{
+    if (state == Device_Added)
+    {
+        m_cbCurrentVideo.AddString(UTF8ToWString(strDeviceName.c_str()).c_str());
+        m_vecVideoDeviceIDs.push_back(strDeviceId);
+    }
+    else if (state == Device_Deleted)
+    {
+        for (int i = 0; i < m_vecVideoDeviceIDs.size(); i++)
+        {
+            if (m_vecVideoDeviceIDs[i] != strDeviceId)
+                continue;
+
+            m_vecVideoDeviceIDs.erase(m_vecVideoDeviceIDs.begin() + i);
+
+            int currentCurl = m_cbCurrentVideo.GetCurSel();
+            if (currentCurl == i)
+            {
+                //MessageBox(L"当前视频设备被移除", L"提示", MB_OK);
+                //默认采集第一个视频设备
+                if (m_vecVideoDeviceIDs.size() > 0)
+                {
+                    AV::SetVideoDevice(m_vecVideoDeviceIDs[0].c_str());
+                    m_pAVSettings->SetCameraId(m_vecVideoDeviceIDs[0]);
+                }
+            }
+
+            m_cbCurrentVideo.DeleteString(i);
+            m_cbCurrentVideo.SetCurSel(0);
+            break;
+        }
+    }
+}
 //////////////////////////////////////////////////////////////////////////
 // 消息相关处理
 void CZegoRoomDlg::OnIdok()
@@ -885,4 +1034,45 @@ void CZegoRoomDlg::HandlePublishRequest(const std::string& msg)
 
 	std::string strBuffer = buffer.GetString();
 	CHATROOM::SendRelayBroadcastCustomMsg(strBuffer.c_str(), strBuffer.size(), true);
+}
+
+void CZegoRoomDlg::OnCbnSelchangeComboCurvideo()
+{
+    // TODO: Add your control notification handler code here
+    int currentCurl = m_cbCurrentVideo.GetCurSel();
+    if (currentCurl < m_vecVideoDeviceIDs.size())
+    {
+        AV::SetVideoDevice(m_vecVideoDeviceIDs[currentCurl].c_str());
+        m_pAVSettings->SetCameraId(m_vecVideoDeviceIDs[currentCurl]);
+    }
+}
+
+
+void CZegoRoomDlg::OnCbnSelchangeComboCuraudio()
+{
+    // TODO: Add your control notification handler code here
+    int currentCurl = m_cbCurrentAudio.GetCurSel();
+    if (currentCurl < m_vecAudioDeviceIDs.size())
+    {
+        AV::SetAudioDevice(AV::AudioDevice_Input, m_vecAudioDeviceIDs[currentCurl].c_str());
+        m_pAVSettings->SetMicrophoneId(m_vecAudioDeviceIDs[currentCurl]);
+    }
+}
+
+
+void CZegoRoomDlg::OnBnClickedButtonCapture()
+{
+    // TODO: Add your control notification handler code here
+    if (m_bSystemCapture)
+    {
+        m_bSystemCapture = false;
+        m_btnCapture.SetWindowText(_T("声卡采集"));
+    }
+    else
+    {
+        m_bSystemCapture = true;
+        m_btnCapture.SetWindowText(_T("关闭采集"));
+    }
+
+    AV::EnableMixSystemPlayout(m_bSystemCapture);
 }

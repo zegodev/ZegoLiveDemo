@@ -1,8 +1,8 @@
 #ifndef ZEGOMediaCapture_h
 #define ZEGOMediaCapture_h
 
-#include "video_capture.h"
-#include "audio_capture.h"
+#include "./video_capture.h"
+#include "./audio_capture.h"
 
 namespace AVE {
 

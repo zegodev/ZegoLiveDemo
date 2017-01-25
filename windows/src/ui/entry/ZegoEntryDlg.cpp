@@ -345,6 +345,9 @@ void CZegoEntryDlg::OnBnClickedOk()
 			break;
 		}
 
+        if (pCurSettings->GetCameraId().length() == 0)
+            pCurSettings->InitDeviceId();
+
 		if (CHATROOM::CreateRoomAndGetIn(strUserId.c_str(), strUserName.c_str()))
 		{
 			m_pRoomDlg = new CZegoRoomDlg(pCurSettings);

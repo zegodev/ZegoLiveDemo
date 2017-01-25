@@ -119,6 +119,32 @@ void CZegoAVSignal::OnReconnected(const char* pszUserID, const char* pszChannelI
 	ZEGO_SWITCH_THREAD_ING
 }
 
+void CZegoAVSignal::OnAudioDeviceStateChanged(AudioDeviceType deviceType, DeviceInfo *deviceInfo, DeviceState state)
+{
+    if (deviceInfo == nullptr)
+        return;
+
+    std::string strDeviceId = deviceInfo->szDeviceId;
+    std::string strDeviceName = deviceInfo->szDeviceName;
+
+    ZEGO_SWITCH_THREAD_PRE
+        m_sigAudioDeviceChanged(deviceType, strDeviceId, strDeviceName, state);
+    ZEGO_SWITCH_THREAD_ING
+}
+
+void CZegoAVSignal::OnVideoDeviceStateChanged(DeviceInfo *deviceInfo, DeviceState state)
+{
+    if (deviceInfo == nullptr)
+        return;
+
+    std::string strDeviceId = deviceInfo->szDeviceId;
+    std::string strDeviceName = deviceInfo->szDeviceName;
+
+    ZEGO_SWITCH_THREAD_PRE
+        m_sigVideoDeviceChanged(strDeviceId, strDeviceName, state);
+    ZEGO_SWITCH_THREAD_ING
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 CZegoChatRoomSignal::CZegoChatRoomSignal()

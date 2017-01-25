@@ -5,11 +5,13 @@
 #include "ZegoChatRoom.h"
 #include "ZegoRoomModel.h"
 using namespace ZEGO;
+using namespace ZEGO::AV;
 
 #include <string>
 #include <stack>
 #include "CGridListCtrlX/CGridListCtrlEx.h"
 #include "afxwin.h"
+#include "afxcmn.h"
 
 class CAboutDlg : public CDialogEx, public sigslot::has_slots<>
 {
@@ -55,7 +57,7 @@ protected:
 	void OnClose();
 	void OnSize(UINT nType, int cx, int cy);
 	void OnSysCommand(UINT nID, LPARAM lParam);
-
+    void OnTimer(UINT_PTR id);
 	afx_msg void OnBnClickedButtonSend();
 	afx_msg void OnBnClickedButtonBack();
 	afx_msg void OnBnClickedCheckMicrophone();
@@ -82,6 +84,9 @@ protected:
 	void OnAVDisconnected(std::string userId, std::string channelId, unsigned int errCode);
 	void OnAVReconnected(std::string userId, std::string channelId);
 
+    void OnAudioDeviceChanged(AudioDeviceType deviceType, std::string strDeviceId, std::string strDeviceName, DeviceState state);
+    void OnVideoDeviceChanged(std::string strDeviceId, std::string strDeviceName, DeviceState state);
+
 protected:
 	void RefreshVisitorList(void);
 
@@ -95,6 +100,9 @@ protected:
 
 	void HandleTextMessage(const std::string& msg, size_t split);
 	void HandlePublishRequest(const std::string& msg);
+
+private:
+    void EnumVideoAndAudioDevice();
 
 private:
 	HICON m_hIcon;
@@ -115,6 +123,8 @@ private:
 	CEdit m_edStreamUrl;
 	BOOL m_bCKEnableMic;
 	CButton m_btnAux;
+    CComboBox m_cbCurrentAudio;
+    CComboBox m_cbCurrentVideo;
 
 	CZegoAVView m_primaryAVView;
 	std::stack<unsigned int> m_avaliablePrimaryView;
@@ -125,4 +135,19 @@ private:
 	CZegoAVView m_student5AVView;
 	CZegoAVView m_student6AVView;	
 	std::stack<unsigned int> m_avaliableStudentView;
+
+    std::vector<std::string> m_vecAudioDeviceIDs;
+    std::vector<std::string> m_vecVideoDeviceIDs;
+
+public:
+    afx_msg void OnCbnSelchangeComboCurvideo();
+    afx_msg void OnCbnSelchangeComboCuraudio();
+private:
+    CButton m_btnCapture;
+    bool m_bSystemCapture = false;
+
+public:
+    afx_msg void OnBnClickedButtonCapture();
+private:
+    CProgressCtrl m_captureVolumeProg;
 };

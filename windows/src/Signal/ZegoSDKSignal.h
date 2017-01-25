@@ -7,8 +7,9 @@
 #include "ZegoChatRoomCallback.h"
 #include "ZegoRoomModel.h"
 using namespace ZEGO;
+using namespace ZEGO::AV;
 
-class CZegoAVSignal : public AV::IZegoLiveCallback
+class CZegoAVSignal : public AV::IZegoLiveCallback, public AV::IZegoDeviceStateCallback
 {
 public:
 	CZegoAVSignal();
@@ -23,6 +24,9 @@ public:
 	ZEGO_MAKE_SIGNAL(AuxInput, 4, unsigned char*, int*, int*, int*)
 	ZEGO_MAKE_SIGNAL(Disconnected, 3, std::string, std::string, unsigned int)
 	ZEGO_MAKE_SIGNAL(Reconnected, 2, std::string, std::string)
+
+    ZEGO_MAKE_SIGNAL(AudioDeviceChanged, 4, AudioDeviceType, std::string, std::string, DeviceState)
+    ZEGO_MAKE_SIGNAL(VideoDeviceChanged, 3, std::string, std::string, DeviceState)
 
 protected:
 	void OnVideoSizeChanged(const char* pStreamID, int nWidth, int nHeight) {}
@@ -44,6 +48,10 @@ protected:
 	void OnAuxCallback(unsigned char *pData, int *pDataLen, int *pSampleRate, int *pNumChannels);
 	void OnAVEngineStop() {}
     void OnUpdateMixStreamConfig(unsigned int uiErrorCode, const char* pszMixStreamID, const AV::ZegoStreamInfo& oStreamInfo) {}
+
+    void OnAudioDeviceStateChanged(AudioDeviceType deviceType, DeviceInfo *deviceInfo, DeviceState state);
+    void OnVideoDeviceStateChanged(DeviceInfo *deviceInfo, DeviceState state);
+
 private:
 	HWND m_hCommWnd;
 };

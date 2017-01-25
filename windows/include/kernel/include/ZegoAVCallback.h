@@ -74,6 +74,17 @@ namespace ZEGO
         public:
             virtual void OnAVKitEvent(int event, EventInfo* pInfo) = 0;
         };
+
+
+        class IZegoDeviceStateCallback
+        {
+        public:
+#ifdef WIN32
+            virtual void OnAudioDeviceStateChanged(AudioDeviceType deviceType, DeviceInfo *deviceInfo, DeviceState state) = 0;
+            virtual void OnVideoDeviceStateChanged(DeviceInfo *deviceInfo, DeviceState state) = 0;
+#endif
+            virtual void OnDeviceError(const char* deviceName, int errorCode) {}
+        };
     }
 }
 
