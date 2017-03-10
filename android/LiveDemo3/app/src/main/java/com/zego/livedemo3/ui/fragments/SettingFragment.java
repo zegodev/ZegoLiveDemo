@@ -15,19 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.tencent.bugly.crashreport.CrashReport;
-import com.zego.livedemo3.ui.activities.AboutZegoActivity;
-import com.zego.livedemo3.presenters.BizLivePresenter;
 import com.zego.livedemo3.MainActivity;
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.ZegoApiManager;
-import com.zego.livedemo3.ZegoApplication;
+import com.zego.livedemo3.ui.activities.AboutZegoActivity;
 import com.zego.livedemo3.ui.base.AbsBaseFragment;
 import com.zego.livedemo3.utils.PreferenceUtil;
 import com.zego.livedemo3.utils.SystemUtil;
+import com.zego.zegoavkit2.ZegoAVKit;
 import com.zego.zegoavkit2.ZegoAvConfig;
 
 import butterknife.Bind;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 
@@ -85,10 +84,35 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
     @Bind(R.id.sv)
     public ScrollView scrollView;
 
+    @Bind(R.id.tb_video_capture)
+    public ToggleButton tbVideoCapture;
+
+    @Bind(R.id.tb_video_filter)
+    public ToggleButton tbVideoFilter;
+
+    @Bind(R.id.tb_external_render)
+    public ToggleButton tbExternalRender;
+
+    @Bind(R.id.tb_hardware_encode)
+    public ToggleButton tbHardwareEncode;
+
+    @Bind(R.id.tb_hardware_decode)
+    public ToggleButton tbHardwareDecode;
+
+    @Bind(R.id.tb_rate_control)
+    public ToggleButton tbRateControl;
+
     // 分辨率text
     private String mResolutionTexts[];
 
     private int mCount = 0;
+
+    private final int[][] VIDEO_RESOLUTIONS = new int[][]{{320, 240}, {352, 288}, {640, 360},
+            {640, 360}, {1280, 720}, {1920, 1080}};
+
+    private boolean mNeedToReInitSDK = false;
+
+    private ZegoAVKit mZegoAVKit = null;
 
     @Override
     protected int getContentViewLayout() {
@@ -102,14 +126,16 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
 
     @Override
     protected void initVariables() {
+        mZegoAVKit = ZegoApiManager.getInstance().getZegoAVKit();
         mResolutionTexts = mResources.getStringArray(R.array.resolutions);
+
     }
 
     @Override
     protected void initViews() {
 
         // 用户信息
-        tvsdkVersion.setText(ZegoApiManager.getInstance().getZegoAVKit().version());
+        tvsdkVersion.setText(mZegoAVKit.version());
         etUserAccount.setText(PreferenceUtil.getInstance().getUserID());
         etUserAccount.setSelection(etUserAccount.getText().toString().length());
         etUserName.setText(PreferenceUtil.getInstance().getUserName());
@@ -134,7 +160,7 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                spinnerResolutions.setSelection(ZegoAvConfig.LEVEL_COUNT - 1);
+                spinnerResolutions.setSelection(5);
             }
 
             @Override
@@ -144,21 +170,22 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
         };
 
         // 默认设置级别为"高"
-        final ZegoAvConfig.Level defaultLevel = ZegoAvConfig.Level.High;
+        ZegoAvConfig.Level defaultLevel = ZegoAvConfig.Level.High;
+
         // 初始化分辨率, 默认为640x480
-        seekbarResolution.setMax(ZegoAvConfig.MAX_LEVEL);
+        seekbarResolution.setMax(6);
         seekbarResolution.setProgress(defaultLevel.code);
         seekbarResolution.setOnSeekBarChangeListener(seekBarChangeListener);
         tvResolution.setText(getString(R.string.resolution_prefix, mResolutionTexts[defaultLevel.code]));
 
         // 初始化帧率, 默认为15
-        seekBarFps.setMax(ZegoAvConfig.MAX_VIDEO_FPS);
+        seekBarFps.setMax(30);
         seekBarFps.setProgress(15);
         seekBarFps.setOnSeekBarChangeListener(seekBarChangeListener);
         tvFps.setText(getString(R.string.fps_prefix, "15"));
 
         // 初始化码率, 默认为600 * 1000
-        seekBarBitrate.setMax(ZegoAvConfig.MAX_VIDEO_BITRATE);
+        seekBarBitrate.setMax(1000000);
         seekBarBitrate.setProgress(ZegoAvConfig.VIDEO_BITRATES[defaultLevel.code]);
         seekBarBitrate.setOnSeekBarChangeListener(seekBarChangeListener);
         tvBitrate.setText(getString(R.string.bitrate_prefix, "" + ZegoAvConfig.VIDEO_BITRATES[defaultLevel.code]));
@@ -167,18 +194,17 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
         spinnerResolutions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position <= ZegoAvConfig.MAX_LEVEL) {
+                if (position <= ZegoAvConfig.Level.VeryHigh.code) {
                     int level = position;
                     seekbarResolution.setProgress(level);
                     // 预设级别中,帧率固定为"15"
                     seekBarFps.setProgress(15);
                     seekBarBitrate.setProgress(ZegoAvConfig.VIDEO_BITRATES[level]);
-                }
-                if(position < ZegoAvConfig.MAX_LEVEL){
+
                     seekbarResolution.setEnabled(false);
                     seekBarFps.setEnabled(false);
                     seekBarBitrate.setEnabled(false);
-                }else {
+                } else {
                     seekbarResolution.setEnabled(true);
                     seekBarFps.setEnabled(true);
                     seekBarBitrate.setEnabled(true);
@@ -188,17 +214,6 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-
-        tbTestEnv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    ZegoApiManager.getInstance().getZegoAVKit().setTestEnv(true);
-                } else {
-                    ZegoApiManager.getInstance().getZegoAVKit().setTestEnv(false);
-                }
             }
         });
 
@@ -232,7 +247,7 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
     }
 
     @OnClick(R.id.tv_advanced)
-    public void showAdvaaced(){
+    public void showAdvaaced() {
         llytHideOperation.setVisibility(View.VISIBLE);
         mHandler.post(new Runnable() {
             @Override
@@ -244,8 +259,8 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
 
 
     @OnClick(R.id.tv_upload_log)
-    public void uploadLog(){
-        ZegoApiManager.getInstance().getZegoAVKit().uploadLog();
+    public void uploadLog() {
+        mZegoAVKit.uploadLog();
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -255,7 +270,7 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
     }
 
     @OnClick(R.id.tv_about)
-    public void openAboutPage(){
+    public void openAboutPage() {
         AboutZegoActivity.actionStart(mParentActivity);
     }
 
@@ -264,12 +279,6 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
 
         InputMethodManager imm = (InputMethodManager) mParentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mParentActivity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-        PreferenceUtil.getInstance().setUserID(etUserAccount.getText().toString().trim());
-        PreferenceUtil.getInstance().setUserName(etUserName.getText().toString().trim());
-
-        // bugly初始化用户id
-        CrashReport.setUserId(etUserAccount.getText().toString().trim());
 
         ZegoAvConfig zegoAvConfig = null;
         switch (spinnerResolutions.getSelectedItemPosition()) {
@@ -290,8 +299,10 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
                 break;
             case 5:
                 // 自定义设置
-                zegoAvConfig = new ZegoAvConfig();
-                zegoAvConfig.setResolution(ZegoAvConfig.VIDEO_RESOLUTIONS[seekbarResolution.getProgress()][0], ZegoAvConfig.VIDEO_RESOLUTIONS[seekbarResolution.getProgress()][1]);
+                zegoAvConfig = new ZegoAvConfig(ZegoAvConfig.Level.High);
+                int progress = seekbarResolution.getProgress();
+                zegoAvConfig.setVideoEncodeResolution(VIDEO_RESOLUTIONS[progress][0], VIDEO_RESOLUTIONS[progress][1]);
+                zegoAvConfig.setVideoCaptureResolution(VIDEO_RESOLUTIONS[progress][0], VIDEO_RESOLUTIONS[progress][1]);
                 zegoAvConfig.setVideoFPS(seekBarFps.getProgress());
                 zegoAvConfig.setVideoBitrate(seekBarBitrate.getProgress());
                 break;
@@ -307,7 +318,7 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (!TextUtils.isEmpty(appID) && !TextUtils.isEmpty(appKey)) {
+                if ((!TextUtils.isEmpty(appID) && !TextUtils.isEmpty(appKey))) {
                     // appID必须是数字
                     if (!TextUtils.isDigitsOnly(appID)) {
                         return;
@@ -324,24 +335,85 @@ public class SettingFragment extends AbsBaseFragment implements MainActivity.OnS
                         signKey[i] = (byte) data;
                     }
 
-                    ZegoApiManager.getInstance().getZegoAVKit().unInit();
-                    ZegoApiManager.getInstance().getZegoAVKit().init(Long.valueOf(appID), signKey, ZegoApplication.sApplicationContext);
+                    // 重新初始化sdk
+                    ZegoApiManager.getInstance().releaseSDK();
+                    ZegoApiManager.getInstance().reInitSDK(Long.valueOf(appID), signKey);
 
-                    // 即构分配的key与id
-                    byte[] signKeyBiz = {
-                            (byte)0xf9,(byte)0xe4,(byte)0x7b,(byte)0x67,(byte)0xa,(byte)0x8f,(byte)0x46,
-                            (byte)0x14,(byte)0x3e,(byte)0xdb,(byte)0xfb,(byte)0xc0,(byte)0x66,(byte)0x2a,
-                            (byte)0xc4,(byte)0xfe,(byte)0x88,(byte)0xde,(byte)0xb6,(byte)0x3f,(byte)0x79,
-                            (byte)0xad,(byte)0xc5,(byte)0xc4,(byte)0xe3,(byte)0xa6,(byte)0x18,(byte)0x1b,
-                            (byte)0x7d,(byte)0xe3,(byte)0x1e,(byte)0x91
-                    };
-                    long appIDBiz = 308895348;
+                } else if (mNeedToReInitSDK) {
 
-                    BizLivePresenter.getInstance().unInit();
-                    BizLivePresenter.getInstance().init(appIDBiz, signKeyBiz, signKeyBiz.length, ZegoApplication.sApplicationContext);
+                    // 重新初始化sdk
+                    mNeedToReInitSDK = false;
+                    ZegoApiManager.getInstance().releaseSDK();
+                    ZegoApiManager.getInstance().initSDK();
                 }
             }
         }).start();
+    }
 
+    @OnCheckedChanged({R.id.tb_modify_test_env, R.id.tb_hardware_encode, R.id.tb_hardware_decode, R.id.tb_rate_control})
+    public void onCheckedChanged1(CompoundButton compoundButton, boolean checked) {
+        // "非点击按钮"时不触发回调
+        if (!compoundButton.isPressed()) return;
+
+        switch (compoundButton.getId()) {
+            case R.id.tb_modify_test_env:
+
+                // 标记需要"重新初始化sdk"
+                mNeedToReInitSDK = true;
+                ZegoApiManager.getInstance().setUseTestEvn(checked);
+
+                break;
+            case R.id.tb_hardware_encode:
+                ZegoApiManager.getInstance().setUseHardwareEncode(checked);
+                // 开硬编时, 关闭码率控制
+                if (tbRateControl.isChecked()) {
+                    tbRateControl.setChecked(false);
+                }
+                break;
+            case R.id.tb_hardware_decode:
+                ZegoApiManager.getInstance().setUseHardwareDecode(checked);
+                break;
+            case R.id.tb_rate_control:
+                // 开码率控制时, 关硬编
+                ZegoApiManager.getInstance().setUseRateControl(checked);
+                if (tbHardwareEncode.isChecked()) {
+                    tbHardwareEncode.setChecked(false);
+                }
+                break;
+        }
+    }
+
+    @OnCheckedChanged({R.id.tb_video_capture, R.id.tb_video_filter, R.id.tb_external_render})
+    public void onCheckedChanged2(CompoundButton compoundButton, boolean checked) {
+
+        // "非点击按钮"时不触发回调
+        if (!compoundButton.isPressed()) return;
+
+        switch (compoundButton.getId()) {
+            case R.id.tb_video_capture:
+                if(checked){
+                    // 开启外部采集时, 关闭外部滤镜
+                    tbVideoFilter.setChecked(false);
+                    ZegoApiManager.getInstance().setUseVideoFilter(false);
+                }
+
+                ZegoApiManager.getInstance().setUseVideoCapture(checked);
+                break;
+            case R.id.tb_video_filter:
+                if(checked){
+                    // 开启外部滤镜时, 关闭外部采集
+                    tbVideoCapture.setChecked(false);
+                    ZegoApiManager.getInstance().setUseVideoCapture(false);
+                }
+
+                ZegoApiManager.getInstance().setUseVideoFilter(checked);
+                break;
+            case R.id.tb_external_render:
+                ZegoApiManager.getInstance().setUseExternalRender(checked);
+                break;
+        }
+
+        // 标记需要"重新初始化sdk"
+        mNeedToReInitSDK = true;
     }
 }

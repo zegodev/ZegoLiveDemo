@@ -77,8 +77,16 @@
     <string name="open_recorder_permission">请开启录音权限</string>
     <string name="share">分享</string>
     <string name="cancel">取消</string>
+    <string name="game_live_mode">游戏直播</string>
     <string name="mix_stream_mode">混流模式</string>
     <string name="more_anchors_mode">连麦模式</string>
     <string name="single_anchor_mode">单主播模式</string>
     <string name="play_mixstream">播放混流</string>
+
+    <string name="external_capture">外部采集</string>
+    <string name="external_render">外部渲染</string>
+    <string name="external_filter">外部滤镜</string>
+    <string name="hardware_encode">硬件编码</string>
+    <string name="hardware_decode">硬件解码</string>
+    <string name="rate_control">码率控制</string>
 </resources>

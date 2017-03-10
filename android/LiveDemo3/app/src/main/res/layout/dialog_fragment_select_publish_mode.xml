@@ -55,6 +55,18 @@
     <View style="@style/HorizontalDivider"/>
 
     <TextView
+        android:id="@+id/tv_select_game_living"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:background="@drawable/sl_item"
+        android:gravity="center"
+        android:text="@string/game_live_mode"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_5"/>
+
+    <View style="@style/HorizontalDivider"/>
+
+    <TextView
         android:id="@+id/tv_cancel"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_50"

@@ -26,10 +26,33 @@ extern "C"{
     void setUseAlphaEnv(BOOL alphaEnv);
     BOOL isUsingAlphaEnv();
     
-    void ZegoRequireHardwareAccelerated(bool hardwareAccelerated);
-    BOOL ZegoIsRequireHardwareAccelerated();
+    //硬件编码
+    void setUsingHardwareEncode(bool bUse);
+    BOOL isUsingHardwareEncode();
     
+    //硬件解码
+    void setUsingHardwareDecode(bool bUse);
+    BOOL isUsingHardwareDecode();
+    
+    //外部采集
+    void setUsingExternalCapture(BOOL bUse);
+    BOOL isUsingExternalCapture();
+    
+    //外部渲染
+    void setUsingExternalRender(BOOL bUse);
     BOOL isUsingExternalRender();
+    
+    //外部滤镜
+    void setUsingExternalFilter(BOOL bUse);
+    BOOL isUsingExternalFilter();
+    
+    //自适应码率
+    void setEnableRateControl(BOOL bEnable);
+    BOOL isRateControlOn();
+    
+    //混响
+    void setEnableReverb(BOOL bEnable);
+    BOOL isEnableReverb();
     
 #import <ZegoLiveRoom/BizLiveRoom.h>
     

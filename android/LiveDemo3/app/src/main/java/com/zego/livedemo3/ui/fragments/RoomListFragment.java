@@ -12,6 +12,7 @@ import com.zego.livedemo3.R;
 import com.zego.livedemo3.ZegoApiManager;
 import com.zego.livedemo3.interfaces.OnUpdateRoomListListener;
 import com.zego.livedemo3.presenters.BizLivePresenter;
+import com.zego.livedemo3.ui.activities.gamelive.GameLivingPlayActivity;
 import com.zego.livedemo3.ui.activities.mixstream.MixStreamPlayActivity;
 import com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsPlayActivity;
 import com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPlayActivity;
@@ -100,6 +101,8 @@ public class RoomListFragment extends AbsBaseFragment {
                         publishType = 2;
                     }else if(bizStream.userName.startsWith(BizLiveRoomUitl.USER_NAME_PREFIX_MIX_STREAM)){
                         publishType = 3;
+                    }else if(bizStream.userName.startsWith(BizLiveRoomUitl.USER_NAME_PREFIX_GAME_LIVING)){
+                        publishType = 4;
                     }
                 }
 
@@ -107,7 +110,6 @@ public class RoomListFragment extends AbsBaseFragment {
                     case 1:
                         if(ZegoApiManager.getInstance().getUseExternalRender()){
                             ExternalRenderPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
-
                         }else {
                             SingleAnchorPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
                         }
@@ -117,6 +119,9 @@ public class RoomListFragment extends AbsBaseFragment {
                         break;
                     case 3:
                         MixStreamPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
+                        break;
+                    case 4:
+                        GameLivingPlayActivity.actionStart(mParentActivity, roomInfo.roomKey, roomInfo.serverKey, roomInfo.listStream);
                         break;
                 }
 

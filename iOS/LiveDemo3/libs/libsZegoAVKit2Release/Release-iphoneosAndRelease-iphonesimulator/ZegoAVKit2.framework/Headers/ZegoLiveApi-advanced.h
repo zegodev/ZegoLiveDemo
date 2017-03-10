@@ -258,6 +258,10 @@ typedef enum : NSUInteger {
 /// \param moduleType 模块类型，参考 ZegoAPIModuleType
 - (void)resumeModule:(int)moduleType;
 
+/// \brief 耳机是否插入状态下是否使用回声消除
+/// \param enable true 使用，false 不使用
+/// \note 在 Init 之后，推流之前调用
+- (void)enableAECWhenHeadsetDetected:(bool)enable;
 
 @end
 

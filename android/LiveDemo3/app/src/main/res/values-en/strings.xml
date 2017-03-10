@@ -79,8 +79,16 @@
     <string name="open_recorder_permission">Please allow the record audio permission</string>
     <string name="share">Share</string>
     <string name="cancel">Cancel</string>
+    <string name="game_live_mode">Game Live</string>
     <string name="mix_stream_mode">Mix Streams</string>
     <string name="more_anchors_mode">More Anchors</string>
     <string name="single_anchor_mode">Single Anchor</string>
     <string name="play_mixstream">Play MixStream</string>
+
+    <string name="external_capture">External Capture</string>
+    <string name="external_render">External Render</string>
+    <string name="external_filter">External Filter</string>
+    <string name="hardware_encode">Hardware Encode</string>
+    <string name="hardware_decode">Hardware_Decode</string>
+    <string name="rate_control">Rate Control</string>
 </resources>

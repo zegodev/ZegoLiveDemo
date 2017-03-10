@@ -7,10 +7,12 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.TextureView;
 import android.view.View;
 
 import com.zego.zegoavkit2.ZegoVideoCaptureDevice;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
@@ -20,8 +22,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCaptureDevice implements Camera.PreviewCallback, TextureView.SurfaceTextureListener {
-    private static final String TAG = "VideoCaptureDeviceDemo";
+/**
+ * Created by robotding on 16/6/5.
+ */
+public class VideoCaptureFromCamera extends ZegoVideoCaptureDevice implements Camera.PreviewCallback, TextureView.SurfaceTextureListener {
+    private static final String TAG = "VideoCaptureFromCamera";
     private static final int CAMERA_STOP_TIMEOUT_MS = 7000;
 
     private Camera mCam = null;
@@ -32,7 +37,7 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
     int mFrameRate = 15;
     int mRotation = 0;
 
-    com.zego.zegoavkit2.ZegoVideoCaptureDevice.Client mClient = null;
+    ZegoVideoCaptureDevice.Client mClient = null;
 
     private TextureView mView = null;
     private SurfaceTexture mTexture = null;
@@ -48,9 +53,9 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
     private volatile Handler cameraThreadHandler = null;
     private final AtomicBoolean isCameraRunning = new AtomicBoolean();
     private final Object pendingCameraRestartLock = new Object();
-    private volatile boolean pendingCameraRestart;
+    private volatile boolean pendingCameraRestart = false;
 
-    protected void allocateAndStart(com.zego.zegoavkit2.ZegoVideoCaptureDevice.Client client) {
+    protected void allocateAndStart(ZegoVideoCaptureDevice.Client client) {
         mClient = client;
         mThread = new HandlerThread("camera-cap");
         mThread.start();
@@ -58,11 +63,12 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
     }
 
     protected void stopAndDeAllocate() {
-        mClient.destroy();
-        mClient = null;
         stopCapture();
         mThread.quit();
         mThread = null;
+
+        mClient.destroy();
+        mClient = null;
     }
 
     protected int startCapture() {
@@ -109,9 +115,14 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
         return 0;
     }
 
+    @Override
+    protected int supportBufferType() {
+        return PIXEL_BUFFER_TYPE_MEM;
+    }
+
     protected int setFrameRate(int framerate) {
         mFrameRate = framerate;
-            updateRateOnCameraThread(framerate);
+        updateRateOnCameraThread(framerate);
         return 0;
     }
 
@@ -130,13 +141,15 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
 
     protected int setView(final View view) {
         if (mView != null) {
-            mView.setSurfaceTextureListener(null);
+            if (mView.getSurfaceTextureListener().equals(this)) {
+                mView.setSurfaceTextureListener(null);
+            }
             mView = null;
             mTexture = null;
         }
         mView = (TextureView) view;
         if (mView != null) {
-            mView.setSurfaceTextureListener(VideoCaptureDeviceDemo.this);
+            mView.setSurfaceTextureListener(VideoCaptureFromCamera.this);
             if (mView.isAvailable()) {
                 mTexture = mView.getSurfaceTexture();
             }
@@ -309,7 +322,7 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
         // *
         // * Recording hint
         // *
-        parms.setRecordingHint(true);
+        parms.setRecordingHint(false);
 
         // *
         // * focus mode
@@ -441,6 +454,12 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
             }
         });
 
+        if (!didPost) {
+            synchronized (pendingCameraRestartLock) {
+                pendingCameraRestart = false;
+            }
+        }
+
         return 0;
     }
 
@@ -473,13 +492,21 @@ public class VideoCaptureDeviceDemo extends com.zego.zegoavkit2.ZegoVideoCapture
             return;
         }
 
-        VideoCaptureFormat format = new ZegoVideoCaptureDevice.VideoCaptureFormat();
+        VideoCaptureFormat format = new VideoCaptureFormat();
         format.width = mWidth;
         format.height = mHeight;
         format.strides[0] = mWidth;
         format.strides[1] = mWidth;
+        format.rotation = mCamInfo.orientation;
         format.pixel_format = PIXEL_FORMAT_NV21;
-        mClient.onByteBufferFrameCaptured(data, mFrameSize, format, System.currentTimeMillis(), 1000);
+
+        long now = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            now = SystemClock.elapsedRealtimeNanos();
+        } else {
+            now = TimeUnit.MILLISECONDS.toNanos(SystemClock.elapsedRealtime());
+        }
+        mClient.onByteBufferFrameCaptured(data, mFrameSize, format, now, 1000000000);
 
         camera.addCallbackBuffer(data);
     }

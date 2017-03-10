@@ -46,6 +46,8 @@ public class BizLiveRoomUitl {
 
     public static final String USER_NAME_PREFIX_MIX_STREAM = "#s-";
 
+    public static final String USER_NAME_PREFIX_GAME_LIVING = "#g-";
+
     public static String getChannel(long roomKey, long serverKey){
        return "0x" + Long.toHexString(roomKey) + "-0x" + Long.toHexString(serverKey);
     }

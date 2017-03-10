@@ -648,7 +648,7 @@ public abstract class MixstreamBaseLiveActivity extends AbsShowActivity {
                 mIsPublishing = false;
                 recordLog(MY_SELF + ": onPublishStop(" + streamID + ") --errCode:" + retCode);
                 // 停止预览
-                mZegoAVKit.stopPreview();
+                // mZegoAVKit.stopPreview();
                 // 释放View
                 releaseTextureViewAndRemoteViewIndex(streamID);
                 mRlytControlHeader.bringToFront();

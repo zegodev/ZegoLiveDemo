@@ -15,8 +15,8 @@
         android:layout_height="match_parent"
         android:background="@color/bg_black">
 
-        <SurfaceView
-            android:id="@+id/sv_preview"
+        <TextureView
+            android:id="@+id/textureView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />

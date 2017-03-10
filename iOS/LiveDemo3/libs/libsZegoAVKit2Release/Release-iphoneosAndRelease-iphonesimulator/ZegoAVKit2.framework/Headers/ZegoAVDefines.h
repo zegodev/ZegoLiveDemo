@@ -114,9 +114,9 @@ enum ZegoAPIVideoEncoderRateControlStrategy
 
 enum ZegoAPIPublishFlag
 {
-    ZEGOAPI_JOIN_PUBLISH   = 1 << 0,
-    ZEGOAPI_MIX_STREAM     = 1 << 1,
-    ZEGOAPI_SINGLE_ANCHOR  = 1 << 2,
+    ZEGOAPI_JOIN_PUBLISH   = 0 << 0,    ///< 普通连麦
+    ZEGOAPI_MIX_STREAM     = 1 << 1,    ///< 混流
+    ZEGOAPI_SINGLE_ANCHOR  = 1 << 2,    ///< 单主播场景
 };
 
 enum ZegoAPIModuleType

@@ -37,6 +37,7 @@ public class DialogSelectPublishMode extends DialogFragment implements View.OnCl
         view.findViewById(R.id.tv_select_single_anchor).setOnClickListener(this);
         view.findViewById(R.id.tv_select_more_anchors).setOnClickListener(this);
         view.findViewById(R.id.tv_select_mix_stream).setOnClickListener(this);
+        view.findViewById(R.id.tv_select_game_living).setOnClickListener(this);
         view.findViewById(R.id.tv_cancel).setOnClickListener(this);
 
         builder.setView(view);
@@ -65,6 +66,9 @@ public class DialogSelectPublishMode extends DialogFragment implements View.OnCl
                     case R.id.tv_select_mix_stream:
                         mOnSelectPublishModeListener.onMixStreamSelect();
                         break;
+                    case R.id.tv_select_game_living:
+                        mOnSelectPublishModeListener.onGameLivingSelect();
+                        break;
                     case R.id.tv_cancel:
                         break;
                 }
@@ -78,6 +82,7 @@ public class DialogSelectPublishMode extends DialogFragment implements View.OnCl
         void onSingleAnchorSelect();
         void onMoreAnchorsSelect();
         void onMixStreamSelect();
+        void onGameLivingSelect();
     }
 
 }

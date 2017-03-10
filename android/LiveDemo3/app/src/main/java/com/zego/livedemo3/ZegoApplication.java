@@ -22,7 +22,7 @@ public class ZegoApplication extends Application{
         sApplicationContext = this;
 
         BizLivePresenter.getInstance();
-        ZegoApiManager.getInstance().initSDK(this);
+        ZegoApiManager.getInstance().initSDK();
 
         CrashReport.initCrashReport(getApplicationContext(), "e40f06d75c", false);
         // bugly初始化用户id

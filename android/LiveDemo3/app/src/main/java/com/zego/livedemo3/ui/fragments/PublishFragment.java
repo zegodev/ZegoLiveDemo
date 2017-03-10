@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import android.widget.ToggleButton;
 
 import com.zego.livedemo3.R;
 import com.zego.livedemo3.ZegoApiManager;
+import com.zego.livedemo3.ui.activities.gamelive.GameLiveActivity;
 import com.zego.livedemo3.ui.activities.mixstream.MixStreamPublishActivity;
 import com.zego.livedemo3.ui.activities.moreanchors.MorAnchorsPublishActivity;
 import com.zego.livedemo3.ui.activities.singleanchor.SingleAnchorPublishActivity;
@@ -62,8 +64,8 @@ public class PublishFragment extends AbsBaseFragment {
     @Bind(R.id.et_publish_title)
     public EditText etPublishTitle;
 
-    @Bind(R.id.sv_preview)
-    public SurfaceView svPreview;
+    @Bind(R.id.textureView)
+    public TextureView textureView;
 
 
     private int mSelectedBeauty = 0;
@@ -199,6 +201,7 @@ public class PublishFragment extends AbsBaseFragment {
     public void onStop() {
         super.onPause();
         if(SystemUtil.isAppBackground()){
+            //stopPreview();
             Log.i("Foreground", "Foreground");
         }else {
             Log.i("Foreground", "Background");
@@ -223,7 +226,6 @@ public class PublishFragment extends AbsBaseFragment {
             @Override
             public void onSingleAnchorSelect() {
                 SingleAnchorPublishActivity.actionStart(mParentActivity, publishTitleTemp, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter, mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
-
             }
 
             @Override
@@ -234,6 +236,11 @@ public class PublishFragment extends AbsBaseFragment {
             @Override
             public void onMixStreamSelect() {
                 MixStreamPublishActivity.actionStart(mParentActivity, publishTitleTemp, tbEnableFrontCam.isChecked(), tbEnableTorch.isChecked(), mSelectedBeauty, mSelectedFilter, mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
+            }
+
+            @Override
+            public void onGameLivingSelect() {
+                GameLiveActivity.actionStart(mParentActivity, publishTitleTemp, mParentActivity.getWindowManager().getDefaultDisplay().getRotation());
             }
         });
 
@@ -297,11 +304,11 @@ public class PublishFragment extends AbsBaseFragment {
         rect.bottom = 160;
         ZegoAVKit.setPreviewWaterMarkRect(rect);
 
-        mZegoAVKit.setLocalView(svPreview);
+        mZegoAVKit.setLocalView(textureView);
         mZegoAVKit.setLocalViewMode(ZegoAVKitCommon.ZegoVideoViewMode.ScaleAspectFill);
         mZegoAVKit.startPreview();
         mZegoAVKit.setFrontCam(tbEnableFrontCam.isChecked());
-        svPreview.setVisibility(View.VISIBLE);
+        textureView.setVisibility(View.VISIBLE);
         mZegoAVKit.enableTorch(tbEnableTorch.isChecked());
 
         // 设置美颜
@@ -312,7 +319,7 @@ public class PublishFragment extends AbsBaseFragment {
     }
 
     private void stopPreview() {
-        svPreview.setVisibility(View.INVISIBLE);
+        textureView.setVisibility(View.INVISIBLE);
         mZegoAVKit.stopPreview();
         mZegoAVKit.setLocalView(null);
     }

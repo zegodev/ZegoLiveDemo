@@ -16,8 +16,16 @@
 @property (weak, nonatomic) IBOutlet UITextView *appSign;
 
 @property (weak, nonatomic) IBOutlet UISwitch *testEnvSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *hardwareAcceleratedSwitch;
-@property (weak, nonatomic) IBOutlet UISwitch *mixStreamSwitch;
+
+@property (weak, nonatomic) IBOutlet UISwitch *captureSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *renderSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *filterSwitch;
+
+@property (weak, nonatomic) IBOutlet UISwitch *encodeSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *decodeSwitch;
+@property (weak, nonatomic) IBOutlet UISwitch *rateSwitch;
+
+@property (weak, nonatomic) IBOutlet UISwitch *reverbSwitch;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 
@@ -33,8 +41,8 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.testEnvSwitch.on = isUseingTestEnv();
-    self.hardwareAcceleratedSwitch.on = ZegoIsRequireHardwareAccelerated();
+    
+    [self updateSwitchView];
     
     if (ZegoGetAppID() != 0) {
         [self.appID setText:[NSString stringWithFormat:@"%u", ZegoGetAppID()]];
@@ -81,9 +89,66 @@
     setUseTestEnv(s.on);
 }
 
-- (IBAction)toggleHardwareAccelerated:(id)sender {
+- (IBAction)toggleCapture:(id)sender
+{
     UISwitch *s = (UISwitch *)sender;
-    ZegoRequireHardwareAccelerated(s.on);
+    setUsingExternalCapture(s.on);
+}
+
+- (IBAction)toggleRender:(id)sender
+{
+    UISwitch *s = (UISwitch *)sender;
+    setUsingExternalRender(s.on);
+}
+
+- (IBAction)toggleFilter:(id)sender
+{
+    UISwitch *s = (UISwitch *)sender;
+    setUsingExternalFilter(s.on);
+}
+
+- (IBAction)toggleHardwareEncode:(id)sender
+{
+    UISwitch *s = (UISwitch *)sender;
+    setUsingHardwareEncode(s.on);
+    [self updateSwitchView];
+}
+
+- (IBAction)toggleHardwareDecode:(id)sender
+{
+    UISwitch *s = (UISwitch *)sender;
+    setUsingHardwareDecode(s.on);
+}
+
+- (IBAction)toggleRateControl:(id)sender
+{
+    UISwitch *s = (UISwitch *)sender;
+    setEnableRateControl(s.on);
+    [self updateSwitchView];
+}
+
+- (IBAction)toggleReverb:(id)sender
+{
+    UISwitch *s = (UISwitch *)sender;
+    setEnableReverb(s.on);
+}
+
+- (void)updateSwitchView
+{
+    self.testEnvSwitch.on = isUseingTestEnv();
+    self.encodeSwitch.on = isUsingHardwareEncode();
+    self.decodeSwitch.on = isUsingHardwareDecode();
+    
+#if TARGET_OS_SIMULATOR
+    self.captureSwitch.enabled = NO;
+#endif
+    
+    self.captureSwitch.on = isUsingExternalCapture();
+    self.renderSwitch.on = isUsingExternalRender();
+    self.filterSwitch.on = isUsingExternalFilter();
+    self.rateSwitch.on = isRateControlOn();
+    
+    self.reverbSwitch.on = isEnableReverb();
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

@@ -15,14 +15,22 @@ BOOL g_useTestEnv = NO;
 BOOL g_useAlphaEnv = NO;
 
 #if TARGET_OS_SIMULATOR
-BOOL g_requireHardwareAccelerated = NO;
+BOOL g_useHardwareEncode = NO;
+BOOL g_useHardwareDecode = NO;
 #else
-BOOL g_requireHardwareAccelerated = YES;
+BOOL g_useHardwareEncode = YES;
+BOOL g_useHardwareDecode = YES;
 #endif
 
 BOOL g_enableVideoRateControl = NO;
 
 BizLiveRoom *g_bizRoom = nil;
+
+BOOL g_useExternalCaptrue = NO;
+BOOL g_useExternalRender = NO;
+BOOL g_useExternalFilter = NO;
+
+BOOL g_enableReverb = NO;
 
 void setCustomAppIDAndSign(uint32 appid, NSData* data)
 {
@@ -49,13 +57,18 @@ NSData * zegoAppSignFromServer()
 #import <ZegoAVKit2/ZegoVideoCapture.h>
 #import "./advanced/video_capture_external_demo.h"
 #import "./advanced/ZegoVideoCaptureFromImage.h"
+#import "./advanced/ZegoVideoFilterDemo.h"
 
 static __strong id<ZegoVideoCaptureFactory> g_factory = nullptr;
+static __strong id<ZegoVideoFilterFactory> g_filterFactory = nullptr;
 
 void ZegoSetVideoCaptureDevice()
 {
 #if TARGET_OS_SIMULATOR
     if (g_factory == nullptr) {
+        
+        g_useExternalCaptrue = YES;
+        
         g_factory = [[ZegoVideoCaptureFactory alloc] init];
         [ZegoLiveApi setVideoCaptureFactory:g_factory];
     }
@@ -68,35 +81,177 @@ void ZegoSetVideoCaptureDevice()
      [ZegoLiveApi setVideoCaptureFactory:g_factory];
      }
      */
+    
 #endif
 }
 
+
 BOOL isUsingExternalRender()
 {
-    return NO;
+    return g_useExternalRender;
 }
 
-static void SetupHardwareAcceleratedAndRateControl_()
+void setUsingExternalRender(BOOL bUse)
 {
-    if (g_requireHardwareAccelerated)
+    if (g_useExternalRender == bUse)
+        return;
+    
+    g_useExternalRender = bUse;
+    
+    releaseZegoAV_ShareInstance();
+    
+    [ZegoLiveApi setExtenralRender:bUse];
+}
+
+BOOL isUsingExternalCapture()
+{
+    return g_useExternalCaptrue;
+}
+
+void setUsingExternalCapture(BOOL bUse)
+{
+    if (g_useExternalCaptrue == bUse)
+        return;
+    
+    g_useExternalCaptrue = bUse;
+    
+    releaseZegoAV_ShareInstance();
+    
+    if (bUse)
     {
-        [ZegoLiveApi requireHardwareDecoder:true];
-        if (g_enableVideoRateControl)
-        {
-            [g_zegoAV enableRateControl:true];
-        }
-        else
-        {
-            [ZegoLiveApi requireHardwareEncoder:true];
-        }
+        if (g_factory == nil)
+            g_factory = [[ZegoVideoCaptureFactory alloc] init];
+        
+        [ZegoLiveApi setVideoCaptureFactory:g_factory];
     }
     else
     {
-        [ZegoLiveApi requireHardwareDecoder:false];
-        [ZegoLiveApi requireHardwareEncoder:false];
-        [g_zegoAV enableRateControl:g_enableVideoRateControl];
+        [ZegoLiveApi setVideoCaptureFactory:nil];
     }
 }
+
+BOOL isUsingExternalFilter()
+{
+    return g_useExternalFilter;
+}
+
+void setUsingExternalFilter(BOOL bUse)
+{
+    if (g_useExternalFilter == bUse)
+        return;
+    
+    g_useExternalFilter = bUse;
+    
+    releaseZegoAV_ShareInstance();
+    
+    if (bUse)
+    {
+        if (g_filterFactory == nullptr)
+            g_filterFactory = [[ZegoVideoFilterFactoryDemo alloc] init];
+        
+        [ZegoLiveApi setVideoFilterFactory:g_filterFactory];
+    }
+    else
+    {
+        [ZegoLiveApi setVideoFilterFactory:nil];
+    }
+}
+
+BOOL isRateControlOn()
+{
+    return g_enableVideoRateControl;
+}
+
+void setEnableRateControl(BOOL bEnable)
+{
+    if (g_enableVideoRateControl == bEnable)
+        return;
+    
+    if (bEnable)
+    {
+        if (g_useHardwareEncode)
+        {
+            g_useHardwareEncode = NO;
+            [ZegoLiveApi requireHardwareEncoder:false];
+        }
+        
+        g_enableVideoRateControl = YES;
+    }
+    else
+    {
+        g_enableVideoRateControl = NO;
+    }
+    
+    [g_zegoAV enableRateControl:g_enableVideoRateControl];
+}
+
+void setUsingHardwareEncode(bool bUse)
+{
+    if (g_useHardwareEncode == bUse)
+        return;
+    
+    if (bUse)
+    {
+        if (g_enableVideoRateControl)
+        {
+            g_enableVideoRateControl = NO;
+            [g_zegoAV enableRateControl:NO];
+        }
+    }
+    
+    g_useHardwareEncode = bUse;
+    [ZegoLiveApi requireHardwareEncoder:bUse];
+}
+
+BOOL isUsingHardwareEncode()
+{
+    return g_useHardwareEncode;
+}
+
+void setUsingHardwareDecode(bool bUse)
+{
+    if (g_useHardwareDecode == bUse)
+        return;
+    
+    g_useHardwareDecode = bUse;
+    [ZegoLiveApi requireHardwareDecoder:g_useHardwareDecode];
+}
+
+BOOL isUsingHardwareDecode()
+{
+    return g_useHardwareDecode;
+}
+
+void prep_func(const short* inData, int inSamples, int sampleRate, short *outData)
+{
+    memcpy(outData, inData, inSamples * sizeof(short));
+}
+
+void setEnableReverb(BOOL bEnable)
+{
+    if (g_enableReverb == bEnable)
+        return;
+    
+    g_enableReverb = bEnable;
+    
+    releaseZegoAV_ShareInstance();
+    
+    if (bEnable)
+    {
+        [ZegoLiveApi setAudioPrep:&prep_func];
+    }
+    else
+    {
+        [ZegoLiveApi setAudioPrep:nil];
+    }
+}
+
+BOOL isEnableReverb()
+{
+    return g_enableReverb;
+}
+
+
 
 ZegoLiveApi * getZegoAV_ShareInstance()
 {
@@ -118,7 +273,8 @@ ZegoLiveApi * getZegoAV_ShareInstance()
             g_zegoAV = [[ZegoLiveApi alloc] initWithAppID:1 appSignature:appSign];
         }
         
-        SetupHardwareAcceleratedAndRateControl_();
+        setUsingHardwareDecode(g_useHardwareDecode);
+        setUsingHardwareEncode(g_useHardwareEncode);
     }
     return g_zegoAV;
 }
@@ -235,18 +391,6 @@ uint32 ZegoGetAppID()
 {
     return g_appID;
 }
-
-void ZegoRequireHardwareAccelerated(bool hardwareAccelerated)
-{
-    g_requireHardwareAccelerated = hardwareAccelerated;
-    SetupHardwareAcceleratedAndRateControl_();
-}
-
-BOOL ZegoIsRequireHardwareAccelerated()
-{
-    return g_requireHardwareAccelerated;
-}
-
 
 #pragma mark - helper
 

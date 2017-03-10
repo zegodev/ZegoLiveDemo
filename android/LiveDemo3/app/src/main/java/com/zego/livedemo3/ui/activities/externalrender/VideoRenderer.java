@@ -576,12 +576,12 @@ public class VideoRenderer implements Choreographer.FrameCallback, ZegoExternalR
 
     @Override
     public synchronized int dequeueInputBuffer(int width, int height, int stride) {
-        if (stride * height * 4 > mMaxBufferSize) {
+        if (stride * height > mMaxBufferSize) {
             if (mMaxBufferSize != 0) {
                 mProduceQueue.clear();
             }
 
-            mMaxBufferSize = stride * height * 4;
+            mMaxBufferSize = stride * height;
             createPixelBufferPool(4);
         }
 
@@ -611,6 +611,7 @@ public class VideoRenderer implements Choreographer.FrameCallback, ZegoExternalR
         pixelBuffer.width = width;
         pixelBuffer.height = height;
         mConsumeQueue.add(pixelBuffer);
+        mWriteIndex++;
     }
 
     private synchronized void returnProducerPixelBuffer(PixelBuffer pixelBuffer) {
