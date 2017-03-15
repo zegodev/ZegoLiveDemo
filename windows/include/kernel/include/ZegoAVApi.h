@@ -25,6 +25,7 @@ namespace ZEGO
 
 		/// \brief 反初始化SDK
 		/// \return true: 调用成功; false: 调用失败
+        /// \note Windows 平台会等到真正停止才返回
 		ZEGOAVKIT_API bool UninitSDK();
 
         /// \brief 设置Zego房间相关信息通知的回调
@@ -40,9 +41,9 @@ namespace ZEGO
         /// \brief 获取直播流列表
 		/// \param userID 用户 ID，每个用户唯一
 		/// \param userName 用户名
-		/// \param liveID 频道 ID
+		/// \param pszChannelID 频道 ID
 		/// \return true 成功，等待异步结果回调，否则失败
-		ZEGOAVKIT_API bool LoginChannel(const char* pszUserID, const char* pszUserName, const char* pszLiveID, int nNetType);
+		ZEGOAVKIT_API bool LoginChannel(const char* pszUserID, const char* pszUserName, const char* pszChannelID, int nNetType);
 
         /// \brief 退出直播频道
         /// \note 会停止所有的推拉流
@@ -50,10 +51,10 @@ namespace ZEGO
 		ZEGOAVKIT_API bool LogoutChannel();
 
 		/// \brief 播放
-		/// \param streamID 流 ID
-		/// \param chn 播放通道
+		/// \param pszStreamID 流 ID
+		/// \param uiChnIndex 播放通道
 		/// \return true 成功，等待异步结果回调，否则失败
-		ZEGOAVKIT_API bool PlayStream(const char* pszStreamID, unsigned int uiChannelID);
+		ZEGOAVKIT_API bool PlayStream(const char* pszStreamID, unsigned int uiChnIndex);
 
 		/// \brief 停止播放
 		/// \param streamID 流 ID
@@ -62,15 +63,15 @@ namespace ZEGO
 
 		/// \brief 设置视频播放载体 view
         /// \param[in] pView view 指针
-        /// \param[in] uiChannelIndex 播放通道
+        /// \param[in] uiChnIndex 播放通道
         /// \return true: 调用成功; false: 调用失败
-		ZEGOAVKIT_API bool SetView(void* pView, unsigned int uiChannelIndex = 0);
+		ZEGOAVKIT_API bool SetView(void* pView, unsigned int uiChnIndex = 0);
 
         /// \breif 设置播放视频模式
         /// \param[in] mode 模式
-        /// \param[in] uiChannelIndex 播放通道
+        /// \param[in] uiChnIndex 播放通道
         /// \return true: 调用成功; false: 调用失败
-		ZEGOAVKIT_API bool SetViewMode(ZegoVideoViewMode mode, unsigned int uiChannelIndex);
+		ZEGOAVKIT_API bool SetViewMode(ZegoVideoViewMode mode, unsigned int uiChnIndex);
         
         /// \brief 手机外放开关
         /// \param bEnalbe 是否开启，true 声音从外放播放

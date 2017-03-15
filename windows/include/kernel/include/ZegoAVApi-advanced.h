@@ -24,12 +24,16 @@ namespace ZEGO
         /// \brief 初始化引擎
         /// \note jvm 与 ctx 仅用于 android
         /// \return true: 调用成功; false: 调用失败
-        ZEGOAVKIT_API bool InitPlatform(void* jvm, void* ctx);
+        ZEGOAVKIT_API bool InitPlatform(void* jvm = 0, void* ctx = 0);
         
         /// \brief 设置业务类型
         /// \param nType 类型，默认为 0
         /// \return true: 调用成功; false: 调用失败
         ZEGOAVKIT_API bool SetBusinessType(int nType);
+        
+        /// \brief 获取 SDK 支持的最大同时播放流数
+        /// \return 最大支持播放流数
+        ZEGOAVKIT_API int GetMaxPlayChannelCount();
         
         /// \brief 设置外部采集模块
         /// \param
@@ -200,11 +204,18 @@ namespace ZEGO
         /// \note 必须在 InitSDK 前调用，并且不能置空
         ZEGOAVKIT_API void SetVideoFilterFactory(AVE::VideoFilterFactory* factory);
         
-#if WIN32
-        ZEGOAVKIT_API WindowsDecs* FillWindowList(unsigned int& window_count, bool include_minimized);
-        ZEGOAVKIT_API void FreeWindowList(WindowsDecs* window_list);
-#endif
-
+        /// \brief 设置水印的图片路径
+        /// \param filepath 图片路径
+        ZEGOAVKIT_API void SetWaterMarkImagePath(const char *filePath);
+        
+        /// \brief 设置水印在采集video中的位置
+        /// \note  左上角为坐标系原点,区域不能超过编码分辨率设置的大小
+        ZEGOAVKIT_API void SetPublishWaterMarkRect(int left, int top, int right, int bottom);
+        
+        /// \brief 设置水印在预览video中的位置
+        /// \note 左上角为坐标系原点,区域不能超过preview的大小
+        ZEGOAVKIT_API void SetPreviewWaterMarkRect(int left, int top, int right, int bottom);
+        
         /// \brief 设置拉流质量监控周期
         /// \param timeInMS 时间周期，单位为毫秒，取值范围：(500, 60000)
         /// \return true 设置成功，否则失败

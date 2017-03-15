@@ -8,7 +8,7 @@ namespace AVE {
 
 class MediaCaptureDevice {
 public:
-    class Client : public VideoCaptureCallback, public AudioCaptureCallback {
+    class Client {
     public:
         virtual ~Client() {}
         
@@ -17,6 +17,9 @@ public:
         virtual void Destroy() = 0;
         
         virtual void OnError(const char* reason) = 0;
+        
+        virtual void* GetVideoInterface() = 0;
+        virtual void* GetAudioInterface() = 0;
     };
     
 public:
@@ -27,6 +30,8 @@ public:
     virtual int StartCapture() = 0;
     
     virtual int StopCapture() = 0;
+    
+    virtual VideoPixelBufferType SupportBufferType() = 0;
 };
 
 class MediaCaptureFactory {

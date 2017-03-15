@@ -60,7 +60,14 @@ namespace ZEGO
         class IZegoVideoRenderCallback
         {
         public:
-            virtual void OnVideoDataCallback(const unsigned char *pData, int dataLen, int nChannelIdx, int width, int height, int strides[4]) = 0;
+            /// \brief 视频帧数据回调
+            /// \param pData 视频数据起始地址，windows 平台上回调数据格式为 RGBA32
+            /// \param dataLen 视频数据长度
+            /// \param nChnIndex 播放时传入的播放通道（uiChnIndex）
+            /// \param width 视频宽
+            /// \param height 视频高
+            /// \param strides 每个平面一行字节数（RGBA 只需考虑 strides[0]）
+            virtual void OnVideoDataCallback(const unsigned char *pData, int dataLen, int nChnIndex, int width, int height, int strides[4]) = 0;
         };
         
         class IZegoAudioRecordCallback

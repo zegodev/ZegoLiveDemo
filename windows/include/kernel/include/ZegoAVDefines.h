@@ -32,6 +32,8 @@
 #define ZEGOAVKIT_API __attribute__((visibility("default")))
 #endif
 
+#define ZEGO_DEPRECATED     ///< 废弃标记
+
 namespace ZEGO
 {
     namespace AV
@@ -76,8 +78,11 @@ namespace ZEGO
 
         struct ZegoStreamInfo
         {
-            ZegoStreamInfo() : uiRtmpURLCount(0), uiHlsURLCount(0), uiFlvURLCount(0)
+            ZegoStreamInfo()
             {
+                uiRtmpURLCount = 0;
+                uiHlsURLCount = 0;
+                uiFlvURLCount = 0;
                 szStreamID[0] = '\0';
                 szMixStreamID[0] = '\0';
             }
@@ -99,8 +104,8 @@ namespace ZEGO
         {
             AVStateBegin = 0,               ///< 直播开始
             AVStateEnd = 1,                 ///< 直播正常停止
-            TempBroken = 2,                 ///< 直播异常中断
-            FatalError = 3,                 ///< 直播遇到严重的问题
+            TempBroken = 2 ZEGO_DEPRECATED, ///< 直播异常中断
+            FatalError = 3,                 ///< 直播遇到严重的问题（如出现，请联系 ZEGO 技术支持）
 
             CreateStreamError = 4,          ///< 创建直播流失败
             FetchStreamError = 5,           ///< 获取流信息失败
@@ -127,7 +132,7 @@ namespace ZEGO
 
         enum ZegoPublishFlag
         {
-            ZEGO_JOIN_PUBLISH   = 1 << 0,
+            ZEGO_JOIN_PUBLISH   = 0,
             ZEGO_MIX_STREAM     = 1 << 1,
             ZEGO_SINGLE_ANCHOR  = 1 << 2,
         };

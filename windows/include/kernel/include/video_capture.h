@@ -20,7 +20,18 @@ namespace AVE {
             : width(width), height(height), pixel_format(pixel_format), rotation(0) {
             strides[0] = strides[1] = strides[2] = strides[3] = 0;
         }
-                
+        
+        bool operator==(const VideoCaptureFormat& other) {
+            return (width == other.width && height == other.height &&
+                    strides[0] == other.strides[0] && strides[1] == other.strides[1] &&
+                    strides[2] == other.strides[2] && strides[3] == other.strides[3] &&
+                    rotation == other.rotation && pixel_format == other.pixel_format);
+        }
+        
+        bool operator!=(const VideoCaptureFormat& other) {
+            return !(*this == other);
+        }
+        
         int width;
         int height;
         int strides[4];
@@ -31,44 +42,44 @@ namespace AVE {
     class SupportsVideoCapture {
     public:
         /// \brief 设置采集帧率
-        /// \param framerate，帧率，一般为10，15，20，30
+        /// \param framerate 帧率，一般为10，15，20，30
         /// \note SDK SetVideoFPS异步调用，透传该方法入参
         /// \note 可以不实现
         virtual int SetFrameRate(int framerate) = 0;
         
         /// \brief 设置采集分辨率，采集的分辨率最大不能超过1920*1080
-        /// \param width，宽
-        /// \param height，高
+        /// \param width 宽
+        /// \param height 高
         /// \note SDK SetVideoResolution异步调用，透传该方法入参
         /// \note 可以不实现
         virtual int SetResolution(int width, int height) = 0;
         
         /// \brief 切换前后摄像头，移动端专用，PC端不需要实现
-        /// \param bFront，true表示前摄像头，false表示后摄像头
+        /// \param bFront true表示前摄像头，false表示后摄像头
         /// \note SDK SetFrontCam异步调用，透传该方法入参
         /// \note 可以不实现
         virtual int SetFrontCam(int bFront) = 0;
         
         /// \brief 设置采集使用载体
-        /// \param view，跨平台预览载体指针
+        /// \param view 跨平台预览载体指针
         /// \note SDK SetPreviewView同步调用，透传该方法入参
         /// \note 可以不实现
         virtual int SetView(void *view) = 0;
         
         /// \brief 设置采集预览的模式
-        /// \param nMode，取值参考ZegoVideoViewMode
+        /// \param nMode 取值参考ZegoVideoViewMode
         /// \note SDK SetPreviewViewMode异步调用，透传该方法入参
         /// \note 可以不实现
         virtual int SetViewMode(int nMode) = 0;
         
         /// \brief 设置采集预览的逆时针旋转角度
-        /// \param nRotation，值为0,90,180,270
+        /// \param nRotation 值为0,90,180,270
         /// \note SDK SetDisplayRotation 异步调用，主要用于修复移动端的横竖屏旋转问题
         /// \note 可以不实现
         virtual int SetViewRotation(int nRotation) = 0;
         
         /// \brief 设置采集buffer的顺时针旋转角度
-        /// \param nRotation，值为0,90,180,270
+        /// \param nRotation 值为0,90,180,270
         /// \note SDK SetDisplayRotation 异步调用，主要用于修复移动端的横竖屏旋转问题
         /// \note 可以不实现
         virtual int SetCaptureRotation(int nRotation) = 0;
@@ -84,7 +95,7 @@ namespace AVE {
         virtual int StopPreview() = 0;
         
         /// \brief 打开闪光灯
-        /// \param bEnable，true表示打开，false表示关闭
+        /// \param bEnable true表示打开，false表示关闭
         /// \note SDK EnableTorch异步调用
         /// \note 可以不实现
         virtual int EnableTorch(bool bEnable) = 0;
@@ -95,7 +106,7 @@ namespace AVE {
         virtual int TakeSnapshot() = 0;
         
         /// \brief 设置采集刷新率
-        /// \param nFreq，刷新频率
+        /// \param nFreq 刷新频率
         /// \note 可以不实现
         virtual int SetPowerlineFreq(unsigned int nFreq) { return 0; }
     };
@@ -103,11 +114,11 @@ namespace AVE {
     class VideoCaptureCallback {
     public:
         /// \brief 通知SDK采集到视频数据，SDK会同步拷贝数据，切换到内部线程进行编码，如果缓冲队列不够，SDK会自动丢帧
-        /// \param data，采集buffer指针
-        /// \param length，采集buffer的长度
-        /// \param frame_format，描述buffer的属性，包括了宽高，色彩空间
-        /// \param reference_time，采集到该帧的时间戳，用于音画同步，如果采集实现是摄像头，最好使用系统采集回调的原始时间戳，如果不是，最好是生成该帧的UTC时间戳
-        /// \param reference_time_scale，采集时间戳单位，毫秒10^3，微妙10^6，纳秒10^9，精度不能低于毫秒
+        /// \param data 采集buffer指针
+        /// \param length 采集buffer的长度
+        /// \param frame_format 描述buffer的属性，包括了宽高，色彩空间
+        /// \param reference_time 采集到该帧的时间戳，用于音画同步，如果采集实现是摄像头，最好使用系统采集回调的原始时间戳，如果不是，最好是生成该帧的UTC时间戳
+        /// \param reference_time_scale 采集时间戳单位，毫秒10^3，微妙10^6，纳秒10^9，精度不能低于毫秒
         /// \note SDK不会做额外的裁剪缩放，编码器分辨率以frame_format内的宽高为准
         virtual void OnIncomingCapturedData(const char* data,
                                             int length,
@@ -116,13 +127,37 @@ namespace AVE {
                                             unsigned int reference_time_scale) = 0;
         
         /// \brief 通知SDK截图成功
-        /// \param image
+        /// \param image 图像数据
         virtual void OnTakeSnapshot(void* image) = 0;
     };
     
-    class VideoCaptureDevice : public SupportsVideoCapture {
+    class VideoCaptureCVPixelBufferCallback {
     public:
-        class Client : public VideoCaptureCallback {
+        virtual void OnIncomingCapturedData(void* buffer,
+                                            double reference_time_ms) = 0;
+    };
+    
+    class VideoCaptureSurfaceTextureCallback {
+    public:
+        virtual void* GetSurfaceTexture() = 0;
+    };
+    
+    class VideoCaptureTextureCallback {
+    public:
+        virtual void OnIncomingCapturedData(int texture_id, int width, int height, double reference_time_ms) = 0;
+    };
+    
+    enum VideoPixelBufferType {
+        PIXEL_BUFFER_TYPE_UNKNOWN = 0,
+        PIXEL_BUFFER_TYPE_MEM = 1 << 0,
+        PIXEL_BUFFER_TYPE_CV_PIXEL_BUFFER = 1 << 1,
+        PIXEL_BUFFER_TYPE_SURFACE_TEXTURE = 1 << 2,
+        PIXEL_BUFFER_TYPE_GL_TEXTURE_2D = 1 << 3,
+    };
+    
+    class VideoCaptureDeviceBase {
+    public:
+        class Client {
         public:
             virtual ~Client() {}
             
@@ -131,6 +166,8 @@ namespace AVE {
             virtual void Destroy() = 0;
             
             virtual void OnError(const char* reason) = 0;
+            
+            virtual void* GetInterface() = 0;
         };
         
     public:       
@@ -158,22 +195,51 @@ namespace AVE {
         /// \note SDK回调StopCapture后，不再接收任何采集数据
 		/// \note 一定要实现
         virtual int StopCapture() = 0;
+        
+        virtual VideoPixelBufferType SupportBufferType() = 0;
+        virtual void* GetInterface() = 0;
+    };
+    
+    class VideoCaptureDevice : public VideoCaptureDeviceBase, public SupportsVideoCapture {
+    public:
+        class Client : public VideoCaptureDeviceBase::Client, public VideoCaptureCallback {
+        public:
+            virtual ~Client() {}
+            virtual void* GetInterface() {
+                return (VideoCaptureCallback*)this;
+            }
+        };
+    
+    public :
+        virtual void AllocateAndStart(Client* client) = 0;
+        
+        virtual void AllocateAndStart(VideoCaptureDeviceBase::Client* client) override {
+            this->AllocateAndStart((Client*)client);
+        }
+        
+        virtual VideoPixelBufferType SupportBufferType() override {
+            return VideoPixelBufferType::PIXEL_BUFFER_TYPE_MEM;
+        }
+        
+        virtual void* GetInterface() override {
+            return (SupportsVideoCapture*)this;
+        }
     };
     
     class VideoCaptureFactory {
     public:
         virtual ~VideoCaptureFactory() {}
 		/// \brief 创建采集设备
-		/// \param device_id，SDK SetVideoDevice透传的参数
+		/// \param device_id SDK SetVideoDevice透传的参数
 		/// \note SDK第一次StartPublish或者PlayStream时异步调用
 		/// \note 一定要实现
-        virtual VideoCaptureDevice* Create(const char* device_id) = 0;
+        virtual VideoCaptureDeviceBase* Create(const char* device_id) = 0;
 
 		/// \brief 销毁采集设备
-		/// \param vc，Create方法返回的采集对象
+		/// \param vc Create方法返回的采集对象
 		/// \note SDK LogoutChannel时同步调用
 		/// \note 一定要实现
-        virtual void Destroy(VideoCaptureDevice *vc) = 0;
+        virtual void Destroy(VideoCaptureDeviceBase *vc) = 0;
     };
     
     enum VideoBufferType {
@@ -182,6 +248,7 @@ namespace AVE {
         BUFFER_TYPE_ASYNC_PIXEL_BUFFER = 1 << 1,
         BUFFER_TYPE_SYNC_PIXEL_BUFFER = 1 << 2,
         BUFFER_TYPE_SURFACE_TEXTURE = 1 << 3,
+        BUFFER_TYPE_HYBRID_MEM_GL_TEXTURE_2D = 1 << 4,
     };
 
     class VideoBufferPool {
