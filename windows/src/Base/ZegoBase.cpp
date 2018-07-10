@@ -6,14 +6,10 @@
 #include "ZegoSigslotDefine.h"
 using namespace ZEGO;
 
-static DWORD g_dwAppID2 = 1;
+static DWORD g_dwAppID2 = 0;
 
 static BYTE g_bufSignKey2[] =
 {
-    0x91, 0x93, 0xcc, 0x66, 0x2a, 0x1c, 0x0e, 0xc1, 
-    0x35, 0xec, 0x71, 0xfb, 0x07, 0x19, 0x4b, 0x38, 
-    0x41, 0xd4, 0xad, 0x83, 0x78, 0xf2, 0x59, 0x90, 
-    0xe0, 0xa4, 0x0c, 0x7f, 0xf4, 0x28, 0x41, 0xf7
 };
 
 LRESULT CALLBACK ZegoCommuExchangeWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -36,7 +32,7 @@ CZegoBase::CZegoBase(void) : m_dwInitedMask(INIT_NONE)
 	CString strPath = strAppFullName.Left(strAppFullName.ReverseFind('\\') + 1);
 	m_strLogPathUTF8 = WStringToUTF8(strPath);
 
-	// 创建隐藏的通信窗体
+	// 麓麓陆篓脪镁虏脴碌脛脥篓脨脜麓掳脤氓
 	WNDCLASSEX wcex = { sizeof(WNDCLASSEX) };
 	wcex.hInstance = GetModuleHandle(0);
 	wcex.lpszClassName = ZegoCommWndClassName;
